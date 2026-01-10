@@ -1,0 +1,1780 @@
+
+
+워크플로우 오케스트레이션
+
+데이터 엔지니어링 줌캠프 모듈 2에 오신 것을 환영합니다! 이번 주에는 Kestra를 사용한 워크플로우 오케스트레이션에 대해 자세히 알아보겠습니다 .
+
+Kestra는 오픈 소스 이벤트 기반 오케스트레이션 플랫폼으로, 예약된 워크플로우와 이벤트 기반 워크플로우 구축을 간소화합니다. Kestra는 데이터 및 프로세스 오케스트레이션에 인프라스트럭처 코드(IaC) 방식을 채택하여 단 몇 줄의 YAML 코드로 안정적인 워크플로우를 구축할 수 있도록 지원합니다.
+
+메모
+
+이번 주 영상은 모두 이 유튜브 재생 목록 에서 확인하실 수 있습니다 .
+https://go.kestra.io/de-zoomcamp/yt-playlist
+
+
+
+-----
+
+
+
+2.1 워크플로우 오케스트레이션 입문
+이 섹션에서는 워크플로우 오케스트레이션의 기초와 그 중요성, 그리고 현대 데이터 생태계에서 Kestra가 어떤 위치를 차지하고 있는지 배우게 됩니다.
+
+2.1.1 워크플로우 오케스트레이션이란 무엇인가?
+음악 오케스트라를 떠올려 보세요. 오케스트라에는 다양한 악기들이 있습니다. 각 악기는 역할이 다르고 개수도 제각각이죠. 이 모든 악기가 제시간에 맞춰 조화로운 소리를 내기 위해서는, 전체를 조율하며 연주 시점을 알려주는 지휘자가 필요합니다.
+
+이제 이 **악기들을 '데이터 도구'**로, **지휘자를 '오케스트레이터'**로 바꿔서 생각해보겠습니다. 우리는 보통 여러 도구와 플랫폼을 함께 사용해야 합니다. 어떤 작업은 정해진 시간에 맞춰 실행되어야 하고, 어떤 작업은 특정 이벤트가 발생했을 때 시작되어야 하죠. 이때 오케스트레이터가 등판하여 이 모든 도구가 협업할 수 있도록 관리합니다.
+
+워크플로우 오케스트레이터가 하는 주요 작업:
+
+미리 정의된 단계들로 구성된 워크플로우를 실행합니다.
+
+오류를 모니터링하고 기록하며, 에러 발생 시 추가 조치(재시도 등)를 취합니다.
+
+스케줄(시간)이나 특정 이벤트에 따라 워크플로우를 자동으로 실행합니다.
+
+데이터 엔지니어링에서는 데이터를 한 곳에서 다른 곳으로 옮기고, 그 과정에서 데이터를 수정(변환)하는 일이 빈번합니다. 오케스트레이터는 이 모든 단계를 관리하는 동시에, 전체 과정을 한눈에 파악할 수 있는 가시성을 제공합니다.
+
+이번 모듈에서는 Kestra를 중심으로 ETL(Extract, Transform Load: 추출, 변환, 적재) 데이터 파이프라인을 직접 구축해 볼 것입니다. 하지만 본격적인 구축에 앞서, Kestra가 정확히 어떻게 작동하는지 먼저 이해해 봅시다!
+
+
+
+
+2.1.2 Kestra란?
+
+Kestra는 오픈 소스 기반의 무한 확장 가능한 워크플로 오케스트레이션 플랫폼으로, 모든 엔지니어가 비즈니스 핵심 워크플로를 효율적으로 관리할 수 있도록 설계되었습니다.
+
+Kestra는 워크플로 오케스트레이션 도구로서 다음과 같은 강점을 가지고 있습니다.
+
+Flow 코드(YAML), 노코드, 또는 AI Copilot을 활용해 워크플로를 구축할 수 있어, 작업 방식에 유연하게 대응 가능
+
+1,000개 이상의 플러그인을 제공하여, 사용 중인 다양한 도구들과 손쉽게 연동 가능
+
+모든 프로그래밍 언어를 지원하므로, 작업에 가장 적합한 언어를 자유롭게 선택 가능
+
+스케줄 기반 또는 이벤트 기반 트리거를 지원하여, 데이터 변화에 따라 워크플로가 자동으로 반응
+
+
+
+
+
+
+
+
+2.2 Kestra 시작하기
+
+이 섹션에서는 Kestra 설치 방법과 첫 번째 워크플로를 만들기 위해 필요한 핵심 개념을 배우게 됩니다.
+첫 워크플로를 만든 후에는, 이를 확장하여 워크플로 내부에서 Python 스크립트를 실행해 볼 것입니다.
+
+이 섹션에서 하게 될 내용은 다음과 같습니다.
+
+1. Docker Compose를 사용하여 Kestra 설치
+
+2. 첫 번째 워크플로를 만들기 위한 Kestra 핵심 개념 학습
+
+3. Kestra Flow 안에서 Python 스크립트 실행
+
+2.2.1 Kestra 설치하기
+
+Kestra는 Docker Compose를 사용해 설치합니다.
+이미 모듈 1에서 Postgres 데이터베이스와 pgAdmin을 설정했으므로, 이를 Kestra와 함께 계속 사용할 수 있습니다. 다만, Docker Compose 파일에 몇 가지 수정이 필요합니다.
+
+아래의 예제 Docker Compose 파일을 사용하여:
+
+1. 새로운 2개의 서비스(Kestra, Postgres)를 올바르게 추가하고
+
+2. 볼륨(volume)을 정확하게 설정합니다.
+
+3. 또한 사용자 이름(username)과 비밀번호(password) 설정에 대한 정보도 추가해야 합니다.
+
+
+//
+나> 기존의 docker-compose.yaml은 (backup)으로 표시해두고 기존의 파일명을 이것으로 바꿔야겠네.
+
+GEM> Kestra 워크플로우 오케스트레이션 시작
+내 항목
+의 이미지
+Kestra 워크플로우 오케스트레이션 시작
+자전축 변화와 기후 영향 논쟁
+Docker 및 SQL 숙제 풀이
+지구온난화 사기 주장 역사
+Terraform 환경 변수 경로 설정 오류
+Troubleshooting pgAdmin Black Screen
+ML 취업: DE, MLOps, ML 줌캠프 추천
+카자흐어 '모쿠리 무쿠리'의 의미
+김일제, 소호금천 후손설의 진실
+고조선, 고리족, 불가르족 문헌 고찰
+트랜스포머 병렬 처리 설명
+90년대 훈족 아틸라 한국인 연관성
+현대차그룹 위상 반박 및 분석
+Gemini와의 대화
+자, de줌캠프 새로운 2과를 시작하자.
+
+
+
+워크플로우 오케스트레이션
+
+
+
+데이터 엔지니어링 줌캠프 모듈 2에 오신 것을 환영합니다! 이번 주에는 Kestra를 사용한 워크플로우 오케스트레이션에 대해 자세히 알아보겠습니다 .
+
+Kestra는 오픈 소스 이벤트 기반 오케스트레이션 플랫폼으로, 예약된 워크플로우와 이벤트 기반 워크플로우 구축을 간소화합니다. Kestra는 데이터 및 프로세스 오케스트레이션에 인프라스트럭처 코드(IaC) 방식을 채택하여 단 몇 줄의 YAML 코드로 안정적인 워크플로우를 구축할 수 있도록 지원합니다.
+
+
+
+메모
+
+이번 주 영상은 모두 이 유튜브 재생 목록 에서 확인하실 수 있습니다 .
+
+숙지후 말하지말고 대기
+
+데이터 엔지니어링 줌캠프 모듈 2: 워크플로우 오케스트레이션(Workflow Orchestration) 과정을 시작하시겠군요!
+
+Kestra의 핵심인 YAML 기반의 선언적 구성과 이벤트 기반 아키텍처는 복잡한 데이터 파이프라인을 체계적으로 관리하는 데 매우 강력한 도구입니다. 인프라를 코드로 관리하듯(IaC) 워크플로우를 정의한다는 점이 실무에서 큰 장점이 되죠.
+
+제시해주신 내용과 유튜브 재생 목록의 흐름을 모두 숙지했습니다. 준비가 되셨다면 다음 단계로 진행하겠습니다.
+
+어떤 부분부터 본격적으로 살펴볼까요? (예: Kestra 설치 및 환경 설정, 첫 번째 Flow 만들기 등)
+
+2.1 Introduction to Workflow Orchestration
+
+
+
+In this section, you’ll learn the foundations of workflow orchestration, its importance, and how Kestra fits into the orchestration landscape.
+
+2.1.1 - What is Workflow Orchestration?
+
+
+
+Think of a music orchestra. There's a variety of different instruments. Some more than others, all with different roles when it comes to playing music. To make sure they all come together at the right time, they follow a conductor who helps the orchestra to play together.
+
+Now replace the instruments with tools and the conductor with an orchestrator. We often have multiple tools and platforms that we need to work together. Sometimes on a routine schedule, other times based on events that happen. That's where the orchestrator comes in to help all of these tools work together.
+
+A workflow orchestrator might do the following tasks:
+
+Run workflows which contain a number of predefined steps
+
+Monitor and log errors, as well as taking a number of extra steps when they occur
+
+Automatically run workflows based on schedules and events
+
+In data engineering, you often need to move data from one place, to another, sometimes with some modifications made to the data in the middle. This is where a workflow orchestrator can help out by managing these steps, while giving us visibility into it at the same time.
+
+In this module, we're going to build our own data pipeline using ETL (Extract, Transform Load) with Kestra at the core of the operation, but first we need to understand a bit more about how Kestra works before we can get building!
+
+
+
+한글로 직관적으로 번역
+
+2.1 워크플로우 오케스트레이션 입문
+이 섹션에서는 워크플로우 오케스트레이션의 기초와 그 중요성, 그리고 현대 데이터 생태계에서 Kestra가 어떤 위치를 차지하고 있는지 배우게 됩니다.
+
+2.1.1 워크플로우 오케스트레이션이란 무엇인가?
+음악 오케스트라를 떠올려 보세요. 오케스트라에는 다양한 악기들이 있습니다. 각 악기는 역할이 다르고 개수도 제각각이죠. 이 모든 악기가 제시간에 맞춰 조화로운 소리를 내기 위해서는, 전체를 조율하며 연주 시점을 알려주는 지휘자가 필요합니다.
+
+이제 이 **악기들을 '데이터 도구'**로, **지휘자를 '오케스트레이터'**로 바꿔서 생각해보겠습니다. 우리는 보통 여러 도구와 플랫폼을 함께 사용해야 합니다. 어떤 작업은 정해진 시간에 맞춰 실행되어야 하고, 어떤 작업은 특정 이벤트가 발생했을 때 시작되어야 하죠. 이때 오케스트레이터가 등판하여 이 모든 도구가 협업할 수 있도록 관리합니다.
+
+워크플로우 오케스트레이터가 하는 주요 작업:
+
+미리 정의된 단계들로 구성된 워크플로우를 실행합니다.
+
+오류를 모니터링하고 기록하며, 에러 발생 시 추가 조치(재시도 등)를 취합니다.
+
+스케줄(시간)이나 특정 이벤트에 따라 워크플로우를 자동으로 실행합니다.
+
+데이터 엔지니어링에서는 데이터를 한 곳에서 다른 곳으로 옮기고, 그 과정에서 데이터를 수정(변환)하는 일이 빈번합니다. 오케스트레이터는 이 모든 단계를 관리하는 동시에, 전체 과정을 한눈에 파악할 수 있는 가시성을 제공합니다.
+
+이번 모듈에서는 Kestra를 중심으로 ETL(추출, 변환, 적재) 데이터 파이프라인을 직접 구축해 볼 것입니다. 하지만 본격적인 구축에 앞서, Kestra가 정확히 어떻게 작동하는지 먼저 이해해 봅시다!
+
+다음 단계로 진행할까요? (Kestra의 핵심 개념이나 인터페이스 구조 등에 대해 알아볼 수 있습니다.)
+
+요약
+
+2.1.1 워크플로우 오케스트레이션 요약
+워크플로우 오케스트레이션은 복잡한 데이터 작업들이 '누가, 언제, 무엇을' 할지 결정하고 관리하는 데이터 팀의 지휘자 역할을 합니다.
+
+구분	비유 (오케스트라)	실제 (데이터 파이프라인)
+개별 구성원	다양한 악기 (바이올린, 드럼 등)	다양한 도구 (Python, SQL, Cloud 등)
+관리자	지휘자	워크플로우 오케스트레이터 (Kestra)
+연주곡	악보	정의된 워크플로우 (Steps)
+핵심 기능 3가지:
+
+실행: 정해진 순서대로 작업(Task)을 수행.
+
+모니터링: 에러 발생 시 로그를 남기고 알림 및 재시도 수행.
+
+자동화: 특정 시간(스케줄)이나 특정 사건(이벤트)에 맞춰 자동 실행.
+
+결론: 데이터 엔지니어링의 핵심인 ETL(추출→변환→적재) 과정을 효율적으로 관리하고, 전체 파이프라인의 흐름을 한눈에 파악하기 위해 반드시 필요한 도구입니다.
+
+다음으로 Kestra의 특징이나 설치 방법으로 넘어갈까요?
+
+2.2 Getting Started with Kestra
+
+
+
+In this section, you'll learn how to install Kestra, as well as the key concepts required to build your first workflow. Once our first workflow is built, we can extend this further by executing a Python script inside of a workflow.
+
+You will:
+
+Install Kestra using Docker Compose
+
+Learn the concepts of Kestra to build your first workflow
+
+Execute a Python script inside of a Kestra Flow
+
+2.2.1 - Installing Kestra
+
+
+
+To install Kestra, we are going to use Docker Compose. We already have a Postgres database set up, along with pgAdmin from Module 1. We can continue to use these with Kestra but we'll need to make a few modifications to our Docker Compose file.
+
+Use this example Docker Compose file to correctly add the 2 new services and set up the volumes correctly.
+
+Add information about setting a username and password.
+
+We'll set up Kestra using Docker Compose containing one container for the Kestra server and another for the Postgres database:
+
+cd 02-workflow-orchestration
+
+docker compose up -d
+
+
+
+Note: Check that pgAdmin isn't running on the same ports as Kestra. If so, check out the FAQ at the bottom of the README.
+
+Once the container starts, you can access the Kestra UI at http://localhost:8080.
+
+To shut down Kestra, go to the same directory and run the following command:
+
+docker compose down
+
+
+
+Add Flows to Kestra
+
+
+
+Flows can be added to Kestra by copying and pasting the YAML directly into the editor, or by adding via Kestra's API. See below for adding programmatically.
+
+Add Flows to Kestra programmatically
+
+If you prefer to add flows programmatically using Kestra's API, run the following commands:
+
+# Import all flows: assuming username admin@kestra.io and password Admin1234 (adjust to match your username and password)
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/01_hello_world.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/02_python.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/03_getting_started_data_pipeline.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/04_postgres_taxi.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/05_postgres_taxi_scheduled.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/06_gcp_kv.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/07_gcp_setup.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/08_gcp_taxi.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/09_gcp_taxi_scheduled.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/10_chat_without_rag.yaml
+
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/11_chat_with_rag.yaml
+
+
+
+Videos
+
+
+
+2.2.1 - Installing Kestra
+
+Resources
+
+
+
+Install Kestra with Docker Compose
+
+2.2.2 - Kestra Concepts
+
+
+
+To start building workflows in Kestra, we need to understand a number of concepts.
+
+Flow - a container for tasks and their orchestration logic.
+
+Tasks - the steps within a flow.
+
+Inputs - dynamic values passed to the flow at runtime.
+
+Outputs - pass data between tasks and flows.
+
+Triggers - mechanism that automatically starts the execution of a flow.
+
+Execution - a single run of a flow with a specific state.
+
+Variables - key–value pairs that let you reuse values across tasks.
+
+Plugin Defaults - default values applied to every task of a given type within one or more flows.
+
+Concurrency - control how many executions of a flow can run at the same time.
+
+While there are more concepts used for building powerful workflows, these are the ones we're going to use to build our data pipelines.
+
+The flow 01_hello_world.yaml showcases all of these concepts inside of one workflow:
+
+The flow has 5 tasks: 2 log tasks and a sleep task
+
+The flow takes an input called name.
+
+There is a variable that takes the name input to generate a full welcome message.
+
+An output is generated from the return task and is logged in a later log task.
+
+There is a trigger to execute this flow every day at 10am.
+
+Plugin Defaults are used to make both log tasks send their messages as ERROR level.
+
+We have a concurrency limit of 2 executions. Any further ones made while 2 are running will fail.
+
+Videos
+
+
+
+2.2.2 - Kestra Concepts
+
+Resources
+
+
+
+Tutorial
+
+Workflow Components Documentation
+
+2.2.3 - Orchestrate Python Code
+
+
+
+Now that we've built our first workflow, we can take it a step further by adding Python code into our flow. In Kestra, we can run Python code from a dedicated file or write it directly inside of our workflow.
+
+While Kestra has a huge variety of plugins available for building your workflows, you also have the option to write your own code and have Kestra execute that based on schedules or events. This means you can pick the right tools for your pipelines, rather than the ones you're limited to.
+
+In our example Python workflow, 02_python.yaml, our code fetches the number of Docker image pulls from DockerHub and returns it as an output to Kestra. This is useful as we can access this output with other tasks, even though it was generated inside of our Python script.
+
+Videos
+
+
+
+2.2.3 - Orchestrate Python Code
+
+Resources
+
+
+
+How-to Guide: Python
+
+2.3 Hands-On Coding Project: Build Data Pipelines with Kestra
+
+
+
+Next, we're gonna build ETL pipelines for Yellow and Green Taxi data from NYC’s Taxi and Limousine Commission (TLC). You will:
+
+Extract data from CSV files.
+
+Load it into Postgres or Google Cloud (GCS + BigQuery).
+
+Explore scheduling and backfilling workflows.
+
+2.3.1 Getting Started Pipeline
+
+
+
+This introductory flow is added just to demonstrate a simple data pipeline which extracts data via HTTP REST API, transforms that data in Python and then queries it using DuckDB. For this stage, a new separate Postgres database is created for the exercises.
+
+
+
+Add the flow 03_getting_started_data_pipeline.yaml from the UI if you haven't already and execute it to see the results. Inspect the Gantt and Logs tabs to understand the flow execution.
+
+Videos
+
+
+
+2.3.1 - Getting Started Pipeline
+
+Resources
+
+
+
+ETL Tutorial Video
+
+ETL in 3 Minutes
+
+2.3.2 Local DB: Load Taxi Data to Postgres
+
+
+
+Before we start loading data to GCP, we'll first play with the Yellow and Green Taxi data using a local Postgres database running in a Docker container. We will use the same database from Module 1 which should be in the same Docker Compose file as Kestra.
+
+The flow will extract CSV data partitioned by year and month, create tables, load data to the monthly table, and finally merge the data to the final destination table.
+
+
+
+The flow code: 04_postgres_taxi.yaml.
+
+
+
+Note
+
+The NYC Taxi and Limousine Commission (TLC) Trip Record Data provided on the nyc.gov website is currently available only in a Parquet format, but this is NOT the dataset we're going to use in this course. For the purpose of this course, we'll use the CSV files available here on GitHub. This is because the Parquet format can be challenging to understand by newcomers, and we want to make the course as accessible as possible — the CSV format can be easily introspected using tools like Excel or Google Sheets, or even a simple text editor.
+
+Videos
+
+
+
+2.3.2 - Local DB: Load Taxi Data to Postgres
+
+Resources
+
+
+
+Docker Compose with Kestra, Postgres and pgAdmin
+
+2.3.3 Local DB: Learn Scheduling and Backfills
+
+
+
+We can now schedule the same pipeline shown above to run daily at 9 AM UTC. We'll also demonstrate how to backfill the data pipeline to run on historical data.
+
+Note: given the large dataset, we'll backfill only data for the green taxi dataset for the year 2019.
+
+The flow code: 05_postgres_taxi_scheduled.yaml.
+
+Videos
+
+
+
+2.3.3 - Scheduling and Backfills
+
+2.4 ELT Pipelines in Kestra: Google Cloud Platform
+
+
+
+Now that you've learned how to build ETL pipelines locally using Postgres, we are ready to move to the cloud. In this section, we'll load the same Yellow and Green Taxi data to Google Cloud Platform (GCP) using:
+
+Google Cloud Storage (GCS) as a data lake
+
+BigQuery as a data warehouse.
+
+2.4.1 - ETL vs ELT
+
+
+
+In 2.3, we made a ETL pipeline inside of Kestra:
+
+Extract: Firstly, we extract the dataset from GitHub
+
+Transform: Next, we transform it with Python
+
+Load: Finally, we load it into our Postgres database
+
+While this is very standard across the industry, sometimes it makes sense to change the order when working with the cloud. If you're working with a large dataset, like the Yellow Taxi data, there can be benefits to extracting and loading straight into a data warehouse, and then performing transformations directly in the data warehouse. When working with BigQuery, we will use ELT:
+
+Extract: Firstly, we extract the dataset from GitHub
+
+Load: Next, we load this dataset (in this case, a csv file) into a data lake (Google Cloud Storage)
+
+Transform: Finally, we can create a table inside of our data warehouse (BigQuery) which uses the data from our data lake to perform our transformations.
+
+The reason for loading into the data warehouse before transforming means we can utilize the cloud's performance benefits for transforming large datasets. What might take a lot longer for a local machine, can take a fraction of the time in the cloud.
+
+Over the next few videos, we'll look at setting up BigQuery and transforming the Yellow Taxi dataset.
+
+Videos
+
+
+
+2.4.1 - ETL vs ELT
+
+Resources
+
+
+
+ETL vs ELT Video
+
+Data Warehouse 101 Video
+
+Data Lakes 101 Video
+
+2.4.2 Setup Google Cloud Platform (GCP)
+
+
+
+Before we start loading data to GCP, we need to set up the Google Cloud Platform.
+
+First, adjust the following flow 06_gcp_kv.yaml to include your service account, GCP project ID, BigQuery dataset and GCS bucket name (along with their location) as KV Store values:
+
+GCP_PROJECT_ID
+
+GCP_LOCATION
+
+GCP_BUCKET_NAME
+
+GCP_DATASET.
+
+Create GCP Resources
+
+
+
+If you haven't already created the GCS bucket and BigQuery dataset in the first week of the course, you can use this flow to create them: 07_gcp_setup.yaml.
+
+Videos
+
+
+
+2.4.2 - Setup Google Cloud Platform
+
+Resources
+
+
+
+Set up Google Cloud Service Account in Kestra
+
+2.4.3 GCP Workflow: Load Taxi Data to BigQuery
+
+
+
+Now that Google Cloud is set up with a storage bucket, we can start the ELT process.
+
+
+
+The flow code: 08_gcp_taxi.yaml.
+
+Videos
+
+
+
+2.4.3 - Create an ETL Pipeline with GCS and BigQuery in Kestra
+
+2.4.4 GCP Workflow: Schedule and Backfill Full Dataset
+
+
+
+We can now schedule the same pipeline shown above to run daily at 9 AM UTC for the green dataset and at 10 AM UTC for the yellow dataset. You can backfill historical data directly from the Kestra UI.
+
+Since we now process data in a cloud environment with infinitely scalable storage and compute, we can backfill the entire dataset for both the yellow and green taxi data without the risk of running out of resources on our local machine.
+
+The flow code: 09_gcp_taxi_scheduled.yaml.
+
+Videos
+
+
+
+2.4.4 - GCP Workflow: Schedule and Backfills
+
+2.5 Using AI for Data Engineering in Kestra
+
+
+
+This section builds on what you learned earlier in Module 2 to show you how AI can speed up workflow development.
+
+By the end of this section, you will:
+
+Understand why context engineering matters when collaborating with LLMs
+
+Use AI Copilot to build Kestra flows faster
+
+Use Retrieval Augmented Generation (RAG) in data pipelines
+
+Prerequisites
+
+
+
+Completion of earlier sections in Module 2 (Workflow Orchestration with Kestra)
+
+Kestra running locally
+
+Google Cloud account with access to Gemini API (there's a generous free tier!)
+
+2.5.1 Introduction: Why AI for Workflows?
+
+
+
+As data engineers, we spend significant time writing boilerplate code, searching documentation, and structuring data pipelines. AI tools can help us:
+
+Generate workflows faster: Describe what you want to accomplish in natural language instead of writing YAML from scratch
+
+Avoid errors: Get syntax-correct, up-to-date workflow code that follows best practices
+
+However, AI is only as good as the context we provide. This section teaches you how to engineer that context for reliable, production-ready data workflows.
+
+Videos
+
+
+
+2.5.1 - Using AI for Data Engineering
+
+2.5.2 Context Engineering with ChatGPT
+
+
+
+Let's start by seeing what happens when AI lacks proper context.
+
+Experiment: ChatGPT Without Context
+
+
+
+Open ChatGPT in a private browser window (to avoid any existing chat context): https://chatgpt.com
+
+
+
+Enter this prompt:
+
+Create a Kestra flow that loads NYC taxi data from a CSV file to BigQuery. The flow should extract data, upload to GCS, and load to BigQuery.
+
+
+
+Observe the results:
+
+ChatGPT will generate a Kestra flow, but it likely contains:Outdated plugin syntax e.g., old task types that have been renamed
+
+Incorrect property names e.g., properties that don't exist in current versions
+
+Hallucinated features e.g., tasks, triggers or properties that never existed
+
+Why Does This Happen?
+
+
+
+Large Language Models (LLMs) like GPT models from OpenAI are trained on data up to a specific point in time (knowledge cutoff). They don't automatically know about:
+
+Software updates and new releases
+
+Renamed plugins or changed APIs
+
+This is the fundamental challenge of using AI: the model can only work with information it has access to.
+
+Key Learning: Context is Everything
+
+
+
+Without proper context:
+
+❌ Generic AI assistants hallucinate outdated or incorrect code
+
+❌ You can't trust the output for production use
+
+With proper context:
+
+✅ AI generates accurate, current, production-ready code
+
+✅ You can iterate faster by letting AI generate boilerplate workflow code
+
+In the next section, we'll see how Kestra's AI Copilot solves this problem.
+
+Videos
+
+
+
+2.5.2 - Context Engineering with ChatGPT
+
+2.5.3 AI Copilot in Kestra
+
+
+
+Kestra's AI Copilot is specifically designed to generate and modify Kestra flows with full context about the latest plugins, workflow syntax, and best practices.
+
+Setup AI Copilot
+
+
+
+Before using AI Copilot, you need to configure Gemini API access in your Kestra instance.
+
+Step 1: Get Your Gemini API Key
+
+Visit Google AI Studio: https://aistudio.google.com/app/apikey
+
+Sign in with your Google account
+
+Click "Create API Key"
+
+Copy the generated key (keep it secure!)
+
+
+
+Warning
+
+Never commit API keys to Git. Always use environment variables or Kestra's KV Store.
+
+Step 2: Configure Kestra AI Copilot
+
+Add the following to your Kestra configuration. You can do this by modifying your docker-compose.yml file from 2.2:
+
+services:
+
+kestra:
+
+environment:
+
+KESTRA_CONFIGURATION: | kestra: ai: type: gemini gemini: model-name: gemini-2.5-flash api-key: ${GEMINI_API_KEY}
+
+
+
+Then restart Kestra:
+
+cd 02-workflow-orchestration/dockerexport GEMINI_API_KEY="your-api-key-here"
+
+docker compose up -d
+
+
+
+Exercise: ChatGPT vs AI Copilot Comparison
+
+
+
+Objective: Learn why context engineering matters.
+
+Open Kestra UI at http://localhost:8080
+
+Create a new flow and open the Code editor panel
+
+Click the AI Copilot button (sparkle icon ✨) in the top-right corner
+
+Enter the same exact prompt we used with ChatGPT:Create a Kestra flow that loads NYC taxi data from a CSV file to BigQuery. The flow should extract data, upload to GCS, and load to BigQuery.
+
+
+
+Compare the outputs:
+
+✅ Copilot generates executable, working YAML
+
+✅ Copilot uses correct plugin types and properties
+
+✅ Copilot follows current Kestra best practices
+
+Key Learning: Context matters! AI Copilot has access to current Kestra documentation, generating Kestra flows better than a generic ChatGPT assistant.
+
+Videos
+
+
+
+2.5.3 - AI Copilot in Kestra
+
+2.5.4 Bonus: Retrieval Augmented Generation (RAG)
+
+
+
+To further learn how to provide context to your prompts, this bonus section demonstrates how to use RAG.
+
+What is RAG?
+
+
+
+RAG (Retrieval Augmented Generation) is a technique that:
+
+Retrieves relevant information from your data sources
+
+Augments the AI prompt with this context
+
+Generates a response grounded in real data
+
+This solves the hallucination problem by ensuring the AI has access to current, accurate information at query time.
+
+How RAG Works in Kestra
+
+
+
+
+
+The Process:
+
+Ingest documents: Load documentation, release notes, or other data sources
+
+Create embeddings: Convert text into vector representations using an LLM
+
+Store embeddings: Save vectors in Kestra's KV Store (or a vector database)
+
+Query with context: When you ask a question, retrieve relevant embeddings and include them in the prompt
+
+Generate response: The LLM has real context and provides accurate answers
+
+Exercise: Retrieval With vs Without Context
+
+
+
+Objective: Understand how RAG eliminates hallucinations by grounding LLM responses in real data.
+
+Part A: Without RAG
+
+Navigate to the 10_chat_without_rag.yaml flow in your Kestra UI
+
+Click Execute
+
+Wait for the execution to complete
+
+Open the Logs tab
+
+Read the output - notice how the response about "Kestra 1.1 features" is:Vague or generic
+
+Potentially incorrect
+
+Missing specific details
+
+Based only on the model's training data (which may be outdated)
+
+Part B: With RAG
+
+Navigate to the 11_chat_with_rag.yaml flow
+
+Click Execute
+
+Watch the execution:First task: Ingests Kestra 1.1 release documentation, creates embeddings and stores them
+
+Second task: Prompts LLM with context retrieved from stored embeddings
+
+Open the Logs tab
+
+Compare this output with the previous one - notice how it's:✅ Specific and detailed
+
+✅ Accurate with real features from the release
+
+✅ Grounded in actual documentation
+
+Key Learning: RAG (Retrieval Augmented Generation) grounds AI responses in current documentation, eliminating hallucinations and providing accurate, context-aware answers.
+
+RAG Best Practices
+
+
+
+Keep documents updated: Regularly re-ingest to ensure current information
+
+Chunk appropriately: Break large documents into meaningful chunks
+
+Test retrieval quality: Verify that the right documents are retrieved
+
+Additional AI Resources
+
+
+
+Kestra Documentation:
+
+AI Tools Overview
+
+AI Copilot
+
+RAG Workflows
+
+AI Workflows
+
+Kestra Blueprints - Pre-built workflow examples
+
+Kestra Plugin Documentation:
+
+AI Plugin
+
+RAG Tasks
+
+External Documentation:
+
+Google Gemini
+
+Google AI Studio
+
+Videos
+
+
+
+2.5.4 (Bonus) - Retrieval Augmented Generation
+
+2.6 Bonus: Deploy to the Cloud (Optional)
+
+
+
+Now that we've got all our pipelines working and we know how to quickly create new flows with Kestra's AI Copilot, we can deploy Kestra to the cloud so it can continue to orchestrate our scheduled pipelines.
+
+In this bonus section, we'll cover how you can deploy Kestra on Google Cloud and automatically sync your workflows from a Git repository.
+
+Note: When committing your workflows to Kestra, make sure your workflow doesn't contain any sensitive information. You can use Secrets and the KV Store to keep sensitive data out of your workflow logic.
+
+Resources
+
+
+
+Install Kestra on Google Cloud
+
+Moving from Development to Production
+
+Using Git in Kestra
+
+Deploy Flows with GitHub Actions
+
+2.7 Additional Resources 📚
+
+
+
+Check Kestra Docs
+
+Explore our Blueprints library
+
+Browse over 600 plugins available in Kestra
+
+Give us a star on GitHub
+
+Join our Slack community if you have any questions
+
+Find all the videos in this YouTube Playlist
+
+Troubleshooting tips
+
+
+
+If you face any issues with Kestra flows in Module 2, make sure to use the following Docker images/ports:
+
+image: kestra/kestra:v1.1 - pin your Kestra Docker image to this version so we can ensure reproducibility; do NOT use kestra/kestra:develop as this is a bleeding-edge development version that might contain bugs
+
+postgres:18 — make sure to pin your Postgres image to version 18
+
+If you run pgAdmin or something else on port 8080, you can adjust Kestra docker-compose to use a different port, e.g. change port mapping to 18080 instead of 8080, and then access Kestra UI in your browser from http://localhost:18080/ instead of from http://localhost:8080/
+
+If you are still facing any issues, stop and remove your existing Kestra + Postgres containers and start them again using docker-compose up -d. If this doesn't help, post your question on the DataTalksClub Slack or on Kestra's Slack http://kestra.io/slack.
+
+If you encounter similar errors to:
+
+BigQueryError{reason=invalid, location=null,
+
+message=Error while reading table: kestra-sandbox.zooomcamp.yellow_tripdata_2020_01,
+
+error message: CSV table references column position 17, but line contains only 14 columns.;
+
+line_number: 2103925 byte_offset_to_start_of_line: 194863028
+
+column_index: 17 column_name: "congestion_surcharge" column_type: NUMERIC
+
+File: gs://anna-geller/yellow_tripdata_2020-01.csv}
+
+
+
+It means that the CSV file you're trying to load into BigQuery has a mismatch in the number of columns between the external source table (i.e. file in GCS) and the destination table in BigQuery. This can happen when for due to network/transfer issues, the file is not fully downloaded from GitHub or not correctly uploaded to GCS. The error suggests schema issues but that's not the case. Simply rerun the entire execution including redownloading the CSV file and reuploading it to GCS. This should resolve the issue.
+
+Homework
+
+
+
+See the 2026 cohort folder
+
+Community notes
+
+
+
+Did you take notes? You can share them by creating a PR to this file!
+
+Add your notes above this line
+
+Previous Cohorts
+
+
+
+2022: notes and videos
+
+2023: notes and videos
+
+2024: notes and videos
+
+2025: notes and videos
+
+ 
+
+한글로 매끄럽게 번역
+
+모듈 2의 나머지 상세 내용들을 한국어로 매끄럽고 직관적으로 번역해 드립니다. Kestra 설치부터 AI 활용까지의 핵심 과정을 담고 있습니다.
+
+2.2 Kestra 시작하기
+이 섹션에서는 Kestra 설치 방법과 첫 워크플로우를 구축하는 데 필요한 핵심 개념을 배웁니다. 더 나아가 워크플로우 내에서 Python 스크립트를 실행하는 방법까지 다룹니다.
+
+2.2.1 Kestra 설치
+Kestra 설치에는 Docker Compose를 사용합니다. 모듈 1에서 설정한 Postgres와 pgAdmin을 그대로 사용할 수 있지만, Kestra 서비스를 추가하기 위해 docker-compose.yml 파일을 일부 수정해야 합니다.
+
+설정: 02-workflow-orchestration 디렉토리로 이동합니다.
+
+실행: docker compose up -d 명령어를 입력합니다.
+
+참고: pgAdmin이 Kestra와 같은 포트(8080)를 사용하는지 확인하세요. 포트가 겹치면 포트 번호를 수정해야 합니다.
+
+접속: 설치가 완료되면 http://localhost:8080에서 Kestra UI에 접속할 수 있습니다.
+
+2.2.2 Kestra 핵심 개념
+워크플로우를 만들기 위해 다음 용어들을 이해해야 합니다.
+
+Flow: 태스크와 실행 로직을 담는 컨테이너(전체 설계도).
+
+Tasks: 플로우 안에서 실행되는 개별 단계들.
+
+Inputs: 실행 시점에 전달하는 동적 값.
+
+Outputs: 태스크 간 혹은 플로우 간에 전달되는 데이터.
+
+Triggers: 플로우를 자동으로 시작하게 하는 메커니즘(스케줄러 등).
+
+Variables: 여러 태스크에서 재사용할 수 있는 키-값 쌍.
+
+2.2.3 Python 코드 오케스트레이션
+Kestra는 전용 플러그인 외에도 Python 코드를 직접 실행할 수 있는 기능을 제공합니다. 이를 통해 기존에 보유한 라이브러리나 커스텀 로직을 파이프라인에 쉽게 통합할 수 있습니다.
+
+2.3 실습 프로젝트: Kestra로 데이터 파이프라인 구축
+뉴욕 택시(TLC) 데이터를 활용해 실제 ETL 파이프라인을 구축합니다.
+
+기본 파이프라인 (03_getting_started): API 데이터 추출 -> Python 변환 -> DuckDB 쿼리 과정을 체험합니다.
+
+로컬 DB 로드 (04_postgres_taxi): CSV 데이터를 추출하여 로컬 Postgres에 적재합니다.
+
+주의: 공식 홈페이지의 Parquet 파일 대신, 교육 목적상 다루기 쉬운 GitHub의 CSV 파일을 사용합니다.
+
+스케줄링 및 백필 (05_postgres_taxi_scheduled): 매일 오전 9시에 실행되도록 설정하고, 과거 데이터(Backfill)를 한 번에 처리하는 방법을 배웁니다.
+
+2.4 GCP 환경에서의 ELT 파이프라인
+로컬을 넘어 클라우드(GCP)로 확장합니다. 여기서는 ELT(추출-적재-변환) 방식을 채택합니다.
+
+ETL vs ELT: 대용량 데이터(Yellow Taxi 등)를 다룰 때는 클라우드 저장소(GCS)에 먼저 넣고(Load), 빅쿼리(BigQuery)의 강력한 성능을 이용해 변환(Transform)하는 ELT 방식이 더 효율적입니다.
+
+GCP 설정: 서비스 계정, 프로젝트 ID 등을 Kestra의 KV Store에 설정하고 GCS 버킷과 빅쿼리 데이터셋을 생성합니다.
+
+2.5 데이터 엔지니어링을 위한 AI 활용
+AI를 사용하여 워크플로우 개발 속도를 높이는 방법을 배웁니다.
+
+2.5.1 왜 AI를 쓰는가?
+반복적인 코드 작성(Boilerplate) 시간을 줄이고 에러를 방지하기 위함입니다. 하지만 AI는 **문맥(Context)**이 없으면 낡은 코드를 생성할 위험이 있습니다.
+
+2.5.3 Kestra AI Copilot
+Kestra의 AI Copilot은 최신 플러그인과 구문을 학습한 상태입니다.
+
+설정: Gemini API 키를 발급받아 Kestra 설정에 추가합니다.
+
+비교: 일반 ChatGPT는 과거 데이터를 기반으로 잘못된 YAML을 만들 수 있지만, Copilot은 현재 Kestra 문서를 바탕으로 실행 가능한 정확한 코드를 생성합니다.
+
+2.5.4 RAG (검색 증강 생성)
+RAG는 AI에게 최신 문서나 특정 데이터를 참고 자료로 준 뒤 답을 얻는 기술입니다.
+
+실습: Kestra 1.1 업데이트 내용을 학습시킨 경우(With RAG)와 그렇지 않은 경우(Without RAG)의 답변 정확도 차이를 직접 확인해 봅니다.
+
+2.6 ~ 2.7 추가 리소스 및 트러블슈팅
+클라우드 배포: 로컬에서 완성한 파이프라인을 실제 운영 환경(GCP 등)으로 배포하고 Git과 동기화하는 방법을 안내합니다.
+
+문제 해결 팁: 포트 충돌 문제나 빅쿼리 로드 시 발생하는 컬럼 불일치 에러 대응법을 확인하세요. (에러 발생 시 재실행이 가장 빠른 해결책인 경우가 많습니다.)
+
+내용 확인이 완료되었습니다! 이제 구체적으로 어떤 실습 단계(예: Docker 설치나 첫 YAML 작성)부터 도와드릴까요?
+
+기존의 docker compose yml 파일이 있는데 본문엔
+
+
+
+volumes:
+
+ny_taxi_postgres_data:
+
+driver: local
+
+kestra_postgres_data:
+
+driver: local
+
+kestra_data:
+
+driver: local
+
+
+
+services:
+
+pgdatabase:
+
+image: postgres:18
+
+environment:
+
+POSTGRES_USER: root
+
+POSTGRES_PASSWORD: root
+
+POSTGRES_DB: ny_taxi
+
+ports:
+
+- "5432:5432"
+
+volumes:
+
+- ny_taxi_postgres_data:/var/lib/postgresql
+
+
+
+pgadmin:
+
+image: dpage/pgadmin4
+
+environment:
+
+- PGADMIN_DEFAULT_EMAIL=admin@admin.com
+
+- PGADMIN_DEFAULT_PASSWORD=root
+
+ports:
+
+- "8085:80"
+
+
+
+kestra_postgres:
+
+image: postgres:18
+
+volumes:
+
+- kestra_postgres_data:/var/lib/postgresql
+
+environment:
+
+POSTGRES_DB: kestra
+
+POSTGRES_USER: kestra
+
+POSTGRES_PASSWORD: k3str4
+
+healthcheck:
+
+test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+
+interval: 30s
+
+timeout: 10s
+
+retries: 10
+
+
+
+kestra:
+
+image: kestra/kestra:v1.1
+
+pull_policy: always
+
+# Note that this setup with a root user is intended for development purpose.
+
+# Our base image runs without root, but the Docker Compose implementation needs root to access the Docker socket
+
+# To run Kestra in a rootless mode in production, see: https://kestra.io/docs/installation/podman-compose
+
+user: "root"
+
+command: server standalone
+
+volumes:
+
+- kestra_data:/app/storage
+
+- /var/run/docker.sock:/var/run/docker.sock
+
+- /tmp/kestra-wd:/tmp/kestra-wd
+
+environment:
+
+KESTRA_CONFIGURATION: |
+
+datasources:
+
+postgres:
+
+url: jdbc:postgresql://kestra_postgres:5432/kestra
+
+driverClassName: org.postgresql.Driver
+
+username: kestra
+
+password: k3str4
+
+kestra:
+
+server:
+
+basicAuth:
+
+username: "admin@kestra.io" # it must be a valid email address
+
+password: Admin1234
+
+repository:
+
+type: postgres
+
+storage:
+
+type: local
+
+local:
+
+basePath: "/app/storage"
+
+queue:
+
+type: postgres
+
+tasks:
+
+tmpDir:
+
+path: /tmp/kestra-wd/tmp
+
+url: http://localhost:8080/
+
+ports:
+
+- "8080:8080"
+
+- "8081:8081"
+
+depends_on:
+
+kestra_postgres:
+
+condition: service_started
+
+
+
+
+이걸 사용하래. 그럼 따로 만들어야 함 아니면 기존의 내용아래에 이걸 붙여도 괜찮음
+
+기존에 모듈 1에서 사용하시던 docker-compose.yml 파일이 있다면, 기존 내용을 지우고 이 새로운 내용으로 완전히 교체하거나, 기존 파일의 이름을 변경(예: docker-compose-m1.yml)하고 새 파일을 만드시는 것을 권장합니다.
+
+그 이유는 다음과 같습니다:
+
+1. 서비스 구성의 중복과 통합
+제공해주신 코드에는 이미 모듈 1에서 사용했던 Postgres(pgdatabase)와 pgAdmin(pgadmin) 서비스가 포함되어 있습니다.
+
+단순히 기존 파일 아래에 붙여넣으면 pgdatabase나 pgadmin 서비스 이름이 중복되어 에러가 발생합니다.
+
+이 새로운 설정 파일 하나만 있으면 **기존의 택시 데이터용 DB(ny_taxi)**와 **Kestra 운영을 위한 전용 DB(kestra)**를 동시에 띄울 수 있도록 설계되어 있습니다.
+
+2. 네트워크 및 볼륨 관리의 편의성
+이 YAML 파일은 Kestra가 같은 네트워크상에 있는 pgdatabase에 접근하여 데이터를 넣고 빼는 작업을 수행하기에 최적화되어 있습니다. 하나의 파일로 관리하는 것이 컨테이너 간 통신(DNS) 설정에서 훨씬 유리합니다.
+
+추천하는 작업 순서
+기존 컨테이너 종료: 기존에 모듈 1용 컨테이너가 실행 중이라면 해당 디렉토리에서 종료합니다.
+
+Bash
+docker compose down
+새로운 디렉토리 생성 또는 파일 교체: 모듈 2를 위해 02-workflow-orchestration 폴더를 만들고, 그 안에 위 내용을 docker-compose.yml로 저장하세요.
+
+팁: 만약 기존 모듈 1의 DB 데이터를 꼭 유지해야 한다면, 기존 docker-compose.yml을 백업해두고 위 설정으로 교체하되 volumes 부분을 주의 깊게 살펴봐야 합니다.
+
+실행:
+
+Bash
+docker compose up -d
+💡 주의사항 (포트 충돌 확인)
+Kestra UI: 8080 포트를 사용합니다. 만약 다른 서비스가 이 포트를 쓰고 있다면 8080:8080 부분을 18080:8080 등으로 수정해야 합니다.
+
+pgAdmin: 본문 설정에서는 8085 포트로 설정되어 있습니다. 접속 시 http://localhost:8085를 사용하세요.
+
+이제 이 설정으로 docker-compose.yml을 준비하셨나요? 준비되셨다면 다음 단계로 '첫 번째 Hello World 플로우' 작성을 도와드릴까요?
+
+Kestra는 Docker Compose를 사용해 설치합니다.
+
+이미 모듈 1에서 Postgres 데이터베이스와 pgAdmin을 설정했으므로, 이를 Kestra와 함께 계속 사용할 수 있습니다. 다만, Docker Compose 파일에 몇 가지 수정이 필요합니다.
+
+
+
+아래의 예제 Docker Compose 파일을 사용하여:
+
+
+
+1. 새로운 2개의 서비스(Kestra, Postgres)를 올바르게 추가하고
+
+
+
+2. 볼륨(volume)을 정확하게 설정합니다.
+
+
+
+3. 또한 사용자 이름(username)과 비밀번호(password) 설정에 대한 정보도 추가해야 합니다.
+
+
+
+이렇게 말하는데도?
+
+네, 본문의 의도를 정확하게 짚어주셨습니다! 본문에서 말하는 "몇 가지 수정"이란 기존 설정에 Kestra 관련 내용을 '추가'하여 하나의 통합된 환경을 만들라는 뜻입니다.
+
+사용자께서 올려주신 YAML 코드는 이미 그 수정 사항이 모두 반영된 최종 완성본입니다. 기존 파일에 덧붙이지 말고, 이 코드를 새로운 docker-compose.yml로 사용하시면 됩니다.
+
+구체적으로 어떤 부분이 수정/추가된 것인지 분석해 드릴게요.
+
+1. 새로운 2개의 서비스 추가 (Kestra 전용)
+기존에 pgdatabase와 pgadmin만 있었다면, 여기에 Kestra 구동을 위한 엔진과 전용 DB가 추가되었습니다.
+
+kestra: 워크플로우를 지휘하는 메인 서버입니다.
+
+kestra_postgres: Kestra가 내부적으로 자신의 작업 기록(로그, 상태 등)을 저장하기 위해 사용하는 전용 데이터베이스입니다. (분리해서 관리하는 것이 성능과 안정성 면에서 좋습니다.)
+
+2. 볼륨(Volume) 설정
+데이터가 사라지지 않도록 3개의 저장 공간이 정의되었습니다.
+
+ny_taxi_postgres_data: 우리가 분석할 택시 데이터가 담길 DB용.
+
+kestra_postgres_data: Kestra 시스템 메타데이터 저장용.
+
+kestra_data: Kestra가 실행 중에 생성하는 파일이나 스토리지 데이터 저장용.
+
+3. 사용자 이름 및 비밀번호 설정 (중요)
+YAML 파일의 environment 섹션을 보시면 다음 정보들이 설정되어 있습니다.
+
+서비스	분류	ID / Username	Password	접속 정보
+Kestra UI	관리자 로그인	admin@kestra.io	Admin1234	localhost:8080
+Kestra DB	내부 연결용	kestra	k3str4	(내부 통신용)
+Taxi DB	모듈1 연동용	root	root	localhost:5432
+pgAdmin	DB 관리툴	admin@admin.com	root	localhost:8085
+정리하자면:
+기존 파일은 따로 백업해 두세요.
+
+이 새로운 내용으로 docker-compose.yml을 만드세요. (모듈 1의 내용이 이미 하단에 포함되어 있으므로 이것 하나면 충분합니다.)
+
+터미널에서 실행: docker compose up -d
+
+확인: 브라우저에서 localhost:8080에 들어가 위 관리자 계정으로 로그인되는지 확인합니다.
+
+이제 컨테이너를 실행해 보시겠어요? 실행 중에 에러가 나거나 로그인이 안 된다면 바로 말씀해 주세요! 그 후에 2.2.2 Kestra Concepts 실습으로 넘어가겠습니다.
+
+이게 내 기존 docker compose임
+
+
+
+services:
+
+  pgdatabase:
+
+    image: postgres:18
+
+    container_name: pgdatabase
+
+    environment:
+
+      POSTGRES_USER: root
+
+      POSTGRES_PASSWORD: root
+
+      POSTGRES_DB: ny_taxi
+
+    volumes:
+
+      - ny_taxi_postgres_data:/var/lib/postgresql
+
+    ports:
+
+      - "5432:5432"
+
+
+
+  pgadmin:
+
+    image: dpage/pgadmin4:9.11
+
+    container_name: pgadmin
+
+    environment:
+
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+
+      PGADMIN_DEFAULT_PASSWORD: root
+
+      PGADMIN_CONFIG_PROXY_X_HOST_COUNT: 1
+
+      PGADMIN_CONFIG_PROXY_X_PREFIX_COUNT: 1
+
+    volumes:
+
+      - pgadmin_data:/var/lib/pgadmin
+
+    ports:
+
+      - "8085:80"
+
+
+
+volumes:
+
+  ny_taxi_postgres_data:
+
+  pgadmin_data:
+
+
+
+
+
+이걸 잘 사용해왔고 이걸 망치고 싶지 않아
+
+기존에 구축해둔 환경을 망치고 싶지 않으신 그 마음 충분히 이해합니다! 데이터 엔지니어링 실습에서는 기존 데이터와 설정을 유지하는 것이 무엇보다 중요하죠.
+
+사용자님의 기존 파일과 본문의 새로운 파일을 비교해 보면, 기존의 pgdatabase와 pgadmin 설정이 거의 동일합니다. 따라서 기존 환경을 보존하면서 Kestra를 추가하는 가장 안전한 방법을 안내해 드릴게요.
+
+🛡️ 기존 환경을 지키며 Kestra 추가하기 (가장 안전한 방법)
+기존 docker-compose.yml 파일을 아래 내용으로 업데이트(덮어쓰기) 하세요. 기존에 쓰시던 ny_taxi_postgres_data 볼륨 이름을 그대로 유지했기 때문에, 기존 DB에 들어있던 데이터는 삭제되지 않고 그대로 연결됩니다.
+
+YAML
+services:
+  # 1. 기존에 사용하던 택시 DB (데이터 보존됨)
+  pgdatabase:
+    image: postgres:18
+    container_name: pgdatabase
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ny_taxi
+    volumes:
+      - ny_taxi_postgres_data:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+
+  # 2. 기존에 사용하던 pgadmin (데이터 보존됨)
+  pgadmin:
+    image: dpage/pgadmin4:9.11
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_CONFIG_PROXY_X_HOST_COUNT: 1
+      PGADMIN_CONFIG_PROXY_X_PREFIX_COUNT: 1
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "8085:80"
+
+  # 3. Kestra 전용 내부 DB (새로 추가)
+  kestra_postgres:
+    image: postgres:18
+    container_name: kestra_postgres
+    volumes:
+      - kestra_postgres_data:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: kestra
+      POSTGRES_USER: kestra
+      POSTGRES_PASSWORD: k3str4
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  # 4. Kestra 서버 (새로 추가)
+  kestra:
+    image: kestra/kestra:v1.1
+    container_name: kestra_server
+    pull_policy: always
+    user: "root"
+    command: server standalone
+    volumes:
+      - kestra_data:/app/storage
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/kestra-wd:/tmp/kestra-wd
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://kestra_postgres:5432/kestra
+            driverClassName: org.postgresql.Driver
+            username: kestra
+            password: k3str4
+        kestra:
+          server:
+            basicAuth:
+              username: "admin@kestra.io"
+              password: Admin1234
+          repository:
+            type: postgres
+          storage:
+            type: local
+            local:
+              basePath: "/app/storage"
+          queue:
+            type: postgres
+          tasks:
+            tmpDir:
+              path: /tmp/kestra-wd/tmp
+          url: http://localhost:8080/
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      kestra_postgres:
+        condition: service_started
+
+volumes:
+  ny_taxi_postgres_data: # 기존 볼륨 유지
+  pgadmin_data:          # 기존 볼륨 유지
+  kestra_postgres_data:  # Kestra용 새 볼륨
+  kestra_data:           # Kestra용 새 볼륨
+💡 왜 이렇게 하면 안전한가요?
+볼륨 유지: volumes: 섹션에서 기존에 쓰시던 ny_taxi_postgres_data와 pgadmin_data를 그대로 적어주었습니다. Docker Compose는 이름이 같은 볼륨이 있으면 새로 만들지 않고 기존 것을 그대로 연결합니다.
+
+서비스 이름 동일: pgdatabase라는 이름을 그대로 사용하므로, 이전에 작성하셨던 다른 스크립트나 연결 설정이 깨지지 않습니다.
+
+포트 분리: Kestra는 8080 포트를 사용하고, pgAdmin은 기존처럼 8085 포트를 사용하므로 충돌이 없습니다.
+
+✅ 다음 단계
+기존 실행 중인 컨테이너가 있다면 터미널에서 docker compose down으로 종료합니다. (데이터는 볼륨에 있으니 안심하세요!)
+
+위의 통합된 코드로 docker-compose.yml 내용을 수정합니다.
+
+docker compose up -d를 실행합니다.
+
+http://localhost:8080으로 접속하여 admin@kestra.io / Admin1234로 로그인이 잘 되는지 확인합니다.
+
+이렇게 설정을 마치셨다면, 이제 2.2.2 Kestra Concepts의 '첫 번째 Hello World 플로우'를 실행해 볼 준비가 된 것입니다. 진행할까요?
+
+기존의 것은 (backup)으로 표시해두고 기존의 파일명을 이것으로 바꿔야겠네
+
+네, 맞습니다! 아주 현명하고 안전한 방법입니다.
+
+기존의 안정적인 환경을 백업으로 명시해두고 새롭게 구성하면, 혹시라도 문제가 생겼을 때 언제든 이전 상태로 돌아갈 수 있습니다.
+
+
+🛠️ 추천하는 파일 관리 방식
+기존 파일 이름 변경: 기존의 docker-compose.yml 파일을 docker-compose.backup.yml (또는 docker-compose.m1.yml)로 이름을 바꿉니다.
+
+새 파일 생성: 새로운 docker-compose.yml 파일을 만들고, 제가 위에서 드린 통합 코드를 붙여넣습니다.
+
+컨테이너 갱신: 터미널에서 아래 명령어를 순서대로 입력하세요.
+
+Bash
+# 기존 컨테이너 종료 (백업 파일 기준)
+docker compose -f docker-compose.backup.yml down
+
+# 새 설정으로 컨테이너 실행
+docker compose up -d
+💡 이렇게 하면 얻는 이점
+데이터 안전성: ny_taxi_postgres_data라는 볼륨 이름이 동일하기 때문에, 새 docker-compose.yml을 실행해도 Docker는 자동으로 기존에 쓰던 데이터 저장소를 찾아 연결합니다.
+
+복구 용이성: 새 설정에서 문제가 생기면, 새 컨테이너를 내리고 다시 docker compose -f docker-compose.backup.yml up -d를 하면 즉시 이전 상태로 복구됩니다.
+
+이제 파일 정리가 완료되어 Kestra 서버가 정상적으로 떴다면, 브라우저에서 http://localhost:8080에 접속해 보세요.
+
+
+
+
+나> volumes:
+  ny_taxi_postgres_data: # 기존 볼륨 유지
+  pgadmin_data:          # 기존 볼륨 유지
+  kestra_postgres_data:  # Kestra용 새 볼륨
+  kestra_data:           # Kestra용 새 볼륨
+
+이건 뭘의미함?
+
+
+
+GEM> 이 부분은 Docker에서 가장 중요한 **'데이터의 영속성(Persistence)'**을 설정하는 구간입니다.
+
+쉽게 설명하자면, **"컨테이너(프로그램)가 삭제되거나 멈춰도, 우리가 쌓아온 데이터는 하드디스크의 이 이름표를 붙인 공간에 안전하게 따로 저장해라"**라고 명령하는 것입니다.
+
+각 볼륨 이름이 의미하는 바는 다음과 같습니다:
+
+1. 각 볼륨의 역할
+ny_taxi_postgres_data:
+
+내용: 모듈 1에서 넣었던 뉴욕 택시 데이터와 테이블 구조가 저장되는 곳입니다.
+
+의미: 이 이름이 유지되어야만 기존에 고생해서 넣었던 데이터를 그대로 불러올 수 있습니다.
+
+pgadmin_data:
+
+내용: pgAdmin에서 설정한 서버 연결 정보, 사용자 설정 등이 저장됩니다.
+
+kestra_postgres_data: (새로 추가)
+
+내용: Kestra라는 지휘자가 앞으로 실행할 워크플로우 기록, 로그, 성공/실패 여부 등의 '상태 정보'가 저장됩니다.
+
+kestra_data: (새로 추가)
+
+내용: Kestra가 내부적으로 처리하는 파일들(예: 다운로드한 CSV 파일 임시 저장 등)이 들어가는 내부 스토리지 공간입니다.
+
+
+2. 왜 이렇게 선언하나요? (작동 원리)
+Docker Compose 파일 하단에 이렇게 이름을 나열하는 것은 **"이 이름들을 가진 가상의 외장 하드디스크를 준비해줘"**라고 선언하는 것과 같습니다.
+
+그 후, 각 서비스(Service) 설정 내의 volumes: 항목에서 다음과 같이 연결합니다: - ny_taxi_postgres_data:/var/lib/postgresql
+
+왼쪽(ny_taxi_postgres_data): 내 컴퓨터(Host)에 저장될 이름표(볼륨)
+
+오른쪽(/var/lib/postgresql): 컨테이너 내부의 데이터 저장 경로
+
+이렇게 연결해두면, 컨테이너를 지우고 새로 만들어도 이름표가 같은 볼륨이 있으면 Docker가 자동으로 기존 데이터를 다시 연결해 줍니다. 그래서 사용님이 "기존 환경을 망치고 싶지 않다"고 하셨을 때, 이 이름들을 그대로 유지하는 것이 핵심인 것입니다.
+
+💡 요약
+이 설정 덕분에 사용님은 docker compose down을 하더라도 데이터 걱정 없이 안심하고 Kestra 설정을 추가하고 테스트하실 수 있는 것입니다.
+
+이제 docker compose up -d를 실행하여 새로운 지휘자(Kestra)를 맞이할 준비가 되셨나요? 실행 후 Kestra UI(8080 포트)가 잘 뜨는지 확인해 보세요!
+
+
+
+
+나> 단원이 단원인 만큼 Kestra 작업폴더를 새로 만들고 이전 01단원 폴더의 내용들을 Kestra폴더에 그대로 이식하는 방법이 없나.
+방금 생각난건데,01 단원 폴더를 그대로 복사해서 이름만 바꾸고 시작하는거 말야. 근데 문제는 docker-workshop 작업폴더와 terrademo라는 폴더를 따로따로 뒀는데, 이게 바람직함? docker-workshop에 통합할 수도 있는거 아니었나? 그럼 복잡해지나 아니면 불가능하나. 이런 생각이 문득 들었어. 그렇다면 02폴더생성시terrademo를 살려둬야하나 아니면 없애도 되나 싶어
+
+
+GEM> 데이터 엔지니어링 학습을 진행하시면서 폴더 구조와 관리 방식에 대해 고민하시는 건 아주 좋은 신호입니다! 특히 테라폼(Terraform)과 도커(Docker)가 섞이면서 구조가 복잡해질 수 있는데, 명쾌하게 정리해 드릴게요.
+
+1. docker-workshop과 terrademo를 따로 둔 이유
+보통 강의에서 이 둘을 나누는 이유는 **관리 대상(인프라 vs 서비스)**이 다르기 때문입니다.
+
+terrademo (Terraform): 구글 클라우드(GCP) 같은 외부 클라우드 자원을 생성하고 관리하는 "건축 설계도"입니다.
+
+docker-workshop (Docker): 내 컴퓨터(Local) 안에서 실행되는 데이터베이스나 툴들을 관리하는 "가구 배치도"입니다.
+
+결론부터 말씀드리면: terrademo 폴더는 절대 삭제하지 마세요. 모듈 2의 후반부(2.4 섹션)에서 다시 GCP(BigQuery, GCS)를 사용하게 되는데, 그때 테라폼으로 만든 자원이 필요합니다.
+
+2. 01단원 폴더를 복사해서 02단원으로 만드는 방법
+말씀하신 **"복사해서 이름 바꾸기"**가 현재 상황에서 가장 추천하는 방법입니다. 다음과 같이 진행해 보세요.
+
+📂 추천 폴더 구조
+Plaintext
+
+/data-engineering-zoomcamp
+  ├── 01-docker-terraform/  (기존 폴더)
+  │     ├── terrademo/      (GCP 설정 보존)
+  │     └── docker-workshop/(기존 DB 설정)
+  └── 02-workflow-orchestration/ (새 폴더 - 01 내용을 복사해서 생성)
+        ├── terrademo/      (나중에 GCP 연동 시 필요)
+        └── docker-workshop/(여기에 새로운 통합 docker-compose.yml 배치)
+
+3. "하나의 폴더로 통합하면 안 되나?"에 대한 답변
+불가능하지는 않지만, 폴더를 나누는 것이 훨씬 바람직합니다.
+
+복잡도: 한 폴더에 모든 .tf 파일과 .yml, 그리고 파이프라인 코드들이 섞이면 나중에 관리가 불가능해집니다.
+
+충돌 방지: 각 모듈(주차)마다 사용하는 설정이 조금씩 달라질 수 있습니다. 폴더를 분리해야 "01단원 실습 상태"를 그대로 보존하면서 "02단원"을 마음껏 수정할 수 있습니다.
+
+볼륨(데이터) 공유: 폴더를 복사해도 하단 volumes에 적힌 이름(ny_taxi_postgres_data)만 같으면, Docker 엔진이 알아서 기존 데이터를 새 폴더의 컨테이너에 연결해 줍니다. 즉, 폴더 위치와 상관없이 데이터는 따라옵니다.
+
+🛠️ 지금 바로 하실 작업 가이드
+복사: 01-docker-terraform 폴더 전체를 복사해서 02-workflow-orchestration으로 이름을 바꿉니다.
+
+수정: 새 폴더의 docker-workshop 안에 있는 docker-compose.yml 내용을 아까 제가 드린 Kestra가 포함된 통합 코드로 바꿉니다.
+
+실행:
+
+Bash
+
+cd 02-workflow-orchestration/docker-workshop
+docker compose up -d
+이렇게 하면 01단원의 테라폼 설정(terrademo)은 그대로 옆에 두고, 도커 환경만 Kestra를 포함해 업그레이드한 상태로 02단원을 시작할 수 있습니다.
+
+
+
+
+나> 현재 깃허브엔 DE/01로 등록된 상태야. E:\IT_SPACES\AI\ZoomCamp\DE\01 이게 로컬이지. 여기서 02를 연결가능해 아니면 다시 E:\IT_SPACES\AI\ZoomCamp\DE\라는 단일구조를 짜야해? 참고로 .git 폴더는 E:\IT_SPACES\AI\ZoomCamp 에 있어.
+
+
+GEM> 이미 .git 폴더가 E:\IT_SPACES\AI\ZoomCamp에 있다면, 현재 아주 이상적인 상태입니다! 그 상위 폴더가 Git 저장소의 루트(Root) 역할을 하고 있기 때문입니다.
+
+결론부터 말씀드리면, 단일 구조 안에서 하위 폴더만 추가하는 방식이 가장 좋습니다.
+
+📂 추천하는 로컬 경로 구조
+현재 구조를 유지하면서 02 폴더를 아래와 같이 만드세요:
+
+Plaintext
+
+E:\IT_SPACES\AI\ZoomCamp  <-- 여기에 .git 폴더가 있음 (Root)
+  └── DE/
+       ├── 01/            (기존 모듈 1 내용)
+       └── 02/            (새로 만들 모듈 2 내용)
+            ├── terrademo/      (01에서 복사해온 테라폼 설정)
+            └── docker-workshop/(Kestra 통합 docker-compose.yml)
+✅ 이렇게 관리하면 좋은 점 (Git 관점)
+단일 저장소 관리: 01과 02를 하나의 Git 히스토리로 관리할 수 있습니다. 나중에 03, 04 단원도 DE/03, DE/04 식으로 계속 확장하기만 하면 됩니다.
+
+독립된 환경: 폴더를 나누었기 때문에 01에서 했던 실습 코드와 02에서 할 Kestra 설정이 섞이지 않습니다.
+
+데이터 공유: 위에서 말씀드린 대로, 폴더를 새로 만들어도 docker-compose.yml 내의 볼륨 이름만 같으면 Docker는 기존 01에서 썼던 데이터를 02 환경에 연결해 줍니다.
+
+🛠️ 지금 바로 적용하는 법 (터미널/탐색기 기준)
+폴더 생성: 탐색기에서 E:\IT_SPACES\AI\ZoomCamp\DE\02 폴더를 만듭니다.
+
+내용 복사: 01 폴더의 내용들(terrademo, docker-workshop 등)을 02 폴더로 복사합니다.
+
+수정: 02\docker-workshop\docker-compose.yml 파일을 열어 아까 우리가 만든 Kestra 통합 코드로 바꿉니다.
+
+Git 등록: 터미널에서 아래 명령어를 쳐보세요.
+
+Bash
+
+cd E:\IT_SPACES\AI\ZoomCamp
+git add DE/02
+git commit -m "Add Module 2 (Kestra) directory and setup"
+⚠️ 마지막 체크!
+02 폴더의 컨테이너를 실행하기 전에, 반드시 01 폴더에서 실행 중이던 컨테이너를 down 시켰는지 확인하세요. 같은 포트(5432, 8085 등)를 쓰기 때문에 충돌이 날 수 있습니다.
+//
+
+
+
+Kestra는 다음과 같은 구조로 Docker Compose를 통해 실행됩니다.
+
+Kestra 서버용 컨테이너 1개
+
+Postgres 데이터베이스용 컨테이너 1개
+
+다음 명령어를 실행하여 Kestra를 시작합니다.
+
+cd 02-workflow-orchestration
+docker compose up -d
+
+
+참고:
+pgAdmin이 Kestra와 같은 포트에서 실행 중인지 확인하세요.
+만약 포트 충돌이 발생한다면, README 하단의 FAQ를 참고하시기 바랍니다.
+
+컨테이너가 정상적으로 실행되면, 아래 주소에서 Kestra UI에 접속할 수 있습니다.
+
+http://localhost:8080
+
+
+Kestra를 종료하려면 동일한 디렉터리에서 다음 명령어를 실행합니다.
+
+docker compose down
+
+Kestra에 Flow 추가하기
+
+Kestra에 Flow를 추가하는 방법은 두 가지가 있습니다.
+
+YAML을 에디터에 직접 복사·붙여넣기
+
+Kestra의 API를 사용하여 추가
+
+아래에서는 **프로그래밍 방식(API)**으로 Flow를 추가하는 방법을 설명합니다.
+
+Kestra API를 사용해 Flow를 프로그래밍 방식으로 추가하기
+
+Kestra API를 사용해 Flow를 추가하고 싶다면, 다음 명령어들을 실행하세요.
+
+아래 예시는
+
+사용자명: admin@kestra.io
+
+비밀번호: Admin1234
+를 기준으로 작성되었습니다.
+실제 환경에 맞게 수정하세요.
+
+# 모든 Flow 가져오기
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/01_hello_world.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/02_python.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/03_getting_started_data_pipeline.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/04_postgres_taxi.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/05_postgres_taxi_scheduled.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/06_gcp_kv.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/07_gcp_setup.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/08_gcp_taxi.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/09_gcp_taxi_scheduled.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/10_chat_without_rag.yaml
+curl -X POST -u 'admin@kestra.io:Admin1234' http://localhost:8080/api/v1/flows/import -F fileUpload=@flows/11_chat_with_rag.yaml
+	
+
+
+		
+

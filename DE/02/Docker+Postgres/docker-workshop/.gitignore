@@ -1,5 +1,11 @@
 *.parquet
 
+
+# GCP 보안 관련 파일 (절대 업로드 금지)
+.env_encoded
+*.json
+06_gcp_creds_setup.yaml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

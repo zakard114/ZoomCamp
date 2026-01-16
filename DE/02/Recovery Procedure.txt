@@ -1,0 +1,51 @@
+
+1. Workflows폴더 내 모든 flows(yaml)를 Kestra에 execution
+03_getting_started_data_pipeline
+04_postgres_taxi
+05_postgres_taxi_parquet_V2_green
+05_postgres_taxi_parquet_V2_yellow
+download_nyc_taxi_data
+green_taxi_and_zones_ingest
+
+
+
+2. Connect pgAdmin to PostgreSQL 
+(localhost:8085)
+
+You should now be able to load pgAdmin on a web browser by browsing to http://localhost:8085. Use the same email and password you used for running the container to log in.
+
+Open browser and go to http://localhost:8085
+Login with email: admin@admin.com, password: root
+Right-click "Servers" → Register → Server
+Configure:
+General tab: Name: Local Docker
+Connection tab:
+Host: pgdatabase (the container name)
+Port: 5432
+Username: root
+Password: root
+Save
+Now you can explore the database using the pgAdmin interface!
+
+https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/01-docker-terraform/docker-sql/07-pgadmin.md
+
+
+
+
+3. Kestra(localhost:8080)에서 
+
+"새 플로우" -> 05_postgres_taxi_scheduled.yaml 
+Triggers 탭 -> green_schedule's Backfill executions -> start: 2019-01-01 00:00:00, end: 2019-02-02 00:00:00  -> Execute Backfill
+
+이후
+
+pgAdmin에서 
+Right-click "Servers" → Register → Server
+Configure:
+General tab: Name: db
+Connection tab:
+Host: pgdatabase (the container name)
+Port: 5432
+Username: root
+Password: root
+Save

@@ -4057,5 +4057,98 @@ GEM> 앗, 죄송합니다! 제가 이전 답변에서 닉네임을 착각했나 
 
 나> 가보자
 
-GEM> 
+GEM> 좋습니다! GCP(Google Cloud Platform) 정복의 첫 단계인 VM 인스턴스 생성부터 시작하겠습니다.
+
+
+...
+
+
+** 결과적으로 주어진 용량 10gb가 한계라 docker-compose up -d를 이용해 클라우드 로딩 실패. 용량이 아득히 10gb를 초과. 
+
+
+
+나> 그냥 인스턴스 삭제하고 이번주 숙제가자. 어차피 보너스 옵션이었고, 같은 문제는 나중에 나올텐데 그때 하면 되겠지. 그것조차도 이런 문제가 나올지 모르겠는데 보통 다른학생들도 10기가정도 compose up하는거야 아니면 나만 특이한거야?
+
+
+GEM> 그 판단 아주 현명하십니다! 안 되는 부분에 너무 시간을 쏟기보다는 빠르게 본 궤도(숙제)로 돌아가는 것이 공부 효율 면에서 훨씬 좋습니다.
+
+궁금해하신 **"10GB 용량 문제"**에 대해 결론부터 말씀드리면, 사용자님이 특이한 게 아니라 GCP의 기본 설정이 요즘 데이터 도구들을 감당하기에 너무 작아서 생기는 흔한 일입니다.
+
+🧐 왜 나만 용량이 부족했을까?
+GCP의 기본값: VM을 처음 만들 때 구글이 추천하는 기본 용량이 보통 10GB입니다.
+
+Kestra의 덩치: Kestra는 Java 기반의 무거운 엔진이라 Docker 이미지 크기 자체가 2~3GB를 차지합니다.
+
+Docker의 작동 방식: 이미지를 다운로드할 때 압축 파일을 받고(Pulling), 그걸 다시 풉니다(Extracting). 즉, 이미지 크기의 2배 이상의 여유 공간이 순간적으로 필요합니다.
+
+다른 학생들의 경우: 보통 실습 가이드에서 "디스크를 30GB 이상으로 설정하세요"라는 문구를 보고 시작하거나, 혹은 운 좋게 아주 가벼운 이미지만 써서 10GB 턱걸이로 성공하곤 합니다.
+
+결론: 사용자님 잘못이 아니라, **"요즘 데이터 엔지니어링 도구들을 돌리기엔 10GB는 너무 좁은 방이었다"**고 생각하시면 됩니다. 다음에 새로 만드실 때는 처음부터 30GB 정도로 잡으시면 이런 스트레스 없이 바로 실행될 거예요!
+
+🧹 깔끔하게 정리하고 숙제 가기
+약속드린 대로, 과금을 막기 위해 인스턴스 삭제를 확실히 마무리합시다.
+
+GCP 콘솔 > Compute Engine > VM 인스턴스로 이동합니다.
+
+kestra-server 체크박스를 선택합니다.
+
+상단의 [삭제(DELETE)] 버튼을 누릅니다.
+
+주의: '중지'가 아니라 '삭제'를 해야 디스크 비용까지 완전히 안 나갑니다.
+
+
+
+
+
+
+
+2.7 추가 자료 📚
+Kestra 문서를 확인하세요		https://go.kestra.io/de-zoomcamp/docs
+
+저희 설계도 라이브러리 를 살펴보세요		https://go.kestra.io/de-zoomcamp/blueprints
+
+Kestra에서 사용 가능한 600개 이상의 플러그인을 살펴보세요.	https://go.kestra.io/de-zoomcamp/plugins
+
+GitHub 에서 별표를 눌러주세요 !		https://go.kestra.io/de-zoomcamp/github
+궁금한 점이 있으면 슬랙 커뮤니티 에 참여하세요.	https://go.kestra.io/de-zoomcamp/slack
+이 YouTube 재생목록 에서 모든 영상을 찾아보세요		https://go.kestra.io/de-zoomcamp/yt-playlist
+
+문제 해결 팁
+모듈 2에서 Kestra 플로우 관련 문제가 발생하는 경우, 다음 Docker 이미지/포트를 사용하시기 바랍니다.
+
+image: kestra/kestra:v1.1재현성을 확보하기 위해 Kestra Docker 이미지를 이 버전으로 고정해 주세요. kestra/kestra:develop이 버전은 버그가 포함될 수 있는 최첨단 개발 버전이므로 사용하지 마세요.
+postgres:18— Postgres 이미지를 버전 18로 고정했는지 확인하세요.
+만약 pgAdminKestra가 8080 포트를 사용하고 있다면, docker-compose포트 매핑을 8080 대신 18080으로 변경하는 등 Kestra가 다른 포트를 사용하도록 설정할 수 있습니다. 그러면 브라우저에서 Kestra UI에 접속할 때 http://localhost:8080/ 대신 http://localhost:18080/ 을 사용하면 됩니다.
+여전히 문제가 발생하는 경우, 기존 Kestra + Postgres 컨테이너를 중지하고 제거한 다음 다시 시작해 보세요 docker-compose up -d. 그래도 문제가 해결되지 않으면 DataTalksClub Slack 또는 Kestra Slack (http://kestra.io/slack) 에 질문을 올려주세요 .
+
+다음과 같은 오류가 발생하는 경우:
+
+BigQueryError{reason=invalid, location=null, 
+message=Error while reading table: kestra-sandbox.zooomcamp.yellow_tripdata_2020_01, 
+error message: CSV table references column position 17, but line contains only 14 columns.; 
+line_number: 2103925 byte_offset_to_start_of_line: 194863028 
+column_index: 17 column_name: "congestion_surcharge" column_type: NUMERIC 
+File: gs://anna-geller/yellow_tripdata_2020-01.csv}
+
+이는 BigQuery에 로드하려는 CSV 파일의 외부 소스 테이블(즉, GitHub 저장소의 파일)과 BigQuery의 대상 테이블 간의 열 개수가 일치하지 않음을 의미합니다. 네트워크/전송 문제로 인해 GitHub에서 파일이 완전히 다운로드되지 않았거나 GCS에 올바르게 업로드되지 않았을 때 이러한 문제가 발생할 수 있습니다. 오류 메시지에는 스키마 문제가 있는 것처럼 보이지만 실제로는 스키마 문제가 아닙니다. CSV 파일을 다시 다운로드하고 GCS에 다시 업로드하는 과정을 포함하여 전체 실행을 다시 수행하면 문제가 해결될 것입니다.
+
+숙제
+2026년도 입학생 폴더를 참조하세요 . 	
+https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/cohorts/2026/02-workflow-orchestration/homework.md
+
+커뮤니티 노트
+메모하셨나요? 이 파일에 대한 PR을 생성하여 메모를 공유해 주세요!
+
+이 줄 위에 메모를 추가하세요
+이전 코호트
+2022년: 메모 및 동영상
+2023년: 메모 및 동영상
+2024년: 메모 및 동영상
+2025년: 메모 및 동영상
+
+
+
+
+
+
 

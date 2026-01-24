@@ -4,7 +4,7 @@ This repository contains the solutions for the **Data Engineering Zoomcamp 2026*
 
 ## 🚀 Key Highlights
 
-* **Early Adoption of Orchestration**: Integrated **Kestra's Backfill feature** (originally a Module 2 topic) to automate and optimize the data loading process for the October 2019 dataset.
+* **Early Adoption of Orchestration**: Integrated **Kestra's pipeline** to automate and optimize the data loading process for the **November 2025 dataset**, ensuring efficient ingestion of Parquet and CSV files into PostgreSQL.
 * **Infrastructure as Code (IaC)**: Provisioned GCP resources using **Terraform**, implementing professional state management and security practices.
 
 ---

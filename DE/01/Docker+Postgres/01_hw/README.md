@@ -11,110 +11,122 @@ This repository contains the solutions for the **Data Engineering Zoomcamp 2026*
 
 ## 🐳 Docker & Networking (Questions 1 & 2)
 
-### Q1. Understanding Docker First Run
+### Q1. What's the version of pip in the python:3.13 image? 
 
 To check the `pip` version in the `python:3.12.8` image, I executed the following in the terminal:
 
-**Run the container:**
+**Run & check version inside the container:**
 
 ```bash
-docker run -it --entrypoint bash python:3.12.8
+$ docker run -it --rm python:3.13 pip --version
 
 ```
 
-**Check version inside the container:**
+> **Result:** `pip 25.3 from /usr/local/lib/python3.13/site-packages/pip (python 3.13)`
+> **Answer:** `25.3`
 
-```bash
-pip --version
+---
 
-```
-
-> **Result:** `pip 24.3.1 from /usr/local/lib/python3.12/site-packages/pip (python 3.12)`
-> **Answer:** `24.3.1`
-
-### Q2. Understanding Docker Networking
+### Q2. Given the docker-compose.yaml, what is the hostname and port that pgadmin should use to connect to the postgres database? 
 
 Based on the `docker-compose.yaml`, `pgadmin` connects to the PostgreSQL database using the following hostname and port:
 
 > **Answer:** `db:5432`
 
+**Clarification on Hostname:**
+In my local development environment, I configured the Postgres service name as `pgdatabase` in `docker-compose.yaml`. Therefore, I use `pgdatabase:5432` to connect via pgAdmin. However, based on the **official homework 1 question 2 provided YAML snippet**, the service is defined as `db:`. 
+
+Since Docker Compose uses the service name as the network hostname, the correct answer for the quiz is **`db:5432`**, while my actual implementation uses **`pgdatabase:5432`**.
+
 ---
 
 ## 📊 SQL Data Analysis (Questions 3 - 6)
 
-### Q3. Trip Segmentation Count
+### Q3. Which was the pick up day with the longest trip distance? Only consider trips with trip_distance less than 100 miles. 
 
 ```sql
-SELECT 
-    COUNT(CASE WHEN trip_distance <= 1 THEN 1 END) AS "Up to 1 mile", 
-    COUNT(CASE WHEN trip_distance > 1 AND trip_distance <= 3 THEN 1 END) AS "1 to 3 miles", 
-    COUNT(CASE WHEN trip_distance > 3 AND trip_distance <= 7 THEN 1 END) AS "3 to 7 miles", 
-    COUNT(CASE WHEN trip_distance > 7 AND trip_distance <= 10 THEN 1 END) AS "7 to 10 miles", 
-    COUNT(CASE WHEN trip_distance > 10 THEN 1 END) AS "Over 10 miles" 
-FROM green_oct_2019 
-WHERE lpep_pickup_datetime >= '2019-10-01' AND lpep_pickup_datetime < '2019-11-01' 
-  AND lpep_dropoff_datetime >= '2019-10-01' AND lpep_dropoff_datetime < '2019-11-01';
+SELECT count(*) 
+FROM public.green_tripdata_2025_11 
+WHERE trip_distance <= 1.0 
+  AND lpep_pickup_datetime >= '2025-11-01' 
+  AND lpep_pickup_datetime < '2025-12-01';
 
 ```
 
-> **Answer:** `104,802; 198,924; 109,603; 27,678; 35,189`
+> **Answer:** `8,007`
 
-### Q4. Longest Trip for Each Day
+### Q4. Which was the pick up day with the longest trip distance? Only consider trips with trip_distance less than 100 miles. 
 
 ```sql
 SELECT 
-    lpep_pickup_datetime::date AS pickup_day, 
-    MAX(trip_distance) AS max_dist 
-FROM green_oct_2019 
-GROUP BY pickup_day 
-ORDER BY max_dist DESC 
+    CAST(lpep_pickup_datetime AS DATE) AS pickup_day, 
+    MAX(trip_distance) AS max_distance
+FROM public.green_tripdata_2025_11
+WHERE trip_distance < 100
+GROUP BY CAST(lpep_pickup_datetime AS DATE)
+ORDER BY max_distance DESC
+LIMIT 1;
+
+/* or
+
+SELECT 
+    DATE(lpep_pickup_datetime) AS pickup_day, 
+    MAX(trip_distance) AS max_distance
+FROM public.green_tripdata_2025_11
+WHERE trip_distance < 100
+GROUP BY pickup_day
+ORDER BY max_distance DESC
+LIMIT 1;
+*/
+```
+
+> **Answer:** `2025-11-14`
+
+### Q5. Which was the pickup zone with the largest total_amount (sum of all trips) on November 18th, 2025?
+
+```sql
+SELECT 
+    z.zone AS pickup_zone, 
+    SUM(g.total_amount) AS total_revenue
+FROM public.green_tripdata_2025_11 g
+JOIN public.taxi_zone_lookup z 
+  ON g.pulocationid::integer = z.locationid
+WHERE DATE(g.lpep_pickup_datetime) = '2025-11-18'
+GROUP BY z.zone
+ORDER BY total_revenue DESC
 LIMIT 1;
 
 ```
 
-> **Answer:** `2019-10-31`
+> **Answer:** `East Harlem North`
 
-### Q5. Three Biggest Pickup Zones
-
-```sql
-SELECT 
-    z."Zone", 
-    SUM(g.total_amount) AS total_sum 
-FROM green_oct_2019 g 
-JOIN zones_new z ON g."PULocationID" = z."LocationID" 
-WHERE g.lpep_pickup_datetime::date = '2019-10-18' 
-GROUP BY z."Zone" 
-HAVING SUM(g.total_amount) > 13000 
-ORDER BY total_sum DESC;
-
-```
-
-> **Answer:** `East Harlem North, East Harlem South, Morningside Heights`
-
-### Q6. Largest Tip (Pickup: East Harlem North)
+### Q6. For the passengers picked up in the zone named "East Harlem North" in November 2025, which was the drop off zone that had the largest tip? 
 
 ```sql
 SELECT 
-    z_drop."Zone" AS dropoff_zone, 
-    MAX(g.tip_amount) AS max_tip 
-FROM green_oct_2019 g 
-JOIN zones_new z_pick ON g."PULocationID" = z_pick."LocationID" 
-JOIN zones_new z_drop ON g."DOLocationID" = z_drop."LocationID" 
-WHERE z_pick."Zone" = 'East Harlem North' 
-  AND g.lpep_pickup_datetime >= '2019-10-01' AND g.lpep_pickup_datetime < '2019-11-01' 
-GROUP BY z_drop."Zone" 
-ORDER BY max_tip DESC 
+    z_do.zone AS dropoff_zone, 
+    MAX(g.tip_amount) AS max_tip
+FROM public.green_tripdata_2025_11 g
+JOIN public.taxi_zone_lookup z_pu 
+  ON g.pulocationid::integer = z_pu.locationid
+JOIN public.taxi_zone_lookup z_do 
+  ON g.dolocationid::integer = z_do.locationid
+WHERE z_pu.zone = 'East Harlem North'
+  AND g.lpep_pickup_datetime >= '2025-11-01' 
+  AND g.lpep_pickup_datetime < '2025-12-01'
+GROUP BY z_do.zone
+ORDER BY max_tip DESC
 LIMIT 1;
 
 ```
 
-> **Answer:** `JFK Airport`
+> **Answer:** `Yorkville West`
 
 ---
 
 ## 🏗️ Terraform (Question 7)
 
-### Q7. Terraform Workflow Sequence
+### Q7. Which of the following sequences describes the Terraform workflow for: 1. Downloading plugins and setting up backend, 2. Generating and executing changes, 3. Removing all resources? 
 
 1. **Initialize**: `terraform init`
 2. **Apply with Auto-approve**: `terraform apply -auto-approve`

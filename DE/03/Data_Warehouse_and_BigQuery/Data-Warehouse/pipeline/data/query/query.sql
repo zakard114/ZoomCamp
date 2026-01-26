@@ -139,7 +139,7 @@ WHERE DATE(tpep_pickup_datetime) BETWEEN '2019-06-01' AND '2019-06-30';
 SELECT count(*) as trips
 FROM `de-zoomcamp-02-zakard.nytaxi.yellow_tripdata_partitioned`
 WHERE DATE(tpep_pickup_datetime) BETWEEN '2019-06-01' AND '2019-06-30'
-  AND VendorID = 1; -- 세미콜론을 여기로 옮겨야 합니다.
+  AND VendorID = 1; 
 
 -- 2. 파티션 + 클러스터 테이블 성능 테스트
 SELECT count(*) as trips

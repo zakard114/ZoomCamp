@@ -2,7 +2,7 @@
 
 This folder contains the SQL solutions for the Module 3 homework, focusing on BigQuery optimization techniques such as Partitioning, Clustering, and Metadata utilization.
 
-## Project Structure
+## 📂 Project Structure
 
 ```text
 ZoomCamp/DE/03/Data_Warehouse_and_BigQuery/03_hw/

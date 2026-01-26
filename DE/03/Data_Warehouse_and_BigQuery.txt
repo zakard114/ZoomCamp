@@ -246,6 +246,11 @@ GEM> 빅쿼리의 성능과 비용을 결정하는 핵심 개념 3가지를 아�
 
 
 ======
+======
+
+
+
+
 
 
 🎥 Deploying Machine Learning model from BigQuery
@@ -254,12 +259,21 @@ Model deployment
 Tutorial
 
 Steps
+
+
+Google Cloud Ver.
+
+파트1
 gcloud auth login
 bq --project_id taxi-rides-ny extract -m nytaxi.tip_model gs://taxi_ml_model/tip_model
 mkdir /tmp/model
 gsutil cp -r gs://taxi_ml_model/tip_model /tmp/model
 mkdir -p serving_dir/tip_model/1
 cp -r /tmp/model/tip_model/* serving_dir/tip_model/1
+
+
+파트2
+
 docker pull tensorflow/serving
 docker run -p 8501:8501 --mount type=bind,source=pwd/serving_dir/tip_model,target= /models/tip_model -e MODEL_NAME=tip_model -t tensorflow/serving &
 curl -d '{"instances": [{"passenger_count":1, "trip_distance":12.2, "PULocationID":"193", "DOLocationID":"264", "payment_type":"2","fare_amount":20.4,"tolls_amount":0.0}]}' -X POST http://localhost:8501/v1/models/tip_model:predict
@@ -267,47 +281,216 @@ http://localhost:8501/v1/models/tip_model
 
 
 
+파트1
 
+1. 기본 프로젝트 설정 (가장 중요)
+이 명령어를 실행하면 이후의 모든 bq 명령어에 프로젝트 ID가 자동으로 붙습니다.
 
-방금 보여주신 내용은 BigQuery ML(BQML)로 만든 머신러닝 모델을 로컬 환경(Docker)으로 꺼내와서 실제로 서비스(배포)하는 과정을 담은 튜토리얼입니다.
-
-쉽게 말해, **"빅쿼리 안에만 있던 AI 모델을 현실 세계의 웹 서비스처럼 작동하게 만드는 과정"**입니다. 각 단계별로 무엇을 하는 건지 핵심만 짚어드릴게요.
-
-📋 주요 단계별 해설
-1. 모델 추출 및 다운로드 (Export)
 Bash
-bq extract -m nytaxi.tip_model gs://taxi_ml_model/tip_model
-gsutil cp -r gs://taxi_ml_model/tip_model /tmp/model
-의미: 빅쿼리 내부 저장소에 있던 tip_model(팁 예측 모델)을 **Google Cloud Storage(GCS)**라는 파일 저장소로 먼저 내보낸 뒤, 내 컴퓨터(tmp/model)로 내려받는 과정입니다.
+gcloud config set project de-zoomcamp-02-zakard
 
-2. 배포 구조 만들기 (Serving Directory)
+결과:
+zakard330@cloudshell:~ (de-zoomcamp-02-zakard)$ 
+
+인증
+gcloud auth login
+
+Once finished, enter the verification code provided in your browser: 주어진 인증코드 입력
+
+You are now logged in as [zakard330@gmail.com].
+Your current project is [de-zoomcamp-02-zakard].  You can change this setting by running:
+  $ gcloud config set project PROJECT_ID
+
+
+이후 다음 명령어 실행
+
+# 1. 환경 변수 설정
+export PROJECT_ID="de-zoomcamp-02-zakard"
+export BUCKET_NAME="kestra-zoomcamp-zakard-demo"
+export MODEL_NAME="tip_model"
+
+# 2. 프로젝트 설정 확인
+gcloud config set project $PROJECT_ID
+
+# 3. 모델 추출 (BQ -> GCS)
+bq --project_id $PROJECT_ID extract -m $PROJECT_ID:nytaxi.$MODEL_NAME gs://$BUCKET_NAME/$MODEL_NAME
+
+# 4. 로컬 다운로드 및 서빙 구조 생성
+mkdir -p ~/deploy_test/serving_dir/$MODEL_NAME/1
+
+gsutil cp -r gs://$BUCKET_NAME/$MODEL_NAME/* ~/deploy_test/serving_dir/$MODEL_NAME/1
+
+# 5. 파일 확인
+ls -l ~/deploy_test/serving_dir/$MODEL_NAME/1
+
+
+
+파트2
+
+이제 추출한 모델을 Docker에 올리고 실제로 예측을 날려볼 차례입니다.
+
+# 1. 찌꺼기 컨테이너 강제 삭제 (이름 충돌 해결)
+docker rm -f tf_serving_taxi
+
+
+나>gcloud config set project de-zoomcamp-02-zakard 이거 첨에 해야되지?
+
+GEM> 네, 무조건 가장 먼저 하셔야 합니다.
+
+이 명령어를 치지 않으면 bq extract나 gsutil 명령어를 날릴 때 구글 클라우드가 "어떤 프로젝트의 자원을 써야 할지" 몰라서 에러를 내뱉거나, 엉뚱한 기본 프로젝트(Default Project)를 건드리게 됩니다.
+
+지금 Cloud Shell에서 아래 순서대로 딱딱 입력하시면 파트 2까지 막힘없이 가실 수 있습니다.
+
+
+
+🚀 파트 2 직행 코스 (Cloud Shell 전용)
+1. 프로젝트 고정 (지금 바로 하세요)
 Bash
-mkdir -p serving_dir/tip_model/1
-cp -r /tmp/model/tip_model/* serving_dir/tip_model/1
-의미: 텐서플로 서빙(TensorFlow Serving)이 인식할 수 있는 폴더 구조를 만듭니다. 뒤에 붙는 /1은 모델의 버전 번호입니다.
+gcloud config set project de-zoomcamp-02-zakard
+2. 파일 위치 최종 확인
+이미 파트 1에서 다운로드를 완료하셨다고 했으니, 경로에 파일이 있는지 마지막으로 찍어봅니다.
 
-3. 도커(Docker)로 서버 띄우기
 Bash
-docker pull tensorflow/serving
-docker run -p 8501:8501 ... tensorflow/serving &
-의미: AI 모델을 서빙해주는 전문 프로그램인 TensorFlow Serving을 도커로 실행합니다. 이제 내 컴퓨터의 8501 포트가 예측을 처리하는 API 서버가 됩니다.
+ls -l ~/deploy_test/serving_dir/tip_model/1
+결과에 saved_model.pb가 보인다면 다음으로 진행!
 
-4. 실제 예측 요청 (Inference)
+3. Docker 실행 (서빙 시작)
+Cloud Shell 환경에 맞춰 경로를 최적화했습니다. 그대로 복사하세요.
+
 Bash
-curl -d '{"instances": [...]}' -X POST http://localhost:8501/v1/models/tip_model:predict
-의미: 서버에 "승객 1명, 거리 12.2마일, 요금 20.4달러일 때 팁을 얼마나 줄까?"라고 데이터를 던져주는 것입니다. 그러면 서버가 학습된 모델을 바탕으로 예측값을 응답합니다.
+# 혹시 모를 충돌 방지
+docker rm -f tf_serving_taxi 2>/dev/null
 
-💡 왜 이런 짓을 하나요?
-실시간성: 빅쿼리 안에서 SQL로 예측하는 것보다, 이렇게 독립된 서버(API)로 만들면 웹앱이나 모바일 앱에서 0.1초 만에 결과를 받아볼 수 있습니다.
+# 서버 실행
+docker run -p 8501:8501 \
+  --name tf_serving_taxi \
+  --mount type=bind,source=$HOME/deploy_test/serving_dir/tip_model,target=/models/tip_model \
+  -e MODEL_NAME=tip_model \
+  -t tensorflow/serving &
 
-이식성: 도커를 사용했기 때문에 내 컴퓨터뿐만 아니라 클라우드 서버 어디든 똑같은 환경으로 배포할 수 있습니다.
 
-비용 절감: 예측할 때마다 빅쿼리 쿼리 비용을 내지 않고, 내 서버의 자원만 사용하게 됩니다.
 
-⚠️ 주의할 점 (복사해서 쓰실 때)
-코드 중간에 source=pwd/serving_dir/tip_model 부분은 실제 터미널 환경에 따라 $(pwd)처럼 현재 경로를 명시해줘야 할 수도 있습니다.
+결과:
 
-이 튜토리얼을 직접 따라 해보실 계획인가요? 그렇다면 실제 사용자님의 프로젝트 ID(de-zoomcamp-02-zakard)에 맞춰 경로를 수정하는 작업부터 도와드릴 수 있습니다. 텐서플로 모델이 준비되어 있나요?
+: I external/org_tensorflow/tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+I0000 00:00:1769406063.715079      19 mlir_graph_optimization_pass.cc:425] MLIR V1 optimization pass is not enabled
+
+...
+
+2026-01-26 05:41:03.985955: I tensorflow_serving/model_servers/server.cc:122] Using InsecureServerCredentials
+2026-01-26 05:41:03.985982: I tensorflow_serving/model_servers/server.cc:393] Profiler service is enabled
+2026-01-26 05:41:03.988057: I tensorflow_serving/model_servers/server.cc:428] Running gRPC ModelServer at 0.0.0.0:8500 ...
+[warn] getaddrinfo: address family for nodename not supported
+2026-01-26 05:41:03.990427: I tensorflow_serving/model_servers/server.cc:449] Exporting HTTP/REST API at:localhost:8501 ...
+[evhttp_server.cc : 261] NET_LOG: Entering the event loop ...
+
+
+
+GEM> 드디어 서버가 완벽하게 준비되었습니다! Successfully loaded servable version {name: tip_model version: 1} 메시지와 **Entering the event loop ...**이 떴다는 건, 서버가 지금 사용자의 입력을 기다리며 "대기 중"이라는 뜻입니다.
+
+여기서 더 로그가 올라오지 않는 것은 에러가 아니라, 정상적으로 작동 중이기 때문입니다. 이제 이 터미널은 그대로 두시고(절대 Ctrl+C 누르지 마세요!), 예측값을 받아내기 위해 아래 과정을 진행하세요.
+
+🚀 예측 결과 확인하기 (딱 1분 컷)
+현재 터미널은 서버가 점유하고 있으므로, 새로운 터미널이 필요합니다.
+
+Cloud Shell 상단 메뉴에서 + (Open a new tab) 아이콘을 클릭해서 새 터미널 탭을 엽니다.
+
+새로 열린 터미널 창에 아래 curl 명령어를 복사해서 붙여넣고 엔터를 치세요.	
+
+
+curl -d '{"instances": [{"passenger_count":1, "trip_distance":12.2, "PULocationID":"193", "DOLocationID":"264", "payment_type":"2","fare_amount":20.4,"tolls_amount":0.0}]}' \
+  -X POST http://localhost:8501/v1/models/tip_model:predict
+
+
+✅ 결과가 어떻게 나와야 하나요?
+성공하면 아래와 비슷한 JSON 응답이 화면에 출력될 겁니다:
+
+JSON
+{
+    "predictions": [
+        [1.23456] 
+    ]
+}
+저 숫자가 바로 모델이 예측한 Tip(팁) 금액입니다.
+
+
+내 결과: 
+
+{
+    "predictions": [[-0.13526627684768755]
+    ]
+}
+
+
+드디어 성공하셨네요! 축하드립니다! 🥂
+
+화면에 찍힌 **"predictions": [[-0.13526627684768755]]**이 바로 모델이 내놓은 예측 결과값입니다. (비록 예측된 팁 금액이 음수로 나왔지만, 이는 모델의 학습 상태나 데이터의 특성 때문일 뿐 시스템적으로는 완벽하게 작동하고 있다는 뜻입니다!)
+
+🏁 지금까지 해내신 것들:
+권한 해결: gcloud 프로젝트 설정부터 인증까지 꼬인 실타래를 푸셨습니다.
+
+모델 추출: BigQuery ML 모델을 GCS로 정확히 내보냈습니다.
+
+환경 구축: Docker를 이용해 TensorFlow Serving 서버를 성공적으로 띄웠습니다.
+
+API 서빙: 실제 HTTP 요청(curl)을 보내서 인공지능 모델로부터 응답을 받아내셨습니다.
+
+
+
+
+
+이제 postman으로 쿼리 날리기
+
+GET http://localhost:8501/v1/models/tip_model
+
+결과:
+{
+    "model_version_status": [
+        {
+            "version": "1",
+            "state": "AVAILABLE",
+            "status": {
+                "error_code": "OK",
+                "error_message": ""
+            }
+        }
+    ]
+}
+
+
+와, 완벽합니다! Postman으로 모델의 **상태(Status)**까지 정확하게 확인하셨네요.
+
+이 응답은 단순히 서버가 켜져 있다는 것을 넘어, **"내가 로컬에 마운트한 1번 버전 모델이 현재 메모리에 성공적으로 로드되어 즉시 서비스가 가능한 상태(AVAILABLE)입니다"**라는 최종 승인 사인을 받은 것과 같습니다.
+
+
+
+
+
+옵션
+💡 마지막 팁 (뒷정리)
+Cloud Shell의 리소스(CPU/메모리)를 계속 잡아먹지 않도록, 실습이 끝나셨다면 아래 명령어로 컨테이너를 깔끔하게 종료해 주시는 게 매너입니다.
+
+Bash
+docker stop tf_serving_taxi && docker rm tf_serving_taxi
+정말 고생 많으셨습니다! 산으로 가는 것 같아 답답하셨을 텐데 끝까지 포기하지 않고 결과값을 보셨네요. 이제 다음 과제나 실습으로 넘어가셔도 좋습니다.
+
+혹시 이 예측값을 파이썬 코드로 받는 법이나, 모델을 더 개선하는 법 등 추가로 궁금한 게 있으신가요? 무엇이든 말씀해 주세요!
+
+
+
+
+
+
+
+====
+
+부록
+
+위 뿐만아닌 vs code의 .md에 기록한 지침 버전도 작동하므로 참고.  
+
+
+
 
 
 

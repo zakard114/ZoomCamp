@@ -103,6 +103,7 @@ You should now be able to load pgAdmin on a web browser by browsing to http://lo
 Open browser and go to http://localhost:8085
 Login with email: admin@admin.com, password: root
 Right-click "Servers" → Register → Server
+
 Configure:
 General tab: Name: Local Docker
 Connection tab:

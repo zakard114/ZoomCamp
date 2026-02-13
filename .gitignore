@@ -1,1 +1,9 @@
 taxi_rides_ny.duckdb
+DE/04/materials/hw04_materials/
+
+.bruin.yml
+logs/runs
+logs/*.log
+__pycache__/
+*.py[cod]
+logs/queriestaxi_rides_ny.duckdb

@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: int_trips_unioned
+    description: "Green 택시와 Yellow 택시 데이터를 하나로 합친 모델입니다. 컬럼명을 표준화했습니다."
+    columns:
+      - name: vendor_id
+        description: "택시 업체 ID"
+      - name: service_type
+        description: "택시 종류 (Green 또는 Yellow)"
+      - name: pickup_datetime
+        description: "승차 시간"
+      - name: pickup_location_id
+        description: "승차 지역 ID"
+      - name: dropoff_location_id
+        description: "하차 지역 ID"
+      - name: payment_type
+        description: "결제 수단 코드"
+
+  - name: int_trips
+    description: "중복이 제거되고 결제 수단 설명이 추가된 최종 Intermediate 모델입니다."
+    columns:
+      - name: trip_id
+        description: "Surrogate Key (MD5 해시로 생성된 고유 식별자)"
+        data_tests:
+          - unique
+          - not_null
+      - name: vendor_id
+        description: "택시 업체 ID"
+        data_tests:
+          - not_null
+      - name: service_type
+        description: "택시 종류"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['Green', 'Yellow']
+      - name: pickup_datetime
+        description: "승차 시간"
+        data_tests:
+          - not_null
+      - name: total_amount
+        description: "총 결제 금액"
+        data_tests:
+          - not_null
+      - name: payment_type_description
+        description: "결제 수단 코드에 대한 실제 설명 (예: Credit card, Cash)"

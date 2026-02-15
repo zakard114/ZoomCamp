@@ -1,2 +1,0 @@
-# docker-workshop
-Workshop Codespaces

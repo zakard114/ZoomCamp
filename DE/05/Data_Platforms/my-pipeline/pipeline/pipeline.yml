@@ -1,0 +1,52 @@
+# Zoomcamp template: pipeline.yml
+# Goal: help you learn Bruin pipeline configuration patterns. This file is intentionally *not* runnable until you complete the TODOs.
+#
+# Key docs:
+# - Pipeline files: https://getbruin.com/docs/bruin/getting-started/pipeline
+# - Variables (JSON Schema): https://getbruin.com/docs/bruin/getting-started/pipeline-variables
+# - Run command: https://getbruin.com/docs/bruin/commands/run
+
+# TODO: Set a pipeline name (string). This shows up in logs + `BRUIN_PIPELINE` for Python assets.
+name: zoomcamp-pipeline
+
+# 아래 줄을 추가하세요
+workers: 1 
+
+# TODO: Pick a schedule ("daily", "hourly", "weekly", "monthly") or a cron string.
+schedule: daily
+
+# TODO: Set the earliest date this pipeline should consider for full refresh backfills.
+# Format: YYYY-MM-DD
+start_date: "2021-01-01"
+
+# TODO: Configure default connections so assets can omit explicit `connection: ...`.
+# Common pattern: `duckdb: duckdb-default` for local dev.
+# Docs (connections): https://getbruin.com/docs/bruin/commands/connections
+default_connections:
+  duckdb: duckdb
+
+# TODO: Define pipeline variables using JSON Schema and defaults.
+# - Variables must have a `default` so assets can render without `--var`.
+# - In SQL/YAML assets: reference as `{{ var.my_variable }}`.
+# - In Python assets: read JSON from env var `BRUIN_VARS`.
+variables:
+  # TODO: Define `taxi_types` as an array of strings with a sensible default.
+  taxi_types:
+    type: array
+    items:
+      type: string
+    default: ["yellow", "green"]
+#   other_string_var: (optional) Add your own variable and use it in both Python and SQL assets.
+#     type: string
+#     default: "my_value"
+
+# 아래 내용을 파일 끝에 추가하거나 기존 connections가 있다면 수정하세요
+connections:
+  duckdb:
+    type: duckdb  # <--- 이 줄이 반드시 있어야 합니다!
+    # 주석에 속지 마세요! 파일 이름만 쓰면 파일이 여기저기 흩어집니다.
+    # 아래처럼 전체 경로를 써야 안전합니다.
+    path: "e:/it_spaces/ai/zoomcamp/duckdb.db"
+    # path: "e:/it_spaces/ai/zoomcamp/duckdb_v2.db"
+    # path: "e:/it_spaces/ai/zoomcamp/duckdb_v3.db" # 아예 v3로 바꿔서 새 장부를 만듭시다.
+    # path: "e:/it_spaces/ai/zoomcamp/duckdb_v4.db"

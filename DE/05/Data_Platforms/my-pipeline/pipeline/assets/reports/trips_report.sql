@@ -6,6 +6,7 @@ owner: zakard
 
 depends:
   - staging.trips
+  - reports.ensure_trips_report_table
 
 materialization:
   type: table

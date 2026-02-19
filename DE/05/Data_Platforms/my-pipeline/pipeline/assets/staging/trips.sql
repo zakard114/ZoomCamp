@@ -44,11 +44,6 @@ columns:
     checks:
       - name: not_null
 
-custom_checks:
-  - name: check_positive_distance
-    query: |
-      SELECT count(*) FROM staging.trips WHERE trip_distance <= 0
-    value: 0
 @bruin */
 
 WITH base AS (

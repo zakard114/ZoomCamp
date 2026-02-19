@@ -49,17 +49,17 @@ columns:
 WITH base AS (
   SELECT
     t.vendor_id,
-    t.pickup_datetime,
+    CAST(t.pickup_datetime AS TIMESTAMP) AS pickup_datetime,
     t.trip_distance,
     t.payment_type,
     p.payment_type_name AS payment_type_description,
     t.taxi_type,
-    t.extracted_at
+    CAST(t.extracted_at AS TIMESTAMP) AS extracted_at
   FROM ingestion.trips AS t
   LEFT JOIN ingestion.payment_lookup AS p
     ON t.payment_type = p.payment_type_id
-  WHERE t.pickup_datetime >= '{{ start_date }}'
-    AND t.pickup_datetime < '{{ end_date }}'
+  WHERE CAST(t.pickup_datetime AS TIMESTAMP) >= '{{ start_date }}'
+    AND CAST(t.pickup_datetime AS TIMESTAMP) < '{{ end_date }}'
     AND t.trip_distance > 0
     AND t.payment_type IS NOT NULL
 ),

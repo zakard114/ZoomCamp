@@ -5,6 +5,7 @@ type: bq.sql
 depends:
   - ingestion.trips
   - ingestion.payment_lookup
+  - staging.ensure_trips_table
 
 materialization:
   type: table

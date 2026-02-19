@@ -1,6 +1,7 @@
-# NYC TLC ingestion asset (trips.py)
+# NYC TLC ingestion asset (trips.py, taxi_zones.py)
 # Docs: https://getbruin.com/docs/bruin/assets/python
 pandas>=2.0.0
 requests>=2.28.0
 pyarrow>=14.0.0
 python-dateutil>=2.8.0
+google-cloud-bigquery>=3.0.0

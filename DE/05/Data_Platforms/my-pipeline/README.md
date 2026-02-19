@@ -410,6 +410,12 @@ Docs:
 - BigQuery platform: https://getbruin.com/docs/bruin/platforms/bigquery
 - `.bruin.yml` secrets backend: https://getbruin.com/docs/bruin/secrets/bruinyml
 
+### 5.5 Troubleshooting: "ingestion.trips" 404 (ingestr / Bruin)
+
+- **Location**: BigQuery 데이터셋은 리전별로 존재합니다. `.bruin.yml`의 `location`이 GCP 콘솔에서 만든 데이터셋의 리전과 **정확히 같아야** 합니다. 데이터셋이 `asia-northeast3`(서울) 등이면 `location: "asia-northeast3"`로 변경하세요.
+- **테이블 경로**: 에셋 이름 `ingestion.trips`는 `project_id.dataset.table`에서 `bruin-de-zoomcamp.ingestion.trips`로 사용됩니다. 프로젝트 ID는 connection에서 한 번만 쓰이므로, `bruin-de-zoomcamp.bruin-de-zoomcamp.ingestion.trips` 같은 중복은 Bruin 기본 동작이 아닙니다. 404가 나면 먼저 location을 확인하세요.
+- **Credentials**: `use_application_default_credentials: true`이면 `gcloud auth application-default login` 또는 `GOOGLE_APPLICATION_CREDENTIALS` 환경 변수로 인증됩니다. `bruin connections ping gcp-default`로 연결을 확인할 수 있습니다.
+
 ---
 
 ## Key Commands Reference

@@ -6092,22 +6092,783 @@ Path (또는 Database Path):
 
 
 
+나> 없어
+
+GEM> 어라, zakard님! 리스트에 DuckDB가 없나요?
+
+아마 Bruin Cloud 버전이나 티어에 따라 커넥션 리스트 구성이 조금 다를 수 있습니다. 이럴 땐 당황하지 마시고 두 가지 방법 중 하나로 해결할 수 있습니다.
+
+방법 1: SQLite 또는 다른 로컬 DB 타입이 있는지 확인
+만약 DuckDB라는 이름이 아예 없다면, 리스트에 **SQLite**나 MotherDuck 같은 항목이 있는지 봐주세요.
+
+하지만 Bruin Cloud는 클라우드 기반이라 로컬 파일 시스템을 쓰는 DuckDB 설정을 리스트에서 빼두었을 가능성이 큽니다.
+
+방법 2: 파이프라인 코드에서 duckdb 연결 삭제 (가장 확실한 방법)
+우리는 어차피 **GCP(BigQuery)**를 메인으로 쓸 거니까, 코드에서 DuckDB를 찾아서 지워버리는 게 가장 깔끔합니다.
+
+로컬 VS Code로 가서 프로젝트의 .bruin.yml 파일이나 각 .sql 파일 상단을 확인해 보세요.
+
+특정 파일(Asset) 상단에 아래와 같이 적힌 부분이 있을 겁니다:
+
+YAML
+connection: duckdb
+이 부분을 connection: gcp-default (아까 만든 GCP 연결 이름)로 바꾸거나, 아예 삭제해 보세요.
+
+수정한 내용을 GitHub에 git commit & push 합니다.
+
+Bruin Cloud는 GitHub과 연동되어 있으므로, 잠시 후(약 1~2분) 파이프라인이 갱신되면서 더 이상 duckdb 연결을 요구하지 않게 됩니다!
+
+💡 혹시 이 파이프라인이 DuckDB가 꼭 필요한 구조인가요?
+만약 단순히 튜토리얼을 따라 하다가 DuckDB 설정이 섞여 들어간 것이라면, GCP 연결만 사용하도록 코드를 통일하는 게 클라우드 배포의 정석입니다.
+
+지금 리스트에 어떤 DB 타입들이 보이는지 몇 개만 알려주실 수 있나요? 혹은 코드를 수정해서 Push 하는 게 편하신지 말씀해 주세요! 제가 바로 가이드 드릴게요. 🍀
 
 
 
-3. 실행 생성 (Create Run)
+CURSOR> 1. DuckDB 연결 정리
+에셋: trips.py, taxi_zones.py는 이미 connection: gcp-default만 사용 중입니다.
+pipeline.yml: default_connections에 google_cloud_platform: gcp-default만 있고, DuckDB 항목 없음.
+.bruin.yml: GCP(gcp-default) 연결만 있고, DuckDB 연결 블록 없음.
+→ 코드 상에서 connection: duckdb나 DuckDB 기본 연결은 더 이상 없습니다.
+2. Git 커밋 & 푸시
+스테이징: git add DE/05/ 실행.
+DB 파일 제외: .gitignore에 있는 ZoomCamp.duckdb, pipeline.duckdb는 스테이징에서 제거해 커밋 대상에서 뺐습니다. duckdb.db는 원래 Untracked라 리스트에 없었습니다.
+커밋:
+chore(DE/05): pipeline GCP BigQuery only, remove DuckDB connection refs
+푸시:
+git push origin main → 성공 (ac353cf..d22d90b main -> main).
+Bruin Cloud가 GitHub과 연동되어 있다면 1~2분 안에 파이프라인이 갱신되며, DuckDB 연결 없이 GCP BigQuery만 사용하는 상태로 동작할 것입니다.
 
-파이프라인 상세 화면 우측 상단에 있는 Run 또는 Trigger Pipeline 버튼을 누르세요.
-
-"어떤 환경에서 실행할까요?"라고 묻는다면 아까 만든 gcp-default 연결이 선택되어 있는지 확인하고 확인을 누릅니다.
- 
 
 
 
+나> 야 난 커서 모를땐 어떻게 작업했는지 몰러 기본 한시간인데 문제 맞딱뜨릴때마다. 이건 쓩쓩 5분이면 뜩을 치네 뜩을 쳐 ㅋㅋ
 
-=====
+GEM> 진짜 Cursor + Gemini 조합 맛보시면 예전으로 못 돌아가죠! 😂 zakard님, "떡을 친다"는 표현이 아주 찰떡입니다. 혼자 끙끙대면 한 시간 넘게 삽질할 걸, AI가 앞뒤 맥락 딱 짚어주니 5분 컷 되는 그 쾌감! 저도 아주 짜릿하네요.
 
-현재 위치:
+지금 커서(Cursor)로 깔끔하게 DuckDB 흔적 다 지우고 푸시까지 하셨으니, 이제 Bruin Cloud는 "어? 이제 duckdb 안 찾네? GCP만 있으면 되네!" 하고 태세 전환을 했을 겁니다.
+
+
+
+
+아까 커서(Cursor)로 DuckDB 관련 코드를 싹 다 지우고 푸시하셨잖아요? 그렇다면 이제 Bruin Cloud 화면에서 더 이상 + Create Connection (duckdb)을 할 필요가 없어야 정상입니다!
+
+코드에서 connection: duckdb라는 글자를 다 지웠으니까, Bruin Cloud가 최신 코드를 읽어들이면 "아, 이제 DuckDB는 안 쓰는구나!" 하고 알아차릴 거거든요.
+
+📍 지금 바로 확인하실 것
+Bruin Cloud 페이지 새로고침(F5):
+
+깃허브에 푸시한 내용(d22d90b 커밋)이 반영될 시간을 줘야 합니다.
+
+파이프라인 활성화 다시 시도:
+
+다시 한번 파이프라인 목록에서 Paused → Enable 스위치를 켜보세요.
+
+만약 또 duckdb가 필요하다고 뜬다면?
+
+그건 아직 Bruin Cloud가 옛날 코드를 물고 있는 겁니다. 1~2분만 더 기다렸다가 새로고침해서 다시 시도해 보세요.
+
+
+나> 여전히 duckb 뜬 후 새로고침 한 결과:
+Enable Pipeline
+
+This operation will enable the pipeline. This means that the pipeline will continue working on the schedule you defined.
+
+This pipeline will trigger a run immediately after enabling, keep in mind.
+
+버튼: Cancel, Enable
+
+
+//
+💡 만약 기다려도 계속 DuckDB를 찾는다면?
+그때는 아까 제가 말씀드린 **"가짜 DuckDB 연결"**을 하나 만들어버리는 게 정신 건강에 이롭습니다. (에러만 통과시키기용)
+
+Connection Name: duckdb
+
+Connection Type: 만약 리스트에 DuckDB가 진짜 없다면, 아무거나(예: SQLite) 대충 고르고 이름만 duckdb라고 붙여서 저장해 보세요. (어차피 코드에서 안 쓰니까 이름만 있으면 통과됩니다.)
+
+하지만! 커서로 완벽하게 밀어버리셨으니 새로고침만 하면 바로 활성화될 확률이 높습니다.
+//
+
+지금 새로고침 하시고 다시 스위치 켜보셨나요? 결과 알려주세요! 이번엔 진짜 'Run' 버튼 누르는 화면 보고 싶네요. 😂 필승! 💪
+
+...
+
+GEM> 오! zakard님, 드디어 Active 상태로 바뀌었네요!
+
+Enabled? 칸에 초록색 불이 들어오거나 **Active**라고 떠 있다면, 이제 Bruin Cloud가 이 파이프라인을 실행할 준비가 완벽히 끝났다는 뜻입니다. (Status가 Unknown인 건 아직 한 번도 실행하지 않아서 그런 것이니 걱정 마세요!)
+
+자, 이제 진짜 '클라우드 첫 실행' 들어갑니다.
+
+
+
+🚀 대망의 첫 실행(Run) 버튼 누르기
+목록에 있는 zoomcamp-pipeline 이름을 클릭해서 상세 페이지로 들어갑니다.
+
+화면 우측 상단에 있는 Run 버튼(혹은 Trigger Run)을 누르세요.
+
+나> 누른 후:
+
+GEM> 드디어 카운트다운 화면까지 오셨군요, zakard님! 🚀
+
+복잡해 보이지만 지금은 첫 실행이 목적이니, 다른 건 건드릴 필요 없이 바로 쏘시면 됩니다. 아래 가이드대로만 확인하고 버튼 누르세요!
+
+📍 어떻게 설정하고 누를까요?
+Full Refresh: 체크하세요! * 처음 실행하는 거니까 BigQuery에 테이블을 새로 깨끗하게 밀어 넣는 게 좋습니다.
+(메시지: When full refresh is enabled, the pipeline's default start date will be used instead of the selected date range.)
+
+Start Date / End Date:
+
+비워두셔도 됩니다. (기본적으로 pipeline.yml에 설정된 기간이나 현재 시간을 기준으로 돌아갑니다.)
+
+Note / Tags / Variables:
+
+모두 무시하고 비워두세요.
+
+No split / Auto-split:
+
+기본값인 No split 그대로 두시면 됩니다.
+
+🚀 자, 이제 하단의 [New Run] (또는 Run) 버튼을 누르세요!
+버튼을 누르는 순간:
+
+나> 
+Full Refresh Confirmation
+You are about to run 5 assets with full refresh enabled.
+
+This will reload all data from the beginning. Are you sure you want to continue?
+
+Affected assets:
+
+• ingestion.payment_lookup
+• ingestion.taxi_zones
+• ingestion.trips
+• reports.trips_report
+• staging.trips
+
+GEM> 네, zakard님! 그 화면이 맞습니다.
+
+목록을 보니 우리가 공들여 만든 ingestion, staging, reports 레이어의 5개 에셋이 아주 예쁘게 잡혀 있네요. **Full Refresh**는 기존에 혹시나 잘못 들어갔을지 모를 데이터를 싹 비우고 처음부터 깨끗하게 새로 쌓겠다는 뜻이니, 지금 상황에 딱 좋습니다.
+
+
+📍 망설이지 말고 [New Run] (또는 Contitue) 클릭!
+이제 진짜 주사위는 던져졌습니다. 버튼을 누르시면:
+
+Dashboard나 Runs 탭에 실시간 진행 상황이 뜹니다.
+
+결과: 
+일부 성공, 일부 실패
+
+
+GEM> 하, zakard님! 역시 한 번에 다 되면 재미없다는 듯이 에러가 터져주는군요. 하지만 분석해 보니 범인이 아주 명확합니다.
+
+현재 상황을 보면 ingestion.payment_lookup(BigQuery SQL)은 성공했는데, Python으로 작성된 ingestion 에셋들(taxi_zones, trips)에서 에러가 났습니다. 상위 작업이 깨지니 밑에 있는 staging과 reports는 시도조차 못 하고 upstream_failed가 뜬 상태고요.
+
+🕵️ 원인 분석 (Python 에셋의 반란)
+Python 에셋이 실패한 이유는 보통 두 가지 중 하나입니다:
+
+패키지 누락: pandas, pyarrow 등 필요한 라이브러리가 Bruin Cloud 환경에 설치되어 있지 않음.
+
+연결 정보 미전달: Python 코드 안에서 connection을 사용하는 방식이 Bruin Cloud와 맞지 않음.
+
+🛠️ 해결을 위한 로그 확인 (지금 바로 해주세요!)
+지금 실패한 에셋 중 하나인 ingestion.taxi_zones 또는 ingestion.trips 이름을 클릭해 보세요.
+
+클릭하면 오른쪽에 상세 창이 뜨면서 Logs 탭이 보일 겁니다.
+
+그 로그의 맨 아랫부분에 있는 에러 메시지(Traceback...이나 ModuleNotFoundError, PermissionError 등)를 저에게 복사해서 보여주세요!
+
+
+나> 2월 19일 03:56:28
+>>   File "/home/bruin/.local/share/uv/tools/ingestr/lib/python3.11/site-packages/dlt/pipeline/pipeline.py", line 626, in load
+2월 19일 03:56:28
+>>     raise PipelineStepFailed(self, "load", err_load_id, l_ex, step_info) from l_ex
+2월 19일 03:56:28
+>> dlt.pipeline.exceptions.PipelineStepFailed: Pipeline execution failed at `step=load` when processing package with `load_id=1771473381.852428` with exception:
+2월 19일 03:56:28
+>> 
+2월 19일 03:56:28
+>> 
+2월 19일 03:56:28
+>> Job with `job_id=trips.cc5d49544b.parquet` and `load_id=1771473381.852428` failed terminally with message: 404 POST https://bigquery.googleapis.com/upload/bigquery/v2/projects/bruin-de-zoomcamp/jobs?uploadType=resumable: Not found: Table bruin-de-zoomcamp:ingestion.trips. The package is aborted and cannot be retried.
+2월 19일 03:56:28
+>> WARNING: package `1771473381.852428` is partially loaded. Data in destination could be modified by one of completed load jobs while others were not yet executed or were retried. Data in the destination may be in inconsistent state. We recommend that you retry the load or  review the incident before dropping pending packages. See https://dlthub.com/docs/running-in-production/running#partially-loaded-packages for details
+2월 19일 03:56:29
+2월 19일 03:56:29
+2월 19일 03:56:29
+Failed 1 tasks in 26.167s
+2월 19일 03:56:29
+2월 19일 03:56:29
+ingestion.trips: failed to execute Python script: failed to run load the data into the destination: exit status 1
+2월 19일 03:56:32
+Task finished with status: Failed
+
+참고로 너도 CURSOR를 필요할때 가용해. 니가 나에게 지침하는것 보다 어쩌면 그편이 시간을 단축할 수 있으니. 
+
+
+GEM> 로그를 보니 범인이 명확히 잡혔습니다, zakard님! dlt 라이브러리가 데이터를 BigQuery로 쏘려고 했는데, 데이터를 담을 테이블(ingestion.trips)이 없다며 404 Not Found 에러를 뱉었네요.
+
+보통은 dlt가 테이블을 자동으로 만들어주지만, GCP 프로젝트의 권한 문제나 데이터셋(Dataset) 부재 때문에 생성을 거부당했을 확률이 높습니다.
+
+커서(Cursor)를 가용해서 코드 레벨에서 한 번에 쓱- 해결하는 게 훨씬 빠르겠네요. 아래 절차대로 진행해 주세요!
+
+
+🛠️ Cursor 작업 지시 (Time-Saver)
+zakard님, Cursor를 켜고 trips.py와 taxi_zones.py 파일로 가서 각각 아래 내용을 체크/수정해 달라고 하세요.
+
+1. 데이터셋(Dataset) 강제 생성 설정
+GCP 콘솔에서 ingestion이라는 데이터셋이 미리 만들어져 있어야 합니다. 하지만 코드를 수정해서 "없으면 만들어라"라고 명시하는 게 제일 편합니다.
+
+Cursor에게 줄 프롬프트:
+
+"ingestion.trips와 ingestion.taxi_zones 파이프라인에서 BigQuery 테이블을 찾지 못해 404 에러가 발생했어. dlt.pipeline 설정이나 BigQuery Destination 설정 부분에서 dataset_name이 ingestion으로 정확히 지정되어 있는지 확인하고, 만약 없다면 자동으로 생성하도록 설정을 보강해줘. 그리고 GCP project_id가 bruin-de-zoomcamp로 명시되어 있는지도 체크해줘."
+
+2. BigQuery 권한 확인 (중요)
+코드를 아무리 고쳐도 GCP에서 막으면 끝입니다. 아까 제가 말씀드린 서비스 계정에 **BigQuery Data Editor**와 BigQuery Job User 권한이 있는지 꼭 확인해야 합니다. (Cursor가 이건 직접 못 하니 zakard님이 한 번만 봐주세요!)
+
+
+📍 GCP 콘솔에서 수동 해결 (가장 확실한 방법)
+만약 코드를 고치기 번거로우시다면, GCP BigQuery 콘솔로 가셔서 **ingestion**이라는 이름의 데이터셋을 수동으로 하나 뚝딱 만들어주세요.
+
+GCP BigQuery 접속.
+
+프로젝트(bruin-de-zoomcamp) 옆의 점 세 개 클릭 -> 데이터셋 만들기(Create dataset).
+
+데이터셋 ID: ingestion (소문자 필수).
+
+위치: US (아까 Bruin 설정과 동일하게).
+
+결론:
+지금 에러는 **"그릇(ingestion 데이터셋)이 없어서 음식을 못 담는 상태"**입니다.
+
+Cursor에게 "데이터셋 자동 생성을 보장하는 코드로 업데이트해줘"라고 시키신 후 Push 하시거나, GCP 콘솔에서 ingestion 데이터셋을 직접 만드신 후 다시 Run 하시면 해결됩니다!
+
+어떤 방법으로 진행해 보시겠어요? (성공하면 알려주세요, 떡 치러 가야죠! 🥂)
+
+
+
+나> ingestion이전에 이미 만들지 않았나? 들어와보니 이미 있어
+
+GEM> 데이터셋이 이미 있다면 더 당황스러우시겠네요. zakard님, 데이터셋은 있는데 404 Not Found가 뜬다면 이건 십중팔구 "권한(Permission)" 혹은 "위치(Location) 불일치" 문제입니다.
+
+범인을 좁히기 위해 Cursor에게 다음 작업을 시키고, 결과를 푸시해 보세요. 이게 가장 빠릅니다.
+
+🛠️ Cursor에게 시킬 작업 (복사해서 붙여넣으세요)
+"ingestr이 ingestion.trips 테이블을 찾을 수 없다고 404 에러를 내고 있어. 근데 GCP 콘솔에는 이미 ingestion 데이터셋이 있거든? 아래 두 가지를 확인하고 수정해줘.
+
+Location 일치: Bruin Cloud 설정은 US인데, 만약 ingestion 데이터셋이 asia-northeast3 같은 다른 지역에 생성되어 있다면 에러가 날 수 있어. 코드에서 destination 위치를 US로 명시하거나, 혹은 위치를 타지 않게 설정을 점검해줘.
+
+Full Table Path: dlt나 ingestr 설정에서 프로젝트 ID(bruin-de-zoomcamp)가 중복으로 붙거나 누락되어서 bruin-de-zoomcamp.bruin-de-zoomcamp.ingestion.trips 같은 잘못된 경로로 찌르고 있는 건 아닌지 봐줘.
+
+Credentials 확인: 현재 코드에서 GCP 연결 정보를 환경 변수나 gcp-default 커넥션에서 제대로 물어오고 있는지 확인해줘."
+
+📍 왜 이미 있는데 없다고 할까요? (AI의 추측)
+위치(Region) 문제 (가장 유력):
+
+데이터셋은 US(멀티 리전)인데, Bruin Cloud의 작업 요청은 asia-northeast3에서 들어오거나 그 반대일 경우, BigQuery는 "내 구역엔 그런 테이블 없는데?"라며 404를 던집니다.
+
+권한 누락:
+
+서비스 계정이 데이터셋을 **볼 권한(Metadata Viewer)**이 없으면, 존재하더라도 "없음"으로 처리될 수 있습니다. (GCP의 보안 특성상 "권한 없음"을 "찾을 수 없음"으로 응답하기도 합니다.)
+
+✅ 지금 바로 확인할 것 (GCP 콘솔)
+BigQuery 콘솔에서 ingestion 데이터셋의 정보를 눌러 **'위치'**가 US인지 확인해 보세요.
+
+만약 서울이나 다른 곳이라면, 데이터셋을 삭제하고 US로 다시 만드시는 게 속 편합니다. (Bruin 설정과 맞추기 위해)
+
+Cursor로 코드 점검하고 다시 Push 하셨나요? 그다음 다시 Bruin에서 Run 돌려보시고, 똑같은 404가 뜨는지 알려주세요! 이번엔 Cursor가 해결책을 찾아낼 겁니다. 💪
+
+
+
+
+
+CURSOR> 요청하신 세 가지를 반영해 수정·정리했습니다.
+
+1. Location 일치
+원인: BigQuery 데이터셋은 리전별로 존재합니다. Bruin 설정이 location: "US"인데, ingestion 데이터셋을 asia-northeast3(서울) 등 다른 리전에 만들었다면, 클라이언트가 US에서만 찾기 때문에 404가 납니다.
+
+조치
+.bruin.yml에 주석을 넣어, location이 GCP 콘솔의 데이터셋 리전과 반드시 같아야 한다고 명시했습니다.
+ingestion 데이터셋이 asia-northeast3라면, 아래처럼 location만 해당 리전으로 바꾸면 됩니다.
+location: "asia-northeast3"
+현재 값은 그대로 "US"입니다. 콘솔에서 ingestion 데이터셋이 어떤 리전에 있는지 확인한 뒤, 그 리전 문자열로 맞춰 주세요.
+
+2. Full Table Path (프로젝트 ID 중복)
+문서와 구조상, Bruin/ingestr는 connection의 project_id 한 번과 에셋 이름 ingestion.trips(dataset.table)를 조합해
+bruin-de-zoomcamp.ingestion.trips 로만 사용합니다.
+bruin-de-zoomcamp.bruin-de-zoomcamp.ingestion.trips 같은 이중 project_id는 기본 동작이 아닙니다.
+따라서 404 원인은 경로 중복보다는 리전(location) 불일치일 가능성이 큽니다.
+위처럼 location을 데이터셋 리전에 맞추면 해결되는 경우가 많습니다.
+
+3. Credentials 확인
+.bruin.yml에는 use_application_default_credentials: true만 있어, 다음 중 하나로 인증합니다.
+gcloud auth application-default login
+또는 GOOGLE_APPLICATION_CREDENTIALS에 서비스 계정 JSON 경로 지정
+연결 확인: 터미널에서
+bruin connections ping gcp-default
+로 gcp-default 연결이 정상인지 확인할 수 있습니다.
+이 내용도 .bruin.yml 주석과 README에 적어 두었습니다.
+수정된 파일 요약
+파일	변경 내용
+.bruin.yml	상단에 404 방지용 주석 추가 (Location / 테이블 경로 / Credentials). location 옆에 “데이터셋 리전과 일치” 안내.
+README.md	5.5 Troubleshooting: ingestion.trips 404 섹션 추가 (Location, 테이블 경로, Credentials 점검 방법).
+다음 액션: GCP 콘솔에서 ingestion 데이터셋의 리전을 확인한 뒤, 그 리전이 US가 아니면 .bruin.yml의 location을 해당 리전(예: asia-northeast3)으로 바꾼 후 다시 실행해 보시면 됩니다.
+
+
+GEM> 커서(Cursor)가 아주 논리적으로 잘 짚어줬네요! zakard님, 이제 결전의 시간입니다. 커서가 말한 대로 **'리전(Location) 불일치'**가 이번 404 에러의 99% 원인일 겁니다.
+
+지금 바로 GCP 콘솔에서 딱 10초만 투자해서 확인해 주세요.
+
+🔍 확인 및 조치 (마지막 단계)
+GCP BigQuery 콘솔로 갑니다.
+
+ingestion 데이터셋을 클릭하고 [정보(Details)] 탭을 보세요.
+
+**데이터 위치(Data location)**가 무엇으로 되어 있나요?
+
+US (또는 US (multiple regions)): 현재 .bruin.yml 설정과 일치하므로 그대로 두면 됩니다.
+
+asia-northeast3 (서울) 또는 다른 리전: 이게 범인입니다!
+
+✅ 만약 리전이 다르다면?
+
+방법 A: .bruin.yml 파일에서 location: "US"를 콘솔에 적힌 리전(예: "asia-northeast3")으로 바꾸고 git push 하세요.
+
+방법 B (추천): 그냥 GCP에서 ingestion 데이터셋을 삭제하고, 위치를 US로 선택해서 다시 만드세요. (나머지 프로젝트 설정과 맞추는 게 나중에 덜 꼬입니다.)
+
+
+
+나>...
+
+GEM> 
+데이터 위치가 **US**로 되어 있는 걸 보니, 설정상의 지역 불일치 문제는 아니었네요. zakard님, 데이터셋도 있고 위치도 맞는데 404 Not Found가 뜬다면, 이건 ingestr 도구가 테이블을 생성하러 들어갈 때 프로젝트 ID를 해석하는 방식에서 미세한 충돌이 난 겁니다.
+
+커서(Cursor)가 분석한 대로 경로 문제는 이미 점검했으니, 이제 GCP 서비스 계정의 권한을 딱 한 단계만 더 높여서 이 문제를 강제로 돌파해 봅시다.
+
+
+🛠️ 1분 해결책: 권한 업그레이드
+GCP는 때때로 테이블이 없을 때 "권한이 없어서 못 만든다"는 말을 **"테이블을 찾을 수 없다(404)"**는 말로 대신하기도 합니다. 지금 서비스 계정에 아래 권한이 있는지 확인하고 추가해 주세요.
+
+
+**GCP 콘솔 [IAM 페이지]**로 이동.
+
+사용 중인 서비스 계정(bruin-cloud-key@...) 편집.
+
+기존 권한에 더해 **BigQuery 편집자 (BigQuery Data Editor)**가 있는지 확인하세요.
+
+만약 BigQuery 관리자가 이미 있다면 충분하지만, 혹시 모르니 BigQuery 작업 사용자 (BigQuery Job User) 권한도 추가해 주세요. (프로젝트 수준에서 필요합니다.)
+
+🛠️ Bruin Cloud에서 한 번 더 체크할 것
+Project ID 중복 확인:
+Bruin Cloud 연결 설정 시 Project ID 입력 칸에 bruin-de-zoomcamp라고 쓰셨죠?
+혹시 JSON 파일 내용 안에도 project_id가 똑같이 들어있는데, Bruin이 이걸 조합하다가 bruin-de-zoomcamp.bruin-de-zoomcamp.ingestion.trips라고 잘못 찌르고 있는 건 아닌지 확인이 필요합니다.
+
+테스트 실행:
+권한 추가 후, Bruin Cloud에서 다시 **Run**을 누르되 이번에는 Full Refresh를 끄고 그냥 한번 돌려보세요.
+
+📍 Cursor에게 마지막으로 시킬 '코드 한 줄' 수정
+만약 권한을 줬는데도 안 된다면, trips.py의 dlt 설정 부분에 프로젝트 ID를 명시적으로 박아버리는 것이 가장 확실합니다.
+
+Cursor 프롬프트:
+
+"dlt.pipeline의 destination 설정에서 project_id를 하드코딩하지 말고, Bruin의 연결 정보를 확실히 물어오도록 credentials 설정을 보강해줘. 그리고 만약 ingestr을 쓴다면 --project-id 옵션이 중복되지 않게 파라미터를 정리해줘."
+
+zakard님, 지금 IAM에서 BigQuery Data Editor 권한만 다시 한번 확인해 보시고 바로 Run 눌러보시겠어요?
+
+데이터셋이 US인 걸 확인했으니, 이제 남은 건 "권한 때문에 테이블 생성을 거부당함" 하나뿐입니다. 이번엔 뚫릴 겁니다! 🥂 결과 기다릴게요. (커서랑 같이 하면 떡 치는 건 시간문제죠!)
+
+
+...
+
+
+zakard님, 지금 올려주신 화면은 '서비스 계정의 키(Key)' 화면이네요!
+
+키는 이미 Active 상태로 아주 잘 생성되어 있습니다. 하지만 404 에러(Table Not Found)의 원인은 키 자체가 아니라, 이 키에 부여된 '역할(Role, 즉 권한)' 문제일 가능성이 매우 높습니다.
+
+지금 보고 계신 화면 상단의 탭 중에서 권한(PERMISSIONS) 또는 액세스 권한이 있는 주 구성원 탭을 클릭해 보세요. 거기에 아래 권한들이 들어있는지 확인하는 게 핵심입니다.
+
+
+…
+
+zakard님, 지금 올려주신 화면은 '서비스 계정의 키(Key)' 화면이네요!
+
+키는 이미 Active 상태로 아주 잘 생성되어 있습니다. 하지만 404 에러(Table Not Found)의 원인은 키 자체가 아니라, 이 키에 부여된 '역할(Role, 즉 권한)' 문제일 가능성이 매우 높습니다.
+
+지금 보고 계신 화면 상단의 탭 중에서 권한(PERMISSIONS) 또는 액세스 권한이 있는 주 구성원 탭을 클릭해 보세요. 거기에 아래 권한들이 들어있는지 확인하는 게 핵심입니다.
+
+
+
+IAM 및 관리자 > 서비스 계정 > bruin-cloud-key 선택 화면
+
+나> zakard330@gmail.com
+Code Holic	
+소유자
+ bruin-de-zoomcamp
+
+
+
+zakard님, 찾았습니다! 범인이 아주 명확하게 검거됐네요.
+
+지금 올려주신 화면을 보니, bruin-cloud-key 서비스 계정 자체에 대한 권한 설정 페이지를 보고 계신데요. 정작 이 서비스 계정이 BigQuery에 접근할 수 있는 '역할(Role)'이 하나도 부여되지 않은 상태입니다.
+
+리스트에 zakard330@gmail.com만 소유자로 되어 있고, 우리가 만든 서비스 계정은 이 프로젝트에서 아무런 힘이 없는 "이름만 있는 사원" 같은 상태예요. 그래서 BigQuery가 "너 누구야? 그런 테이블 없어(404)"라고 문을 닫아버린 겁니다.
+
+🛠️ 10초 만에 해결하는 권한 부여 (필수!)
+지금 보고 계신 화면(IAM 및 관리자 > 서비스 계정 > bruin-cloud-key 선택 화면)이 아니라, 왼쪽 메뉴에서 진짜 [IAM] 메뉴를 다시 클릭하세요. (맨 위에 있는 'IAM' 글자)
+
+[+ 액세스 권한 부여] (또는 GRANT ACCESS) 버튼을 클릭합니다.
+
+새 주 구성원 (New principals): 서비스 계정 이메일을 복사해서 넣으세요.
+
+bruin-cloud-key@bruin-de-zoomcamp.iam.gserviceaccount.com
+
+역할 선택 (Select a role): 다음 2개를 꼭 추가하세요.
+
+BigQuery 관리자 (BigQuery Admin) - 가장 확실합니다.
+
+서비스 계정 사용자 (Service Account User)
+
+**[저장]**을 누릅니다.
+
+📍 왜 이 작업이 필요한가요?
+현재 상태: 서비스 계정이라는 '열쇠(Key)'는 만들었지만, 그 열쇠가 'BigQuery'라는 문을 열 수 있게 허락(IAM Role)을 안 해준 상태입니다.
+
+조치 후: 이제 Bruin Cloud가 이 열쇠를 들고 가면, GCP가 "아, BigQuery 관리자님이 오셨군요!" 하고 테이블을 생성해 줄 겁니다.
+
+🚀 마지막 실행 준비
+권한 저장을 마치셨다면, 다시 Bruin Cloud로 가셔서 Run을 눌러보세요.
+
+
+결과:
+정책을 업데이트했습니다. 변경사항이 활성화되는 데 몇 분 정도 걸릴 수 있습니다.
+
+GEM> 드디어 권한의 자물쇠를 여셨군요, zakard님! 👏
+
+GCP가 "정책 업데이트 완료"라고 했으니, 이제 **bruin-cloud-key**는 정식으로 BigQuery를 다스릴 수 있는 관리자 자격을 얻었습니다. 보통은 바로 적용되지만, 클라우드 시스템끼리 정보를 동기화하는 데 약간의 시간이 필요할 수 있으니 딱 30초만 숨 고르고 다음 단계로 넘어가시죠.
+
+🚀 대망의 재도전 (Run!)
+이제 Bruin Cloud로 돌아가서 다시 한번 시원하게 실행해 봅시다.
+
+Bruin Cloud 화면에서 해당 파이프라인의 Run 버튼을 누르세요.
+
+이번에도 **Full Refresh**를 체크하시는 걸 추천합니다. (이전에 권한 문제로 꼬였던 잔해들을 싹 밀고 새로 시작하기 위함입니다.)
+
+[Trigger Run] 클릭!
+
+
+
+**커서(Cursor)**한테는 "IAM 권한 수정했으니 다시 돌려볼게"라고 한마디 해주시고요. 이번에는 진짜 5분 컷으로 Success 뜰 겁니다!
+
+
+
+GEM> zakard님, 지금 보고 계신 리스트는 **'과거에 실패했던 기록'**들입니다! (Started at이 03:55분, 03:48분으로 되어 있네요.)
+
+권한을 방금 수정하셨으니, **새로운 실행(New Run)**을 수동으로 직접 쏴주셔야 합니다. 그래야 방금 업데이트한 '관리자 권한'을 들고 데이터가 다시 출발합니다.
+
+📍 마지막 세팅 가이드
+Full Refresh: ✅ 반드시 체크!
+
+(이제 권한이 있으니, 기존에 실패했던 흔적을 지우고 테이블을 새로 생성할 수 있습니다.)
+
+Pipeline: zoomcamp-pipeline이 선택되어 있는지 확인하세요.
+
+Start / End Date: 그냥 비워두셔도 됩니다. (기본 설정으로 돌아갑니다.)
+
+No split: 기본값 그대로 두세요.
+
+🚀 이제 하단의 [Trigger Run]을 클릭하세요!
+누르자마자 Runs 목록 화면으로 돌아갈 텐데, 거기서 가장 위에 있는 최신 실행 건을 주목해 주세요.
+
+
+결과:
+	
+ingestion.taxi_zones
+Python	00:00:13	-	No checks executed.	failed	
+
+ingestion.trips
+Python	00:00:39	-	1 check failed.	failed	
+
+ingestion.payment_lookup
+BigQuery	00:00:52	-	3 checks passed.	success	
+
+reports.trips_report
+BigQuery	-	-		upstream_failed	
+
+staging.trips
+BigQuery	-	-		upstream_failed	
+
+
+
+
+...
+
+이후 LOG와 깃헙 커밋 푸시 권한을 CURSOR에게 위임한 후 성공
+
+Dashboard
+Pipelines
+Assets
+Lineage
+Runs
+Glossary
+Insights
+Search...
+⌘ K
+
+zakard-data
+
+zoomcamp-pipeline / manual__2026-02-19T07:46:00.344774+00:00
+Thu, 19 Feb 2026 07:48:03 UTC
+re-run
+Status
+success
+# Assets
+7
+Quality Checks
+22
+Duration
+00:02:12
+Assets
+Timeline
+
+
+
+Search...
+Name
+Type
+Duration
+Retries
+Checks	
+Status
+ingestion.payment_lookup
+BigQuery	00:00:46	-	3 checks passed.	success	
+
+ingestion.taxi_zones
+Python	00:00:23	-	No checks executed.	success	
+
+ingestion.trips
+Python	00:00:37	-	1 checks passed.	success	
+
+reports.ensure_trips_report_table
+BigQuery	00:00:12	-	No checks executed.	success	
+
+reports.trips_report
+BigQuery	00:00:29	-	11 checks passed.	success	
+
+staging.ensure_trips_table
+BigQuery	00:00:12	-	No checks executed.	success	
+
+staging.trips
+BigQuery	00:00:39	-	7 checks passed.	success	
+
+https://cloud.getbruin.com/zakarddatamoqdky3v/projects/zakarddatamoqdky3v/pipelines/zoomcamp-pipeline/runs/manual__2026-02-19T07:46:00.344774+00:00
+
+
+
+GEM> 와, zakard님!!! 드디어 **전부 초록색(Success)**이 떴네요! 축하드립니다! 🎉🥂
+
+저 수많은 success 글자와 11 checks passed, 7 checks passed 숫자들이 보이시나요? 단순히 데이터만 옮긴 게 아니라, 데이터 품질 검사(Quality Checks)까지 완벽하게 통과했다는 뜻입니다. zakard님과 Cursor, 그리고 제가 합작해서 결국 GCP BigQuery의 철옹성을 뚫어냈군요.
+
+📊 지금 달성하신 결과물 (Zakard-Data의 첫 성과)
+Ingestion 성공: 파이썬 직구 코드로 taxi_zones와 trips 데이터를 BigQuery로 안전하게 쐈습니다.
+
+Staging 완수: 원천 데이터를 가공해서 staging.trips 테이블을 만들어냈고요.
+
+Reporting 완료: 최종 결과물인 reports.trips_report까지 완성되었습니다.
+
+이제 BigQuery 콘솔에 가보시면 이 예쁜 테이블들이 실제로 데이터와 함께 들어있을 겁니다.
+
+🔥 사투의 끝, 그리고 소감
+오늘 IAM 권한 설정부터 시작해서 리전(Location) 확인, Python 라이브러리 의존성(requirements) 해결, 그리고 마지막 직구 코드 전환까지... 이건 사실 데이터 엔지니어가 실무에서 겪는 핵심 트러블슈팅의 풀코스였습니다. 이걸 하루 만에 다 깨부수신 거예요.
+
+zakard님, 이제 이 파이프라인은 '돌아가는 코드'가 되었습니다.
+
+마지막으로 제가 도와드릴 일이 있을까요? * 예를 들어, "이 데이터를 가지고 이제 어떤 대시보드를 만들 수 있을지" 궁금하시거나,
+
+아니면 "성공한 기념으로 BigQuery에서 쿼리 한 번 시원하게 날려보고 싶다" 하시면 쿼리 짜드릴게요!
+
+
+
+
+
+나> 자 이제 이거 다 끝난건가?
+
+"파이프라인을 활성화하고 실행하세요:
+
+1. Bruin Cloud 홈페이지에서 파이프라인 페이지 로 이동하세요.
+2. 해당 파이프라인을 찾아서 클릭하여 활성화하세요.
+3. Bruin 클라우드 인프라에서 파이프라인을 실행하기 위한 실행을 생성하세요."
+
+
+GEM> 네, zakard님! 이제 엔지니어링 사투는 끝났고, 이제는 이 파이프라인이 매일 혹은 매시간 스스로 일하게 만드는 '운영(Ops)' 단계만 남았습니다.
+
+이미 수동 실행(New Run)으로 성공을 확인하셨으니, 말씀하신 3단계는 사실상 **"자동화 스위치를 켜는 과정"**이라고 보시면 됩니다.
+
+✅ 진짜 끝내기 위한 마지막 체크리스트
+파이프라인 활성화 (Enable)
+
+지금은 zakard님이 버튼을 눌러야만 돌아가는 '수동' 상태일 수 있습니다.
+
+파이프라인 설정(Settings)이나 메인 화면에서 Enabled 또는 Active 스위치를 켜주세요. 그래야 코드에 설정된 스케줄(예: 매일 자정)에 맞춰 자동으로 돌아갑니다.
+
+데이터 확인 (GCP 콘솔)
+
+기분 좋게 마무리하기 위해 BigQuery 콘솔에 접속해서 reports.trips_report 테이블을 SELECT 해보세요.
+
+사투의 결과물이 테이블 형태로 예쁘게 쌓여있는 걸 보면 진짜 끝났다는 실감이 나실 겁니다.
+
+무료 티어 확인
+
+현재 무료 티어를 사용 중이시니, 너무 자주 돌아가게(예: 5분마다 실행) 설정되어 있지는 않은지만 한 번 쓱 봐주세요. 쿼리 비용이나 인스턴스 제한 내에서 아주 넉넉하게 돌아갈 겁니다.
+
+💡 다음은 무엇을 할까요?
+이제 파이프라인이라는 **'수도관'**은 완벽하게 연결되었습니다. 이제 그 관을 통해 흐르는 데이터를 요리할 차례입니다.
+
+"성공한 데이터를 시각화해보고 싶다": Looker Studio나 다른 툴로 대시보드 연결하는 법을 알아볼까요?
+
+"코드를 좀 더 깔끔하게 정리하고 싶다": Cursor와 함께 리팩토링을 한 번 더 돌릴까요?
+
+"이제 좀 쉬고 싶다": 이건 제가 가장 추천하는 옵션입니다. ☕️
+
+zakard님, 이제 모든 에셋이 초록색이니 마음 편히 끄셔도 됩니다! 혹시 활성화 과정에서 UI가 헷갈리거나 도움이 더 필요하시면 말씀해 주세요. 정말 고생 많으셨습니다! 🏆
+
+
+
+----
+
+
+나> 아래 본문에 대해, 여기서 내가 해야할게 아직 남아있어 아니면 그냥 참고용이야?
+
+GEM> zakard님, 보내주신 내용은 향후 운영과 확장을 위한 **'핵심 가이드북(Cheat Sheet)'**이라고 보시면 됩니다.
+
+지금 당장 추가로 코드를 수정하거나 명령어를 입력할 필요는 없지만, 앞으로 파이프라인을 관리하면서 다음 세 가지 상황이 올 때 이 내용을 꺼내 쓰시면 됩니다.
+
+1. 언제 이 명령어를 쓰게 될까요? (명령어 참조)
+현재는 Bruin Cloud UI에서 클릭으로 해결했지만, 나중에 로컬 터미널(VS Code 등)에서 작업할 때 필수적입니다.
+
+bruin validate: 코드를 수정하고 Push 하기 전, 문법이나 종속성에 문제가 없는지 미리 확인할 때 씁니다.
+
+bruin run --full-refresh: 오늘처럼 데이터 구조를 완전히 갈아엎거나, 과거 데이터를 처음부터 다시 쌓아야 할 때 씁니다.
+
+2. 데이터가 늘어날 때 (구체화 전략)
+지금은 데이터가 적어서 금방 돌아가지만, 나중에 수백만 건이 되면 매번 테이블을 새로 만드는 것은 비효율적입니다.
+
+이때 가이드에 적힌 **time_interval**이나 merge 전략으로 변경하여, 새로 들어온 데이터만 똑똑하게 업데이트하도록 코드를 수정하게 될 겁니다.
+
+3. 데이터 신뢰도를 높일 때 (품질 검사)
+가이드의 checks 부분을 참고해서, 예를 들어 "요금(fare_amount)은 반드시 0보다 커야 한다"는 식의 검사를 추가하면, 불량 데이터가 들어왔을 때 파이프라인이 자동으로 멈추고 경고를 보내줍니다.
+
+결론
+지금은 그냥 참고용으로 두셔도 무방합니다. 이미 사투 끝에 모든 에셋이 **초록색(Success)**이 되었기 때문에, 현재의 파이프라인은 완벽하게 작동하고 있는 상태입니다.
+
+오늘 공부한 이 내용들은 **"이제 이 파이프라인을 어떻게 더 고도화하고 유지보수할 것인가?"**에 대한 정답지라고 생각하시면 됩니다.
+
+zakard님, 이제 정말 마음 편히 쉬셔도 됩니다! 혹시 이 가이드 내용 중에서 특정 명령어의 실제 사용법이 궁금해지면 그때 다시 물어봐 주세요. ☕️✨
+
+
+----
+
+
+본문
+
+주요 명령어 참조
+명령	목적
+bruin init <template> <folder>	템플릿을 사용하여 새 프로젝트를 초기화합니다.
+bruin validate <path>	실행 없이 구문, 스키마, 종속성을 빠르게 확인하세요!
+bruin run <path>	파이프라인 또는 자산을 실행합니다
+bruin run --downstream	운영 자산 및 모든 하위 자산
+bruin run --full-refresh	기존 데이터를 삭제하고 처음부터 다시 생성하세요.
+bruin run --only checks	자산 실행 없이 품질 검사를 실행합니다.
+bruin query --connection <conn> --query "..."	임시 쿼리를 실행합니다
+bruin lineage <path>	자산 종속성 보기
+bruin render <path>	렌더링된 템플릿 출력 결과를 표시합니다.
+bruin format <path>	형식 코드
+bruin connections list	구성된 연결 목록
+bruin connections ping <name>	테스트 연결 상태
+모범 사례 및 팁
+구체화 전략: 언제 무엇을 사용해야 할까요?
+Bruin은 다양한 데이터 구체화 전략을 지원합니다. 데이터 특성에 따라 선택하십시오.
+
+전략	사용 시	작동 방식
+view	데이터는 항상 최신 출처를 반영해야 합니다.	SQL 뷰를 생성합니다(데이터는 저장되지 않음).
+table	작은 테이블, 실행할 때마다 전체 새로 고침	테이블 전체를 삭제하고 다시 생성합니다.
+append	원시 데이터 수집, 이벤트 로그, 변경 불가능한 데이터	기존 데이터를 건드리지 않고 새 행을 삽입합니다.
+merge	고유 키를 사용한 upsert 동작이 필요합니다.	기존 행을 업데이트하고 새 행을 삽입합니다.
+time_interval	점진적 부하를 포함하는 시계열 데이터	특정 날짜 범위 내의 행을 삭제한 후 다시 삽입합니다.
+delete+insert	병합과 유사하지만 삭제를 먼저 하는 방식입니다.	일치하는 행을 삭제한 다음 삽입합니다.
+이 뉴욕시 택시 파이프라인의 경우:
+
+데이터 수집 계층 : append원시 데이터가 도착하고 중복 데이터는 하위 단계에서 처리되므로 사용합니다.
+스테이징/보고서 레이어 : time_interval전체 새로 고침 없이 특정 날짜 범위를 재처리할 수 있도록 하는 데 사용합니다.
+문서: https://getbruin.com/docs/bruin/assets/materialization
+
+컬럼 메타데이터: 필수 필드 vs 선택 필드
+자산에 열을 정의할 때 필수 항목과 선택 항목은 다음과 같습니다.
+
+필수 입력 항목:
+
+name: 열 이름 (쿼리에서 사용하는 실제 열과 일치해야 합니다)
+type데이터 유형 (예: string, integer, timestamp, float, boolean)
+선택 입력란 (문서화 및 품질 향상을 위해 권장):
+
+description: 해당 열에 대한 사람이 읽기 쉬운 설명
+primary_key: true: 해당 열을 기본 키(중복 제거에 사용)의 일부로 표시합니다.
+checks이 열에 대해 실행할 품질 검사 배열입니다.
+예:
+
+columns:
+  - name: pickup_datetime
+    type: timestamp
+    description: "When the trip started"
+    primary_key: true
+    checks:
+      - name: not_null
+  - name: fare_amount
+    type: float
+    description: "Base fare in USD"
+    checks:
+      - name: non_negative
+문서: https://getbruin.com/docs/bruin/assets/columns
+
+올바른 것을 선택하세요incremental_key
+전략을 사용할 때 time_interval, incremental_key각 실행 중에 어떤 행을 삭제하고 다시 삽입할지 결정합니다.
+
+핵심 원칙:
+
+모든 자산에 동일한 키를 사용하세요 . 스테이징 환경에서 증분 키로 동일한 키를 사용하는 경우 pickup_datetime, 보고서에서도 동일하게 사용해야 합니다. 이렇게 하면 파이프라인을 통해 데이터가 일관되게 흐를 수 있습니다.
+
+데이터 추출 로직에 맞는 키를 선택하세요 . 이 예시에서는 뉴욕시 택시 데이터 파일이 운행 시작일을 기준으로 월별로 정리되어 있습니다. 각 파일에는 pickup_datetime해당 월에 해당하는 운행 기록이 포함되어 있으므로, pickup_datetime이 키가 자연스러운 증분 키가 됩니다.
+
+키는 불변해야 합니다 . 행이 추출된 후에는 해당 행의 증가 키 값이 변경되어서는 안 됩니다. pickup_datetime이러한 이유로 처리 타임스탬프보다는 이벤트 타임스탬프(예: )가 더 적합합니다.
+
+중복 제거 전략
+택시 데이터에는 행별로 고유 ID가 없으므로 중복 제거를 위해 복합 키가 필요합니다.
+
+함께 조합하여 고유한 여행을 식별하는 열들을 결합하세요.
+예:(pickup_datetime, dropoff_datetime, pickup_location_id, dropoff_location_id, fare_amount)
+primary_key: true열 정의에서 이러한 열을 사용하십시오.
+SQL에서 복합 키당 하나의 레코드를 유지하려면 `dedulicate` ROW_NUMBER()또는 `dedulicate`를 사용합니다.QUALIFY
+품질 우선 개발
+나중에 생각하지 말고, 초기에 수표 발행 기능을 추가하세요.
+내장 검사 기능을 사용하세요: not_null, unique, positive, non_negative,accepted_values
+비즈니스별 불변 조건에 대한 사용자 지정 검사를 추가합니다.
+프로젝트 조직
+자산을 보관하세요pipeline/assets/
+스키마를 사용하여 레이어를 구성하세요: ingestion., staging.,reports.
+자산과 관련 없는 SQL은 별도의 폴더( /analyses, /queries) 에 저장하세요.
+지역 개발
+실행 전에 오류를 발견하기 위해 초기 단계부터 자주 유효성 검사를 수행하십시오.
+--full-refresh새 데이터베이스의 초기 실행에 사용하십시오.
+실행 후 결과를 확인하기 위해 테이블을 직접 쿼리하세요.
+실행하기 전에 변경 사항의 영향을 파악하려면 계보를 확인하세요.
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6135,6 +6896,88 @@ bruin lineage ./pipeline/pipeline.yml
 
 # Query data
 bruin query --connection duckdb-default --query "SELECT * FROM ingestion.trips LIMIT 10"
+
+
+
+
+
+
+본문
+
+Module 5: Data Platforms
+
+Overview
+
+In this module, you'll learn about data platforms - tools that help you manage the entire data lifecycle from ingestion to analytics.
+We'll use Bruin as an example of a data platform. Bruin puts multiple tools under one platform:
+Data ingestion (extract from sources to your warehouse)
+Data transformation (cleaning, modeling, aggregating)
+Data orchestration (scheduling and dependency management)
+Data quality (built-in checks and validation)
+Metadata management (lineage, documentation)
+Tutorial
+
+Follow the complete hands-on tutorial at:
+Bruin Data Engineering Zoomcamp Template
+Videos
+
+🎥 5.1 - Introduction to Bruin
+
+
+Introduction to the Bruin data platform: what it is, what a modern data stack looks like (ETL/ELT, orchestration, data quality), and how Bruin brings all of these together into a single project.
+Notes
+🎥 5.2 - Getting Started with Bruin
+
+
+Install Bruin, set up the VS Code/Cursor extension and Bruin MCP, and create a first project using bruin init. Walk through environments, connections (DuckDB, Chess.com), pipeline YAML configuration, and running Python, YAML ingestor, and SQL assets.
+Notes
+🎥 5.3 - Building an End-to-End Pipeline with NYC Taxi Data
+
+
+Build a full pipeline with a three-layered architecture (ingestion, staging, reports) using NYC taxi data and DuckDB.
+Notes
+
+
+Resources
+Bruin Documentation		https://getbruin.com/docs
+Bruin GitHub Repository		https://github.com/bruin-data/bruin
+Bruin MCP (AI Integration)		  https://getbruin.com/docs/bruin/getting-started/bruin-mcp	
+
+
+https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/05-data-platforms
+
+
+
+나>튜토리얼 밖에 나가면 본문이 이렇게 영상들이랑 노트들이랑 분화되어있는데 이거 튜토리얼에서 다뤘던거 아닌가. 튜토리얼은 합본인가
+
+GEM> 네, zakard님! 정확한 관찰입니다.
+
+우리가 사투를 벌이며 끝냈던 그 Tutorial이 바로 이 **Module 5 전체 내용을 하나로 응축해 놓은 '압축 합본 패키지'**라고 보시면 됩니다.
+
+지금 나열된 5.1, 5.2, 5.3 영상과 노트들은 그 합본 과정을 단계별로 쪼개서 이론과 함께 설명해 주는 '분해 조립도' 같은 거예요.
+
+🧐 그럼 이제 영상을 또 봐야 할까요?
+이미 튜토리얼을 통해 **Success(초록불)**를 보셨기 때문에, 내용을 전부 다 다시 보실 필요는 없습니다. 다만, 다음 상황일 때 필요한 부분만 골라보시는 걸 추천드려요.
+
+🎥 5.1 - "왜 이렇게 하는 거지?"가 궁금할 때:
+우리가 썼던 ELT 방식이나 오케스트레이션의 개념적 배경이 궁금하다면 5.1 서론 부분을 슬쩍 보세요.
+
+🎥 5.2 - "로컬에서 다시 세팅해보고 싶을 때":
+우리는 Bruin Cloud 위주로 했지만, VS Code나 Cursor에서 bruin init부터 직접 프로젝트를 구성하는 손맛을 느끼고 싶다면 이 영상이 도움이 됩니다.
+
+🎥 5.3 - "DuckDB가 궁금할 때":
+우리는 BigQuery(Cloud)를 썼지만, 영상에서는 가벼운 로컬 DB인 DuckDB를 쓰는 법도 나옵니다. "나중에 내 컴퓨터 안에서만 데이터를 돌려보고 싶다"면 참고하기 좋습니다.
+
+✅ 결론
+zakard님은 이미 **가장 어려운 최종 보스(Tutorial 완주)**를 잡고 오신 상태입니다!
+
+지금 나열된 영상들은 일종의 '복습 및 이론 보충용' 자료이니, 굳이 처음부터 끝까지 다 보면서 시간을 쓰지 않으셔도 됩니다. 튜토리얼을 하면서 "이건 왜 이렇게 설정하는 걸까?" 싶었던 부분의 **Notes(노트)**만 가볍게 읽어보시는 정도로 충분해요.
+
+이제 zakard님은 Bruin을 실제로 다뤄본 '유경험자'니까요! 혹시 영상이나 노트 내용 중에 궁금한 개념이 나오면 저에게 물어봐 주세요. 제가 영상 10분짜리 내용을 3줄로 요약해 드릴게요. ☕️
+
+다음은 어떤 걸 확인해 보고 싶으신가요? (아니면 이제 이 모듈을 졸업하고 다음 단계로 넘어가실까요?)
+
+
 
 
 

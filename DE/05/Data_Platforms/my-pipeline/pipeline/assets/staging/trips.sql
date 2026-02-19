@@ -48,10 +48,10 @@ columns:
 
 WITH base AS (
   SELECT
-    t.vendor_id,
+    CAST(t.vendor_id AS INT64) AS vendor_id,
     CAST(t.pickup_datetime AS TIMESTAMP) AS pickup_datetime,
     t.trip_distance,
-    t.payment_type,
+    CAST(t.payment_type AS INT64) AS payment_type,
     p.payment_type_name AS payment_type_description,
     t.taxi_type,
     CAST(t.extracted_at AS TIMESTAMP) AS extracted_at

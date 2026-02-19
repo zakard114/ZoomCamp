@@ -1,10 +1,6 @@
-# TODO: Add Python dependencies required by the python ingestion asset.
-# - Keep this intentionally minimal.
-# - Pin versions for reproducibility.
+# NYC TLC ingestion asset (trips.py)
 # Docs: https://getbruin.com/docs/bruin/assets/python
-#
-# Example:
-pandas==2.2.0
-pyarrow==15.0.0
-requests==2.31.0
-tzdata
+pandas>=2.0.0
+requests>=2.28.0
+pyarrow>=14.0.0
+python-dateutil>=2.8.0

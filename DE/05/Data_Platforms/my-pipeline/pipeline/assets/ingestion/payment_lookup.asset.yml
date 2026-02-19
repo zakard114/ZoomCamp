@@ -1,7 +1,7 @@
 # 파일명: pipeline/assets/ingestion/payment_lookup.asset.yml
 
 name: ingestion.payment_lookup
-type: duckdb.seed
+type: bq.seed
 
 parameters:
   path: payment_lookup.csv

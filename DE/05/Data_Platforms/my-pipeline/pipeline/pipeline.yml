@@ -19,13 +19,11 @@ schedule: daily
 # Format: YYYY-MM-DD
 start_date: "2021-01-01"
 
-# TODO: Configure default connections so assets can omit explicit `connection: ...`.
-# Common pattern: `duckdb: duckdb-default` for local dev.
-# Docs (connections): https://getbruin.com/docs/bruin/commands/connections
+# Default connection: GCP BigQuery (see .bruin.yml)
 default_connections:
-  duckdb: duckdb
+  google_cloud_platform: gcp-default
 
-# TODO: Define pipeline variables using JSON Schema and defaults.
+# Pipeline variables
 # - Variables must have a `default` so assets can render without `--var`.
 # - In SQL/YAML assets: reference as `{{ var.my_variable }}`.
 # - In Python assets: read JSON from env var `BRUIN_VARS`.
@@ -39,14 +37,3 @@ variables:
 #   other_string_var: (optional) Add your own variable and use it in both Python and SQL assets.
 #     type: string
 #     default: "my_value"
-
-# 아래 내용을 파일 끝에 추가하거나 기존 connections가 있다면 수정하세요
-connections:
-  duckdb:
-    type: duckdb  # <--- 이 줄이 반드시 있어야 합니다!
-    # 주석에 속지 마세요! 파일 이름만 쓰면 파일이 여기저기 흩어집니다.
-    # 아래처럼 전체 경로를 써야 안전합니다.
-    path: "e:/it_spaces/ai/zoomcamp/duckdb.db"
-    # path: "e:/it_spaces/ai/zoomcamp/duckdb_v2.db"
-    # path: "e:/it_spaces/ai/zoomcamp/duckdb_v3.db" # 아예 v3로 바꿔서 새 장부를 만듭시다.
-    # path: "e:/it_spaces/ai/zoomcamp/duckdb_v4.db"

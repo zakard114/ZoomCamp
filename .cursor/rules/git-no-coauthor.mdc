@@ -1,0 +1,14 @@
+---
+description: Git commits must not add Co-authored-by or any co-author trailer
+alwaysApply: true
+---
+
+# Git commits – no co-author
+
+When running `git commit` (or suggesting commit messages):
+
+- **Do not** add a `Co-authored-by:` trailer.
+- **Do not** use `--author` or any option that attributes the commit to anyone other than the repository owner.
+- Use only: `git commit -m "message"` (or equivalent) with the user’s chosen message.
+
+The user has not authorized Cursor/agent to be listed as co-author on commits.

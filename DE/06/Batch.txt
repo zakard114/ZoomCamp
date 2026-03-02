@@ -161,7 +161,7 @@ $cd /e/IT_SPACES/AI/ZoomCamp/DE/06
 
 1. 가상환경(venv) 생성
 Bash
-python -m venv venv
+python -m venv venv --without-pip
 
 2. 가상환경 활성화 (Windows Git Bash 기준)
 Bash
@@ -189,8 +189,6 @@ $ python -c "import pyspark; print(pyspark.__version__)"
 여기까지 완료되어 버전 숫자가 출력되면, 드디어 실제 데이터 처리 코드를 작성할 준비가 모두 끝난 겁니다.
 
 설치가 잘 진행되었나요? 완료되면 다음 단계인 Spark Session 생성 코드 작성을 도와드릴게요. 이제부터는 진짜 재미있는 작업이 시작됩니다!
-
-
 
 
 
@@ -345,8 +343,1493 @@ https://github.com/aaalexlit/medium_articles/blob/main/Spark_in_Colab.ipynb
 🎥 6.3.1 First Look at Spark/PySpark
 https://youtu.be/r_Sf6fCB40c&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=54
 
+
+1. 다음 주소에서 code와 setup 폴더를 가져옴
+https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/06-batch
+
+2. setup 폴더의 pyspark.md에서 (암호가 담긴)다음을 긁어 터미널에 붙여 실행
+   (Git Bash에서 실행. pip 전용 pyspark만 쓰면 SPARK_HOME 없어도 됨 → 3번으로)
+
+   export PYTHONPATH="${SPARK_HOME}/python/:$PYTHONPATH"
+   export PYTHONPATH="${SPARK_HOME}/python/lib/py4j-0.10.9.5-src.zip:$PYTHONPATH"
+
+   또는: Batch/setup/set_pythonpath.sh 생성됨 → Git Bash에서 source Batch/setup/set_pythonpath.sh
+
+3. $ jupyter notebook 실행
+   (반드시 06 폴더에서 venv 활성화 후 실행 → 아나콘다 주피터 대신 venv 인식)
+
+
+
+실행 후 에러가 나오면: 
+
+방금 python test_spark.py는 성공했는데, **주피터 노트북(Jupyter Notebook)이나 특정 에디터의 대화형 셀(Cell)**에서 실행하려니 이 에러가 난 것 같네요.
+
+이유는 간단합니다. 현재 실행 중인 노트북(커널)이 우리가 만든 venv 환경을 바라보고 있지 않기 때문입니다.
+
+//
+에러나온 것. 스킵해도 무방하나 참고용 기록
+🛠️ 해결 방법: 주피터 노트북에 venv 연결하기
+가상환경(venv)이 활성화된 Git Bash 터미널에서 아래 명령어를 순서대로 입력해 주세요.
+
+
+1. 커널 관리를 위한 도구 설치
+Bash
+pip install ipykernel
+2. 현재 venv를 주피터 커널로 등록
+이 작업을 해야 주피터 노트북 우측 상단에서 우리가 만든 환경을 선택할 수 있습니다.
+
+Bash
+python -m ipykernel install --user --name venv --display-name "PySpark-Venv"
+3. 주피터 노트북(또는 VS Code)에서 커널 변경
+작업 중인 .ipynb 파일이나 대화형 창을 엽니다.
+
+화면 오른쪽 상단에 있는 커널 이름(예: Python 3.x.x)을 클릭합니다.
+
+방금 우리가 만든 **"PySpark-Venv"**를 선택합니다.
+
+💡 왜 이런 일이 생기나요?
+터미널에서 python을 치면 활성화된 venv의 파이썬이 실행되지만, IDE(Cursor/VS Code)의 노트북은 기본 시스템 파이썬이나 이전에 설정된 다른 환경을 기본값으로 잡는 경우가 많기 때문입니다.
+
+**"PySpark-Venv"**로 커널을 바꾸고 다시 import pyspark를 실행해 보세요. 이제 정상적으로 작동할 겁니다!
+
+...
+
+로그를 보니 문제가 명확해졌습니다, zakard님.
+현재 jupyter notebook이 실행된 위치를 보면 C:\Users\HP EliteBook\anaconda3\... 경로의 아나콘다(Anaconda) 기반 주피터가 실행되었습니다. 하지만 우리가 pyspark를 설치한 곳은 /e/IT_SPACES/AI/ZoomCamp/DE/06에 있는 venv 가상환경이죠.
+
+즉, **엔진(아나콘다 주피터)**과 **기름(venv의 pyspark)**이 서로 다른 통에 들어있어서 인식을 못 하는 상황입니다.
+
+이후는 아래와 이어짐.
+//
+
+
+새 터미널에서 
+
+# 방법 A: 폴더 안으로 들어가서 활성화 (추천)
+cd 06
+source venv/Scripts/activate
+
+# 2. ipykernel 설치 (venv 안에)
+pip install --no-cache-dir ipykernel
+
+# 3. 주피터가 venv를 인식하도록 등록 (이름은 자유지만 구분하기 쉽게)
+python -m ipykernel install --user --name ZoomCampVenv --display-name "Python (ZoomCamp-Venv)"
+
+결과:
+$ python -m ipykernel install --user --name ZoomCampVenv --display-name "Python (ZoomCamp-Venv)"
+Installed kernelspec ZoomCampVenv in C:\Users\HP EliteBook\AppData\Roaming\jupyter\kernels\zoomcampvenv
+
+성공 메시지 예시: Installed kernelspec ZoomCampVenv in ... 이 뜨면 완벽합니다.
+
+
+
+2. 주피터 노트북에서 확인 및 실행
+이미 띄워놓은 주피터 노트북 브라우저 창으로 갑니다.
+
+페이지를 새로고침(F5) 합니다.
+
+우측 상단의 커널 이름 부분을 클릭하고, 방금 만든 **"Python (ZoomCamp-Venv)"**를 선택합니다.
+
+첫 번째 셀에 아래 코드를 넣고 실행(Shift + Enter)해 보세요.
+
+(노트북에 설정된 코드)
+import pyspark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+
+print(f"Spark Version: {spark.version}")
+
+
+
+나> 선택후 실행해서 아무 반응 없는거 보니 잘 먹히는 듯
+
+GEM> 네, zakard님. 아무런 에러 없이 셀이 조용히 넘어가거나 다음 숫자가 떴다면 성공적으로 임포트가 된 것입니다! (보통 아무 반응이 없는 게 최고의 소식이죠.) 
+
+이제 Spark 세션을 실제로 생성해서 엔진이 제대로 돌아가는지 확인해 볼 차례입니다. 주피터 노트북의 다음 셀에 아래 코드를 넣고 실행해 보세요.
+
+
+
+그 다음 spark 마스터 애플리케이션 UI localhost:4040 를 엶
+
+ 3.5.0
+Jobs
+Stages
+Storage
+Environment
+Executors
+test application UI
+Spark Jobs (?)
+User: HP EliteBook
+Total Uptime: 2.2 h
+Scheduling Mode: FIFO
+ Event Timeline
+ Enable zooming
+
+아직 아무것도 실행되지 않았기 때문에 아무것도 표시되지 않은 상태임. 
+다음 작업은 TLC Trip Record Data  https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page 에 접속해서 1월 데이터를 가져옴. 이번엔 노랑 초록 대신 운행횟수가 많은 차량의 기록 High Volume FHV Trips Data Dictionary	https://d37ci6vzurychx.cloudfront.net/trip-data/fhvhv_tripdata_2021-01.parquet들을 우선적으로 가져옴. <- 이 부분은 노트북에 아래와 같이 이미 명시되므로 그대로 실행. 
+
+!wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhvhv/fhvhv_tripdata_2021-01.csv.gz
+
+결과:
+'wget'은(는) 내부 또는 외부 명령, 실행할 수 있는 프로그램, 또는
+배치 파일이 아닙니다.
+
+ 
+이런, 윈도우에는 기본적으로 wget이 설치되어 있지 않아서 그렇습니다. 주피터 노트북에서 느낌표(!)를 쓰고 명령어를 치는 건 리눅스/맥 환경 기준이라서 zakard님의 엘리트북(윈도우)에서는 에러가 날 수밖에 없어요.
+
+하지만 당황하실 필요 없습니다. 윈도우 파워쉘 기반에서 작동하는 **curl**을 쓰거나, 파이썬 코드로 직접 다운로드하면 됩니다.
+
+🛠️ 방법 1: curl 사용하기 (추천)
+윈도우 10/11에는 curl이 기본으로 내장되어 있습니다. 주피터 셀에서 아래 명령어를 실행해 보세요. -L 옵션은 리다이렉션을 따라가게 해주고, -o는 저장할 파일 이름을 지정합니다.
+
+Bash
+!curl -L https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhvhv/fhvhv_tripdata_2021-01.csv.gz -o fhvhv_tripdata_2021-01.csv.gz
+🛠️ 방법 2: 파이썬 코드로 다운로드 (가장 안전)
+명령어 환경이 자꾸 꼬인다면 파이썬 라이브러리를 쓰는 게 속 편합니다.
+
+Python
+import urllib.request
+
+url = "https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhvhv/fhvhv_tripdata_2021-01.csv.gz"
+output_file = "fhvhv_tripdata_2021-01.csv.gz"
+
+print("다운로드 시작...")
+urllib.request.urlretrieve(url, output_file)
+print("다운로드 완료!")
+📦 압축 해제는 어떻게 하나요?
+다운로드한 파일이 .gz 압축 파일입니다. Spark는 압축된 상태의 CSV도 바로 읽을 수 있지만, 나중에 파티셔닝 연습을 하려면 압축을 푸는 게 좋습니다.
+
+윈도우 탐색기에서 직접 압축을 풀거나,
+
+Git Bash 터미널에서 아래 명령어를 입력하세요:
+
+Bash
+gzip -d fhvhv_tripdata_2021-01.csv.gz
+💡 주의사항
+이 파일은 용량이 꽤 큽니다(약 700MB~1GB 사이). 다운로드되는 동안 Spark UI의 Executors 탭을 구경하고 계셔도 좋습니다.
+
+파일 다운로드가 시작되었나요? 완료되면 이 대용량 CSV를 가장 효율적인 Parquet 포맷으로 변환하는 작업을 진행해 보겠습니다! Would you like me to help with the code to read the .gz file directly into Spark?
+
+
+
+...
+
+
+
+import urllib.request
+url = "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
+urllib.request.urlretrieve(url, "taxi_zone_lookup.csv")
+print("다운로드 완료.")
+
+실행 후
+
+다운로드 완료.
+
+그 다음
+
+import pyspark
+from pyspark.sql import SparkSession
+
+# 스파크 세션 시작
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+
+# 데이터 읽기 (이게 되면 오늘 세팅 끝입니다!)
+df = spark.read \
+    .option("header", "true") \
+    .csv('fhvhv_tripdata_2021-01.csv.gz')
+
+df.show(5)
+
+실행 후
+
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|hvfhs_license_num|dispatching_base_num|    pickup_datetime|   dropoff_datetime|PULocationID|DOLocationID|SR_Flag|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|           HV0003|              B02682|2021-01-01 00:33:44|2021-01-01 00:49:07|         230|         166|   NULL|
+|           HV0003|              B02682|2021-01-01 00:55:19|2021-01-01 01:18:21|         152|         167|   NULL|
+|           HV0003|              B02764|2021-01-01 00:23:56|2021-01-01 00:38:05|         233|         142|   NULL|
+|           HV0003|              B02764|2021-01-01 00:42:51|2021-01-01 00:45:50|         142|         143|   NULL|
+|           HV0003|              B02764|2021-01-01 00:48:14|2021-01-01 01:08:42|         143|          78|   NULL|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+only showing top 5 rows
+
+
+
+
+나> 주피터 노트북 시간지나면 커널꺼짐? 오늘 시도해보니 간단한 셀이 결과안나옴
+GEM> 네, zakard님. 주피터 노트북 커널은 여러 가지 이유로 **'잠수'**를 타거나 실제로 꺼질 수 있습니다. 특히 아까처럼 Spark를 띄워놓은 상태라면 더 자주 발생합니다.
+
+나> 커널 재시작 했는데 반응 없어
+GEM> 커널 재시작(Restart)을 눌렀는데도 print조차 반응이 없다면, 이건 주피터의 상태창만 리셋되고 실제 백그라운드 프로세스(좀비 Java/Python)는 여전히 엘리트북의 자원을 붙잡고 늘어지고 있는 상태입니다.
+
+윈도우 환경, 특히 아나콘다와 venv가 섞여 있을 때 자주 발생하는 '프로세스 꼬임' 현상입니다. 이럴 땐 주피터 안에서 해결하려고 하지 마시고, 밖에서 강제로 교통정리를 해줘야 합니다.
+
+지금 바로 Git Bash를 열고 아래 순서대로 진압하세요.
+
+taskkill 명령어는 특정 폴더의 파일을 지우는 게 아니라 윈도우 시스템 전체에서 돌아가는 프로세스를 찾아내서 끄는 명령입니다. 따라서 Git Bash의 현재 경로가 어디든 상관없습니다.
+
+# 1. 작업 폴더로 이동
+cd /e/IT_SPACES/AI/ZoomCamp/DE/06
+
+# 2. 가상환경 활성화
+source venv/Scripts/activate
+
+# 3. 실행 중인 모든 자바(Spark)와 파이썬 프로세스를 강제로 끕니다.
+taskkill //F //IM java.exe
+성공: 프로세스 "java.exe"(PID 27040)이(가) 종료되었습니다.
+
+taskkill //F //IM python.exe
+성공: 프로세스 "python.exe"(PID 8764)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 25572)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 6836)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 696)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 26948)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 23948)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 15140)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 19860)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 1540)이(가) 종료되었습니다.
+성공: 프로세스 "python.exe"(PID 25760)이(가) 종료되었습니다.
+
+
+# 4. 주피터 실행
+jupyter notebook
+
+[W 2026-02-25 10:03:15.096 ServerApp] A `_jupyter_server_extension_points` function was not found in jupyter_lsp. Instead, a `_jupyter_server_extension_paths` function was found and will be used for now. This function name will be deprecated in future releases of Jupyter Server.
+
+...
+
+
+
+df2 = spark.read \
+    .option("header", "true") \
+    .csv('fhvhv_tripdata_2021-01.csv.gz')
+
+df2.show()
+
+
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|hvfhs_license_num|dispatching_base_num|    pickup_datetime|   dropoff_datetime|PULocationID|DOLocationID|SR_Flag|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|           HV0003|              B02682|2021-01-01 00:33:44|2021-01-01 00:49:07|         230|         166|   NULL|
+|           HV0003|              B02682|2021-01-01 00:55:19|2021-01-01 01:18:21|         152|         167|   NULL|
+
+...
+
+NULL|
+|           HV0005|              B02510|2021-01-01 00:08:40|2021-01-01 00:39:39|          62|          29|   NULL|
+|           HV0003|              B02836|2021-01-01 00:53:48|2021-01-01 01:11:40|          22|          22|   NULL|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+only showing top 20 rows
+
+
+한편, 
+
+df2.head(5)
+
+[Row(hvfhs_license_num='HV0003', dispatching_base_num='B02682', pickup_datetime='2021-01-01 00:33:44', dropoff_datetime='2021-01-01 00:49:07', PULocationID='230', DOLocationID='166', SR_Flag=None),
+
+…
+
+dropoff_datetime='2021-01-01 00:45:50', PULocationID='142', DOLocationID='143', SR_Flag=None),
+ Row(hvfhs_license_num='HV0003', dispatching_base_num='B02764', pickup_datetime='2021-01-01 00:48:14', dropoff_datetime='2021-01-01 01:08:42', PULocationID='143', DOLocationID='78', SR_Flag=None)]
+
+
+특이사항: pickup_datetime='2021-01-01 00:33:44' StringType(), 
+
+
+그리고
+
+df2.schema
+
+StructType([StructField('hvfhs_license_num', StringType(), True), StructField('dispatching_base_num', StringType(), True), StructField('pickup_datetime', StringType(), True), StructField('dropoff_datetime', StringType(), True), StructField('PULocationID', StringType(), True), StructField('DOLocationID', StringType(), True), StructField('SR_Flag', StringType(), True)])
+
+특이사항: StringType(), True
+
+
+이렇듯, Spark는 Pandas와 달리 유형구분없이 모든 것을 문자열로 처리합니다. 
+
+1주차에서는 Pandas로 유형을 추론하고, 이 유형을 기반으로 로컬 데이터베이스에 스키마를 생성했습니다. 
+여기서도 전체 데이터세트를 사용하는 대신 비슷한 작업을 수행하려 합니다. 
+
+
+!head -n 101 fhvhv_tripdata_2021-01.csv.gz > head.csv
+!head -n 10 head.csv
+
+결과:	글자깨짐
+곢 bfhvhv_tripdata_2021-01.csvㆍ  $呱$덊	  } % h4$H먞땈
+]怡*값缸t蛛a"挫웢雪 $~ 덍핶UT      澍   滌 秤   俠  ?
+
+
+
+GEM> 글자가 깨지는 이유는 아주 명확합니다! 지금 다루고 있는 파일 확장자가 .csv.gz죠? 이건 Gzip으로 압축된 상태입니다.
+
+head 명령어는 텍스트 파일의 앞부분을 읽는 도구인데, 압축된 이진 데이터(Binary)를 억지로 텍스트로 읽으려다 보니 외계어처럼 깨져서 나오는 거예요.
+
+🛠️ 해결 방법: 압축을 풀면서 읽기 (zcat 사용)
+압축된 파일(.gz)의 내용을 깨지지 않게 보려면 압축을 풀거나 head 대신 zcat (또는 gzip -cd) 명령어를 사용해야 합니다.
+
+
+# 1. 작업 폴더로 이동
+cd /e/IT_SPACES/AI/ZoomCamp/DE/06
+
+# 2. 가상환경 활성화 (이걸 해야 '방' 안으로 들어갑니다)
+source venv/Scripts/activate
+
+압축풀기
+파일위치 확인:
+$ find /e/IT_SPACES/AI/ZoomCamp/DE -name "fhvhv_tripdata_2021-01.csv.gz"
+
+결과:
+/e/IT_SPACES/AI/ZoomCamp/DE/06/Batch/code/fhvhv_tripdata_2021-01.csv.gz
+
+실행 
+$ cd "Batch\code"
+$ gzip -d fhvhv_tripdata_2021-01.csv.gz 
+
+결과:
+06\Batch\code\fhvhv_tripdata_2021-01.csv
+
+
+노트북에서 이전 코드 재시도
+!head -n 101 fhvhv_tripdata_2021-01.csv > head.csv
+!head -n 10 head.csv
+
+결과:
+hvfhs_license_num,dispatching_base_num,pickup_datetime,dropoff_datetime,PULocationID,DOLocationID,SR_Flag
+HV0003,B02682,2021-01-01 00:33:44,2021-01-01 00:49:07,230,166,
+HV0003,B02682,2021-01-01 00:55:19,2021-01-01 01:18:21,152,167,
+
+...
+
+01:04:57,42,151,
+HV0003,B02764,2021-01-01 00:14:30,2021-01-01 00:50:27,71,226,
+HV0003,B02875,2021-01-01 00:22:54,2021-01-01 00:30:20,112,255,
+
+
+노트북
+!wc -l head.csv
+결과:
+101 head.csv
+의미: 101행이 존재
+
+노트북
+!head -n 1001 fhvhv_tripdata_2021-01.csv > head.csv
+import pandas as pd
+df_pandas = pd.read_csv('head.csv')
+df_pandas.dtypes
+
+결과:
+hvfhs_license_num           str
+dispatching_base_num        str
+pickup_datetime             str
+dropoff_datetime            str
+PULocationID              int64
+DOLocationID              int64
+SR_Flag                 float64
+dtype: object
+
+
+Spark를 사용하여 pandas df를 Spark df로 변환
+
+노트북
+spark.createDataFrame(df_pandas)
+결과:
+---------------------------------------------------------------------------
+ModuleNotFoundError                       Traceback (most recent call last)
+Cell In[53], line 1
+----> 1 spark.createDataFrame(df_pandas)
+
+
+GEM>
+이 에러가 발생한 이유는 현재 가상환경(venv)에 pyarrow라는 라이브러리가 설치되어 있지 않기 때문일 확률이 99%입니다.
+
+Spark가 Pandas 데이터를 처리할 때 내부적으로 Apache Arrow라는 기술을 써서 데이터를 빠르게 변환하는데, 이게 설치 안 되어 있으면 "모듈을 찾을 수 없다"며 뻗어버립니다. (에러 메시지 뒷부분에 ModuleNotFoundError: No module named 'pyarrow'라고 적혀 있을 거예요.)
+
+🛠️ 10초 해결법
+터미널(Git Bash)로 가서 가상환경이 켜진 상태로 아래 명령어를 입력하세요.
+
+Bash
+# 가상환경에 pyarrow 설치
+pip install pyarrow
+
+설치가 끝난 후, 터미널 커서가 안보이면 ctrl+c해도 무방. 
+
+이후:
+주피터 노트북에서 커널을 재시작(Restart Kernel) 하거나 해당 셀을 다시 실행해 보세요.
+
+결과:
+
+ModuleNotFoundError: No module named 'distutils'
+
+
+GEM> 에러 로그를 보니 범인이 확실합니다. Python 3.12 버전에서 distutils라는 오래된 모듈이 완전히 삭제되었는데, 하필 PySpark 3.5.0의 내부 코드(utils.py:24)가 여전히 distutils를 불러와서 버전을 체크하려다 보니 발생하는 문제입니다.
+
+이건 setuptools 설치만으로 해결되지 않을 수도 있는 Python 3.12와 PySpark 3.5.0 사이의 고질적인 호환성 문제입니다.
+
+zakard님, 이 꼬인 상황을 해결할 가장 깔끔한 방법 2가지를 제안드립니다.
+
+방법 1: setuptools 재설치 (가장 쉬운 시도)
+가상환경(venv)이 활성화된 상태에서 아래 명령어를 다시 한 번 정확히 입력해 보세요. setuptools가 설치되면 distutils 모듈을 가로채서(monkey-patch) 에러를 막아줄 수 있습니다.
+
+Bash
+# 터미널(venv 활성화 상태)에서 실행
+pip install --upgrade setuptools
+그다음 주피터 노트북 커널을 반드시 Restart 하고 다시 실행해 보세요.
+
+방법 2: 코드 상단에서 강제로 '가짜' 모듈 주입하기 (확실한 해결책)
+만약 설치를 해도 계속 에러가 난다면, 파이썬 3.12에 없는 distutils를 있는 것처럼 속이는 코드를 노트북 맨 윗줄에 넣어주면 됩니다.
+
+노트북의 가장 첫 번째 셀에 이 코드를 넣고 실행하세요:
+
+Python
+# 1. distutils 에러 방지를 위한 패치
+import sys
+try:
+    import distutils
+except ImportError:
+    # 파이썬 3.12 이상에서 distutils가 없을 때 setuptools의 것으로 대체
+    import setuptools.dist
+    sys.modules['distutils'] = setuptools.dist
+
+# 2. 그 다음 기존 코드 실행
+import pyspark
+from pyspark.sql import SparkSession
+import pandas as pd
+
+# (이후 기존의 spark.createDataFrame(df_pandas) 실행)
+🔍 왜 이런 일이 생기나요?
+원인: Python 3.12에서 distutils 삭제.
+
+충돌: PySpark 3.5.0 내부 코드에서 from distutils.version import LooseVersion 호출.
+
+해결: setuptools가 이 호출을 대신 처리해주거나, 위 코드처럼 수동으로 연결해줘야 함.
+
+✅ 지금 바로 해보실 것
+터미널에서 pip install setuptools를 했는지 확인.
+
+노트북에서 [Kernel] -> [Restart] 클릭.
+
+맨 위 셀에 제가 드린 **'가짜 모듈 주입 코드'**를 넣고 실행.
+
+이렇게 하면 spark.createDataFrame이 통과될 겁니다! 결과가 어떻게 나오나요? 🦾
+
+Would you like me to provide a full code block for the first cell to ensure all future compatibility issues are covered?
+
+
+
+
+방법1 실행 후, 
+spark.createDataFrame(df_pandas)
+
+결과: DataFrame[hvfhs_license_num: string, dispatching_base_num: string, pickup_datetime: string, dropoff_datetime: string, PULocationID: bigint, DOLocationID: bigint, SR_Flag: double]
+
+
+GEM> 드디어 성공하셨네요, zakard님! DataFrame[...] 결과가 찍혔다는 건 드디어 Pandas 데이터가 Spark의 세상으로 무사히 넘어갔다는 뜻입니다. 지긋지긋한 distutils 에러를 엘리트북에서 걷어내셨군요!
+
+방금 나온 결과를 자세히 보시면, Spark가 데이터 타입을 어떻게 추측했는지 알 수 있습니다.
+
+📊 Spark가 추측한 스키마 분석
+hvfhs_license_num: string (정상)
+
+pickup_datetime: string (⚠️ 문제 발생)
+
+PULocationID: bigint (정상)
+
+SR_Flag: double (정상)
+
+지금 pickup_datetime이 string으로 잡혀 있는 게 핵심입니다. 이대로 쓰면 나중에 "날짜별 매출" 같은 계산을 할 때 Spark가 계산을 못 합니다.
+
+🛠️ 다음 단계: 스키마(Schema) 고정하기
+이제 Pandas가 알려준 타입을 바탕으로, 우리가 직접 **"이건 진짜 날짜(Timestamp)야!"**라고 Spark에게 명시해줄 차례입니다.
+
+아래 코드를 다음 셀에 복사해서 실행해 보세요. 이 과정이 끝나면 수백만 건의 전체 데이터를 읽을 준비가 완전히 끝납니다.
+
+
+from pyspark.sql import types
+
+# 1. 수동 스키마 정의 (Pandas dtypes 결과를 바탕으로 작성)
+schema = types.StructType([
+    types.StructField('hvfhs_license_num', types.StringType(), True),
+    types.StructField('dispatching_base_num', types.StringType(), True),
+    types.StructField('pickup_datetime', types.TimestampType(), True), # 문자열에서 날짜로 변경!
+    types.StructField('dropoff_datetime', types.TimestampType(), True), # 문자열에서 날짜로 변경!
+    types.StructField('PULocationID', types.IntegerType(), True),
+    types.StructField('DOLocationID', types.IntegerType(), True),
+    types.StructField('SR_Flag', types.StringType(), True)
+])
+
+# 2. 정의한 스키마를 사용하여 실제 전체 데이터(CSV) 읽기
+df = spark.read \
+    .option("header", "true") \
+    .schema(schema) \
+    .csv('fhvhv_tripdata_2021-01.csv')
+
+# 3. 잘 들어왔는지 상위 5개 확인
+df.show(5)
+
+💡 왜 이렇게 하나요?
+Spark에게 스키마를 미리 알려주면(schema(schema)):
+
+속도가 빨라집니다: 데이터 전체를 훑으며 타입을 추측(inferSchema)할 필요가 없습니다.
+
+데이터가 정확해집니다: 날짜가 문자열로 꼬이는 일을 방지합니다.
+
+이제 df.show(5)를 했을 때 날짜 컬럼들이 깔끔하게 시간 데이터로 보이나요? 이게 되면 오늘 목표하신 Spark 세팅 및 데이터 로드 작업은 100점 만점에 100점으로 마무리되는 겁니다! 🦾
+
+
+
+
+본문
+노트북
+spark.createDataFrame(df_pandas).show()
+
+결과: 에러
+
+🏆 최고의 선택: 방법 1 (Parquet)
+데이터 엔지니어링 실무에서도 CSV보다는 Parquet을 선호합니다. 타입 정보가 유지되고 압축률도 좋거든요.
+
+Python
+# 1. Pandas 데이터를 Parquet 파일로 저장 (임시 징검다리)
+df_pandas.to_parquet("head.parquet", index=False)
+
+# 2. Spark가 그 파일을 직접 읽기
+df_spark = spark.read.parquet("head.parquet")
+
+# 3. 확인
+df_spark.show()
+
+🔍 왜 이 방식이 엘리트북에서 더 잘 작동할까요?
+메모리 변환 (기존): Java ↔ Python 소켓 통신 발생 → 윈도우 방화벽이나 포트 타임아웃에 취약.
+
+파일 변환 (현재): Python이 파일을 씀 → Java(Spark)가 파일을 읽음 → 서로 직접 대화할 필요 없음 → 안정성 폭발.
+
+✅ 마지막 체크리스트
+pyarrow 설치 확인: 아까 설치하셨으니 문제없을 겁니다.
+
+데이터 타입 확인: df_spark.printSchema()를 쳐보세요. Parquet 덕분에 pickup_datetime 등이 문자열이 아닌 제대로 된 날짜 타입으로 넘어왔을 가능성이 높습니다.
+
+df_spark.printSchema()
+root
+ |-- hvfhs_license_num: string (nullable = true)
+ |-- dispatching_base_num: string (nullable = true)
+ |-- pickup_datetime: string (nullable = true)
+ |-- dropoff_datetime: string (nullable = true)
+ |-- PULocationID: long (nullable = true)
+ |-- DOLocationID: long (nullable = true)
+ |-- SR_Flag: double (nullable = true)
+
+
+
+df_spark.schema
+StructType([StructField('hvfhs_license_num', StringType(), True), StructField('dispatching_base_num', StringType(), True), StructField('pickup_datetime', StringType(), True), StructField('dropoff_datetime', StringType(), True), StructField('PULocationID', LongType(), True), StructField('DOLocationID', LongType(), True), StructField('SR_Flag', DoubleType(), True)])
+
+이제 이 고비를 넘기셨으니, 다음 단계인 전체 데이터 셋(Large CSV)을 Spark로 로드해서 Parquet으로 변환하는 작업도 아주 수월하게 진행하실 수 있을 거예요.
+
+
+Integer - 4 bytes
+Long - 8 bytes
+
+이제 이 데이터를 그대로 사용하지 않고 long 형식을 정수형으로 변경하고 싶습니다. long 형식은 메모리 효율이 떨어지기 때문입니다. 정수형은 각 값당 4바이트를 차지하고 long 형식 8 바이트를 차지합니다. 좀 더 효율적인 형식을 원하기 때문에 정수형을 사용하겠습니다. 
+
+
+schema 결과인
+StructType([StructField('hvfhs_license_num', StringType(), True), StructField('dispatching_base_num', StringType(), True), StructField('pickup_datetime', StringType(), True), StructField('dropoff_datetime', StringType(), True), StructField('PULocationID', LongType(), True), StructField('DOLocationID', LongType(), True), StructField('SR_Flag', DoubleType(), True)])
+
+를 다음과 같이 바꾼 후, 
+
+types.StructType([
+    types.StructField('hvfhs_license_num', types.StringType(), True),
+    types.StructField('dispatching_base_num', types.StringType(), True), 
+    types.StructField('pickup_datetime', types.TimestampType(), True), 
+    types.StructField('dropoff_datetime', types.StringType(), True), 
+    types.StructField('PULocationID', types.IntegerType(), True), 
+    types.StructField('DOLocationID', types.IntegerType(), True), 
+    types.StructField('SR_Flag', types.StringType(), True)
+])서 VSCODE의 setup폴더에 StructType 이름으로 파일생성후 붙여넣기함. 
+
+scheme = types.StructType([
+    types.StructField('hvfhs_license_num', types.StringType(), True),
+    types.StructField('dispatching_base_num', types.StringType(), True), 
+    types.StructField('pickup_datetime', types.TimestampType(), True), 
+    types.StructField('dropoff_datetime', types.StringType(), True), 
+    types.StructField('PULocationID', types.IntegerType(), True), 
+    types.StructField('DOLocationID', types.IntegerType(), True), 
+    types.StructField('SR_Flag', types.StringType(), True)
+])
+
+
+
+다음, 노트북에서 
+
+from pyspark.sql import types
+
+schema = types.StructType([
+    types.StructField('hvfhs_license_num', types.StringType(), True),
+    types.StructField('dispatching_base_num', types.StringType(), True), 
+    types.StructField('pickup_datetime', types.TimestampType(), True), 
+    types.StructField('dropoff_datetime', types.StringType(), True), 
+    types.StructField('PULocationID', types.IntegerType(), True), 
+    types.StructField('DOLocationID', types.IntegerType(), True), 
+    types.StructField('SR_Flag', types.StringType(), True)
+])
+
+
+GEM> 
+기술적으로 "VSCode에 안 적으면 노트북에서 실행이 안 된다" 같은 직접적인 강제성이나 기능적 개연성은 전혀 없습니다!
+
+노트북에 바로 치나, 메모장에 치나, VSCode에 치나 Spark 입장에서는 똑같은 코드일 뿐이죠. 그럼에도 불구하고 강의나 실습에서 굳이 VSCode를 거치는 이유는 '작업 효율' 때문입니다.
+
+🛠️ 진짜 이유는 '노가다'를 줄이기 위해서입니다
+직접적인 개연성보다는 편의성 때문이라고 보시면 됩니다.
+
+멀티 커서 편집 (가장 큰 이유): 스키마를 짤 때 수십 줄의 컬럼 이름을 하나하나 타이핑하는 건 고역입니다. VSCode에서는 Alt + Click이나 Ctrl + D를 써서 여러 줄을 한꺼번에 잡고 types.StructField(..., True), 같은 공통 코드를 동시에 입력할 수 있습니다. 노트북 셀에서는 이게 안 되거나 매우 불편합니다.
+
+Pandas 결과값 재활용: 아마 df_pandas.dtypes를 출력해서 나온 결과(컬럼 리스트)를 복사해서 VSCode에 붙여넣으셨을 겁니다. 거기서 필요 없는 부분만 샥샥 지우고 스파크 코드로 감싸는 작업을 하기에는 VSCode가 훨씬 빠릅니다.
+
+실수 방지 (Linter): 노트북은 실행하기 전까지 오타를 잘 안 잡아주지만, VSCode는 StructType에서 T를 소문자로 쓰기만 해도 바로 노란 밑줄을 그어줍니다.
+
+💡 결론: 그냥 "좋은 메모장"으로 쓰신 겁니다
+지금 단계에서는 **"VSCode에서 코드를 예쁘게 다듬어서(조립해서) 완성품을 노트북(실행기)으로 가져온다"**는 흐름으로 이해하시면 됩니다.
+
+실제로 zakard님이 노트북에 바로 치는 게 더 편하시다면, 굳이 VSCode를 거치지 않고 바로 노트북 셀에 스키마를 작성하셔도 결과는 100% 동일합니다.
+
+이제 완성된 schema를 노트북에 넣고 전체 데이터를 읽을 준비가 되셨나요? 아니면 혹시 dropoff_datetime 타입을 TimestampType으로 고쳐서 적용해 보실까요? 🦾
+
+
+//
+나> CTRL D 사용법
+GEM> 
+
+기본 사용법: 같은 단어 순차 선택
+1. 수정하고 싶은 단어 하나를 마우스로 드래그하거나 클릭합니다.
+
+2. **Ctrl + D**를 누르면, 문서 아래쪽에 있는 그다음 똑같은 단어가 하나 더 선택됩니다. (커서가 2개가 됨)
+
+3. 계속 누를 때마다 똑같은 단어가 하나씩 추가됩니다.
+
+4. 그 상태에서 글자를 지우거나 입력하면 선택된 모든 곳이 동시에 바뀝니다.
+//
+
+
+
+
+
+본문
+df = spark.read \
+    .option("header", "true") \
+    .schema(schema) \
+    .csv('fhvhv_tripdata_2021-01.csv')
+
+//
+GEM> 
+방금 실행하신 코드는 단순해 보이지만, 내부적으로는 매우 효율적인 "정밀 로딩" 과정을 거쳤습니다. 한 줄씩 뜯어볼게요.
+
+📋 코드 상세 해석
+1. spark.read
+의미: Spark에게 데이터를 읽어오기 위한 **'입력 인터페이스(DataFrameReader)'**를 열라고 명령하는 것입니다.
+
+2. .option("header", "true")
+의미: "파일의 첫 번째 줄은 데이터가 아니라 **컬럼 이름(제목)**이니까 데이터로 취급하지 마!"라고 알려주는 설정입니다.
+
+3. .schema(schema) (가장 중요 ⭐)
+의미: "Spark야, 데이터 타입을 네 맘대로 추측하지 말고, **내가 정의한 그 설계도(schema)**대로 딱딱 맞춰서 읽어!"
+
+효과:
+
+속도 향상: Spark가 타입을 알기 위해 수백만 줄의 CSV를 미리 훑어볼 필요가 없습니다.
+
+정확성: pickup_datetime 같은 컬럼이 단순 문자가 아닌 진짜 시간(Timestamp) 객체로 바로 변환됩니다.
+
+4. .csv('fhvhv_tripdata_2021-01.csv')
+의미: 대상이 되는 실제 파일 경로를 지정하고 로딩을 시작합니다. 이때 Spark는 데이터를 한꺼번에 메모리에 올리지 않고, 어떤 구조로 읽을지 **'계획'**만 세웁니다 (Lazy Evaluation).
+
+5. df.show()
+의미: "계획은 됐고, 이제 진짜로 데이터를 가져와서 내 눈앞에 상위 20개만 표 형태로 보여줘!" (실제 행동을 개시하는 Action 명령입니다.)
+//
+
+
+
+df.show()
+
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|hvfhs_license_num|dispatching_base_num|    pickup_datetime|   dropoff_datetime|PULocationID|DOLocationID|SR_Flag|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|           HV0003|              B02682|2021-01-01 00:33:44|2021-01-01 00:49:07|         230|         166|   NULL|
+|           HV0003|              B02682|2021-01-01 00:55:19|2021-01-01 01:18:21|         152|         167|   NULL|
+
+...
+
+|           HV0005|              B02510|2021-01-01 00:08:40|2021-01-01 00:39:39|          62|          29|   NULL|
+|           HV0003|              B02836|2021-01-01 00:53:48|2021-01-01 01:11:40|          22|          22|   NULL|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+only showing top 20 rows
+
+
+//
+GEM> 
+📊 출력 결과 분석
+출력된 표를 보면 우리가 의도한 대로 데이터가 아주 예쁘게 들어왔습니다.
+
+pickup_datetime / dropoff_datetime: 2021-01-01 00:33:44 형태로 보이죠? 만약 스키마를 지정하지 않았다면 Spark는 이걸 그냥 "글자"로 인식했을 텐데, 이제는 시간 연산(예: 운행 시간 계산)이 가능한 상태입니다.
+
+SR_Flag: NULL이 보입니다. 이건 해당 운행에 공유 승차(Shared Ride) 데이터가 비어 있다는 뜻이며, 우리가 스키마에서 True (Nullable) 설정을 해줬기 때문에 에러 없이 잘 들어온 것입니다.
+
+
+나> Nullable은 모르겠고 types.StructField('SR_Flag', types.StringType(), True) 이렇게 함
+
+GEM> 그 코드의 마지막에 적힌 **True**가 바로 Nullable 설정을 의미합니다!
+
+zakard님이 작성하신 types.StructField('SR_Flag', types.StringType(), True)에서 각 인자의 의미는 다음과 같습니다:
+
+'SR_Flag': 컬럼 이름
+
+types.StringType(): 데이터 타입 (문자열)
+
+True: **"이 칸은 비어있어도(NULL이어도) 괜찮아?"**라는 질문에 대한 답입니다.
+
+🔍 Nullable (True)의 의미
+데이터를 보다 보면 위 결과 화면처럼 NULL이라고 적힌 빈 칸들이 있죠?
+
+True로 설정하면: "이 컬럼은 데이터가 없는 칸이 섞여 있을 수 있어. NULL이 나와도 에러 내지 말고 그대로 읽어줘."라는 뜻입니다. (방금 하신 방식)
+
+False로 설정하면: "이 컬럼은 무조건 데이터가 꽉 차 있어야 해! 하나라도 빈 칸(NULL)이 있으면 에러를 내줘."라는 뜻입니다.
+
+💡 팁: 보통 공공 데이터나 현업 데이터는 빈 칸이 섞여 있는 경우가 많아서, 확실하지 않다면 True로 두는 게 안전합니다. SR_Flag처럼 비어있는 값이 많은 컬럼은 True가 정답입니다.
+
+
+
+번외
+🚀 다음 단계: 데이터를 Parquet으로 구워버리기
+지금 읽어온 데이터는 약 1,200만 건 정도 되는 대용량입니다. CSV는 읽을 때마다 매번 해석해야 해서 느리고 용량도 많이 차지하죠. 이제 이 데이터를 Spark가 가장 좋아하는 'Parquet' 형식으로 저장해 봅시다.
+
+아래 코드를 실행해 보세요:
+
+Python
+# 1. 데이터를 24개의 조각으로 나누기 (병렬 처리를 위해)
+df = df.repartition(24)
+
+# 2. 'fhvhv_tripdata_2021_01.parquet'이라는 이름의 폴더로 저장
+df.write.parquet('fhvhv_tripdata_2021_01.parquet')
+이 코드를 실행하면 왜 repartition(24)를 하는지, 그리고 결과가 파일 하나가 아니라 '폴더'로 생기는 이유가 궁금하지 않으신가요? 🦾
+//
+
+
+
+본문
+df.head(10)
+[Row(hvfhs_license_num='HV0003', dispatching_base_num='B02682', pickup_datetime=datetime.datetime(2021, 1, 1, 0, 33, 44), dropoff_datetime=datetime.datetime(2021, 1, 1, 0, 49, 7), PULocationID=230, DOLocationID=166, SR_Flag=None),
+
+...
+
+ Row(hvfhs_license_num='HV0003', dispatching_base_num='B02875', pickup_datetime=datetime.datetime(2021, 1, 1, 0, 40, 12), dropoff_datetime=datetime.datetime(2021, 1, 1, 0, 53, 31), PULocationID=255, DOLocationID=232, SR_Flag=None)]
+
+
+이렇게 스키마를 정의 했습니다. 이제 데이터 프레임을 partitioning해보겠습니다. 
+
+
+df.repartition(24)
+
+DataFrame[hvfhs_license_num: string, dispatching_base_num: string, pickup_datetime: timestamp, dropoff_datetime: timestamp, PULocationID: int, DOLocationID: int, SR_Flag: string]
+
+
+//
+나> 이 코드 용도
+
+GEM> zakard님, df.repartition(24)는 한마디로 **"거대한 작업을 24명의 일꾼에게 골고루 나눠주기 위한 준비 운동"**입니다.
+
+이 코드를 실행해도 당장 화면에 데이터가 바뀌지는 않지만, 메모리 내부에서는 아주 중요한 변화가 일어납니다.
+
+📋 repartition(24)의 용도
+1. "병렬 처리 극대화" (가장 큰 이유)
+Spark는 데이터를 여러 개의 조각(Partition)으로 나누어 동시에 처리합니다.
+
+만약 데이터 조각이 1개라면? 아무리 CPU 코어가 많아도 일꾼 1명만 일하고 나머지는 놉니다.
+
+repartition(24)를 하면? 데이터를 24개로 쪼개서 24명의 일꾼(Core)이 동시에 달려들 수 있게 만듭니다.
+
+2. "저장되는 파일 개수 결정"
+이후에 df.write.parquet()을 실행하면, 쪼개진 개수만큼 파일이 생깁니다.
+
+repartition(24) 후 저장하면 결과 폴더 안에 24개의 .parquet 파일이 생성됩니다.
+
+나중에 이 데이터를 다시 읽을 때도 24개 조각을 동시에 읽어올 수 있어 훨씬 빨라집니다.
+
+3. "데이터 섞기 (Shuffle)"
+데이터가 특정 조각에만 너무 많이 몰려 있으면(Data Skew 현상), 어떤 일꾼은 금방 끝나고 어떤 일꾼은 밤을 샙니다. repartition은 데이터를 전체적으로 다시 골고루 섞어주는 역할을 합니다.
+
+🔍 왜 하필 '24'인가요? (Data Camp/ZoomCamp 맥락)
+보통 실습에서 24를 쓰는 이유는 해당 데이터(2021년 1월 FHVHV 데이터)의 크기가 약 700MB~1GB 정도 되기 때문입니다.
+
+너무 잘게 쪼개면(1000 등) 관리 비용(Overhead)이 커집니다.
+
+너무 크게 쪼개면(1 등) Spark의 장점인 병렬 처리를 못 합니다.
+
+24는 개별 파일 크기를 적절하게(약 128MB 이하) 유지하면서 병렬성을 챙기기에 적당한 숫자입니다.
+
+⚠️ 주의할 점
+repartition은 데이터 전체를 네트워크를 통해 주고받으며 다시 섞는 작업(Shuffle)이기 때문에, 비용(시간)이 많이 드는 작업입니다. 그래서 꼭 필요한 때(저장 직전이나 대규모 연산 직전)에만 전략적으로 사용합니다.
+
+💡 실행 결과의 의미
+출력된 DataFrame[...] 부분은 "이제 이 데이터프레임은 이런 스키마를 가진 24개의 조각으로 관리될 거야"라는 계획을 보여주는 것입니다.
+
+이제 이 24개의 조각을 실제로 파일로 만들어볼까요? 아래 코드를 실행하면 fhvhv_tripdata_2021_01.parquet이라는 폴더가 생길 겁니다.
+
+Python
+df.write.parquet('fhvhv_tripdata_2021_01.parquet')
+**Would you like me to explain why the result is a 'directory' instead of a single file once it's saved?**🦾
+
+
+
+나> 24개를 executor(실행기)가 치리할때 마지막 1개가 남으면 기다리는가 아니면 데이터 전체를 24개로 분할한 이상 더이상 분할하지 않는가?
+
+GEM>
+좋은 질문입니다, zakard님! 분산 처리의 핵심 원리를 꿰뚫고 계시네요.
+
+결론부터 말씀드리면, "남은 1개가 끝날 때까지 전체 작업은 종료되지 않고 기다려야 합니다." 하지만 Spark는 이미 24개로 분할된 데이터를 더 이상 쪼개지는 않습니다.
+
+이 과정을 구체적으로 설명해 드릴게요.
+
+1. "마지막 1개가 끝날 때까지 기다리는가?" → YES
+Spark에서 하나의 작업(Job)은 여러 개의 단계(Stage)로 나뉩니다. repartition(24) 후에 파일을 저장하는 작업은 하나의 스테이지로 묶이는데, 이때 **동기화(Synchronization)**가 일어납니다.
+
+23개의 조각(Task)이 1초 만에 끝나더라도, 마지막 1개가 데이터가 많거나 PC 사정으로 10초가 걸린다면 전체 저장 작업은 10초가 걸립니다.
+
+이 현상을 데이터 엔지니어링 용어로 "Tail Latency" 또는 "Straggler(뒤처지는 일꾼)" 문제라고 부릅니다.
+
+2. "데이터를 더 분할하는가?" → NO
+이미 repartition(24)를 통해 **"이 데이터는 24개의 파티션이다"**라고 명시한 순간, Spark는 이를 24개의 독립된 태스크(Task)로 확정 짓습니다.
+
+실행기(Executor)의 코어(Core)가 만약 4개뿐이라면, 한 번에 4개씩 6회에 걸쳐 24개를 처리합니다.
+
+실행기가 아무리 많아도(예: 100개), 이미 파티션이 24개뿐이라면 24개만 일하고 나머지 76개는 놉니다.
+
+즉, 한 번 정해진 24개의 파티션은 실행기 사정에 맞춰 더 잘게 쪼개지지 않습니다.
+
+3. 왜 24개로 쪼개는 게 중요할까요?
+만약 데이터를 쪼개지 않고 1개인 상태로 두면 어떻게 될까요?
+
+아무리 좋은 엘리트북(코어가 여러 개라도)이라도 CPU 코어 1개만 열심히 일합니다.
+
+데이터가 너무 크면 메모리 부족(Out Of Memory) 에러가 날 확률이 높습니다.
+
+24개로 쪼개면:
+
+데이터가 약 1/24 크기로 작아져서 메모리 부담이 줄어듭니다.
+
+CPU 코어 여러 개가 동시에 작업을 나눠서 할 수 있습니다. (예: 8코어면 3바퀴만 돌면 끝남)
+
+💡 요약하자면
+"24개로 나눈 이상 Spark는 더 이상 쪼개지 않고 정해진 24개의 태스크를 수행합니다. 그리고 전체 작업이 완료되려면 가장 느린 마지막 1개가 끝날 때까지 기다려야 합니다."
+
+그래서 데이터 엔지니어들은 데이터가 특정 파티션에 몰리지 않게(Data Skew) 골고루 나누는 것을 매우 중요하게 생각합니다.
+
+이제 df.write.parquet(...)를 실행해서 실제로 24개의 파일이 생기는지 확인해 보실까요? 저장된 폴더를 열어보면 재미있는 광경을 보실 수 있습니다! 🦾
+//
+
+
+
+본문
+.repartition 명령어를 실행하고 지정된 위치를 지정하면, 해당 폴더에 있는 파일 개수만큼의 파티션을 가진 데이터프레임이 생성됩니다. 이제 이 명령어를 실행해보겠습니다. Spark 마스터 ui에 접속해보면 아무 작업도 실행되지 않은 것을 확인할 수 있습니다. 이 df.repartition 명령어는 지연 실행 명령어이기 때문에 재분할이 즉시 트리거되지 않습니다. 
+데이터 프레임을 다시 할당할 때 재분할이 실행됩니다. 미래에도 마찬가지입니다. 지금은 여전히 기존 데이터프레임을 그대로 사용하고 있지만, 실제로 어떤 작업을 수행할 때, 예를 들어 데이터 프레임을 저장할 때만 이 명령이 적용됩니다. 
+이제 데이터 프레임을 parquet으로 지정하고 위치를 지정해보겠습니다. 예를 들어 fhvhv/2021/01/ (for hire vehicles/2021/01/) 과 같이 지정할 수 있습니다. 다른것은 지정할 필요가 없을 것 같습니다. 
+
+df.write.parquet('fhvhv/2021/01/')
+(해결: 아래 나중에 이건 df.write.parquet('fhvhv/2021/01/', mode='overwrite') 를 사용해서 중복을 피하게 된다. 흐름을 위해 위의 첫 사례를 남겨둠)
+
+이제 이 명령을 실행하면 뭔가 변화가 일어나는 것을 볼 수 있습니다. 
+
+결과: 에러
+
+
+GEM> 
+아이고, zakard님. 윈도우 환경에서 Spark를 쓸 때 만나는 최종 보스 에러인 HADOOP_HOME 미설정 에러가 터졌네요.
+
+Spark는 파일을 저장할 때 내부적으로 하둡(Hadoop)의 파일 시스템 로직을 사용하는데, 윈도우에서는 이 작업을 도와주는 winutils.exe라는 파일과 하둡 환경 변수가 없으면 **"집(HADOOP_HOME)이 어디인지 모르겠어!"**라며 뻗어버립니다.
+
+이건 코드 문제가 아니라 시스템 설정 문제입니다. 아래 단계를 따라 해결해 봅시다.
+
+
+🛠️ 해결 방법: winutils.exe 설정하기
+0. 하둡 바이너리 다운로드
+윈도우용 하둡 실행 파일들이 필요합니다.
+
+https://github.com/cdarlint/winutils
+
+
+1. 멈춰있는 프로세스 강제 종료
+먼저 2시간째 돌고 있는 녀석을 끈 뒤, 노트북 커널도 재시작하세요.
+
+커널 메뉴: Kernel -> Restart
+
+2. 수동으로 winutils.exe 확보하기 (가장 확실함)
+스크립트가 다운로드에 실패하는 경우가 많으니 직접 파일을 가져다 놓는 게 상책입니다.
+
+winutils.exe (3.2.0 버전) 링크를 클릭해 직접 다운로드하세요.
+
+E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.2.0\bin 폴더를 직접 만듭니다. (폴더가 이미 있다면 그 안에 넣으세요.)
+
+다운로드한 **winutils.exe**를 방금 만든 bin 폴더 안에 복사해 넣습니다.
+
+3. Spark 세션 재시작
+환경 변수를 새로 먹여야 하므로 Kernel을 Restart 해야 합니다.
+
+4. 주피터 노트북 최상단 설정 (이것만 있으면 됨)
+노트북 맨 윗줄에 커서가 제안했던 복잡한 경로 대신, 확실한 절대 경로로 다시 세팅합니다.
+
+Python
+# 03_test.ipynb 파일 맨 위
+import os
+import sys
+
+# 1. 하둡 홈 설정 (bin 폴더의 바로 위 부모 폴더까지만 적습니다)
+hadoop_path = r"E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.2.0"
+os.environ['HADOOP_HOME'] = hadoop_path
+os.environ['PATH'] += os.pathsep + os.path.join(hadoop_path, 'bin')
+
+# 2. 이전에 설정했던 파이썬 경로도 잊지 마세요
+venv_python = r"E:\IT_SPACES\AI\ZoomCamp\DE\06\venv\Scripts\python.exe"
+os.environ['PYSPARK_PYTHON'] = venv_python
+os.environ['PYSPARK_DRIVER_PYTHON'] = venv_python
+
+from pyspark.sql import SparkSession
+
+# 기존 세션 종료 후 재생성
+if 'spark' in locals():
+    spark.stop()
+
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+
+✅ 지금 바로 확인할 것
+E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.2.0\bin 폴더 안에 winutils.exe 파일이 실제로 들어있는지 확인하세요.
+
+파일이 있다면, 위 코드를 실행하고 바로 **df.write.parquet(...)**를 다시 날려보세요.
+
+이제 에러 없이 _SUCCESS 파일이 생기나요? 파일이 들어있는지만 확인해 주시면 바로 다음 단계로 가겠습니다! 🦾
+
+
+//
+🔍 왜 이 고생을 해야 하나요?
+Spark는 원래 리눅스용으로 만들어졌습니다. 리눅스에서는 당연히 있을 법한 파일 관리 기능들이 윈도우에는 없기 때문에, winutils.exe라는 파일이 윈도우 대신 그 역할을 해줘야 합니다. 특히 Parquet 파일을 쓸 때(Write) 이 문제가 반드시 발생합니다.
+
+✅ 요약 및 점검
+winutils.exe가 포함된 bin 폴더를 준비한다.
+
+HADOOP_HOME 환경 변수를 그 상위 폴더로 잡아준다.
+
+커널 재시작 후 df.write.parquet(...)를 다시 실행한다.
+//
+
+
+실행
+df.write.parquet('fhvhv/2021/01/')
+
+결과: 에러 하지만 진전이 있는 듯. 아래 GEM참조
+
+GEM> 
+축하합니다, zakard님! 드디어 HADOOP_HOME 문제를 완전히 뚫으셨네요! 🥳
+
+방금 뜬 AnalysisException: [PATH_ALREADY_EXISTS] 에러는 이제 시스템 설정 에러가 아니라, **"저장을 하려고 보니 이미 그 이름의 폴더가 있어서 덮어쓰지 않겠다"**는 아주 행복한 비명입니다. 즉, Spark가 파일을 쓸 준비가 완벽히 끝났다는 뜻이죠.
+
+🛠️ 해결 방법: 덮어쓰기 모드 추가
+이미 폴더가 생성되어 있기 때문에, Spark에게 "기존 폴더가 있어도 무시하고 새로 써!"라고 명령어를 살짝 고쳐주면 됩니다.
+
+Python
+# .mode("overwrite") 를 추가해줍니다.
+df.write.parquet('fhvhv/2021/01/', mode='overwrite')
+
+
+🧐 왜 이 에러가 났을까요?
+반절의 성공: 아까 에러가 났을 때, 사실 Spark는 폴더 자체는 미리 만들어 두었을 가능성이 큽니다.
+
+보안 장치: Spark는 기본적으로 데이터를 안전하게 보호하기 위해, 이미 데이터가 있는 경로에 덮어쓰는 것을 기본적으로 막아둡니다. (실수로 소중한 데이터를 날리면 안 되니까요!)
+
+✅ 이제 진짜 마지막 확인!
+위 코드를 실행한 뒤, 윈도우 탐색기에서 해당 경로(E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\fhvhv\2021\01)로 들어가 보세요.
+
+_SUCCESS 파일이 생겼나요?
+
+part-00000... 부터 part-00023... 까지 총 24개의 파일이 생겼나요?
+
+만약 파일들이 보인다면, zakard님은 드디어 Windows 환경에서 Spark 설정부터 데이터 변환(ETL)의 가장 험난한 고개를 모두 넘으신 겁니다.
+
+**이제 저장된 Parquet 파일이 잘 읽히는지, 용량은 얼마나 줄었는지 확인해 볼까요?**🦾
+
+
+나> _SUCCESS
+
+._SUCCESS.crc
+
+.part-00000-0bd75486-81b9-48e8-ae37-2562b347f4df-c000.snappy.parquet.crc
+
+part-00000-0bd75486-81b9-48e8-ae37-2562b347f4df-c000.snappy.parquet
+
+위의 파일들이 생성됨
+
+
+GEM>
+완벽합니다, zakard님! 드디어 첫 번째 Spark ETL(추출, 변환, 저장) 프로세스를 성공적으로 마무리하셨네요.
+
+생성된 파일들의 정체를 정확히 알려드릴게요.
+
+📄 생성된 파일들의 정체
+_SUCCESS:
+
+의미: "이 폴더의 모든 데이터는 문제없이 완전히 저장됨"이라는 도장입니다.
+
+용도: 다른 프로그램(예: Airflow나 하둡)이 이 데이터를 읽으려 할 때, 이 파일이 있는지 먼저 확인해서 데이터가 '쓰여지는 중'인지 '완료된 상태'인지 판단합니다.
+
+part-00000-...snappy.parquet:
+
+의미: 이게 진짜 데이터입니다!
+
+snappy: 데이터가 'Snappy'라는 압축 알고리즘으로 압축되어 있다는 뜻입니다. CPU 부담은 적으면서 압축률이 좋아 Spark에서 기본으로 사용합니다.
+
+.crc (Checksum) 파일들:
+
+의미: 파일 전송이나 저장 과정에서 데이터가 깨지지 않았는지 검사하기 위한 '체크용' 파일입니다. (보통 보이지 않게 숨겨져 있는데, 윈도우 설정에 따라 보일 수 있습니다.)
+
+📊 왜 이렇게 저장하나요?
+만약 1,200만 줄의 데이터를 파일 1개로 만들었다면, 나중에 읽을 때 일꾼 1명만 일하게 됩니다. 하지만 지금처럼 **24개(part-00000 ~ 00023)**로 나눠두었기 때문에:
+
+나중에 이 폴더를 읽을 때 Spark는 24명의 일꾼을 동시에 투입해서 순식간에 데이터를 메모리로 올릴 수 있습니다.
+
+이게 바로 분산 컴퓨팅의 힘입니다.
+
+
+
+🚀 이제 잘 저장됐는지 '검증'해 볼까요?
+이제 CSV가 아닌, 방금 만든 따끈따끈한 Parquet 폴더를 다시 읽어서 데이터가 잘 나오는지 확인해 보세요. (CSV보다 훨씬 빠를 겁니다!)
+
+Python
+# 파일이 아니라 '폴더' 경로를 통째로 지정합니다.
+df_parquet = spark.read.parquet('fhvhv/2021/01/')
+
+
+# 스키마와 데이터 확인
+df_parquet.printSchema()
+결과:
+root
+ |-- hvfhs_license_num: string (nullable = true)
+ |-- dispatching_base_num: string (nullable = true)
+ |-- pickup_datetime: timestamp (nullable = true)
+ |-- dropoff_datetime: string (nullable = true)
+ |-- PULocationID: integer (nullable = true)
+ |-- DOLocationID: integer (nullable = true)
+ |-- SR_Flag: string (nullable = true)
+
+
+
+df_parquet.show()
+결과:
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|hvfhs_license_num|dispatching_base_num|    pickup_datetime|   dropoff_datetime|PULocationID|DOLocationID|SR_Flag|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|           HV0003|              B02617|2021-01-24 21:55:11|2021-01-24 22:45:30|         214|          75|   NULL|
+
+...
+
+|           HV0003|              B02875|2021-01-24 21:08:03|2021-01-24 21:22:26|          25|          17|   NULL|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+only showing top 20 rows
+CSV를 읽었을 때와 printSchema() 결과가 똑같이 나오나요? 이제 번거로운 types.StructType 정의 없이도 Spark가 Parquet 안에 저장된 스키마를 알아서 척척 읽어올 겁니다! 🦾
+
+
+
+본문
+8개의 Executor가 현재 작업을 수행하고 있습니다. 
+
+여기에서 확인할 수 있습니다: http://localhost:4040/jobs/
+
+Completed Jobs (13)
+
+parquet at NativeMethodAccessorImpl.java:0
+parquet at NativeMethodAccessorImpl.java:0	2026/02/25 19:47:14	0.2 s	1/1	
+
+위의 링크에 들어가  DAG Visualization 화살표를 내려
+
+파티셔닝이 이루어졌음을 확인, 여러 실행기가 작업을 수행하고 있습니다. 파티셔닝은 상당히 비용이 많이 드는 작업이기 때문에 시간이 좀 걸릴 것입니다. 이 부분은 나중에 자세히 설명하겠습니다. 
+
+
+지금까지 Pi Spark를 이용한 스레드 파일 처리와 결과를 다른 파일에 저장하는 방법에 대해 간략하게 살펴보았습니다. 다음 영상에서는 Spark 데이터 프레임에 대해 이야기해 보겠습니다. Spark 데이터 프레임은 여기 있는 'df'태그와 비슷한데, 번들 데이터 프레임과 완전히 같지는 않습니다. 다음 영상에서 데이터 프레임에 대해 자세히 알아보겠습니다. 
+
+
+GEM> 
+그 문장은 데이터 엔지니어링 강의(ZoomCamp 등)에서 Pandas 데이터프레임과 Spark 데이터프레임의 차이점을 예고하는 내용입니다.
+
+zakard님이 지금까지 하신 작업은 **"거대한 CSV를 읽어서(Pandas 느낌으로), Spark라는 엔진을 통해 조각조각 나눠서 저장"**한 것입니다. 이제 그 과정에서 사용한 df가 무엇인지 설명하려는 거죠.
+
+핵심을 쉽게 요약해 드릴게요.
+
+🧐 "번들 데이터프레임과 완전히 같지는 않다"는 게 무슨 뜻?
+여기서 '번들'은 아마 Pandas를 의미할 가능성이 높습니다. (보통 데이터 분석가들이 기본으로 쓰는 도구니까요.)
+
+Pandas와 Spark 데이터 프레임의 핵심 차이
+첫째, 작업을 처리하는 방식이 다릅니다. Pandas는 코드를 입력하는 즉시 메모리에 데이터를 올리고 바로 계산해 버리는 '즉시 실행(Eager)' 방식입니다. 반면, Spark는 실제로 데이터를 눈으로 확인하거나 저장하라는 명령(show, write 등)을 내리기 전까지는 실제 계산을 하지 않고 어떻게 처리할지 **'계획(Lazy)'**만 세웁니다. 그래서 아까 repartition(24)를 했을 때도 바로 파일이 안 생기고 저장 명령(df.write.parquet('fhvhv/2021/01/', mode='overwrite'))을 할 때서야 움직였던 거예요.
+
+둘째, 데이터가 어디에 위치하는지가 다릅니다. Pandas는 데이터를 내 컴퓨터의 메모리(RAM) 한 곳에 몽땅 다 집어넣고 처리합니다. 하지만 Spark는 방금 실습하신 것처럼 데이터를 여러 개의 **파티션(Partition)**으로 쪼개서, 여러 개의 CPU 코어나 여러 대의 컴퓨터에 분산시켜서 올려둡니다.
+
+셋째, 처리할 수 있는 데이터의 한계가 다릅니다. Pandas는 내 컴퓨터 메모리 용량보다 데이터가 크면 바로 멈춰버립니다(OOM 에러). 하지만 Spark는 메모리보다 훨씬 큰 데이터라도 조각조각(718MB를 24개로 나눈 것처럼) 내서 차례대로 처리할 수 있기 때문에 훨씬 거대한 데이터를 다루기에 유리합니다.
+
+💡 "스레드 파일 처리" 한 줄 요약
+아까 718MB 파일을 처리할 때, 컴퓨터 안의 여러 일꾼(Thread)이 각각의 파티션을 동시에 붙잡고 처리했다는 뜻입니다. "한 명의 요리사가 큰 통을 젓는 게 아니라, 24명의 요리사가 작은 냄비를 동시에 끓였다"고 생각하시면 정확합니다.
+
+이제 이 '분산된 조각들'을 가지고 필터링을 하거나 합계를 구하는 Spark 전용 조작법을 배울 차례라는 뜻입니다.
+
+데이터가 잘 저장된 걸 확인하셨으니, 이제 이 24개 조각에서 "전체 데이터가 총 몇 줄인지" 한 번 세어보시겠어요? 🦾
+
+
+
+💡 "스레드 파일 처리"는 또 무슨 말?
+아까 repartition(24)를 하셨죠?
+
+스레드(Thread) 처리: 24개의 조각을 각각의 일꾼(Thread/Core)이 동시에 처리했다는 뜻입니다.
+
+하나의 큰 덩어리를 처리하는 게 아니라, 여러 줄기(스레드)로 나누어 병렬로 작업했다는 점을 강조하는 표현입니다.
+
+🛠️ 앞으로 배울 내용 (Next Step)
+다음 영상(또는 단계)에서는 이 df를 단순히 저장하는 것을 넘어, Spark SQL이나 Filter, GroupBy 같은 연산을 어떻게 하는지 배울 겁니다.
+
+"데이터가 너무 커서 Pandas로는 도저히 안 되겠다!" 싶을 때 Spark 데이터프레임을 어떻게 조종하는지 그 구체적인 '운전법'을 배우게 되는 거죠.
+
+✅ 요약하자면
+"지금까지는 데이터를 읽고 저장하는 '파이프라인'을 맛봤다면, 다음에는 그 안의 데이터를 마음대로 주무르는 **'Spark식 데이터 조작법'**을 배우겠습니다." 라는 뜻입니다.
+
+지금까지 718MB 데이터를 성공적으로 변환하셨으니, 이제 그 안의 데이터를 분석(SQL 연산 등)해볼 준비가 되신 겁니다!
+
+혹시 저장된 데이터를 가지고 간단한 통계(예: 전체 운행 횟수 카운트)를 내보는 코드를 미리 짜드릴까요?🦾
+
+
+
+나> 글자깨짐 문제가 있는데 다음 단원에서 그게 문제가 되지 않을까?
+GEM> 결론부터 말씀드리면, 데이터 처리 자체에는 전혀 문제가 되지 않으니 안심하셔도 됩니다!
+
+지금 발생하는 글자 깨짐은 **'데이터'**가 깨진 게 아니라, 윈도우가 터미널에 **'메시지(날짜, 시간)'**를 뿌려줄 때 발생하는 단순한 표시 문제입니다.
+
+왜 문제가 안 되는지 3가지 이유로 정리해 드릴게요.
+
+1. 데이터는 안전합니다
+아까 dir이나 ls에서 보신 깨진 글자(2썡, 삤썑)는 윈도우 운영체제가 파일의 "수정한 날짜"를 한글로 출력하려다 발생한 것입니다. 정작 중요한 Parquet 파일 내부의 데이터나 CSV 안의 내용물은 인코딩이 전혀 다른 체계(UTF-8)로 안전하게 저장되어 있습니다.
+
+2. Spark는 똑똑합니다
+다음 단원에서 Spark로 데이터를 읽고 분석할 때, Spark는 시스템의 한글 설정과 상관없이 파일의 바이너리 값을 직접 읽습니다. df.show()를 했을 때 데이터프레임 안의 숫자나 영문자들은 아주 깔끔하게 나올 거예요.
+
+3. 분석 결과는 영어/숫자 위주입니다
+데이터 엔지니어링 과정에서 다루는 컬럼명(hvfhs_license_num, pickup_datetime 등)과 데이터 값들은 대부분 영문과 숫자입니다. 윈도우 터미널이 "오후 8시"라는 글자를 못 보여준다고 해서, 1+1 계산 결과나 데이터 필터링 결과가 틀려지지는 않습니다.
+
+💡 만약 데이터 내용(한글)이 깨져 보인다면?
+혹시 나중에 한글이 포함된 데이터를 다루다가 show() 결과에서 한글이 깨져 보인다면, 그건 그때 가서 주피터 노트북의 폰트 설정만 손봐주면 해결됩니다. 지금은 경로상의 날짜가 깨지는 정도라 무시하고 진도를 나가셔도 무방합니다.
+
+✅ 다음 단계를 위한 조언
+지금까지 **"윈도우 환경에서 Spark 설치 및 대용량 Parquet 저장"**이라는 가장 큰 산을 넘으셨습니다. 이 과정에서 발생한 HADOOP_HOME이나 Py4JJavaError 같은 '진짜' 에러들이 무서운 거지, 지금의 글자 깨짐은 귀여운 수준입니다.
+
+
+
+---
+
+
+
 🎥 6.3.2 Spark Dataframes
 https://youtu.be/ti3aC1m3rE8&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=55
+
+df.write.parquet('fhvhv/2021/01/', mode='overwrite') 아래에 다음을 추가:
+df = spark.read.parquet('fhvhv/2021/01/') 
+
+나> 이미 이전에 df_parquet = spark.read.parquet('fhvhv/2021/01/')로 추가된 상태임. 
+진행 편의상 df_parquet 를 df로 변경 필. 
+
+본문
+
+|hvfhs_license_num|dispatching_base_num|    pickup_datetime|   dropoff_datetime|PULocationID|DOLocationID|SR_Flag|
++-----------------+--------------------+-------------------+-------------------+------------+------------+-------+
+|           HV0003|              B02617|2021-01-24 21:55:11|2021-01-24 22:45:30|         214|          75|   NULL|
+
+parquet파일에는 스키마 정보가 저장되어 있고, 각 열의 데이터유형이 기억되어 있습니다. 첫번째 열은 문자열이고, 두번째 열도 문자열입니다. 첫번째 열은 타임스탬프, 두번째 열은 정수, 마지막 열은 문자열입니다. 따라서 스키마를 명시적으로 지정할 필요가 없습니다. 
+
+parquet파일 용량이 작은 이유 중 하나는 스키마를 알고있기 때문이며, 데이터를 더 효율적으로 압축하는 방법을 알기 때문입니다. 그래서 스키마를 따로 지정할 필요가 없습니다. 
+
+df.printSchema()
+	 
+
+root
+ |-- hvfhs_license_num: string (nullable = true)
+ |-- dispatching_base_num: string (nullable = true)
+ |-- pickup_datetime: timestamp (nullable = true)
+ |-- dropoff_datetime: string (nullable = true)
+ |-- PULocationID: integer (nullable = true)
+ |-- DOLocationID: integer (nullable = true)
+ |-- SR_Flag: string (nullable = true)
+
+
+이제 데이터 프레임이 생겼습니다. 이 데이터프레임으로 무엇을 할 수 있을까요? 판다스에서 할 수 있는 일반적인 작업들을 할 수 있습니다. 
+
+만약 몇개의 열만 선택하고 싶다면, 'dataframe select'를 사용하면 됩니다. 여기에 선택할 열 목록을 지정합니다. 예를 들어,
+
+df.select('pickup_datetime','dropoff_datetime','PULocationID','DOLocationID')
+
+그러면 이 데이터프레임에는 선택한 네개의 열만 포함됩니다. 
+
+결과: 
+DataFrame[pickup_datetime: timestamp, dropoff_datetime: string, PULocationID: int, DOLocationID: int]
+
+필터링과 같은 다른 작업도 할 수 있습니다. 예를 들어, .filter문을 사용하여 라이선스 번호만 선택하고 싶다면
+
+.filter(df.hvfhs_license_num == '라이선스 번호 아래 검색 통해 취득')
+
+!head -n 10 head.csv
+
+hvfhs_license_num,dispatching_base_num,pickup_datetime,dropoff_datetime,PULocationID,DOLocationID,SR_Flag
+HV0003,B02682,2021-01-01 00:33:44,2021-01-01 00:49:07,230,166,
+
+이중 license_num HV0003를 추출해 넣으면 
+
+df.select('pickup_datetime','dropoff_datetime','PULocationID','DOLocationID').filter(df.hvfhs_license_num == 'HV0003')
+
+결과:
+DataFrame[pickup_datetime: timestamp, dropoff_datetime: string, PULocationID: int, DOLocationID: int]
+
+
+//
+GEM> !head -n 10 head.csv
+이 명령어는 리눅스나 유닉스 계열에서 사용하는 "파일의 앞부분만 살짝 들여다보는" 아주 유용한 도구입니다. zakard님이 방금 보신 결과가 어떻게 나왔는지 하나씩 뜯어드릴게요.
+
+🔍 명령어 구성 분석
+!: 주피터 노트북에서 "이건 파이썬 코드가 아니라, 내 컴퓨터 시스템(터미널) 명령어야!"라고 알려주는 기호입니다.
+
+head: 파일의 **머리(윗부분)**를 가져오라는 명령어입니다.
+
+-n 10: Number of lines의 약자로, "위에서부터 딱 10줄만 보여줘"라는 옵션입니다.
+
+head.csv: 읽으려는 파일의 이름입니다.
+
+📝 실행 결과의 의미
+출력된 내용을 보면 이 파일이 어떤 구조인지 바로 알 수 있습니다.
+
+첫 번째 줄 (Header): hvfhs_license_num, dispatching_base_num 등등... 이 파일에 어떤 컬럼(열)이 있는지 보여줍니다.
+
+데이터 예시: HV0003, B02682... 실제 데이터가 어떤 모양(문자인지, 숫자인지)으로 들어있는지 확인이 가능합니다.
+
+구분자 (Delimiter): 데이터들이 쉼표(,)로 구분되어 있는 CSV(Comma Separated Values) 형식임을 확실히 알 수 있습니다.
+
+💡 왜 이 명령어를 쓰나요?
+718MB나 되는 거대한 파일을 메모장이나 엑셀로 열려고 하면 컴퓨터가 버벅거리거나 멈출 수 있습니다.
+하지만 head를 쓰면:
+
+속도: 파일 전체를 읽지 않고 딱 10줄만 읽기 때문에 0.1초 만에 끝납니다.
+
+스키마 파악: Spark에서 StructType으로 스키마를 정의하기 전에, 데이터 타입을 미리 눈으로 확인하기 위해 필수적으로 거치는 단계입니다.
+
+✅ 요약
+"전체 데이터를 다 열어볼 필요 없이, 위에서부터 10줄만 빠르게 읽어서 데이터가 어떻게 생겼는지 간을 보는 작업입니다."
+
+이제 이 10줄의 정보를 바탕으로 Spark가 데이터를 제대로 해석할 수 있게 스키마를 짤 준비가 되신 겁니다. 다음 단계로 넘어가서 이 데이터를 Spark 데이터프레임으로 멋지게 불러와 볼까요? 🦾
+
+
+나> head.csv 라는 파일을 내가 위에서 만든 적이 있던가? 업는걸로 알고있어 내가 틀리지 않다면. 그런데 이렇게 영상에는 head.csv의 존재를 드러내.
+
+GEM> 보통 강의에서는 아래와 같은 명령어로 원본에서 10줄만 추출해 head.csv를 만듭니다.
+
+🛠️ 강의자가 head.csv를 만든 방법 (추측)
+터미널에서 이 명령어를 한 번 실행했을 거예요.
+
+Bash
+# 원본(718MB)에서 상위 10줄만 복사해서 head.csv로 저장해라!
+head -n 10 fhvhv_tripdata_2021-01.csv > head.csv
+
+나> 전에 내가 head -n 10 fhvhv_tripdata_2021-01.csv > head.csv를 한 느낌이 있는거 같기도 한데 어느시점에서 노트북에 이 줄이 사라진것같아.
+
+GEM> 그럴 수 있습니다, zakard님! 아마 아까 파일이 충돌해서 **[Revert]**를 누르셨을 때, 저장되지 않았던 그 줄이 날아갔을 가능성이 매우 높습니다.
+
+또는, 강의를 따라오면서 셀을 실행만 하고 나중에 지우셨을 수도 있고요. 지금 dir 명령어로 확인했을 때 파일 목록에 head.csv가 이미 있다면, 예전에 실행했던 그 명령어가 성공적으로 파일을 만들어둔 것입니다.
+//
+
+
+
+본문
+http://localhost:4040/jobs/ 에서 
+
+showString at NativeMethodAccessorImpl.java:0
+showString at NativeMethodAccessorImpl.java:0	2026/02/26 10:57:00	0.4 s	1/1
+
+기록을 확인. 
+
+
+위 코드에 .show()를 붙이면
+
+df.select('pickup_datetime','dropoff_datetime','PULocationID','DOLocationID').filter(df.hvfhs_license_num == 'HV0003').show()
+
+결과:
++-------------------+-------------------+------------+------------+
+|    pickup_datetime|   dropoff_datetime|PULocationID|DOLocationID|
++-------------------+-------------------+------------+------------+
+|2021-01-24 21:55:11|2021-01-24 22:45:30|         214|          75|
+|2021-01-24 21:01:57|2021-01-24 21:47:06|         239|         177|
+
+...
+
+|2021-01-24 21:17:54|2021-01-24 21:24:33|         164|         230|
+|2021-01-24 21:26:07|2021-01-24 21:35:18|         230|         141|
++-------------------+-------------------+------------+------------+
+only showing top 20 rows
+
+내역이 출력
+
+
+다시 http://localhost:4040/jobs/ 에 들어가보면
+
+showString at NativeMethodAccessorImpl.java:0
+showString at NativeMethodAccessorImpl.java:0	2026/02/26 11:25:01	0.2 s	1/1
+
+로 등록. 
+
+가끔씩 등록이 지연되는 일이 있는데 이러한 작업들이 지연(lazy)실행되기 때문입니다. 
+
+Spark에서는 즉시 실행되는 작업과 즉시 실행되지 않는 작업을 구분하는데, 이를 Actions vs Transformations(액션과 변환) 이라고 합니다. 즉시 실행되지 않는 작업은 변환이라고 하며 데이터를 변환하는데 사용됩니다. 예: 열선택, 함수적용 등. 
+
+df.select('pickup_datetime','dropoff_datetime','PULocationID','DOLocationID').filter(df.hvfhs_license_num == 'HV0003').show()
+
+의 생리:
+df -> select (trans(lazy)) -> filter(trans(lazy)) -> show()(action(eager)).take(5)
+
+즉, show는 전체실행을 트리거하는 역할을 합니다. 
+
+
+Transformations - lazy(not executed immediately):
+* Selecting columns
+* Filtering
+* joins
+* group by
+..
+
+Actions - eager(executed immediately):
+* show, take, head
+* write
+
+이것보다 다음에 다룰 SQL접근이 더 보기 좋고 표현력도 뛰어나다고 생각합니다. 
+
+어쨌든, 이것이 Actions와 Transformations의 주요 차이점입니다.
+
+
+이제 간단한 작업을 수행하는 방법을 알아보겠습니다. 그룹화에 대해 언급했었죠? 그룹화를 통해 어떤 열을 기준으로 그룹화할지, 정확히 어떤 작업을 수행할지 지정할 수 있습니다. 자세한 내용은 공식 문서를 참조하시면 됩니다. 꽤 잘 설명되어 있습니다. 
+그리고 제가 말씀드렸듯이 sql을 사용하는 것이 적어도 일부 작업에서는 이 방법보다 더 간단하기 때문에 sql을 사용하는 것을 추천합니다. 
+
+Spark를 사용하면 똑같은 작업을 할 수 있습니다.
+
+cell
+SELECT * FROM df WHERE hvfhs_license_num = HV0003
+
+//
+결과: 에러.
+cursor에 질문: 현재 주피터 노트북에서 PySpark 실습 중입니다.
+
+강의 영상에서는 셀에 SELECT * FROM df WHERE hvfhs_license_num = HV0003라고만 입력해도 실행이 잘 되는데, 내 환경(일반 Python Kernel)에서는 SyntaxError: invalid syntax가 발생합니다.
+
+왜 내 환경에서는 안 되는 건지 설명해 줘.
+
+spark.sql()을 사용해서 이 쿼리를 실행하는 올바른 코드를 알려줘.
+
+df 데이터프레임을 SQL 쿼리에서 쓸 수 있도록 테이블로 등록하는 방법도 포함해 줘.
+
+
+CURSOR> 왜 SyntaxError가 나는가
+강의 영상에서는 SQL 전용 환경(Databricks, Spark SQL 노트북 등)을 쓰고 있어서, 셀에 SQL만 적어도 실행됩니다.
+반면 일반 Python 커널에서는 셀 내용이 Python 코드로 해석됩니다.
+SELECT * FROM df WHERE ... 는 Python 문법이 아니라서 SyntaxError가 발생합니다.
+올바른 사용 방법
+1. DataFrame을 SQL 테이블로 등록
+df.createOrReplaceTempView("df")
+이렇게 하면 df라는 이름으로 SQL에서 사용할 수 있습니다.
+2. spark.sql()로 쿼리 실행
+result = spark.sql("""    SELECT *     FROM df     WHERE hvfhs_license_num = 'HV0003'""")result.show()
+주의: HV0003은 문자열이므로 SQL 안에서 작은따옴표로 감싸야 합니다.
+'HV0003'이 아니라 HV0003만 쓰면 컬럼 이름으로 인식됩니다.
+전체 예시
+# 1. DataFrame을 SQL 테이블로 등록df.createOrReplaceTempView("df")# 2. spark.sql()로 쿼리 실행result = spark.sql("SELECT * FROM df WHERE hvfhs_license_num = 'HV0003'")result.show()
+또는 한 줄로:
+df.createOrReplaceTempView("df")spark.sql("SELECT * FROM df WHERE hvfhs_license_num = 'HV0003'").show()
+
+CURSOR + GEM> 좋습니다, zakard님! 커서(Cursor)가 아주 정확한 처방전을 줬네요. 핵심은 **"내가 쓰는 주피터는 파이썬 전용이라 SQL을 쓰려면 spark.sql()이라는 틀이 필요하다"**는 점입니다.
+
+가독성을 높여서 다시 정리해 드릴 테니, 이 코드를 주피터 노트북에 그대로 복사해서 실행해 보세요.
+
+🛠️ PySpark에서 SQL 쿼리 실행하기 (정석)
+1. DataFrame을 SQL 테이블로 등록
+Spark 엔진에게 "이제부터 이 df라는 데이터프레임을 SQL에서 **'trips'**라는 이름의 테이블로 부를게!"라고 약속하는 단계입니다.
+
+Python
+# 'df' 대신 원하는 이름을 넣어도 되지만, 쿼리문과 맞춰야 합니다.
+df.createOrReplaceTempView("trips")
+2. spark.sql()로 쿼리 실행
+이제 영상에서 본 그 SQL 문장을 실행합니다. 주의할 점은 문자열(HV0003)에 작은따옴표를 꼭 붙여야 한다는 거예요.
+
+Python
+# 방법 A: 결과만 바로 확인하기
+spark.sql("SELECT * FROM trips WHERE hvfhs_license_num = 'HV0003'").show()
+
+# 방법 B: 쿼리 결과를 새로운 데이터프레임에 담기 (추천)
+result_df = spark.sql("""
+    SELECT 
+        * FROM 
+        trips 
+    WHERE 
+        hvfhs_license_num = 'HV0003'
+""")
+
+result_df.show(5)
+💡 왜 이렇게 해야 하나요? (요약)
+SyntaxError 해결: 파이썬 인터프리터가 SQL 문법을 파이썬 코드로 착각하지 않도록 spark.sql("...") 문자열 안에 가두는 것입니다.
+
+환경의 차이: 강의 영상은 SQL 전용 셀 설정을 미리 해둔 것이고, 우리는 일반 파이썬 셀을 쓰기 때문입니다.
+
+따옴표(')의 중요성: SQL에서 따옴표가 없으면 HV0003을 데이터가 아닌 '컬럼 이름'으로 인식해서 에러가 납니다.
+
+✅ 꿀팁: 여러 줄 쿼리 쓰기
+쿼리가 길어질 때는 따옴표 3개(""")를 사용하면 줄바꿈을 마음대로 할 수 있어 훨씬 보기 편합니다.
+
+Python
+spark.sql("""
+    SELECT 
+        pickup_datetime, 
+        dropoff_datetime, 
+        PULocationID 
+    FROM trips 
+    WHERE hvfhs_license_num = 'HV0003' 
+    LIMIT 10
+""").show()
+이제 에러 없이 시원하게 데이터가 출력되나요? SQL 방식이 익숙해지면 복잡한 통계 계산도 훨씬 직관적으로 하실 수 있을 거예요! 🦾
+
+"trips" 테이블에서 가장 많이 나타나는 PULocationID 상위 5개를 뽑는 SQL 쿼리도 짜드릴까요?
+//
+
+
+cell
+from pyspark.sql import functions as F
+
+cell
+F.to_date()
+
+to_date()함수는 날짜와 시간을 입력받아 시간, 분, 초 등의 정보는 제거하고 날짜 정보만 남깁니다. 
+
+
+
+F및 sql관련:
+강의 영상의 생(Raw) SQL 실행 방식은 Databricks 등 특정 SQL 전용 환경에서만 가능하므로, 일반 Python 커널 환경인 본 실습에서는 호환성을 위해 spark.sql() 함수를 사용하는 표준 방식으로 대체하고 해당 파트는 스킵함. (업뎃: 이후의 노트북04_pyspark에서 다루며 잘 작동함)
+
+환경 차이(SQL 전용 셀 미지원)로 인한 SyntaxError 방지를 위해, 이후 모든 SQL 실습은 **df.createOrReplaceTempView()**와 spark.sql() 조합의 표준 코드로 변환하여 진행함.
+
+
+
+---
+
 
 🎥 6.3.3 (Optional) Preparing Yellow and Green Taxi Data
 https://youtu.be/CI3P4tAtru4&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=56
@@ -358,3 +1841,2279 @@ https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/06-batch/co
 
 메모
 The other way to infer the schema (apart from pandas) for the csv files, is to set the inferSchema option to true while reading the files in Spark.
+(판다스를 이용하는 것 외에) CSV 파일의 스키마를 추론하는 다른 방법은, Spark에서 파일을 읽을 때 inferSchema 옵션을 true로 설정하는 것입니다.
+
+
+시작
+
+터미널
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/06/Batch/setup (main)
+$ python install_winutils.py
+다운로드 대상: E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.3.5\bin
+  OK: hadoop.dll
+  OK: hadoop.exp
+  OK: hadoop.lib
+  OK: hadoop.pdb
+  OK: libwinutils.lib
+  OK: winutils.exe
+  OK: winutils.pdb
+
+완료. HADOOP_HOME으로 설정할 경로:
+E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.3.5
+
+주피터 노트북 맨 위 셀에 아래를 추가하세요 (SparkSession 생성 전):
+
+import os
+os.environ['HADOOP_HOME'] = r'E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.3.5'    
+os.environ['PATH'] = os.environ.get('PATH', '') + os.pathsep + r'E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.3.5\bin'
+
+
+"완료" 후 터미널 지침은 스킵.
+
+
+경로 06\Batch\code 에 start_spark.bat 생성후, 아래 내용 작성.
+
+@echo off
+set HADOOP_HOME=E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.3.5
+set PATH=%HADOOP_HOME%\bin;%PATH%
+
+echo HADOOP_HOME is set to %HADOOP_HOME%
+echo Starting Jupyter Notebook...
+
+# 만약 가상환경을 쓰신다면 활성화 명령을 추가하세요
+# call E:\IT_SPACES\AI\ZoomCamp\DE\06\venv\Scripts\activate
+
+jupyter notebook
+
+
+노트북이 띄워지면 영상지침을 따름
+
+import pyspark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+
+df_green = spark.read.option("header","true").csv('data/raw/green/2021/01/')
+
+…
+
+
+def crazy_stuff(base_num):
+    num = int(base_num[1:])
+    if num % 7 == 0:
+        return f's/{num:03x}'
+    elif num % 3 == 0:
+        return f'a/{num:03x}'
+    else:
+        return f'e/{num:03x}'
+
+에러.
+
+CURSOR + GEM> 
+
+zakard님, 커서(Cursor)가 아주 똑똑한 대안을 제시해주었네요!
+
+❌ 에러의 핵심 원인
+환경 충돌 (가장 큰 이유): 윈도우에 설치된 Docker/Kubernetes 설정이 PySpark의 통로를 가로챘습니다. Spark는 파이썬 코드를 실행하기 위해 '워커(Worker)'라는 프로세스를 띄우는데, 이때 zakard님의 가상환경이 아닌 Docker 내부의 엉뚱한 경로로 접속하려다 실패해서 crashed가 발생한 것입니다.
+
+데이터 예외 처리 누락: dispatching_base_num 컬럼에 None(NULL) 값이 섞여 있었을 가능성이 높습니다. 파이썬 함수에서 None[1:] 같은 연산을 시도하면 에러가 나고, 이 에러가 Spark 워커 전체를 죽게 만들었습니다.
+
+🛠️ 해결된 전체 코드 
+환경 변수 설정(원인 1 해결)과 Spark Native 함수(원인 2 해결)를 결합한 가장 안전한 코드입니다.
+
+
+특히 해결 2(Spark SQL/Native functions 사용) 방식은 제가 정말 강력하게 추천하는 방법입니다. 왜냐하면 Python UDF는 Java와 Python 사이를 왔다 갔다 하며 데이터를 주고받는 "오버헤드"가 큰 반면, Spark 기본 함수(F.when, F.concat 등)는 Spark 엔진(JVM) 내부에서 바로 돌아가기 때문에 속도도 훨씬 빠르고 지금 겪고 계신 Worker Crash 문제에서 원천적으로 자유롭습니다.
+
+🚀 추천: Spark Native 방식 (해결 2)
+커서가 제안한 코드를 조금 더 다듬어서 바로 실행 가능한 형태로 정리해 드릴게요.
+
+
+
+Python
+# 파일명: 03_test_native.py
+from pyspark.sql import functions as F
+
+df \
+    .withColumn('pickup_date', F.to_date(df.pickup_datetime)) \
+    .withColumn('dropoff_date', F.to_date(df.dropoff_datetime)) \
+    .withColumn('num', F.expr("cast(substring(dispatching_base_num, 2, 10) as int)")) \
+    .withColumn('base_id',
+        F.when(F.col('num') % 7 == 0, F.concat(F.lit('s/'), F.lpad(F.hex(F.col('num')), 3, '0')))
+        .when(F.col('num') % 3 == 0, F.concat(F.lit('a/'), F.lpad(F.hex(F.col('num')), 3, '0')))
+        .otherwise(F.concat(F.lit('e/'), F.lpad(F.hex(F.col('num')), 3, '0')))
+    ) \
+    .select('base_id', 'pickup_date', 'dropoff_date', 'PULocationID', 'DOLocationID') \
+    .show(10)
+
+
+결과:
++-------+-----------+------------+------------+------------+
+|base_id|pickup_date|dropoff_date|PULocationID|DOLocationID|
++-------+-----------+------------+------------+------------+
+|  e/9CE| 2021-01-02|  2021-01-03|         225|         178|
+|  e/9CE| 2021-01-01|  2021-01-01|         230|          79|
+|  e/B35| 2021-01-01|  2021-01-01|          78|         174|
+|  e/B35| 2021-01-04|  2021-01-04|         129|          95|
+|  e/B3E| 2021-01-02|  2021-01-02|         200|         200|
+|  e/9CE| 2021-01-01|  2021-01-01|         151|         116|
+|  e/B3B| 2021-01-04|  2021-01-04|          42|         152|
+|  e/9CE| 2021-01-01|  2021-01-01|          69|         174|
+|  e/B3B| 2021-01-04|  2021-01-04|          91|         257|
+|  a/B49| 2021-01-04|  2021-01-04|          74|          42|
++-------+-----------+------------+------------+------------+
+only showing top 10 rows
+
+
+
+💡 왜 이 방식이 더 좋은가요?
+안정성: 파이썬 프로세스를 따로 띄우지 않으니 윈도우/도커 환경 충돌이 일어나지 않습니다.
+
+성능: 데이터를 직렬화/역직렬화(Serialization)할 필요가 없어 대용량 데이터 처리 시 수 배 이상 빠릅니다.
+
+가독성: Spark SQL 문법에 익숙해지면 코드가 훨씬 선언적이고 명확해집니다.
+
+
+⚠️ 만약 그래도 UDF를 꼭 써야 한다면?
+커서가 말한 대로 if base_num is None: return None 처리가 필수입니다. 하지만 아까 우리가 설정한 환경 변수(PYSPARK_PYTHON) 설정이 되어 있지 않으면 아무리 코드가 완벽해도 워커는 죽을 수 있습니다.
+
+방금 커서가 알려준 "해결 2" 방식으로 실행해 보셨나요? 아마 이번에는 에러 없이 아주 깔끔하게 결과 표가 나올 겁니다! 🦾
+
+
+
+./download_data.sh를 통해 .csv.gz 파일들이 지정된 폴더에 차곡차곡 쌓였다면, 분석을 위한 재료 준비는 끝난 셈입니다.
+
+
+
+
+04_pyspark 전체 노트북: 
+Last Checkpoint: 3 days ago
+
+
+import os
+import sys
+
+# Spark가 사용할 파이썬 실행 파일 경로를 명확히 지정
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
+
+# 윈도우에서 워커 접속 문제를 해결하기 위한 설정
+os.environ['SPARK_LOCAL_IP'] = "127.0.0.1"
+import pyspark
+from pyspark.sql import SparkSession
+# spark = SparkSession.builder \
+#    .master("local[*]") \
+#    .appName('test') \
+#    .getOrCreate()
+
+# SparkSession 설정 보강
+#세션을 만들 때도 타임아웃 시간을 늘리고 바인딩 주소를 고정해줍니다.
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .config("spark.driver.host", "127.0.0.1") \
+    .config("spark.driver.bindAddress", "127.0.0.1") \
+    .getOrCreate()
+
+#!wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhvhv/fhvhv_tripdata_2021-01.csv.gz
+
+!curl -L https://github.com/DataTalksClub/nyc-tlc-data/releases/download/fhvhv/fhvhv_tripdata_
+
+#!gzip -dc fhvhv_tripdata_2021-01.csv.gz
+#!wc -l fhvhv_tripdata_2021-01.csv
+
+df = spark.read \
+    .option("header", "true") \
+    .csv('fhvhv_tripdata_2021-01.csv')
+
+df.schema
+
+# head -n 1001 fhvhv_tripdata_2021-01.csv > head.csv
+
+!powershell -command "Get-Content fhvhv_tripdata_2021-01.csv -TotalCount 1001 | Set-Content head.csv"
+
+import pandas as pd
+
+df_pandas = pd.read_csv('head.csv')
+
+df_pandas.dtypes
+
+spark.createDataFrame(df_pandas).schema
+
+Integer - 4 bytes Long - 8 bytes
+
+from pyspark.sql import types
+
+schema = types.StructType([
+    types.StructField('hvfhs_license_num', types.StringType(), True),
+    types.StructField('dispatching_base_num', types.StringType(), True),
+    types.StructField('pickup_datetime', types.TimestampType(), True),
+    types.StructField('dropoff_datetime', types.TimestampType(), True),
+    types.StructField('PULocationID', types.IntegerType(), True),
+    types.StructField('DOLocationID', types.IntegerType(), True),
+    types.StructField('SR_Flag', types.StringType(), True)
+])
+
+df = spark.read \
+    .option("header", "true") \
+    .schema(schema) \
+    .csv('fhvhv_tripdata_2021-01.csv')
+
+df = df.repartition(24)
+
+#df.write.parquet('fhvhv/2021/01/') OR
+df.write.parquet('fhvhv/2021/01/', mode='overwrite')
+
+df = spark.read.parquet('fhvhv/2021/01/')
+
+df.printSchema()
+
+from pyspark.sql import functions as F
+
+df.show()
+
+def crazy_stuff(base_num):
+    num = int(base_num[1:])
+    if num % 7 == 0:
+        return f's/{num:03x}'
+    elif num % 3 == 0:
+        return f'a/{num:03x}'
+    else:
+        return f'e/{num:03x}'
+
+crazy_stuff('B02884')
+
+crazy_stuff_udf = F.udf(crazy_stuff, returnType=types.StringType())
+
+# 파일명: 03_test_native.py
+from pyspark.sql import functions as F
+
+df \
+    .withColumn('pickup_date', F.to_date(df.pickup_datetime)) \
+    .withColumn('dropoff_date', F.to_date(df.dropoff_datetime)) \
+    .withColumn('num', F.expr("cast(substring(dispatching_base_num, 2, 10) as int)")) \
+    .withColumn('base_id',
+        F.when(F.col('num') % 7 == 0, F.concat(F.lit('s/'), F.lpad(F.hex(F.col('num')), 3, '0')))
+        .when(F.col('num') % 3 == 0, F.concat(F.lit('a/'), F.lpad(F.hex(F.col('num')), 3, '0')))
+        .otherwise(F.concat(F.lit('e/'), F.lpad(F.hex(F.col('num')), 3, '0')))
+    ) \
+    .select('base_id', 'pickup_date', 'dropoff_date', 'PULocationID', 'DOLocationID') \
+    .show(10)
+
+
+#df \
+#    .withColumn('pickup_date', F.to_date(df.pickup_datetime)) \
+#    .withColumn('dropoff_date', F.to_date(df.dropoff_datetime)) \
+#    .withColumn('base_id', crazy_stuff_udf(df.dispatching_base_num)) \
+#    .select('base_id', 'pickup_date', 'dropoff_date', 'PULocationID', 'DOLocationID') \
+#    .show()
+df.select('pickup_datetime', 'dropoff_datetime', 'PULocationID', 'DOLocationID') \
+  .filter(df.hvfhs_license_num == 'HV0003')
+
+#!head -n 10 head.csv
+!powershell -command "Get-Content head.csv -TotalCount 10"
+
+
+
+
+05_taxi_schema.ipynb
+
+cell
+import pyspark
+from pyspark.sql import SparkSession
+
+cell
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+
+cell
+import pandas as pd
+
+cell
+from pyspark.sql import types
+green_schema = types.StructType([
+    types.StructField("VendorID", types.IntegerType(), True),
+    types.StructField("lpep_pickup_datetime", types.TimestampType(), True),
+    types.StructField("lpep_dropoff_datetime", types.TimestampType(), True),
+    types.StructField("store_and_fwd_flag", types.StringType(), True),
+    types.StructField("RatecodeID", types.IntegerType(), True),
+    types.StructField("PULocationID", types.IntegerType(), True),
+    types.StructField("DOLocationID", types.IntegerType(), True),
+    types.StructField("passenger_count", types.IntegerType(), True),
+    types.StructField("trip_distance", types.DoubleType(), True),
+    types.StructField("fare_amount", types.DoubleType(), True),
+    types.StructField("extra", types.DoubleType(), True),
+    types.StructField("mta_tax", types.DoubleType(), True),
+    types.StructField("tip_amount", types.DoubleType(), True),
+    types.StructField("tolls_amount", types.DoubleType(), True),
+    types.StructField("ehail_fee", types.DoubleType(), True),
+    types.StructField("improvement_surcharge", types.DoubleType(), True),
+    types.StructField("total_amount", types.DoubleType(), True),
+    types.StructField("payment_type", types.IntegerType(), True),
+    types.StructField("trip_type", types.IntegerType(), True),
+    types.StructField("congestion_surcharge", types.DoubleType(), True)
+])
+
+yellow_schema = types.StructType([
+    types.StructField("VendorID", types.IntegerType(), True),
+    types.StructField("tpep_pickup_datetime", types.TimestampType(), True),
+    types.StructField("tpep_dropoff_datetime", types.TimestampType(), True),
+    types.StructField("passenger_count", types.IntegerType(), True),
+    types.StructField("trip_distance", types.DoubleType(), True),
+    types.StructField("RatecodeID", types.IntegerType(), True),
+    types.StructField("store_and_fwd_flag", types.StringType(), True),
+    types.StructField("PULocationID", types.IntegerType(), True),
+    types.StructField("DOLocationID", types.IntegerType(), True),
+    types.StructField("payment_type", types.IntegerType(), True),
+    types.StructField("fare_amount", types.DoubleType(), True),
+    types.StructField("extra", types.DoubleType(), True),
+    types.StructField("mta_tax", types.DoubleType(), True),
+    types.StructField("tip_amount", types.DoubleType(), True),
+    types.StructField("tolls_amount", types.DoubleType(), True),
+    types.StructField("improvement_surcharge", types.DoubleType(), True),
+    types.StructField("total_amount", types.DoubleType(), True),
+    types.StructField("congestion_surcharge", types.DoubleType(), True)
+])
+
+cell
+year = 2020
+months = list(range(1, 13))
+for month in months:
+    input_path = f'data/raw/green/{year}/{month:02d}/'
+    output_path = f'data/pq/green/{year}/{month:02d}/'
+    if not os.path.exists(input_path):
+        print(f'건너뜀: {input_path}')
+        continue
+    print(f'processing green {year}/{month}')
+    df_green = spark.read.option("header", "true").schema(green_schema).csv(input_path)
+    df_green.repartition(4).write.mode("overwrite").parquet(output_path)
+
+
+결과: 에러
+
+CURSOR> 
+1. 2020년 데이터 다운로드
+터미널에서 실행:
+cd E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\codepython download_yellow_green.py
+이 스크립트는 2020년 1~12월 Green/Yellow 데이터를 받습니다.
+파일이 많고 용량이 커서 시간이 꽤 걸릴 수 있습니다.
+
+2. 1개월만 먼저 받고 싶을 때
+download_yellow_green.py에서:
+MONTHS = [1]  # 1월만
+로 바꾼 뒤 실행하면 2020년 1월만 받습니다.
+
+3. 노트북 설정
+05_taxi_schema.ipynb는 다시 year=2020, months=1~12로 설정해 두었고,
+경로가 없으면 건너뛰고, mode("overwrite")도 적용되어 있습니다.
+다운로드가 끝난 뒤 노트북을 실행하면 됩니다.
+
+
+
+GEM> zakard님, 커서가 데이터 다운로드 단계부터 아주 꼼꼼하게 짚어줬네요!
+
+현재 상황을 요약하자면, **"코드는 준비되었으니, 재료(2020년 데이터)만 창고에 채워 넣어라"**는 뜻입니다. 2020년은 데이터 양이 꽤 되기 때문에 아래 사항만 주의해서 진행해 보세요.
+
+🚀 2020년 데이터 처리 실전 가이드
+
+1. 다운로드 속도 조절
+download_yellow_green.py에서 MONTHS = list(range(1, 13))로 두면 12개월치를 다 받는데, 윈도우 환경이나 인터넷 속도에 따라 중간에 끊길 수도 있습니다.
+
+안전한 방법: MONTHS = [1, 2, 3] 처럼 3개월씩 끊어서 실행하고, 다운로드가 완료된 것을 확인한 뒤 노트북을 돌리는 것이 정신 건강에 이롭습니다.
+
+2. 저장 공간 확인
+CSV를 Parquet로 변환하면 용량이 줄어들긴 하지만, 원본 CSV가 2020년 전체 데이터 기준으로는 기가바이트(GB) 단위가 넘어갈 수 있습니다. E: 드라이브 용량이 넉넉한지 확인해 주세요.
+
+3. Spark 실행 시 메모리 주의
+for문 안에서 12개월치를 한꺼번에 돌릴 때, 이전 루프의 데이터가 메모리에 남아있을 수 있습니다.
+
+만약 실행 도중 Java heap space 에러가 난다면, 노트북을 저장하고 Kernel Restart를 한 번 한 뒤, 나머지 월(Month)부터 다시 실행하시면 됩니다.
+
+✅ 다음 단계 제안
+데이터 다운로드가 모두 끝나고 노트북 실행까지 완료되면, 드디어 Yellow 택시와 Green 택시 데이터를 합치는(Join/Union) 과정으로 넘어가게 됩니다.
+
+
+
+
+# 파일명: download_yellow_green.py 아래와 같이 수정 (아래에 커서에게 지시)
+import os
+import sys # 추가
+import urllib.request
+
+# --- 환경 변수 설정 ---
+actual_python_path = sys.executable # 추가
+os.environ['PYSPARK_PYTHON'] = actual_python_path # 추가
+os.environ['PYSPARK_DRIVER_PYTHON'] = actual_python_path # 추가
+os.environ['SPARK_LOCAL_IP'] = "127.0.0.1" # 추가
+# ---------------------------
+
+URL_PREFIX = "https://github.com/DataTalksClub/nyc-tlc-data/releases/download"
+YEAR = 2020 
+MONTHS = list(range(1, 13)) 
+
+for taxi_type in ["yellow", "green"]:
+    for month in MONTHS:
+        fmonth = f"{month:02d}"
+        url = f"{URL_PREFIX}/{taxi_type}/{taxi_type}_tripdata_{YEAR}-{fmonth}.csv.gz"
+        
+        local_dir = os.path.join("data", "raw", taxi_type, str(YEAR), fmonth)
+        os.makedirs(local_dir, exist_ok=True)
+        
+        local_path = os.path.join(local_dir, f"{taxi_type}_tripdata_{YEAR}_{fmonth}.csv.gz")
+        
+        print(f"다운로드 중: {url}")
+        try:
+            urllib.request.urlretrieve(url, local_path)
+            size = os.path.getsize(local_path)
+            print(f"  완료: {local_path} ({size/1024/1024:.1f} MB)")
+        except Exception as e:
+            print(f"  실패: {e}")
+
+print("\n모든 다운로드 프로세스 종료.")
+
+
+
+CURSOR> 반영했습니다.
+변경 사항
+import sys 추가
+Spark 관련 환경 변수 설정
+PYSPARK_PYTHON, PYSPARK_DRIVER_PYTHON → sys.executable
+SPARK_LOCAL_IP → 127.0.0.1
+파일명 주석 # download_yellow_green.py 추가
+출력 메시지 수정
+"다운로드 중:"
+"모든 다운로드 프로세스 종료."
+실행 방법
+cd E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\codepython download_yellow_green.py
+이 스크립트는 2020년 1~12월 Green/Yellow 데이터를 받습니다.
+파일이 많고 용량이 커서 시간이 꽤 걸릴 수 있습니다.
+
+
+GEM> zakard님, 커서가 요청하신 대로 모든 변경 사항을 정확하게 반영했네요!
+
+특히 **sys.executable**을 사용해 파이썬 경로를 고정한 부분과 SPARK_LOCAL_IP 설정은 윈도우 환경에서 PySpark를 안정적으로 돌리기 위한 치트키와 같습니다.
+
+🚀 데이터 다운로드 시작 전 마지막 체크
+터미널 실행: 커서가 안내한 대로 cd 명령어를 통해 해당 경로로 이동한 뒤 실행하세요.
+
+🛠️ 2020 데이터 처리 가이드
+1. 데이터 다운로드 실행
+먼저 터미널(CMD 또는 PowerShell)을 열고 아래 명령어를 순서대로 입력하여 데이터를 확보하세요.
+
+Bash
+# 1. 프로젝트 폴더로 이동
+cd E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code
+
+# 2. 다운로드 스크립트 실행
+python download_yellow_green.py
+
+결과:
+(venv) 
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/06/Batch/code (main)
+$ python download_yellow_green.py
+다운로드 중: https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2020-01.csv.gz
+  완료: data\raw\yellow\2020\01\yellow_tripdata_2020_01.csv.gz (110.9 MB)
+
+...
+
+다운로드 중: https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2020-12.csv.gz
+  완료: data\raw\green\2020\12\green_tripdata_2020_12.csv.gz (1.4 MB)
+
+모든 다운로드 프로세스 종료.
+
+
+노트북 팝업:
+File Changed
+"05_taxi_schema.ipynb" has changed on disk since the last time it was opened or saved. Do you want to overwrite the file on disk with the version open here, or load the version on disk (revert)?
+
+Cancel	Revert	Overwrite
+
+
+GEM> 이 메시지는 주피터 노트북 파일이 **브라우저 밖(커서나 다른 에디터)**에서 수정되었기 때문에 발생하는 경고입니다.
+
+💡 선택 가이드
+Revert (추천): 커서(Cursor)에서 수정한 내용을 노트북에 반영하려면 Revert를 누르세요. 디스크에 저장된 최신 상태(커서 수정본)를 불러옵니다.
+
+Overwrite: 지금 브라우저 화면에 떠 있는 내용을 강제로 저장하려면 선택하세요. 커서에서 작업한 내용이 사라질 수 있습니다.
+
+✅ 향후 가이드: 안전한 작업 순서
+**커서(Cursor)**에서 코드를 수정하고 반드시 Ctrl + S로 저장하세요.
+
+주피터 노트북 브라우저로 돌아와서 위 팝업이 뜨면 Revert를 누르세요.
+
+그다음 셀을 실행하면 커서에서 수정한 설정들이 그대로 적용됩니다.
+
+Revert를 눌러 커서가 수정한 2020년용 설정들을 불러오셨나요?
+
+
+
+2. 환경 설정 및 스키마 정의 (05_taxi_schema.ipynb)
+노트북 상단에서 Spark 세션을 생성할 때, 윈도우 경로 에러를 막기 위해 아래 설정을 반드시 포함해야 합니다.
+
+Python
+# 파일명: 05_taxi_schema.ipynb
+import os
+import sys
+from pyspark.sql import SparkSession, types
+
+# 환경 변수 설정 (추가된 부분) # 추가
+actual_python_path = sys.executable # 추가
+os.environ['PYSPARK_PYTHON'] = actual_python_path # 추가
+os.environ['PYSPARK_DRIVER_PYTHON'] = actual_python_path # 추가
+os.environ['SPARK_LOCAL_IP'] = "127.0.0.1" # 추가
+
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+3. Parquet 변환 실행
+데이터 다운로드가 끝난 후, 아래 루프를 실행하여 CSV를 Parquet로 변환합니다.
+
+Python
+year = 2020
+months = list(range(1, 13))
+for month in months:
+    input_path = f'data/raw/green/{year}/{month:02d}/'
+    output_path = f'data/pq/green/{year}/{month:02d}/'
+    if not os.path.exists(input_path):
+        print(f'건너뜀: {input_path}')
+        continue
+    print(f'processing green {year}/{month}')
+    df_green = spark.read.option("header", "true").schema(green_schema).csv(input_path)
+    df_green.repartition(4).write.mode("overwrite").parquet(output_path)
+
+
+결과:
+processing data for 2020/1
+processing data for 2020/2                                                      
+processing data for 2020/3                                                      
+processing data for 2020/4                                                      
+processing data for 2020/5                                                      
+processing data for 2020/6                                                      
+processing data for 2020/7                                                      
+processing data for 2020/8                                                      
+processing data for 2020/9                                                      
+processing data for 2020/10                                                     
+processing data for 2020/11                                                     
+processing data for 2020/12                                                     
+                                      
+
+주의: Yellow 택시는 데이터가 크므로 repartition(4) 과정에서 시간이 걸릴 수 있습니다.
+
+
+진행 상황 모니터링: 2020년 데이터는 양이 많습니다. 특히 Yellow 택시 데이터는 파일당 수백 MB에 달할 수 있으니, 터미널에 찍히는 용량(MB)을 보며 네트워크가 끊기지 않는지 확인해 주세요.
+
+저장 구조 확인: 완료되면 data/raw/yellow/2020/01/ 이런 식으로 폴더가 예쁘게 만들어졌는지 윈도우 탐색기로 슬쩍 보시면 됩니다.
+
+
+
+💡 이후 작업 가이드
+다운로드가 완료되면, 아까 준비해둔 05_taxi_schema.ipynb 노트북을 열고 셀을 차례대로 실행하세요. 이제는 경로 에러(PATH_NOT_FOUND)나 워커 크래시 없이 CSV가 Parquet로 슥슥 변환될 겁니다.
+
+혹시 다운로드 도중에 특정 월에서 계속 실패(Error)가 뜨면 말씀해 주세요. 해당 링크가 살아있는지 바로 확인해 드릴게요! 🦾
+
+
+
+
+결과 및 모든 셀 완료. 아래 참고:
+
+05_taxi_schema
+Last Checkpoint: 3 days ago
+
+
+import pyspark
+from pyspark.sql import SparkSession
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+import pandas as pd
+from pyspark.sql import types
+green_schema = types.StructType([
+    types.StructField("VendorID", types.IntegerType(), True),
+    types.StructField("lpep_pickup_datetime", types.TimestampType(), True),
+    types.StructField("lpep_dropoff_datetime", types.TimestampType(), True),
+    types.StructField("store_and_fwd_flag", types.StringType(), True),
+    types.StructField("RatecodeID", types.IntegerType(), True),
+    types.StructField("PULocationID", types.IntegerType(), True),
+    types.StructField("DOLocationID", types.IntegerType(), True),
+    types.StructField("passenger_count", types.IntegerType(), True),
+    types.StructField("trip_distance", types.DoubleType(), True),
+    types.StructField("fare_amount", types.DoubleType(), True),
+    types.StructField("extra", types.DoubleType(), True),
+    types.StructField("mta_tax", types.DoubleType(), True),
+    types.StructField("tip_amount", types.DoubleType(), True),
+    types.StructField("tolls_amount", types.DoubleType(), True),
+    types.StructField("ehail_fee", types.DoubleType(), True),
+    types.StructField("improvement_surcharge", types.DoubleType(), True),
+    types.StructField("total_amount", types.DoubleType(), True),
+    types.StructField("payment_type", types.IntegerType(), True),
+    types.StructField("trip_type", types.IntegerType(), True),
+    types.StructField("congestion_surcharge", types.DoubleType(), True)
+])
+
+yellow_schema = types.StructType([
+    types.StructField("VendorID", types.IntegerType(), True),
+    types.StructField("tpep_pickup_datetime", types.TimestampType(), True),
+    types.StructField("tpep_dropoff_datetime", types.TimestampType(), True),
+    types.StructField("passenger_count", types.IntegerType(), True),
+    types.StructField("trip_distance", types.DoubleType(), True),
+    types.StructField("RatecodeID", types.IntegerType(), True),
+    types.StructField("store_and_fwd_flag", types.StringType(), True),
+    types.StructField("PULocationID", types.IntegerType(), True),
+    types.StructField("DOLocationID", types.IntegerType(), True),
+    types.StructField("payment_type", types.IntegerType(), True),
+    types.StructField("fare_amount", types.DoubleType(), True),
+    types.StructField("extra", types.DoubleType(), True),
+    types.StructField("mta_tax", types.DoubleType(), True),
+    types.StructField("tip_amount", types.DoubleType(), True),
+    types.StructField("tolls_amount", types.DoubleType(), True),
+    types.StructField("improvement_surcharge", types.DoubleType(), True),
+    types.StructField("total_amount", types.DoubleType(), True),
+    types.StructField("congestion_surcharge", types.DoubleType(), True)
+])
+year = 2020
+months = list(range(1, 13))
+for month in months:
+    input_path = f'data/raw/green/{year}/{month:02d}/'
+    output_path = f'data/pq/green/{year}/{month:02d}/'
+    if not os.path.exists(input_path):
+        print(f'건너뜀: {input_path}')
+        continue
+    print(f'processing green {year}/{month}')
+    df_green = spark.read.option("header", "true").schema(green_schema).csv(input_path)
+    df_green.repartition(4).write.mode("overwrite").parquet(output_path)
+processing green 2020/1
+processing green 2020/2
+processing green 2020/3
+processing green 2020/4
+processing green 2020/5
+processing green 2020/6
+processing green 2020/7
+processing green 2020/8
+processing green 2020/9
+processing green 2020/10
+processing green 2020/11
+processing green 2020/12
+year = 2020
+months = list(range(1, 13))
+for month in months:
+    input_path = f'data/raw/yellow/{year}/{month:02d}/'
+    output_path = f'data/pq/yellow/{year}/{month:02d}/'
+    if not os.path.exists(input_path):
+        print(f'건너뜀: {input_path}')
+        continue
+    print(f'processing yellow {year}/{month}')
+    df_yellow = spark.read.option("header", "true").schema(yellow_schema).csv(input_path)
+    df_yellow.repartition(4).write.mode("overwrite").parquet(output_path)
+processing yellow 2020/1
+processing yellow 2020/2
+processing yellow 2020/3
+processing yellow 2020/4
+processing yellow 2020/5
+processing yellow 2020/6
+processing yellow 2020/7
+processing yellow 2020/8
+processing yellow 2020/9
+processing yellow 2020/10
+processing yellow 2020/11
+processing yellow 2020/12
+# Yellow: 2021/01만 있음
+year = 2021
+months = [1]
+for month in months:
+    input_path = f'data/raw/yellow/{year}/{month:02d}/'
+    output_path = f'data/pq/yellow/{year}/{month:02d}/'
+    if not os.path.exists(input_path):
+        print(f'건너뜀: {input_path}')
+        continue
+    print(f'processing yellow {year}/{month}')
+    df_yellow = spark.read.option("header", "true").schema(yellow_schema).csv(input_path)
+    df_yellow.repartition(4).write.mode("overwrite").parquet(output_path)
+processing yellow 2021/1
+
+
+---
+
+
+🎥 6.3.4 SQL with Spark
+https://youtu.be/uAlp2VuZZPY&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=57
+
+06_spark_sql.ipynb
+
+
+...
+
+
+나> df_green_sel = df_green \
+    .select(common_colums) \
+    .withColumn('service_type', F.lit('green'))
+
+여기서 lit 설명
+
+GEM> zakard님, Spark에서 F.lit()은 아주 자주 쓰이는 함수입니다. 한마디로 요약하면 "데이터프레임에 없는 새로운 값(상수)을 컬럼으로 박아넣을 때" 사용합니다.
+
+💡 F.lit() 설명
+lit은 **Literal(리터럴)**의 약자입니다. Spark 데이터프레임의 컬럼 작업(withColumn, select 등)을 할 때, 단순한 문자열이나 숫자를 Spark가 이해할 수 있는 '컬럼 타입'으로 변환해주는 역할을 합니다.
+
+🔍 왜 그냥 문자열을 쓰면 안 되나요?
+만약 아래처럼 코드를 짜면 Spark는 에러를 냅니다.
+
+Python
+# ❌ 에러 발생 (Spark는 'green'이 컬럼 이름인 줄 알고 찾으려 함)
+df.withColumn('service_type', 'green') 
+Spark는 withColumn의 두 번째 인자로 Column 객체가 오기를 기대합니다. 하지만 'green'은 그냥 파이썬 문자열이죠. 이때 F.lit()이 마법을 부립니다.
+
+Python
+# ✅ 정상 작동 (문자열 'green'을 모든 행에 들어갈 '상수 컬럼'으로 변환)
+df.withColumn('service_type', F.lit('green'))
+🛠️ 활용 예시 (다양한 타입)
+lit은 문자열뿐만 아니라 숫자, 불리언 등 어디에나 쓸 수 있습니다.
+
+
+
+나> df_green_sel = df_green \
+    .select(common_colums) \
+    .withColumn('service_type', F.lit('green'))
+
+이 코드 각 기능들 장황하게 말고 간략하게 한두줄 각각 설명
+
+GEM> zakard님, 요청하신 대로 핵심만 요약해 드립니다.
+
+.select(common_colums): 두 데이터프레임(Green/Yellow)에 공통으로 존재하는 컬럼들만 선택하여 형식을 맞춥니다.
+
+.withColumn('service_type', ...): 'service_type'이라는 이름의 새로운 컬럼을 데이터프레임에 추가합니다.
+
+F.lit('green'): 'green'이라는 문자열을 Spark가 인식할 수 있는 상수 값으로 변환하여 모든 행에 동일하게 채웁니다.
+
+
+나> 이렇게 하는 이유 한두줄 요약
+GEM> 이렇게 하는 이유는 다음과 같습니다.
+
+구조 일치: 두 데이터(Green/Yellow)의 컬럼 개수와 이름을 똑같이 맞춰서 하나로 합칠(union) 수 있는 상태로 만들기 위함입니다.
+
+출처 표시: 데이터를 합친 후에도 각 행이 Green인지 Yellow인지 구분하기 위해 '이름표' 컬럼을 미리 달아두는 것입니다.
+
+
+
+...
+
+
+
+에러:
+df_trips_data.registerTempTable('trips_data')
+
+결과:
+E:\IT_SPACES\AI\ZoomCamp\DE\06\venv\Lib\site-packages\pyspark\sql\dataframe.py:329: FutureWarning: Deprecated in 2.0, use createOrReplaceTempView instead.
+  warnings.warn("Deprecated in 2.0, use createOrReplaceTempView instead.", FutureWarning)
+
+
+GEM>방금 보신 경고 메시지는 **"사용 중인 메서드가 너무 낡았다"**는 뜻입니다. Spark가 업데이트되면서 더 직관적인 이름으로 바뀌었거든요.
+
+
+🛠️ 문제 해결: 메서드 교체
+registerTempTable 대신 Spark 2.0부터 권장되는 **createOrReplaceTempView**를 사용하면 경고 없이 깔끔하게 실행됩니다.
+
+기존 코드:
+
+Python
+df_trips_data.registerTempTable('trips_data')
+
+수정 코드:
+
+Python
+# 파일명: 06_spark_sql.ipynb (또는 현재 작업 중인 파일)
+df_trips_data.createOrReplaceTempView('trips_data') # 추가
+
+💡 왜 이 메서드를 쓰나요?
+이름의 명확성: 단순히 테이블을 등록하는 게 아니라, SQL 쿼리를 날릴 수 있는 **'임시 뷰(View)'**를 만든다는 의미를 더 잘 전달합니다.
+
+안전성: OrReplace가 붙어 있어, 코드를 여러 번 재실행해도 기존 뷰를 덮어쓰므로 에러가 나지 않습니다.
+
+
+CURSOR> registerTempTable는 Spark 2.0부터 deprecated라서, 아래처럼 바꾸면 됩니다.
+df_trips_data.createOrReplaceTempView('trips_data')
+동작은 같고, 경고만 사라집니다.
+
+
+CURSOR + GPT> zakard님, 커서와 저의 가이드대로 createOrReplaceTempView로 깔끔하게 교체하셨군요!
+
+FutureWarning은 당장 코드가 안 돌아가는 에러는 아니지만, 나중에 Spark 버전이 올라갔을 때 코드가 깨지는 것을 방지하기 위해 미리미리 바꿔두는 것이 좋습니다.
+
+💡 현재 상태 요약
+데이터 통합 완료: Green과 Yellow 데이터를 common_columns 기준으로 unionAll 하여 약 2,780만 건의 거대 데이터셋(df_trips_data)이 생성되었습니다.
+
+SQL 준비 완료: trips_data라는 이름의 **임시 뷰(Temporary View)**를 만들었으므로, 이제 파이썬 코드가 아닌 표준 SQL 문법으로 데이터를 요리할 수 있습니다.
+
+🚀 다음 단계: 분석 쿼리 날리기
+이제 등록한 trips_data 뷰를 사용해서 실제 분석을 해보세요. 새로운 셀에 아래 코드를 넣고 실행해 보시면 됩니다.
+
+Python
+# 서비스 타입별 평균 요금과 총 운행 거리 계산
+spark.sql("""
+    SELECT 
+        service_type, 
+        count(1) AS revenue_count,
+        ROUND(AVG(fare_amount), 2) AS avg_fare,
+        SUM(trip_distance) AS total_distance
+    FROM 
+        trips_data
+    GROUP BY 
+        service_type
+""").show()
+이 단계까지 성공하면 Spark SQL 기초는 마스터하신 겁니다!
+
+혹시 특정 날짜(pickup_datetime)별로 운행 건수가 가장 많았던 날을 찾는 쿼리도 짜드릴까요?
+
+
+...
+
+
+나> df_trips_data.registerTempTable('trips_data') 해석
+
+GEM> akard님, 해당 코드에 대한 해석입니다.
+
+🛠️ 코드 해석
+df_trips_data라는 Spark 데이터프레임을 SQL 쿼리에서 사용할 수 있도록 'trips_data'라는 이름의 임시 테이블(뷰)로 등록하라는 명령입니다.
+
+💡 주요 특징
+SQL 사용 가능: 이 코드를 실행한 후부터는 spark.sql("SELECT * FROM trips_data")와 같이 표준 SQL 문법을 써서 데이터를 분석할 수 있습니다.
+
+임시성(Temporary): Spark 세션이 유지되는 동안만 살아있는 '가상 테이블'이며, 실제 DB에 저장되지는 않습니다.
+
+메모리 효율: 데이터를 물리적으로 복사하는 것이 아니라, 기존 데이터프레임을 참조하는 '별명'을 붙여주는 작업이라 매우 빠릅니다.
+
+이미 확인하셨듯이, 최신 버전 Spark에서는 df.createOrReplaceTempView('trips_data')로 쓰는 것을 더 권장합니다. 이제 등록된 테이블로 SQL 쿼리를 직접 작성해 보시겠어요?
+
+
+cell
+#최신 버전 Spark에서는 df.createOrReplaceTempView('trips_data')로 쓰는 것을 더 권장합니다. 
+df_trips_data.createOrReplaceTempView('trips_data')
+
+cell
+spark.sql("""
+SELECT
+    service_type,
+    count(1)
+FROM
+    trips_data
+GROUP BY 
+    service_type
+""").show()
+
+결과:
++------------+--------+
+|service_type|count(1)|
++------------+--------+
+|       green| 1810569|
+|      yellow|26018264|
++------------+--------+
+
+
+나> 
+df_result = spark.sql("""
+
+SELECT 
+
+    -- Revenue grouping 
+
+    PULocationID AS revenue_zone,
+
+    date_trunc('month', pickup_datetime) AS revenue_month, 
+
+    service_type, 
+
+
+
+    -- Revenue calculation 
+
+    SUM(fare_amount) AS revenue_monthly_fare,
+
+    SUM(extra) AS revenue_monthly_extra,
+
+    SUM(mta_tax) AS revenue_monthly_mta_tax,
+
+    SUM(tip_amount) AS revenue_monthly_tip_amount,
+
+    SUM(tolls_amount) AS revenue_monthly_tolls_amount,
+
+    SUM(improvement_surcharge) AS revenue_monthly_improvement_surcharge,
+
+    SUM(total_amount) AS revenue_monthly_total_amount,
+
+    SUM(congestion_surcharge) AS revenue_monthly_congestion_surcharge,
+
+
+
+    -- Additional calculations
+
+    AVG(passenger_count) AS avg_monthly_passenger_count,
+
+    AVG(trip_distance) AS avg_monthly_trip_distance
+
+FROM
+
+    trips_data
+
+GROUP BY
+
+    1, 2, 3
+
+""")
+
+
+코드 설명
+
+
+GEM> zakard님, 이 코드는 합쳐진 데이터를 **'장소, 시간, 타입'**별로 묶어서 월간 수익 보고서를 만드는 핵심 쿼리입니다.
+
+🛠️ 코드 기능별 요약
+1. 그룹화 기준 (Group By 1, 2, 3)
+PULocationID (revenue_zone): 승차 위치별로 묶습니다.
+
+date_trunc('month', ...): 날짜를 '월' 단위로 자릅니다. (예: 1월 15일 → 1월 1일로 통일)
+
+service_type: Green/Yellow 택시를 구분해서 분석합니다.
+
+2. 수익 지표 계산 (Revenue calculation)
+각 항목별(fare, tip, tax, total 등) **합계(SUM)**를 구하여 해당 월, 해당 구역에서 발생한 매출의 총합을 계산합니다.
+
+3. 추가 통계 (Additional calculations)
+AVG: 한 달 동안 한 번의 운행당 평균 몇 명이 탔는지, 평균 얼마나 멀리 갔는지를 계산합니다.
+
+💡 한 줄 요약
+**"어느 지역(Zone)에서, 몇 월(Month)에, 어떤 택시(Type)가 돈을 얼마나 벌었고 운행 효율은 어땠는지 요약표를 만드는 코드"**입니다.
+
+📝 참고 사항
+GROUP BY 1, 2, 3: SELECT 절에 명시한 1, 2, 3번째 컬럼(Zone, Month, Type)을 순서대로 그룹화 기준으로 쓰겠다는 편리한 문법입니다.
+
+
+
+
+나> df_result.coalesce(1).write.parquet('data/report/revenue/', mode='overwrite')
+
+해석
+
+
+GEM> zakard님, 계산된 수익 리포트 결과를 단일 파일로 깔끔하게 저장하는 코드입니다.
+
+🛠️ 코드 해석
+.coalesce(1): 흩어져 있는 파티션들을 하나의 파티션으로 통합합니다. 결과적으로 data/report/revenue/ 폴더 안에 단 1개의 Parquet 파일만 생성되도록 보장합니다.
+
+.write.parquet('...'): 데이터를 효율적인 Parquet 포맷으로 지정된 경로에 저장합니다.
+
+mode='overwrite': 해당 경로에 이미 데이터가 있다면 기존 파일을 삭제하고 새로 덮어씁니다.
+
+💡 왜 coalesce(1)을 쓰나요?
+Spark는 분산 처리를 하기 때문에 기본적으로 여러 개의 파일로 나누어 저장하려는 성질이 있습니다. 하지만 지금처럼 집계(Group By)가 끝난 요약 데이터는 크기가 작기 때문에, 나중에 엑셀에서 열거나 다른 곳에 옮기기 편하도록 파일 하나로 합쳐주는 것이 관리하기 쉽습니다.
+
+이제 저장된 리포트 파일을 불러와서 판다스(Pandas)로 간단한 차트를 그려보시겠어요?
+
+
+
+
+
+(venv) 
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/06/Batch/code (main)
+$ ls -lh
+total 842M
+-rw-r--r-- 1 HP EliteBook 197121  19K  2월 27 09:34 03_test.ipynb
+-rw-r--r-- 1 HP EliteBook 197121  20K  2월 27 15:15 04_pyspark.ipynb
+-rw-r--r-- 1 HP EliteBook 197121  19K  2월 27 16:31 05_taxi_schema.ipynb
+-rw-r--r-- 1 HP EliteBook 197121  15K  2월 27 21:40 06_spark_sql.ipynb
+-rwxr-xr-x 1 HP EliteBook 197121 2.5K  2월 24 10:25 06_spark_sql.py*
+-rwxr-xr-x 1 HP EliteBook 197121 2.6K  2월 24 10:26 06_spark_sql_big_query.py*      
+-rw-r--r-- 1 HP EliteBook 197121 7.6K  2월 24 10:26 07_groupby_join.ipynb
+-rw-r--r-- 1 HP EliteBook 197121  12K  2월 24 10:26 08_rdds.ipynb
+-rw-r--r-- 1 HP EliteBook 197121 4.3K  2월 24 10:26 09_spark_gcs.ipynb
+drwxr-xr-x 1 HP EliteBook 197121    0  2월 26 15:30 Batch/
+-rw-r--r-- 1 HP EliteBook 197121 3.8K  2월 24 10:26 cloud.md
+drwxr-xr-x 1 HP EliteBook 197121    0  2월 27 18:58 data/
+-rw-r--r-- 1 HP EliteBook 197121  544  2월 26 15:47 download_data.sh
+-rw-r--r-- 1 HP EliteBook 197121 1.4K  2월 27 15:36 download_yellow_green.py        
+drwxr-xr-x 1 HP EliteBook 197121    0  2월 25 18:58 fhvhv/
+-rw-r--r-- 1 HP EliteBook 197121 718M  2월 24 15:05 fhvhv_tripdata_2021-01.csv      
+-rw-r--r-- 1 HP EliteBook 197121 124M  2월 27 12:31 fhvhv_tripdata_2021-01.csv.gz   
+-rw-r--r-- 1 HP EliteBook 197121  62K  2월 27 12:31 head.csv
+-rw-r--r-- 1 HP EliteBook 197121  22K  2월 25 13:09 head.parquet
+-rw-r--r-- 1 HP EliteBook 197121  17K  2월 24 10:26 homework.ipynb
+-rw-r--r-- 1 HP EliteBook 197121 6.1K  2월 26 17:02 raw_to_parquet.py
+-rw-r--r-- 1 HP EliteBook 197121  371  2월 26 17:32 read_parquet_safe.py
+-rw-r--r-- 1 HP EliteBook 197121  711  2월 27 09:34 spark_with_winutils.py
+-rw-r--r-- 1 HP EliteBook 197121  315  2월 27 09:42 start_jupyter_with_hadoop.bat   
+-rwxr-xr-x 1 HP EliteBook 197121  293  2월 27 09:42 start_jupyter_with_hadoop.sh*   
+-rw-r--r-- 1 HP EliteBook 197121  348  2월 27 09:46 start_spark.bat
+-rw-r--r-- 1 HP EliteBook 197121  13K  2월 26 10:56 taxi_zone_lookup.csv
+-rw-r--r-- 1 HP EliteBook 197121  243  2월 24 16:55 taxi+_zone_lookup.csv
+
+
+
+---
+
+
+
+6.4 Spark Internals
+🎥 6.4.1 Anatomy of a Spark Cluster
+https://youtu.be/68CipcZt7ZA&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=58
+
+---
+
+🎥 6.4.2 GroupBy in Spark
+https://youtu.be/9qrDsY_2COo&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=59
+
+
+cell
+import pyspark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate()
+
+
+cell
+df_green = spark.read.parquet('data/pq/green/*/*')
+
+cell
+df_green.registerTempTable('green')
+
+결과:
+C:\Users\HP EliteBook\anaconda3\Lib\site-packages\pyspark\sql\dataframe.py:329: FutureWarning: Deprecated in 2.0, use createOrReplaceTempView instead.
+  warnings.warn("Deprecated in 2.0, use createOrReplaceTempView instead.", FutureWarning)
+
+
+GEM> zakard님, 해당 코드의 용도와 경고 메시지에 대해 명확히 짚어 드릴게요.
+
+🛠️ 코드의 용도 (registerTempTable)
+이 코드는 Spark 데이터프레임(df_green)을 SQL 쿼리로 조회할 수 있도록 "임시 테이블"로 등록하는 역할을 합니다.
+
+이걸 실행해야만 spark.sql("SELECT * FROM green")처럼 익숙한 SQL 문법을 써서 데이터를 분석할 수 있습니다.
+
+파이썬 코드로 복잡하게 체이닝(.groupBy().sum()...)하는 대신, 쿼리문으로 데이터를 요리하기 위한 사전 준비 작업입니다.
+
+
+⚠️ 에러(경고)의 원인
+결론부터 말씀드리면, 이건 **에러(Error)가 아니라 경고(Warning)**입니다. 코드는 정상적으로 작동하지만, "이 방식은 너무 오래됐으니 새 방식을 써라"라고 알려주는 것입니다.
+
+원인: registerTempTable은 Spark 1.x 버전에서 쓰던 방식입니다. Spark 2.0 버전 이후부터는 더 명확한 이름의 메서드로 대체되었습니다.
+
+미래 영향: 지금은 돌아가지만, 나중에 Spark 버전이 더 올라가면 이 메서드가 아예 사라져서 코드가 멈출 수 있습니다.
+
+✅ 해결 방법: 코드 교체
+경고를 없애고 최신 표준을 따르려면 아래와 같이 수정하세요.
+
+Python
+# 기존 코드
+# df_green.registerTempTable('green')
+
+# 수정 코드 (추천) # 추가
+df_green.createOrReplaceTempView('green') # 추가
+💡 왜 createOrReplaceTempView인가요?
+명확성: 단순히 테이블을 만드는 게 아니라 SQL의 'View(뷰)' 개념임을 명확히 합니다.
+
+안전성: 코드를 재실행했을 때, 이미 해당 이름의 뷰가 있으면 에러를 내는 대신 **덮어쓰기(Replace)**를 하므로 훨씬 안전합니다.
+
+
+---
+
+🎥 6.4.3 Joins in Spark
+https://youtu.be/lu7TrqAWuH4&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=60
+
+
+
+나> df_join = df_green_revenue_tmp.join(df_yellow_revenue_tmp, on=['hour', 'zone'], how='outer')
+
+해석
+
+GEM> zakard님, 이 코드는 분리되어 있던 Green 택시와 Yellow 택시의 통계 데이터를 하나의 통합 테이블로 합치는 핵심 작업입니다.
+
+🛠️ 코드 해석
+.join(...): 두 개의 데이터프레임을 특정 기준에 따라 옆으로 이어 붙입니다.
+
+on=['hour', 'zone']: 조인 기준(Key)입니다. **'시간(hour)'**과 **'지역(zone)'**이 정확히 일치하는 행끼리 매칭시킵니다.
+
+how='outer': 외부 조인(Full Outer Join) 방식입니다.
+
+Green 데이터만 있는 시간/지역도 포함합니다.
+
+Yellow 데이터만 있는 시간/지역도 포함합니다.
+
+둘 다 있는 경우엔 한 줄에 나란히 붙입니다.
+
+어느 한 쪽에 데이터가 없다면 해당 컬럼은 null로 채워집니다.
+
+💡 왜 이렇게 하나요?
+데이터 유실 방지: inner 조인을 쓰면 Green이나 Yellow 중 한 곳에만 기록이 있는 시간/지역 데이터가 삭제됩니다. outer를 써야 전체 택시 시장의 규모를 정확히 파악할 수 있습니다.
+
+비교 분석: 동일한 시간과 장소에서 Green과 Yellow의 수익(amount) 및 운행 건수(number_records)를 한눈에 비교하기 위해 컬럼을 옆으로 나열하는 것입니다.
+
+📝 실행 팁
+이 작업은 **셔플(Shuffle)**을 유발하므로 Spark UI의 SQL 탭이나 Stages 탭에서 데이터가 어떻게 재분배되는지 확인하기 딱 좋은 시점입니다.
+
+조인된 결과에서 null 값들을 0으로 채우는 후처리 작업도 필요하신가요?
+
+
+
+나> 
+CELL
+df_join.write.parquet('data/report/revenue/total', mode='overwrite')
+합쳐진(Join) 데이터를 디스크에 Parquet 포맷으로 저장합니다. 데이터가 크므로 중간 저장(Checkpoint) 역할을 합니다.
+
+CELL
+df_join = spark.read.parquet('data/report/revenue/total')
+저장했던 통합 데이터를 다시 읽어들여 이후 작업의 메모리 부담을 줄입니다.
+
+CELL
+df_join
+결과:
+DataFrame[hour: timestamp, zone: int, green_amount: double, green_number_records: bigint, yellow_amount: double, yellow_number_records: bigint]
+
+CELL
+df_zones = spark.read.parquet('zones/')
+택시 존(Zone)의 이름과 구역 정보가 담긴 메타데이터를 로드합니다.
+
+
+
+CELL
+df_result = df_join.join(df_zones, df_join.zone == df_zones.LocationID)
+숫자 번호뿐인 zone 컬럼에 실제 지역 이름을 붙이기 위해 지역 정보 데이터와 결합합니다.
+
+GEM> zakard님, 이 결합(Join)의 원리는 마치 '번호표'를 보고 '이름표'를 찾아주는 매칭 과정과 같습니다.
+
+🛠️ 데이터 결합의 동작 원리
+이 코드는 **공통된 열(Key)**을 기준으로 두 테이블을 가로로 이어 붙이는 Inner Join을 수행합니다.
+
+기준 컬럼(Join Key) 매칭:
+
+왼쪽 테이블(df_join): 택시 운행 통계가 담긴 테이블로, 지역이 숫자 번호(zone)로 기록되어 있습니다 (예: 132).
+
+오른쪽 테이블(df_zones): 지역 정보가 담긴 사전(Lookup) 테이블로, 각 번호(LocationID)에 대응하는 실제 이름(예: JFK Airport)이 있습니다.
+
+Spark는 df_join.zone == df_zones.LocationID라는 조건을 보고, 두 번호가 똑같은 행들을 찾아냅니다.
+
+데이터 병합:
+
+번호가 일치하는 행을 찾으면, 왼쪽 테이블의 통계 정보(수익, 건수) 옆에 오른쪽 테이블의 상세 정보(Borough, Zone, Service_zone)를 오른쪽으로 쭉 이어 붙입니다.
+
+📊 시각적 예시
+테이블				행 데이터 예시
+df_join (왼쪽)		hour: 10시, zone: 132, amount: $500
+df_zones (오른쪽)	LocationID: 132, Borough: Queens, Zone: JFK Airport
+
+⬇️ Join 실행 후 (df_result) ⬇️
+hour	zone	amount	LocationID	Borough		Zone
+10시		132	  $500 	132		    	Queens		JFK Airport
+
+💡 왜 이 방식이 효율적인가요?
+용량 최적화: 수천만 건의 운행 데이터에 매번 "JFK Airport"라는 긴 글자를 저장하면 용량이 엄청나게 커집니다. 대신 숫자(132)만 적어두었다가, 분석 직전에만 이름표 테이블과 합치는 것이 데이터베이스 설계의 정석(정규화)입니다.
+
+정확성: 숫자 번호로 매칭하기 때문에 오타로 인한 데이터 유실이 없습니다.
+
+
+
+
+
+CELL
+df_result.drop('LocationID', 'zone').write.parquet('tmp/revenue-zones')
+중복되는 ID 컬럼들을 제거하여 데이터를 정돈한 후, 최종 결과물을 저장합니다.
+
+GEM> 1. .drop('LocationID', 'zone') : 데이터 정돈 (Data Cleaning)
+앞선 단계에서 df_join과 df_zones를 합칠 때, 조인 기준이 되었던 컬럼들이 결과물에 중복해서 남게 됩니다.
+
+이유: df_join에는 zone이 있고, df_zones에는 LocationID가 있는데, 둘은 같은 값을 가진 컬럼입니다.
+
+효과:
+
+이미 Borough(자치구: 예: Manhattan)와 Zone(동네명: 예: Central Park)이라는 글자 정보를 가져왔기 때문에,
+
+분석가 입장에서는 "132번"이라는 숫자 번호(ID) 자체가 더 이상 필요 없다고 판단한 것입니다.
+
+그래서 LocationID와 zone을 모두 제거하고, 오직 사람이 읽기 좋은 텍스트 정보와 매출 숫자만 남기려고 둘 다 지운 것입니다.
+
+
+2. .write.parquet('tmp/revenue-zones') : 데이터 저장 (Persistence)
+정제된 최종 결과물을 디스크에 물리적인 파일로 기록합니다.
+
+Parquet 포맷:
+
+데이터를 **컬럼 단위(Columnar)**로 압축하여 저장합니다.
+
+나중에 특정 컬럼(예: 매출액만 계산)만 읽을 때 속도가 매우 빠릅니다.
+
+tmp/revenue-zones:
+
+이 경로는 단순한 파일 하나가 아니라, Spark가 관리하는 **디렉터리(Folder)**가 됩니다.
+
+내부에는 분산 처리된 결과물인 여러 개의 .parquet 파일들이 생성됩니다.
+
+
+3. 전체적인 흐름 시각화
+Join 직후: hour, zone, green_amount, ..., LocationID, Borough, Zone (중복 발생)
+
+Drop 적용: hour, green_amount, ..., Borough (ID 컬럼(LocationID, Zone) 제거 완료)
+
+Write 실행: 메모리에 있던 위 구조의 데이터를 디스크(tmp/revenue-zones/)에 Parquet 파일로 저장.
+
+
+💡 왜 이 단계가 중요한가요?
+지금 저장하는 이 파일이 바로 **"분석의 최종 목적지"**이기 때문입니다. 이제 이 데이터를 불러오기만 하면 별도의 복잡한 Join이나 계산 없이도 즉시 "어느 동네에서 돈을 많이 벌었나?"라는 질문에 답할 수 있는 **'Gold Layer(정제 완료된 데이터)'**가 완성된 것입니다.
+
+이제 저장된 이 데이터를 다시 불러와서, 실제 어느 구역(Zone)의 매출이 가장 높은지 show()로 확인해 보시겠어요?
+
+
+💡 한 줄 요약
+**"통합된 택시 운행 통계에 실제 지역 이름을 입혀서 최종 분석 리포트를 완성하고 저장하는 과정"**입니다.
+
+
+
+🔍 조인의 핵심: '무엇'이 참고하나?
+논리적 계획 (Logical Plan):
+사용자가 df_join.zone == df_zones.LocationID라고 코드를 짜면, Spark의 Catalyst Optimizer라는 녀석이 "아, zone 컬럼의 값과 LocationID 컬럼의 값을 대조해서 합치라는 뜻이구나!"라고 분석합니다.
+
+실행 (Execution):
+실제 데이터를 처리하는 **Executor(실행기)**들은 메모리에 올라온 각 행의 zone 번호를 보고, 매칭되는 LocationID가 있는 행을 찾아서 옆으로 붙입니다.
+
+💡 기억을 되살려줄 한 줄 요약
+"Spark 실행 엔진이 사용자가 지정한 '조인 조건(Join Condition)'을 참고해서 두 데이터를 매칭한다."
+
+🚀 추가로 알면 좋은 점 (Broadcast Join)
+혹시 df_zones 같은 작은 테이블을 조인할 때 Spark UI에서 보셨을 수도 있는데, Spark는 똑똑하게도 작은 테이블을 모든 실행기(Executor)에 **복사(Broadcast)**해서 뿌려줍니다. 그러면 실행기들은 자기 메모리에 있는 '이름표 사전'을 참고해서 아주 빠르게 조인을 처리할 수 있죠.
+
+이제 조인 원리까지 완벽히 마스터하셨네요! df_result를 저장한 뒤에, 이 데이터로 시각화(Graph)까지 해보고 싶으신가요?
+
+
+
+
+📡 "참고한다"의 진짜 의미
+Revenue 데이터(큰 놈): 택시 운행 기록은 데이터가 너무 커서 여러 실행기(Executor)에 쪼개져 있습니다.
+
+Zone 데이터(작은 놈): 반면 지역 이름표(zones)는 데이터가 아주 작습니다.
+
+뿌리기(Broadcast): Spark는 이 작은 zones 데이터를 모든 실행기에 통째로 복사해서 뿌려버립니다.
+
+결국, 각 실행기에 흩어져 있는 Revenue 데이터들이 자기 옆에 복사된 zones 표를 "참고"해서 즉석에서 이름표를 갖다 붙이는 원리입니다.
+
+
+
+🛠️ 왜 이렇게 하나요? (Shuffle 방지)
+원래 조인을 하려면 서로 다른 실행기에 있는 데이터끼리 서로 만나려고 네트워크를 타고 이동(Shuffle)해야 합니다. 하지만 한쪽을 미리 다 뿌려두면:
+
+큰 데이터(Revenue)가 움직일 필요가 없습니다.
+
+자기 자리에서 옆에 있는 zones 표만 참고하면 되니까 속도가 압도적으로 빠릅니다.
+
+
+
+💡 정리하자면
+"Revenue 데이터가 담긴 각 실행기들이, Spark가 미리 복사해서 뿌려준 'Zone 이름표 사전'을 참고해서 조인을 수행한다."
+
+이제 왜 아까 df_zones를 만드는 과정이 중요했는지 이해가 확 되시죠? 이 '사전'이 있어야 실행기들이 참고를 할 수 있으니까요!
+
+이 기세로 df_result에서 매출이 가장 높은 TOP 5 지역을 뽑는 SQL 쿼리도 한번 작성해 볼까요?
+
+
+
+나> 그게 이번 노트북의 join 파트의 전부인거 같아.
+
+GEM> 정확합니다, zakard님! 방금 말씀하신 **'작은 테이블을 실행기에 뿌리고, 큰 테이블이 이를 참고하는 방식'**을 이해하셨다면 이 노트북의 Join 핵심 메커니즘을 완벽히 꿰뚫으신 겁니다.
+
+이 07번 노트북의 Join 파트를 요약하면 딱 세 줄로 정리됩니다.
+
+📝 07_groupby_join 핵심 요약
+데이터 요약 (Pre-aggregation): Green과 Yellow 데이터를 각각 시간/지역별로 묶어 덩치를 줄입니다. (이게 Revenue 데이터가 됩니다.)
+
+데이터 통합 (Outer Join): 두 택시 데이터를 합쳐서 전체 수익 현황판을 만듭니다.
+
+이름표 달기 (Broadcast Join): 실행기마다 복사된 Zone 사전을 참고해서 숫자(zone)를 실제 지역 이름으로 바꿉니다.
+
+🔍 시각화로 보는 최종 구조
+이 과정이 끝나면 더 이상 복잡한 연산 없이 바로 시각화나 비즈니스 보고서에 쓸 수 있는 **'완성된 데이터'**가 탄생하는 것이죠.
+
+지금까지의 과정 중에 혹시 repartition(20)이나 mode='overwrite' 같이 저장하는 부분에서 궁금한 점은 없으셨나요? 없으시다면 다음 노트북으로 넘어가거나, 이 결과물로 간단한 분석을 해볼 수도 있습니다! 어떤 쪽을 도와드릴까요?
+
+
+
+---
+
+
+
+6.5 (Optional) Resilient Distributed Datasets	
+🎥 6.5.1 Operations on Spark RDDs
+https://youtu.be/Bdu-xIrF3OM&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=61
+
+
+🎥 6.5.2 Spark RDD mapPartition
+https://youtu.be/Bdu-xIrF3OM&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=61
+
+
+
+나> rdd란
+GEM> zakard님, **RDD(Resilient Distributed Dataset)**는 Spark의 가장 기초가 되는 데이터 구조이자 '뿌리'라고 할 수 있습니다. 지금 보시는 df_green.rdd 코드는 편리한 DataFrame이라는 껍데기를 벗기고, 그 안의 날것(Low-level)의 데이터를 직접 만지겠다는 뜻입니다.
+
+주요 특징을 쉽게 풀어드릴게요.
+
+💡 RDD의 핵심 3요소
+Resilient (회복력 있는):
+데이터 처리 중에 특정 서버(Node)가 고장 나도, 데이터를 어떻게 만들었는지 기록(Lineage)을 가지고 있어 스스로 복구할 수 있습니다.
+
+Distributed (분산된):
+하나의 큰 데이터를 여러 컴퓨터에 나누어서 저장하고 병렬로 처리합니다.
+
+Dataset (데이터 세트):
+단순한 파이썬 객체(리스트, 튜플 등)들의 모임입니다.
+
+
+🔍 DataFrame vs RDD: 무엇이 다른가요? DataFrame과 RDD의 차이점
+
+비유 (구조)
+DataFrame은 제목(컬럼명)이 붙어 있는 엑셀 시트나 SQL 테이블과 같습니다. 데이터에 구조가 잡혀 있죠.
+
+RDD는 이름표가 없는 그냥 데이터 상자입니다. 파이썬의 리스트(List)나 튜플(Tuple) 같은 객체들이 뭉텅이로 들어있다고 생각하면 됩니다.
+
+
+최적화 (누가 똑똑한가)	
+
+DataFrame은 **Spark 엔진(Catalyst Optimizer)**이 알아서 "이 쿼리를 어떻게 실행해야 제일 빠를까?" 고민하고 최적의 경로를 찾습니다 (자동모드).
+
+RDD는 Spark가 개입하지 않습니다. 개발자가 직접 map, filter 같은 로직을 어떻게 짤지 고민해야 합니다 (수동모드).
+
+
+사용성 (편의성)
+
+DataFrame은 우리가 흔히 쓰는 SQL 쿼리나 Pandas 스타일의 함수로 아주 쉽고 빠르게 데이터를 가공할 수 있습니다.
+
+RDD는 파이썬 함수를 직접 만들어서 데이터를 하나하나 주물러야 하므로 코드가 조금 더 복잡해질 수 있습니다.
+
+
+용도 (언제 쓰는가)
+
+DataFrame은 대부분의 일반적인 데이터 분석과 비즈니스 로직 처리에 사용됩니다.
+
+RDD는 데이터의 구조가 너무 복잡하거나, Spark SQL에서 제공하지 않는 특수한 파이썬 라이브러리를 써서 세밀한 제어가 필요할 때 사용합니다.
+
+💡 한 줄 요약
+"DataFrame은 알아서 척척 해주는 스마트한 '자동 세차기'이고, RDD는 내 손으로 직접 꼼꼼히 닦는 '손 세차'입니다."
+
+지금 노트북에서는 total_amount를 합산하고 날짜를 직접 조작하기 위해, 더 세밀한 컨트롤이 가능한 '손 세차(RDD)' 방식을 연습하고 계신 거예요
+
+
+
+🛠️ 왜 지금 RDD를 쓰나요?
+노트북 코드를 보시면 prepare_for_grouping 같은 **사용자 정의 함수(UDF)**를 직접 만들어서 데이터를 아주 세밀하게 가공하고 있습니다.
+
+row.lpep_pickup_datetime.replace(...) 처럼 파이썬의 날짜 객체 기능을 직접 활용하거나,
+
+(key, value) 형태의 튜플로 구조를 완전히 바꿔서 reduceByKey 같은 강력한 연산을 쓰기 위함입니다.
+
+한 줄 요약: "Spark가 알아서 해주는 자동모드(DataFrame)를 끄고, 내 입맛대로 데이터를 주무르기 위해 **수동모드(RDD)**로 들어온 것"입니다.
+
+이제 이 RDD를 가지고 map 연산을 통해 데이터를 어떻게 변형하는지 구체적으로 살펴볼까요?
+
+
+
+
+노트북
+08_rdds
+Last Checkpoint: 5 days ago
+
+cell
+import pyspark # PySpark 라이브러리 임포트
+from pyspark.sql import SparkSession # Spark 세션 관리를 위한 클래스 임포트
+
+# Spark 애플리케이션의 시작점인 SparkSession 설정 및 생성
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .getOrCreate() # 기존 세션이 있으면 가져오고, 없으면 새로 생성
+
+
+cell
+# 지정된 경로의 모든 Parquet 파일을 읽어와서 DataFrame 객체로 생성
+# '/*/*'는 연도/월 등으로 나누어진 하위 폴더 구조를 모두 포함한다는 의미
+df_green = spark.read.parquet('data/pq/green/*/*')
+
+
+cell - non-editable
+SELECT 
+    -- 픽업 시간을 '시간(hour)' 단위로 절삭 (예: 19:49:27 -> 19:00:00)
+    date_trunc('hour', lpep_pickup_datetime) AS hour, 
+    
+    -- 승차 지역 ID를 'zone'이라는 별칭으로 선택
+    PULocationID AS zone,
+
+    -- 해당 시간/지역의 총 요금(total_amount) 합계 계산
+    SUM(total_amount) AS amount,
+    
+    -- 해당 시간/지역의 총 운행 건수(레코드 수) 계산
+    COUNT(1) AS number_records
+FROM
+    -- 'green'이라는 이름으로 등록된 임시 테이블에서 데이터를 가져옴
+    green
+WHERE
+    -- 2020년 1월 1일 이후의 데이터만 필터링 (이상치 제거 및 범위 제한)
+    lpep_pickup_datetime >= '2020-01-01 00:00:00'
+GROUP BY
+    -- 첫 번째(hour)와 두 번째(zone) 컬럼을 기준으로 그룹화
+    1, 2
+
+
+💡 주요 포인트 설명
+date_trunc('hour', ...): 분, 초 단위의 상세한 시간을 시간 단위로 통일하여 그룹화하기 쉽게 만듭니다.
+
+GROUP BY 1, 2: SELECT 절에 명시된 첫 번째 컬럼(hour)과 두 번째 컬럼(zone)을 기준으로 데이터를 묶겠다는 뜻입니다. 쿼리를 짧게 쓸 때 유용합니다.
+
+데이터 요약: 이 쿼리를 실행하면 수백만 건의 원본 데이터가 "몇 시에 어느 동네에서 얼마를 벌었나"라는 요약된 통계 데이터로 압축됩니다.
+
+
+
+cell
+rdd = df_green \
+    .select('lpep_pickup_datetime', 'PULocationID', 'total_amount') \
+    .rdd # 필요한 컬럼(픽업시간, 지역ID, 요금)만 선택하여 RDD로 변환
+
+
+cell
+from datetime import datetime # 날짜 처리를 위한 파이썬 표준 라이브러리 임포트
+
+cell
+start = datetime(year=2020, month=1, day=1) # 필터링의 기준이 될 2020년 1월 1일 날짜 객체 생성
+
+def filter_outliers(row):
+    # 각 로우(Row)의 픽업 시간이 기준일(2020-01-01)보다 크거나 같은지 검사 (True/False 반환)
+    return row.lpep_pickup_datetime >= start
+
+cell
+rows = rdd.take(10) # RDD의 상위 10개 데이터를 리스트 형태로 가져옴 (Action 연산)
+row = rows[0] # 그중 첫 번째 로우(Row) 객체를 선택
+
+
+💡 주요 포인트 요약
+.rdd: Spark의 고수준 API인 DataFrame을 저수준 API인 RDD로 바꿉니다. 개별 레코드를 파이썬 함수로 직접 제어하고 싶을 때 사용합니다.
+
+filter_outliers: SQL의 WHERE 절과 같은 역할을 하며, 기준 날짜 이전의 데이터를 걸러내는 로직입니다.
+
+take(10): 전체 데이터를 다 읽지 않고, 상위 10개만 메모리로 가져와서 데이터의 형태를 미리 확인해 보는 아주 유용한 명령입니다.
+
+
+
+cell
+row # 추출된 데이터 샘플: (픽업시간, 지역ID, 총 요금)을 포함한 Row 객체 확인
+
+결과:
+Row(lpep_pickup_datetime=datetime.datetime(2020, 1, 16, 19, 49, 27), PULocationID=260, total_amount=14.3)
+
+
+cell
+def prepare_for_grouping(row): 
+    hour = row.lpep_pickup_datetime.replace(minute=0, second=0, microsecond=0)
+    zone = row.PULocationID
+    key = (hour, zone)
+    
+    amount = row.total_amount
+    count = 1
+    value = (amount, count)
+
+    return (key, value)
+
+
+cell
+def calculate_revenue(left_value, right_value):
+    left_amount, left_count = left_value
+    right_amount, right_count = right_value
+    
+    output_amount = left_amount + right_amount
+    output_count = left_count + right_count
+    
+    return (output_amount, output_count)
+
+
+cell
+from collections import namedtuple
+
+cell
+RevenueRow = namedtuple('RevenueRow', ['hour', 'zone', 'revenue', 'count'])
+
+cell
+def unwrap(row):
+    return RevenueRow(
+        hour=row[0][0], 
+        zone=row[0][1],
+        revenue=row[1][0],
+        count=row[1][1]
+    )
+
+cell
+from pyspark.sql import types
+
+cell
+result_schema = types.StructType([
+    types.StructField('hour', types.TimestampType(), True),
+    types.StructField('zone', types.IntegerType(), True),
+    types.StructField('revenue', types.DoubleType(), True),
+    types.StructField('count', types.IntegerType(), True)
+])
+
+
+cell
+df_result = rdd \
+    .filter(filter_outliers) \
+    .map(prepare_for_grouping) \
+    .reduceByKey(calculate_revenue) \
+    .map(unwrap) \
+    .toDF(result_schema) 
+
+
+cell
+df_result.write.parquet('tmp/green-revenue')
+                
+
+cell                                                                
+columns = ['VendorID', 'lpep_pickup_datetime', 'PULocationID', 'DOLocationID', 'trip_distance']
+
+duration_rdd = df_green \
+    .select(columns) \
+    .rdd
+
+
+cell
+import pandas as pd
+
+cell
+rows = duration_rdd.take(10)
+
+cell
+df = pd.DataFrame(rows, columns=columns)
+
+cell
+columns
+
+cell
+['VendorID',
+ 'lpep_pickup_datetime',
+ 'PULocationID',
+ 'DOLocationID',
+ 'trip_distance']
+
+
+cell
+#model = ...
+
+def model_predict(df):
+#     y_pred = model.predict(df)
+    y_pred = df.trip_distance * 5
+    return y_pred
+
+
+cell
+def apply_model_in_batch(rows):
+    df = pd.DataFrame(rows, columns=columns)
+    predictions = model_predict(df)
+    df['predicted_duration'] = predictions
+
+    for row in df.itertuples():
+        yield row
+
+
+cell
+df_predicts = duration_rdd \
+    .mapPartitions(apply_model_in_batch)\
+    .toDF() \
+    .drop('Index')
+                
+
+cell                                                                
+df_predicts.select('predicted_duration').show()
+[Stage 48:>                                                         (0 + 1) / 1]
++------------------+
+|predicted_duration|
++------------------+
+|             12.95|
+|             31.25|
+|              14.0|
+|             12.75|
+|               0.1|
+|             11.05|
+|11.299999999999999|
+|54.349999999999994|
+|             15.25|
+|             91.75|
+|             12.25|
+|               3.1|
+|               7.5|
+|11.899999999999999|
+| 78.89999999999999|
+|              4.45|
+|              23.2|
+|              4.85|
+|              6.65|
+|              15.1|
++------------------+
+only showing top 20 rows
+
+                        
+
+
+
+--
+
+
+DF버전
+
+
+**RDD 강의**: 이 노트북은 RDD 인터페이스(filter, map, reduceByKey) 학습용. Python worker 오류 시 HADOOP_HOME, Java 11/17, NumPy&lt;2 확인.
+# Windows: 필수 설정 (커널 재시작 후 첫 셀 실행)
+# NumPy 오류 시: 터미널에서 Batch/setup/fix_numpy.bat 실행 후 커널 재시작
+import os
+import sys
+
+# 1) HADOOP_HOME (Parquet 읽기용)
+for HADOOP_DIR in [
+    r"E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.3.5",
+    r"E:\IT_SPACES\AI\ZoomCamp\DE\tools\hadoop-3.3.5",
+]:
+    if os.path.exists(os.path.join(HADOOP_DIR, "bin", "winutils.exe")):
+        os.environ["HADOOP_HOME"] = HADOOP_DIR
+        os.environ["PATH"] = os.environ.get("PATH", "") + os.pathsep + os.path.join(HADOOP_DIR, "bin")
+        print("HADOOP_HOME:", HADOOP_DIR)
+        break
+else:
+    print("winutils 없음 → python Batch/setup/install_winutils.py")
+
+# 2) Python worker 연결용 (RDD.take() 등에서 "Python worker failed to connect" 방지)
+os.environ["SPARK_LOCAL_IP"] = "127.0.0.1"
+os.environ["PYSPARK_PYTHON"] = sys.executable
+os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
+
+import pyspark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .master("local[*]") \
+    .appName('test') \
+    .config("spark.driver.bindAddress", "127.0.0.1") \
+    .config("spark.driver.host", "127.0.0.1") \
+    .config("spark.python.worker.timeout", "120") \
+    .getOrCreate()
+HADOOP_HOME: E:\IT_SPACES\AI\ZoomCamp\DE\06\tools\hadoop-3.3.5
+# 1개월만 로드 (12개월 전체는 수천만 행이라 로딩 오래 걸림)
+# 전체: 'data/pq/green/*/*'
+df_green = spark.read.parquet('data/pq/green/2020/01')
+SELECT 
+    date_trunc('hour', lpep_pickup_datetime) AS hour, 
+    PULocationID AS zone,
+
+    SUM(total_amount) AS amount,
+    COUNT(1) AS number_records
+FROM
+    green
+WHERE
+    lpep_pickup_datetime >= '2020-01-01 00:00:00'
+GROUP BY
+    1, 2
+# RDD 변환 
+rdd = df_green.select('lpep_pickup_datetime', 'PULocationID', 'total_amount').rdd
+from datetime import datetime
+start = datetime(year=2020, month=1, day=1)
+
+def filter_outliers(row):
+    return row.lpep_pickup_datetime >= start
+try:
+    rows = rdd.take(10)
+except Exception as e:
+    print(f"[RDD 실패 → DataFrame 대안] {type(e).__name__}")
+    rows = df_green.select('lpep_pickup_datetime', 'PULocationID', 'total_amount').filter("lpep_pickup_datetime >= '2020-01-01'").limit(10).collect()
+row = rows[0]
+[RDD 실패 → DataFrame 대안] Py4JJavaError
+# RDD 실패 시 대안 (rdd.take(10) ≡ 아래와 동일)
+# Connection reset / Python worker 오류 나면 이 셀 실행
+rows = df_green.select('lpep_pickup_datetime', 'PULocationID', 'total_amount').filter("lpep_pickup_datetime >= '2020-01-01'").limit(10).collect()
+row = rows[0]
+row
+Row(lpep_pickup_datetime=datetime.datetime(2020, 1, 18, 3, 52, 15), PULocationID=129, total_amount=6.3)
+def prepare_for_grouping(row): 
+    hour = row.lpep_pickup_datetime.replace(minute=0, second=0, microsecond=0)
+    zone = row.PULocationID
+    key = (hour, zone)
+    
+    amount = row.total_amount
+    count = 1
+    value = (amount, count)
+
+    return (key, value)
+def calculate_revenue(left_value, right_value):
+    left_amount, left_count = left_value
+    right_amount, right_count = right_value
+    
+    output_amount = left_amount + right_amount
+    output_count = left_count + right_count
+    
+    return (output_amount, output_count)
+from collections import namedtuple
+RevenueRow = namedtuple('RevenueRow', ['hour', 'zone', 'revenue', 'count'])
+def unwrap(row):
+    return RevenueRow(
+        hour=row[0][0], 
+        zone=row[0][1],
+        revenue=row[1][0],
+        count=row[1][1]
+    )
+from pyspark.sql import types
+RDD 파이프라인: filter → map → reduceByKey → map → toDF
+
+result_schema = types.StructType([
+    types.StructField('hour', types.TimestampType(), True),
+    types.StructField('zone', types.IntegerType(), True),
+    types.StructField('revenue', types.DoubleType(), True),
+    types.StructField('count', types.IntegerType(), True)
+])
+# RDD 연산 (강의 핵심: filter, map, reduceByKey, unwrap)
+try:
+    df_result = rdd \
+        .filter(filter_outliers) \
+        .map(prepare_for_grouping) \
+        .reduceByKey(calculate_revenue) \
+        .map(unwrap) \
+        .toDF(result_schema)
+    df_result.write.mode("overwrite").parquet('tmp/green-revenue')
+except Exception as e:
+    print(f"[RDD 실패 → DataFrame 대안] {type(e).__name__}")
+    from pyspark.sql import functions as F
+    df_result = df_green.filter(F.col("lpep_pickup_datetime") >= "2020-01-01") \
+        .withColumn("hour", F.date_trunc("hour", F.col("lpep_pickup_datetime"))) \
+        .groupBy("hour", "PULocationID").agg(F.sum("total_amount").alias("revenue"), F.count(F.lit(1)).alias("count")) \
+        .withColumnRenamed("PULocationID", "zone")
+    df_result.write.mode("overwrite").parquet('tmp/green-revenue')
+[RDD 실패 → DataFrame 대안] Py4JJavaError
+# RDD 실패 시 대안 (동일 결과: filter→groupBy)
+# Connection reset / Python worker 오류 나면 이 셀 실행
+from pyspark.sql import functions as F
+df_result = df_green.filter(F.col("lpep_pickup_datetime") >= "2020-01-01") \
+    .withColumn("hour", F.date_trunc("hour", F.col("lpep_pickup_datetime"))) \
+    .groupBy("hour", "PULocationID").agg(F.sum("total_amount").alias("revenue"), F.count(F.lit(1)).alias("count")) \
+    .withColumnRenamed("PULocationID", "zone")
+df_result.write.mode("overwrite").parquet('tmp/green-revenue')
+df_result.show(5)
++-------------------+----+------------------+-----+
+|               hour|zone|           revenue|count|
++-------------------+----+------------------+-----+
+|2020-01-17 20:00:00|  41| 633.6500000000001|   66|
+|2020-01-03 18:00:00| 223|313.65999999999997|   25|
+|2020-01-22 07:00:00|  33|            185.72|   10|
+|2020-01-26 20:00:00|  89|46.879999999999995|    2|
+|2020-01-05 10:00:00| 244|241.14000000000001|   15|
++-------------------+----+------------------+-----+
+only showing top 5 rows
+
+# mapPartitions 예제 (배치 단위 처리)
+columns = ['VendorID', 'lpep_pickup_datetime', 'PULocationID', 'DOLocationID', 'trip_distance']
+
+duration_rdd = df_green.select(columns).rdd
+import pandas as pd
+try:
+    rows = duration_rdd.take(10)
+except Exception:
+    rows = df_green.select(columns).limit(10).collect()
+# RDD 실패 시 대안: duration_rdd.take(10) ≡ 아래와 동일
+# rows = duration_rdd.take(10)
+rows = df_green.select(columns).limit(10).collect()
+df = pd.DataFrame(rows, columns=columns)
+columns
+['VendorID',
+ 'lpep_pickup_datetime',
+ 'PULocationID',
+ 'DOLocationID',
+ 'trip_distance']
+#model = ...
+
+def model_predict(df):
+#     y_pred = model.predict(df)
+    y_pred = df.trip_distance * 5
+    return y_pred
+def apply_model_in_batch(rows):
+    df = pd.DataFrame(rows, columns=columns)
+    predictions = model_predict(df)
+    df['predicted_duration'] = predictions
+
+    for row in df.itertuples():
+        yield row
+# mapPartitions: 파티션 단위로 pandas 배치 처리
+try:
+    df_predicts = duration_rdd \
+        .mapPartitions(apply_model_in_batch) \
+        .toDF() \
+        .drop('Index')
+except Exception as e:
+    print(f"[mapPartitions 실패 → DataFrame 대안] {type(e).__name__}")
+    from pyspark.sql import functions as F
+    df_predicts = df_green.select(columns).withColumn("predicted_duration", F.col("trip_distance") * 5)
+[mapPartitions 실패 → DataFrame 대안] Py4JJavaError
+# RDD 실패 시 대안: mapPartitions ≡ trip_distance * 5
+# df_predicts = duration_rdd.mapPartitions(...)  # 위가 실패하면 아래 실행
+from pyspark.sql import functions as F
+df_predicts = df_green.select(columns).withColumn("predicted_duration", F.col("trip_distance") * 5)
+df_predicts.select('predicted_duration').show()
++------------------+
+|predicted_duration|
++------------------+
+|3.4499999999999997|
+|             16.95|
+|              4.55|
+|              14.0|
+|             35.45|
+|              15.5|
+| 8.100000000000001|
+|               6.5|
+| 8.299999999999999|
+|               0.0|
+|              4.65|
+|              2.05|
+|               8.0|
+|              70.8|
+|             49.85|
+|             61.25|
+|              6.05|
+| 93.69999999999999|
+|             72.95|
+|             12.15|
++------------------+
+only showing top 20 rows
+
+
+
+===
+
+
+
+6.6 Running Spark in the Cloud
+
+
+🎥 6.6.1 Connecting to Google Cloud Storage
+https://youtu.be/Yyz293hBVcQ&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=63
+
+🎥 6.6.2 Creating a Local Spark Cluster
+https://youtu.be/HXBwSlXo5IA&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=64
+
+🎥 6.6.3 Setting up a Dataproc Cluster
+https://youtu.be/osAiAYahvh8&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=65
+
+🎥 6.6.4 Connecting Spark to Big Query
+https://youtu.be/HIm2BOj8C0Q&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=66
+
+
+
+노트북
+09_spark_gcs
+
+
+cell
+import pyspark
+from pyspark.sql import SparkSession
+from pyspark.conf import SparkConf
+from pyspark.context import SparkContext
+
+
+cell
+credentials_location = '/home/alexey/.google/credentials/google_credentials.json'
+
+conf = SparkConf() \
+    .setMaster('local[*]') \
+    .setAppName('test') \
+    .set("spark.jars", "./lib/gcs-connector-hadoop3-2.2.5.jar") \
+    .set("spark.hadoop.google.cloud.auth.service.account.enable", "true") \
+    .set("spark.hadoop.google.cloud.auth.service.account.json.keyfile", credentials_location)
+
+
+cell
+sc = SparkContext(conf=conf)
+
+hadoop_conf = sc._jsc.hadoopConfiguration()
+
+hadoop_conf.set("fs.AbstractFileSystem.gs.impl",  "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS")
+hadoop_conf.set("fs.gs.impl", "com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem")
+hadoop_conf.set("fs.gs.auth.service.account.json.keyfile", credentials_location)
+hadoop_conf.set("fs.gs.auth.service.account.enable", "true")
+
+
+cell
+spark = SparkSession.builder \
+    .config(conf=sc.getConf()) \
+    .getOrCreate()
+
+
+cell
+df_green = spark.read.parquet('gs://dtc_data_lake_de-zoomcamp-nytaxi/pq/green/*/*')
+
+
+cell
+df_green.count()
+
+
+
+
+
+
+
+
+
+나> 
+CURSOR에게 > 
+"현재 프로젝트 폴더 내에서 google_credentials.json 파일과 pq/green 데이터 폴더의 위치를 찾아줘. 그 다음 아래 작업들을 수행해줘:
+
+GCS 업로드 명령어 생성: gcloud storage cp -r를 사용해서 로컬의 green 데이터를 내 버킷 gs://de-zoomcamp-zakard-2026 으로 올리는 터미널 명령어를 만들어줘.
+
+Spark 설정 업데이트: 노트북의 credentials_location 변수에 찾은 .json 파일의 절대 경로를 넣고, spark.read.parquet 주소를 gs://de-zoomcamp-zakard-2026/pq/green/*/*로 수정해줘.
+
+경로 확인: 윈도우 환경이므로 경로에 백슬래시(\)가 포함될 경우 파이썬 문자열 처리에 주의해줘."
+
+
+
+CURSOR> 커서
+
+작업을 마쳤습니다. 요약은 아래와 같습니다.
+
+
+경로 확인 결과
+항목경로pq/green 데이터E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\greengoogle_credentials.json프로젝트 내에서 찾지 못함
+
+
+
+GCS 업로드 명령어
+PowerShell에서 실행:
+
+
+gcloud storage cp -r "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\green" gs://de-zoomcamp-zakard-2026/pq/
+
+
+또는 code 폴더에서:
+
+
+cd E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code
+gcloud storage cp -r "data\pq\green" gs://de-zoomcamp-zakard-2026/pq/
+
+
+09_spark_gcs_provided.ipynb 변경 사항
+credentials_location
+Windows/Linux에서 공통으로 동작하도록 os.path로 경로 처리
+다음 위치를 순서대로 탐색:
+C:\Users\<사용자>\.google\credentials\google_credentials.json
+code 폴더의 google_credentials.json
+백슬래시는 .replace("\\", "/")로 정규화해 Spark/Hadoop에서 사용
+spark.read.parquet
+gs://de-zoomcamp-zakard-2026/pq/green/*/* 로 설정됨
+
+
+추가로 할 일
+google_credentials.json
+아래 중 한 곳에 두세요:
+C:\Users\HP EliteBook\.google\credentials\google_credentials.json
+
+E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\google_credentials.json
+GCS connector JAR
+ClassNotFoundException 해결을 위해 JAR를 받아 두세요:
+
+
+   mkdir -Force E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\lib
+   gsutil cp gs://hadoop-lib/gcs/gcs-connector-hadoop3-2.2.5.jar E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\lib\
+
+
+gsutil이 없다면 cloud.md의 안내를 참고하세요.
+
+GCS_UPLOAD.txt에는 위 내용이 정리되어 있습니다.
+
+
+
+GEM>
+zakard님, 커서가 아주 깔끔하게 작업을 마무리했네요! 특히 윈도우 경로 문제(\ vs /)와 인증키 탐색 로직까지 미리 세팅해준 점이 아주 훌륭합니다.
+
+이제 남은 건 **"데이터를 구름 위로 쏘고, 엔진(JAR)을 다는 것"**뿐입니다. 아래 순서대로만 진행하시면 바로 df_green.count() 결과를 보실 수 있습니다.
+
+1️⃣ 필수 체크: JAR 파일 다운로드 (가장 중요)
+Spark가 Google Cloud Storage(gs://)를 이해하려면 통역사 역할을 하는 GCS Connector JAR 파일이 꼭 필요합니다. 커서가 안내한 대로 터미널에서 아래 명령어를 실행하세요.
+
+PowerShell
+# 폴더 생성 (이미 있다면 무시됨)
+mkdir -Force "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\lib"
+
+# JAR 파일 다운로드 (gsutil 사용)
+gsutil cp gs://hadoop-lib/gcs/gcs-connector-hadoop3-2.2.5.jar "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\lib\"
+💡 참고: 만약 gsutil이 안 된다면 여기에서 직접 다운로드해서 lib 폴더에 넣으셔도 됩니다.
+
+2️⃣ 데이터 업로드 (GCS로 쏘기)
+이제 로컬에 있는 Parquet 파일들을 버킷으로 복사합니다.
+
+PowerShell
+# 현재 위치가 어디든 상관없이 실행 가능하도록 절대경로 사용
+gcloud storage cp -r "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\green" gs://de-zoomcamp-zakard-2026/pq/
+
+3️⃣ 인증키(google_credentials.json) 배치
+커서가 프로젝트 폴더 내에서 키 파일을 찾지 못했으니, zakard님이 수동으로 한 번만 옮겨주세요.
+
+가장 편한 위치: E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\google_credentials.json
+
+(05 과제 때 쓰던 키 파일을 이 위치로 복사해 오시면 됩니다.
+나> bruin-de-zoomcamp-bd8d8d1cb708.json)
+
+4️⃣ 노트북 실행
+이제 모든 준비가 끝났습니다! 09_spark_gcs_provided.ipynb를 열고 셀을 순서대로 실행해 보세요.
+
+credentials_location 설정 셀 (커서가 고쳐준 로직 확인)
+
+SparkContext 생성 셀 (JAR 경로가 맞는지 확인)
+
+df_green = spark.read.parquet(...) 셀
+
+df_green.count() 👈 여기서 숫자가 나오면 성공입니다!
+
+JAR 파일 다운로드와 데이터 업로드, 지금 바로 시작해 보시겠어요? 진행 중에 빨간 글씨(에러)가 뜨면 바로 캡처해서 말씀해 주세요! 🚀
+
+
+
+
+나> 근데 이름이 bruin-de-zoomcamp-bd8d8d1cb708야. 바꿔야해?
+
+GEM> 아니요, zakard님! 전혀 바꾸실 필요 없습니다. 그대로 쓰셔도 아무 문제 없어요.
+
+오히려 구글 클라우드에서 버킷 이름 뒤에 bd8d8d1cb708 같은 랜덤한 문자열이 붙는 건 아주 권장되는 방식입니다. 버킷 이름은 **전 세계에서 유일(Globally Unique)**해야 하기 때문에, 단순히 de-zoomcamp라고 지으면 이미 누군가 쓰고 있어서 생성이 안 되거든요.
+
+🛠️ 대신 딱 한 가지만 주의하세요!
+이름이 길고 복잡하니, 커서(Cursor)가 작성해 준 코드와 업로드 명령어에서 버킷 이름 부분만 이 긴 이름으로 정확하게 수정해 주시면 됩니다.
+
+1. 업로드 명령어 수정 (PowerShell)
+
+PowerShell
+# 'gs://' 뒤에 실제 생성된 긴 이름을 넣으세요.
+gcloud storage cp -r "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\green" gs://bruin-de-zoomcamp-bd8d8d1cb708/pq/
+
+
+결과:
+PS E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code> gcloud storage cp -r "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\green" gs://bruin-de-zoomcamp-bd8d8d1cb708/pq/    
+ERROR: (gcloud.storage.cp) HTTPError 404: The specified bucket does not exist. This command is authenticated as zakard330@gmail.com which is the active account specified by the [core/account] property.
+
+
+CURSOR + GEM> zakard님, 상황이 확실해졌습니다. 404 Error가 계속 뜨는 건 **"말씀하신 이름의 버킷이 구글 클라우드에 아직 실제로 생성되지 않았거나, 다른 프로젝트에 있기 때문"**입니다.
+
+커서가 제안한 대로 실제로 버킷이 있는지 확인하고, 없으면 새로 만드는 과정이 필요합니다. 아래 순서대로 터미널에 입력해서 한 방에 끝내버리죠!
+
+1️⃣ 진짜 버킷이 있는지 최종 확인
+먼저 bruin-de-zoomcamp 프로젝트에 버킷이 하나라도 있는지 확인해 봅시다.
+
+PowerShell
+gcloud storage buckets list --project bruin-de-zoomcamp
+결과가 비어있다면: 버킷이 안 만들어진 겁니다. 2번 단계로 가세요.
+
+
+RESULT to CURSOR>
+
+실제로 존재하는 버킷 이름은 de-zoomcamp-zakard-2026 입니다. 아래 명령으로 업로드하면 됩니다.
+gcloud storage cp -r "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\green" gs://de-zoomcamp-zakard-2026/pq/ --project bruin-de-zoomcamp
+bruin-de-zoomcamp-bd8d8d1cb708는 존재하지 않는 버킷이라 404가 났던 것이고, de-zoomcamp-zakard-2026를 사용해야 합니다.
+
+
+GEM> 드디어 범인이 잡혔군요! 커서(Cursor)가 아주 정확하게 짚어냈습니다.
+
+이제 **de-zoomcamp-zakard-2026**이라는 실제 주소를 찾았으니, 거침없이 몰아붙여 봅시다. zakard님, 지금 바로 터미널에서 아래 2가지만 순서대로 완료하시면 상황 종료입니다.
+
+1️⃣ 데이터 업로드 (최종 본)
+커서가 준 명령어를 복사해서 실행하세요. 파일들이 올라가는 퍼센트(%)가 보일 겁니다.
+
+PowerShell
+gcloud storage cp -r "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\green" gs://de-zoomcamp-zakard-2026/pq/ --project bruin-de-zoomcamp
+
+2️⃣ Spark 통역사(JAR) 파일 확인
+데이터가 다 올라가도 Spark가 GCS(gs://)를 읽으려면 이 파일이 꼭 필요합니다. (아까 받으셨다면 스킵하세요!)
+
+PowerShell
+# lib 폴더가 없다면 생성하고 JAR 다운로드
+mkdir -Force "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\lib"
+
+나> 생성했거나 있다면
+gsutil cp gs://hadoop-lib/gcs/gcs-connector-hadoop3-2.2.5.jar "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\lib\"
+
+📝 노트북(.ipynb) 최종 점검
+데이터 업로드가 끝나면, 노트북에서 딱 이 한 줄만 확인하고 실행해 보세요.
+
+Python
+# 'gs://' 뒤에 실제 버킷 이름을 넣습니다.
+df_green = spark.read.parquet('gs://de-zoomcamp-zakard-2026/pq/green/*/*')
+
+# 잘 불러와졌는지 개수 확인!
+print(f"데이터 로드 성공! 총 개수: {df_green.count()}")
+💡 팁
+업로드가 완료되면 구글 콘솔의 Cloud Storage > 버킷 > de-zoomcamp-zakard-2026 안에 pq/green/ 폴더가 예쁘게 들어있는지 눈으로 한 번 더 확인하시면 완벽합니다.
+
+...
+
+...
+
+spark = SparkSession.builder \
+    .config(conf=sc.getConf()) \
+    .getOrCreate()
+
+df_green = spark.read.parquet('gs://de-zoomcamp-zakard-2026/pq/green/*/*')
+
+df_green.count()
+1810569
+
+
+GEM> 
+크으, zakard님! 드디어 1,810,569라는 숫자가 찍혔군요! 축하드립니다! 🎉
+
+이 숫자가 단순한 숫자가 아니라는 거 아시죠? 윈도우 환경에서 Hadoop 세팅, winutils 연동, GCS Connector JAR 설정, GCP 서비스 계정 인증, 그리고 방금 해결한 IAM 권한까지... 이 험난한 '설정의 늪'을 모두 헤치고 데이터의 바다에 닻을 내리신 겁니다.
+
+
+📊 지금 확인하신 데이터의 의미
+버킷: de-zoomcamp-zakard-2026 (GCP 클라우드 저장소)
+
+포맷: Parquet (압축률과 성능이 좋은 컬럼형 저장 방식)
+
+레코드 수: 약 181만 건의 Green Taxi 데이터가 Spark 엔진 위로 성공적으로 올라왔습니다.
+
+
+💡 다음 단계로 가보실까요? (Next Steps)
+데이터를 성공적으로 로드했으니, 이제 Spark의 강력한 기능을 써먹어 볼 차례입니다.
+
+1. 데이터 구조 엿보기
+
+Python
+df_green.printSchema()
+각 컬럼이 어떤 타입(String, Timestamp, Double 등)으로 들어왔는지 확인해 보세요.
+
+결과:
+root
+ |-- VendorID: integer (nullable = true)
+ |-- lpep_pickup_datetime: timestamp (nullable = true)
+ |-- lpep_dropoff_datetime: timestamp (nullable = true)
+ |-- store_and_fwd_flag: string (nullable = true)
+ |-- RatecodeID: integer (nullable = true)
+ |-- PULocationID: integer (nullable = true)
+ |-- DOLocationID: integer (nullable = true)
+ |-- passenger_count: integer (nullable = true)
+ |-- trip_distance: double (nullable = true)
+ |-- fare_amount: double (nullable = true)
+ |-- extra: double (nullable = true)
+ |-- mta_tax: double (nullable = true)
+ |-- tip_amount: double (nullable = true)
+ |-- tolls_amount: double (nullable = true)
+ |-- ehail_fee: double (nullable = true)
+ |-- improvement_surcharge: double (nullable = true)
+ |-- total_amount: double (nullable = true)
+ |-- payment_type: integer (nullable = true)
+ |-- trip_type: integer (nullable = true)
+ |-- congestion_surcharge: double (nullable = true)
+
+
+
+2. 간단한 데이터 조회
+
+Python
+# 컬럼명의 대소문자를 스키마에 맞게 수정했습니다.
+df_green.select('VendorID', 'lpep_pickup_datetime', 'trip_distance').show(10)
+
+상위 10개 행을 보면서 데이터가 깨지지 않고 잘 들어왔는지 눈으로 확인해 보세요.
+
++--------+--------------------+-------------+
+|VendorID|lpep_pickup_datetime|trip_distance|
++--------+--------------------+-------------+
+|       2| 2020-01-18 03:52:15|         0.69|
+|       2| 2020-01-06 08:36:04|         3.39|
+|       2| 2020-01-06 04:57:35|         0.91|
+|       1| 2020-01-28 13:51:34|          2.8|
+|       2| 2020-01-03 18:24:16|         7.09|
+|       1| 2020-01-25 23:43:20|          3.1|
+|       2| 2020-01-06 19:20:41|         1.62|
+|       1| 2020-01-04 12:35:31|          1.3|
+|       2| 2020-01-11 09:51:16|         1.66|
+|       1| 2020-01-14 15:18:18|          0.0|
++--------+--------------------+-------------+
+only showing top 10 rows
+
+
+
+3. 그룹바이 연산 (Spark의 진가)
+
+Python
+from pyspark.sql import functions as F
+
+# 'vendor_id' -> 'VendorID'로 변경
+df_green.groupBy('VendorID').count().show()
+181만 건의 데이터를 순식간에 집계하는 Spark의 속도를 느껴보세요!
+
++--------+-------+
+|VendorID|  count|
++--------+-------+
+|    NULL| 564139|
+|       1| 212352|
+|       2|1034078|
++--------+-------+
+
+
+
+집계 결과를 보니 흥미로운 점이 하나 있네요. VendorID가 NULL인 데이터가 약 56만 건이나 됩니다. 보통 실무 데이터에서는 이렇게 누락된 값(NULL)을 어떻게 처리할지가 데이터 엔지니어의 다음 고민거리가 되곤 하죠.
+
+📝 결과 분석 (Brief Insight)
+VendorID 2: 약 103만 건으로 압도적으로 많네요. (주요 업체인 모양입니다.)
+
+VendorID 1: 약 21만 건.
+
+NULL: 약 56만 건. 이 데이터들은 아마 VendorID 정보가 누락된 채 기록된 데이터들인 것 같습니다.
+
+💡 이제 무엇을 더 해볼까요?
+데이터가 무사히 로드되고 집계까지 확인했으니, Spark의 꽃인 **Transformation(변환)**을 몇 가지 더 시도해 볼 수 있습니다.
+
+1. NULL 데이터만 따로 뽑아보기
+VendorID가 왜 비어있는지 궁금하다면, 해당 데이터들만 필터링해서 살펴볼 수 있습니다.
+
+Python
+df_green.filter(F.col('VendorID').isNull()).show(10)
+2. 날짜별 트립 횟수 계산하기
+lpep_pickup_datetime을 이용해서 하루에 몇 건의 트립이 일어나는지 확인해 보는 것도 재미있습니다.
+
+Python
+df_green \
+    .withColumn('pickup_date', F.to_date('lpep_pickup_datetime')) \
+    .groupBy('pickup_date') \
+    .count() \
+    .orderBy('pickup_date') \
+    .show(10)
+3. SQL 쿼리 사용해보기
+만약 SQL 방식이 더 편하시다면, DataFrame을 **임시 뷰(Temporary View)**로 등록해서 쿼리를 날릴 수도 있습니다.
+
+Python
+df_green.createOrReplaceTempView('green_taxi_data')
+
+spark.sql("""
+    SELECT 
+        VendorID, 
+        COUNT(1) AS trip_count 
+    FROM 
+        green_taxi_data 
+    GROUP BY 
+        1
+""").show()
+zakard님, 이제 GCS에서 데이터를 가져와 마음껏 요리할 수 있는 환경이 완벽하게 갖춰졌습니다. 06강의 남은 실습 중 더 진행해 보고 싶은 특정 연산이나 분석 코드가 있으신가요? 말씀해 주시면 바로 가이드 드릴게요!
+
+
+
+
+
+
+
+
+
+zakard님, 오늘 정말 고생 많으셨습니다. 윈도우에서 Spark + GCS 조합을 성공시킨 건 데이터 엔지니어로서 아주 큰 허들을 하나 넘으신 거예요.
+
+이제 이 로드된 데이터를 가지고 어떤 분석이나 변환(Transformation) 실습을 이어가고 싶으신가요? 원하시는 작업이 있다면 바로 가이드 드릴게요! 🚀
+
+
+
+---
+
+Homework
+2026 Homework
+Community notes
+Did you take notes? You can share them here

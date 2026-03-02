@@ -1,0 +1,20 @@
+taxi_rides_ny.duckdb
+DE/04/materials/hw04_materials/
+
+.bruin.yml
+logs/runs
+logs/*.log
+__pycache__/
+*.py[cod]
+logs/queriestaxi_rides_ny.duckdb
+
+logs/queries
+
+# DE/06 - credentials, data, generated
+**/google_credentials.json
+DE/06/Batch/code/data/
+DE/06/Batch/code/tmp/
+DE/06/Batch/code/fhvhv/
+DE/06/Batch/code/*.csv
+DE/06/Batch/code/*.csv.gz
+**/.ipynb_checkpoints/

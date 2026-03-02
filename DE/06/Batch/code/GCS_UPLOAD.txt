@@ -1,0 +1,19 @@
+# GCS 업로드 명령어 (zakard)
+
+## 1. 로컬 green 데이터 위치
+E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\green
+
+## 2. gcloud storage 업로드 (버킷: gs://de-zoomcamp-zakard-2026)
+PowerShell에서 실행 (경로에 공백 없음):
+gcloud storage cp -r "E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\data\pq\green" gs://de-zoomcamp-zakard-2026/pq/
+
+또는 code 폴더에서 상대 경로:
+cd E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code
+gcloud storage cp -r "data\pq\green" gs://de-zoomcamp-zakard-2026/pq/
+
+## 3. google_credentials.json 위치
+프로젝트 내에서 발견되지 않음. 아래 중 하나에 두세요:
+- C:\Users\HP EliteBook\.google\credentials\google_credentials.json
+- E:\IT_SPACES\AI\ZoomCamp\DE\06\Batch\code\google_credentials.json
+
+노트북은 위 경로들을 자동으로 탐색합니다.

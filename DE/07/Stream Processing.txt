@@ -1,0 +1,138 @@
+Module 7: Stream Processing
+모듈 7: 스트림 프로세싱
+
+Practical part: PyFlink
+실습 부분: PyFlink
+
+In this video, we show how to use PyFlink to consume data from a Kafka stream
+이 영상에서는 Kafka 스트림에서 데이터를 컨슈밍(수신)하기 위해 PyFlink를 사용하는 방법을 보여줍니다.
+
+Video: TBA (see old video from 2025 here - https://youtu.be/P2loELMUUeI&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=51)
+비디오: 추후 공개 (2025년 이전 영상은 여기서 확인하세요)
+
+PyFlink 2026 workshop		https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/07-streaming/workshop
+PyFlink 2026 워크숍
+
+2026 Homework		https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/cohorts/2026/07-streaming/homework.md
+2026년 숙제
+
+Theoretical part: Kafka + Java (optional)
+이론 부분: Kafka + Java (선택 사항)
+
+In this set of videos, we cover Kafka and give examples in Java
+이 영상 시리즈에서는 Kafka를 다루며 Java 예제를 제공합니다.
+
+Code: Java examples		https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/07-streaming/java
+코드: Java 예제
+
+
+Stream processing
+스트림 프로세싱
+
+🎥 7.0.1 Introduction
+7.0.1 소개
+https://youtu.be/hfvju3iOIP0&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=67
+
+🎥 7.0.2 What is stream processing
+7.0.2 스트림 프로세싱이란 무엇인가
+https://youtu.be/WxTxKGcfA-k&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=68
+
+🎥 7.3 What is kafka?
+7.3 Kafka란 무엇인가?
+https://youtu.be/zPLZUDPi4AY&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=69
+
+🎥 7.4 Confluent cloud
+7.4 Confluent 클라우드
+https://youtu.be/ZnEZFEYKppw&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=70
+
+🎥 7.5 Kafka producer consumer
+7.5 Kafka 프로듀서와 컨슈머
+https://youtu.be/aegTuyxX7Yg&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=71
+
+🎥 7.6 Kafka configuration
+7.6 Kafka 설정
+https://youtu.be/SXQtWyRpMKs&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=72
+
+
+Links:
+링크:
+
+Slides
+슬라이드
+https://docs.google.com/presentation/d/1bCtdCba8v1HxJ_uMm9pwjRUC-NAMeB-6nOG2ng3KujA/edit?usp=sharing
+
+Kafka Configuration Reference
+Kafka 설정 참조 문서
+https://docs.confluent.io/platform/current/installation/configuration/
+
+Confluent cloud trial
+Confluent 클라우드 무료 체험
+https://www.confluent.io/confluent-cloud/tryfree/
+
+
+
+Kafka Streams
+Kafka 스트림즈
+
+🎥 7. Kafka stream basics
+7. Kafka 스트림 기초
+https://youtu.be/dUyA_63eRb0&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=73
+
+🎥 7. Kafka stream join
+7. Kafka 스트림 조인
+https://youtu.be/NcpKlujh34Y&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=74
+
+🎥 7. Kafka stream testing
+7. Kafka 스트림 테스팅
+https://youtu.be/TNx5rmLY8Pk&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=75
+
+🎥 7.0 Kafka stream windowing
+7.0 Kafka 스트림 윈도잉
+https://youtu.be/r1OuLdwxbRc&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=76
+
+🎥 7.1 Kafka ksqldb & Connect
+7.1 Kafka ksqldb 및 커넥트
+https://youtu.be/DziQ4a4tn9Y&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=77
+
+🎥 7.2 Kafka Schema registry
+7.2 Kafka 스키마 레지스트리
+https://youtu.be/tBY_hBuyzwI&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=78
+
+
+Links:
+링크:
+
+Slides
+슬라이드
+https://docs.google.com/presentation/d/1fVi9sFa7fL2ZW3ynS5MAZm0bRSZ4jO10fymPmrfTUjE/edit?usp=sharing
+
+Streams Concepts
+스트림즈 개념
+https://docs.confluent.io/platform/current/streams/concepts.html
+
+
+
+=================================================
+
+
+
+Community notes
+커뮤니티 노트
+
+Did you take notes? You can share them here
+노트를 작성하셨나요? 여기서 공유할 수 있습니다.
+
+Notes by Alvaro Navas
+Alvaro Navas의 노트
+
+Marcos Torregrosa's blog (spanish)
+Marcos Torregrosa의 블로그 (스페인어)
+
+Notes by Oscar Garcia
+Oscar Garcia의 노트
+
+Notes by Shayan Shafiee Moghadam
+Shayan Shafiee Moghadam의 노트
+
+Add your notes here (above this line)
+여기에 노트를 추가하세요 (이 줄 위로)

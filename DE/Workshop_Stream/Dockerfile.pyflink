@@ -1,0 +1,26 @@
+# PyFlink 1.19 + flink_job.py 직접 실행용 이미지
+# flink run -py 대신 python3 /opt/flink/flink_job.py 실행
+FROM flink:1.19.0-java17
+
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 python3-pip python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --no-cache-dir --default-timeout=1000 apache-flink==1.19.0
+
+# JARs: lib/에 복사 (plugins/ 미사용으로 중복 등록 방지, add_classpaths로 로드)
+COPY plugins/kafka/flink-sql-connector-kafka-3.3.0-1.19.jar /opt/flink/lib/
+COPY plugins/jdbc/flink-connector-jdbc-3.2.0-1.19.jar /opt/flink/lib/
+COPY plugins/jdbc/postgresql-42.7.3.jar /opt/flink/lib/
+
+# 잡 파일 (이미지에 포함, flink run -py 불필요)
+COPY src/job/flink_job.py /opt/flink/flink_job.py
+
+ENV PYTHONPATH=/opt/flink
+ENV FLINK_HOME=/opt/flink
+
+WORKDIR /opt/flink
+
+# 기본: python3로 잡 직접 실행 (embedded mini-cluster 모드)
+CMD ["python3", "/opt/flink/flink_job.py"]

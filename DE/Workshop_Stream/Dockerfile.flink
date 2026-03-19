@@ -1,0 +1,35 @@
+# syntax=docker/dockerfile:1
+# BuildKit 활성화: DOCKER_BUILDKIT=1 (기본 켜짐)
+# Flink 2.2 베이스 이미지는 distroless라 /etc/passwd 없음 → uv RUN 불가
+# → 멀티스테이지: 표준 이미지에서 Python venv 빌드 후 Flink 이미지로 복사
+
+# ===== Stage 1: Python venv + JAR 다운로드 (표준 이미지 사용) =====
+FROM python:3.12-slim AS pybuilder
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/
+WORKDIR /opt/pyflink
+COPY pyproject.flink.toml pyproject.toml
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync
+
+# Flink 이미지는 distroless라 RUN 불가 → builder에서 JAR 다운로드 (curl 사용, slim에 wget 없음)
+WORKDIR /opt/flink-lib
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+    && curl -sLO https://repo.maven.apache.org/maven2/org/apache/flink/flink-json/2.2.0/flink-json-2.2.0.jar \
+    && curl -sLO https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/4.0.1-2.0/flink-sql-connector-kafka-4.0.1-2.0.jar \
+    && curl -sLO https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-jdbc-core/4.0.0-2.0/flink-connector-jdbc-core-4.0.0-2.0.jar \
+    && curl -sLO https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-jdbc-postgres/4.0.0-2.0/flink-connector-jdbc-postgres-4.0.0-2.0.jar \
+    && curl -sLO https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.10/postgresql-42.7.10.jar \
+    && apt-get purge -y curl && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+# ===== Stage 2: Flink + venv + JAR 적용 (COPY만 사용) =====
+FROM flink:2.2.0-scala_2.12-java17
+COPY --from=pybuilder /opt/pyflink /opt/pyflink
+COPY --from=pybuilder /opt/flink-lib/ /opt/flink/lib/
+ENV PATH="/opt/pyflink/.venv/bin:$PATH"
+
+COPY flink-config.yaml /opt/flink/conf/config.yaml
+
+# Windows 호스트 마운트 시 PyFlink "No such device" 오류 회피: src를 이미지에 포함
+COPY src/ /opt/src/
+
+WORKDIR /opt/flink

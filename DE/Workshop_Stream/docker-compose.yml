@@ -1,0 +1,58 @@
+services:
+  redpanda:
+    image: redpandadata/redpanda:v25.3.9
+    command:
+      - redpanda
+      - start
+      - --smp
+      - '1'
+      - --reserve-memory
+      - 0M
+      - --overprovisioned
+      - --node-id
+      - '1'
+      - --kafka-addr
+      - PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr
+      - PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+      - --pandaproxy-addr
+      - PLAINTEXT://0.0.0.0:28082,OUTSIDE://0.0.0.0:8082
+      - --advertise-pandaproxy-addr
+      - PLAINTEXT://redpanda:28082,OUTSIDE://localhost:8082
+      - --rpc-addr
+      - 0.0.0.0:33145
+      - --advertise-rpc-addr
+      - redpanda:33145
+    ports:
+      - 8082:8082
+      - 9092:9092
+      - 28082:28082
+      - 29092:29092
+
+  # ===== Flink Driver: Flink entrypoint 스킵, python3 직접 실행 (sed/config.yaml 오류 회피) =====
+  flink-driver:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.pyflink
+    image: pyflink-driver
+    depends_on:
+      - redpanda
+      - postgres
+    environment:
+      - PYTHONPATH=/opt/flink
+      - FLINK_HOME=/opt/flink
+    entrypoint: ["python3", "/opt/flink/flink_job.py"]
+
+  postgres: # 서비스의 이름을 'postgres'로 정의합니다.
+    image: postgres:18 # Docker Hub에서 PostgreSQL 18 버전 이미지를 내려받아 사용합니다.
+    restart: on-failure # 컨테이너가 예기치 않게 종료되었을 경우에만 자동으로 재시작합니다.
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d:ro # 최초 기동 시 processed_events 테이블 생성
+    environment: # 데이터베이스 접속에 필요한 환경 변수를 설정합니다.
+      - POSTGRES_DB=postgres      # 생성할 기본 데이터베이스 이름을 'postgres'로 지정합니다.
+      - POSTGRES_USER=postgres    # 데이터베이스 관리자 계정명을 'postgres'로 지정합니다.
+      - POSTGRES_PASSWORD=postgres # 계정의 비밀번호를 'postgres'로 지정합니다.
+    ports: # 포트 포워딩 설정입니다.
+      - "5432:5432" # 내 컴퓨터(호스트)의 5432 포트와 컨테이너의 5432 포트를 연결합니다.
+
+

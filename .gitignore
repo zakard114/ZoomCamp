@@ -17,4 +17,10 @@ DE/06/Batch/code/tmp/
 DE/06/Batch/code/fhvhv/
 DE/06/Batch/code/*.csv
 DE/06/Batch/code/*.csv.gz
+DE/06/Batch/code/*.jar
 **/.ipynb_checkpoints/
+
+# LLM Zoomcamp — 로컬 가상환경·API 키 (커밋 금지)
+LLM/.venv/
+LLM/.env*
+!LLM/.env.example

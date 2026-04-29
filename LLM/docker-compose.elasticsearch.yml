@@ -1,0 +1,17 @@
+# ZoomCamp LLM — Elasticsearch (데이터는 호스트 E: 고정)
+# 실행: docker compose -f docker-compose.elasticsearch.yml up -d
+# 종료: docker compose -f docker-compose.elasticsearch.yml down
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    volumes:
+      - E:/DockerVolumes/elasticsearch-data:/usr/share/elasticsearch/data

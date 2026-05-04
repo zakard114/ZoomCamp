@@ -7,4 +7,4 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 docker compose -f "${ROOT_DIR}/docker-compose.elasticsearch.yml" up -d
-echo "데이터 디렉터리: E:/DockerVolumes/elasticsearch-data (compose volumes 참고)"
+echo "Host data: E:/IT_SPACES/AI/ZoomCamp/docker-data/volumes/elasticsearch-data (see LLM/docker-compose.elasticsearch.yml)"

@@ -1,4 +1,5 @@
-# ZoomCamp LLM — Elasticsearch (데이터는 호스트 E: 고정)
+# ZoomCamp LLM — 데이터: ../docker-data/volumes/elasticsearch-data (저장소가 E:면 E:에만 쌓임)
+# Windows: Docker Desktop → File sharing 에 해당 드라이브(E:\ 등) 추가 안 하면 바인드가 실패할 수 있음.
 # 실행: docker compose -f docker-compose.elasticsearch.yml up -d
 # 종료: docker compose -f docker-compose.elasticsearch.yml down
 
@@ -14,4 +15,6 @@ services:
       xpack.security.enabled: "false"
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
     volumes:
-      - E:/DockerVolumes/elasticsearch-data:/usr/share/elasticsearch/data
+      - type: bind
+        source: ../docker-data/volumes/elasticsearch-data
+        target: /usr/share/elasticsearch/data

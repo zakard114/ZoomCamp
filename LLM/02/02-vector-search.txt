@@ -1,0 +1,1473 @@
+Vector Search
+
+
+2.1 Getting Started with Vector Search and Qdrant
+
+https://www.youtube.com/watch?v=cX2vO1q2BGE&list=PL3MmuxUbc_hIB4fSqLy_0AfTjVLpgjV3R
+
+
+Links:
+
+Notebook: sematic_search.ipynb
+https://github.com/DataTalksClub/llm-zoomcamp/blob/main/cohorts/2025/02-vector-search/sematic_search.ipynb
+
+
+
+1. 필수 라이브러리 설치
+Qdrant 클라이언트와 효율적인 임베딩 생성을 위한 FastEmbed 라이브러리를 설치합니다.
+
+Install qdrant and fastembed:
+
+pip install -q "qdrant-client[fastembed]>=1.14.2"
+
+
+팝업:
+"전역 환경에 Python 패키지를 설치했을 수 있으며, 이로 인해 패키지 버전 간에 충돌이 발생할 수 있습니다. 이러한 패키지를 사용하여 가상 환경을 만들어 종속성을 격리하시겠습니까?"
+
+나> 내가 가상환경(.venv)를 안켰다는걸 잊었다.
+
+GEM> 먼저 현재 폴더에 어떤 것들이 있는지 확인해 봅시다.
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/LLM/02 (main)
+$ ls -a
+
+결과:
+./  ../  02-vector-search.txt  Vector_Search/
+
+
+GEM> zakard님, 리스트를 보니 현재 .venv 폴더가 생성되지 않은 상태입니다. 아마 이전에 가상환경 생성 명령어를 실행하지 않았거나, 다른 폴더에서 생성하신 것 같습니다.
+
+현재 위치한 /e/IT_SPACES/AI/ZoomCamp/LLM/02 폴더에서 바로 가상환경을 만들고 활성화하는 과정을 다시 진행하겠습니다.
+
+[해결 단계] 가상환경 생성 및 활성화
+터미널(MINGW64)에서 다음 명령어를 순서대로 입력해 주세요.
+
+Bash
+# 1. 가상환경 폴더(.venv) 생성
+python -m venv .venv
+
+# 2. 생성 확인 (목록에 .venv가 보여야 합니다)
+ls -a
+
+결과:
+./   .venv/                Vector_Search/
+../  02-vector-search.txt
+
+
+# 3. 가상환경 활성화 (Windows Git Bash/MINGW64용 경로)
+source .venv/Scripts/activate
+활성화에 성공하면 프롬프트 앞에 (.venv) 가 나타납니다. 그 상태에서 아까 제니가
+
+
+
+2. Docker를 이용한 Qdrant 실행
+로컬 환경에서 Qdrant 벡터 데이터베이스를 컨테이너로 실행하는 방법입니다.
+
+Run in Docker:
+이미지 다운로드:
+
+docker pull qdrant/qdrant
+
+
+컨테이너 실행:
+docker run -p 6333:6333 -p 6334:6334 \
+   -v "$(pwd)/qdrant_storage:/qdrant/storage:z" \
+   qdrant/qdrant
+
+
+
+===
+
+
+
+Chapter 1: 벡터 검색이란 무엇이며 어떻게 작동하는가? (0:00 ~ 3:28)
+
+[스크립트 번역]
+"안녕하세요! 이 코스에 참여해 주셔서 정말 반갑습니다. 저는 Qdrant의 개발자 에드보킷(Developer Advocate) 제니(Jenny)입니다. 오늘은 Qdrant를 이용한 벡터 검색의 간단한 예제를 함께 살펴볼 거예요.
+
+벡터 검색이 '시맨틱 유사성(Semantic Similarity, 의미적 유사성)'을 통해 어떻게 작동하는지 시각적으로 설명해 드리고, Qdrant로 이를 어떻게 구현하는지 보여드릴게요. 오늘 저는 파이썬으로 작성된 간단한 주피터 노트북을 사용할 겁니다. 터미널은 딱 두 개의 명령어를 실행할 때만 쓸 거고요, 제 예술 실력은 좀 부족하지만 'Open Board'에 직접 그린 그림으로도 설명해 드릴게요. 비록 완벽하진 않아도 시각적인 설명이 이해를 돕는 가장 좋은 방법이라고 믿거든요.
+
+여러분은 이미 벡터 검색이 무엇인지 어느 정도 알고 계시겠지만, 다시 한번 짚어보겠습니다. 반복은 언제나 이해에 도움이 되니까요.
+
+여러분은 이미 전통적인 '키워드 검색(Keyword Search)'에 대해 알고 계실 겁니다. 예를 들어, 여러분이 '방망이(Bat)'를 검색한다고 해봅시다. 그게 과일박쥐(동물 Bat)를 의미할 수도 있겠죠. 전통적인 텍스트 기반 키워드 검색 방식에서는 쿼리와 문서 사이의 '단어'가 일치해야 합니다. 그래서 '동굴 속의 방망이(Bat in a cave)' 같은 문서를 찾아내죠. 즉, 키워드가 물리적으로 일치해야 검색이 됩니다.
+
+하지만 '벡터 검색(Vector Search)'은 범위가 훨씬 넓습니다. 검색에 새로운 가능성을 열어주죠. 예를 들어, 여러분이 박쥐 그림(제가 그린 이 그림이 박쥐 같아 보인다면 말이죠!)을 찾고 싶다고 합시다. 벡터 검색은 이 쿼리와 이미지, 혹은 박쥐가 나오는 영상, 심지어 박쥐의 찍찍거리는 소리까지도 매칭할 수 있습니다.
+
+게다가 텍스트만 다룰 때도 벡터 검색은 뛰어납니다. 서로 다른 단어로 표현되었지만 의미가 같은(동의어) 두 가지 아이디어를 연결할 수 있어요. 예를 들어 '날아다니는 쥐(Flying mouse)'라고 검색해도, 벡터 검색은 이것이 '박쥐(Bat)'를 묘사하는 방식이라는 것을 이해하고 두 텍스트를 매칭합니다. 왜냐하면 벡터 검색은 '의미의 수준(Semantics Level)'에서 작동하기 때문입니다.
+
+텍스트를 직접 비교하는 키워드 방식과 달리, 벡터 검색에서는 이 텍스트들을 '벡터화된 표현(Vectorized Representations)'으로 변환해서 작업합니다. 텍스트나 이미지, 영상이 숫자 형태의 벡터가 되고, 이들 사이의 유사성(가까운 정도)을 수치로 계산하는 것이죠. 이때 다양한 '유사도 메트릭(Similarity Metrics)'이 사용되는데, 이는 나중에 실습에서 자세히 다루겠습니다. 이것이 바로 벡터 검색입니다."
+
+[이 단계의 핵심 준비: 라이브러리 설치 (7:40 ~ 8:30 구간 선반영)]
+영상을 보지 않고 따라오려면 가장 먼저 환경이 준비되어야 합니다. 제니가 7분대에 설명하는 설치 코드를 먼저 실행하여 도구를 갖춥시다.
+
+
+Python
+# [단계 1] 필수 라이브러리 설치
+# qdrant-client: Qdrant 서버와 통신하기 위한 공식 파이썬 도구
+# [fastembed]: 텍스트를 숫자인 '벡터'로 변환해주는 기능을 포함하여 설치합니다.
+# 1.14.2 이상의 버전을 권장합니다.
+
+!pip install -q "qdrant-client[fastembed]>=1.14.2"
+
+
+//
+나> LLM 줌캠프 모듈 2 
+
+방금 02폴더의 Vector_Search폴더에 sematic_search.ipynb를 넣었는데,  앞으로 지침 내 제공 노트북 몇개가 더 있을거 같아. 노트북 폴더를 따로 만들어서 한데 넣어놓는게 나을까 그냥 노출된 채로 놔두는게 나을까. 니가 폴더 체크해보면 내가 방금 그 노트북파일을 넣었다는걸 알 수 있을거야
+
+
+CUR> 워크스페이스를 확인했습니다. `ZoomCamp\LLM\02\Vector_Search\sematic_search.ipynb`가 있고, 같은 `02` 아래에는 `02-vector-search.txt` 같은 강의 메모도 있습니다.
+
+## 결론
+
+**지금처럼 주제 폴더(`Vector_Search` 등) 안에 두는 쪽을 추천합니다.** 줌캠프처럼 주차·모듈·주제가 이미 폴더로 나뉘어 있으면, 노트북도 그 주제와 **같은 곳**에 두는 편이 이점이 많습니다.
+
+- **데이터·스크립트·가상환경**과 가까워서 셀 안의 상대 경로(`./data`, `../`)를 단순하게 유지하기 쉽습니다.
+- 나중에 “벡터 검색 주제에서 뭘 했지?” 할 때 **폴더 하나만 열면** 노트북·메모·기타 자료가 한눈에 들어옵니다.
+- 캠프 진행 순서가 **폴더 구조와 같다**는 점도 복습할 때 도움이 됩니다.
+
+## `notebooks/`를 따로 두는 게 나은 경우
+
+- 한 모듈 안에 **노트만 수십 개** 쌓여서 주제 폴더가 지저분해질 때  
+- 노트북만 모아서 공유·제출용으로 **한 디렉터리로 묶어야** 할 때  
+- 주제별 하위 폴더 대신 **플랫한 구조**로 관리하고 싶을 때  
+
+이때는 `02/notebooks/`처럼 두되, 파일명에 주제를 박아 두는 방식(`01_intro.ipynb`, `vector_search_semantic.ipynb` 등)이 실수를 줄입니다.
+
+## 참고
+
+파일명이 `sematic_search.ipynb`로 되어 있는데, 의도하셨다면 `semantic` 철자로 맞추는 것도 검토해 보시면 됩니다.
+
+원하시면 다음 노트북이 몇 개 더 생길 때를 기준으로, `02` 전체 트리에 맞춘 **구체적인 네이밍/폴더 규칙**만 짧게 정리해 드리겠습니다.
+
+
+
+CUR + GEM> 커서가 제안한 내용은 한마디로 "지금처럼 주제별 폴더 안에 노트북을 두는 것이 나중에 관리하기 훨씬 편하다"는 뜻입니다.
+
+커서의 조언을 요약하면 이렇습니다:
+
+맥락 유지: Vector_Search 폴더 안에 노트북이 있어야 나중에 그 안의 데이터 파일이나 설정값들을 불러오기 쉽습니다 (상대 경로 문제).
+
+가독성: 모듈 2 안에 여러 주제가 생길 텐데, 노트북만 한데 모아두면 나중에 "이 노트북이 어떤 주제였지?" 하고 헷갈릴 수 있습니다.
+
+오타 지적: 이건 좀 깐깐한데, 파일명이 sematic(세마틱)으로 되어 있으니 semantic(시맨틱)으로 고치는 게 어떻겠냐는 참견도 덧붙였네요.
+
+결론: 그냥 지금처럼 두세요.
+커서 말대로 주제별로 폴더를 유지하는 게 줌캠프 커리큘럼을 따라가기에 더 직관적입니다. 대신 파일명 앞에 숫자를 붙여서 순서를 표시하면 더 완벽하겠죠? (예: 01_semantic_search.ipynb)
+//
+
+
+
+--
+
+
+
+Chapter 2: 왜 Qdrant 같은 전용 벡터 검색 솔루션이 필요한가? (3:29 ~ 5:09)
+[스크립트 번역]
+"이제 Qdrant가 이 그림에서 어떤 역할을 하는지 이야기해 봅시다. Qdrant는 솔루션의 규모가 커질 때 벡터 검색이 가능하도록 확장성(Scalability)을 제공합니다. 수백만 개, 수십억 개의 벡터가 있을 때도 검색이 빠르고 실제 서비스(Production)에서 사용 가능해야 하니까요.
+
+Qdrant는 Rust 언어로 작성된 오픈소스 벡터 전용 검색 엔진입니다. 빠르고 확장 가능한 벡터 검색을 가능하게 하죠. 왜 일반적인 데이터베이스 대신 이런 전용 솔루션이 필요한지에 대한 내용은 제가 공유해 드리는 아티클에서 확인하실 수 있습니다.
+
+요약하자면, 최신 벡터 검색 트렌드에 발맞추고, 단순히 의미적 유사성 검색을 넘어선 벡터 검색의 모든 기능을 활용하기 위해 전용 솔루션이 필요합니다. 하지만 오늘 우리의 목표는 '시맨틱 유사성 검색'을 여러분의 애플리케이션에 적용하는 것이며, Qdrant는 이에 완벽한 도구입니다.
+
+이제 지루한 이야기는 그만하고 실습으로 넘어가 볼까요?"
+
+[이 단계까지의 체크리스트]
+벡터 검색이 단순 키워드 매칭이 아니라 '의미'를 숫자로 바꿔서 비교한다는 점을 이해하셨나요?
+
+실습을 위한 라이브러리 설치 코드를 확인하셨나요?
+
+zakard님, 여기까지가 도입부와 개념 설명입니다. 다음 장(Chapter 3)에서는 본격적으로 Docker를 이용해 Qdrant를 실행하고 환경을 구축하는 실습 코드가 나옵니다. 진행해도 될까요?
+
+
+
+--
+
+
+
+이미 이전 단계에서 Docker를 통해 Qdrant 컨테이너를 실행하셨고 qdrant-client 설치도 완료되었으므로, 이제 Python 코드상에서 로컬 Qdrant 서버에 접속하고 데이터를 다룰 준비를 할 차례입니다.  
+
+Chapter 3: 환경 구축 및 Qdrant 클라이언트 연결
+
+
+1단계: 필요한 라이브러리 가져오기 및 Qdrant에 연결 
+
+이제 패키지에서 필요한 모듈을 가져오겠습니다 qdrant-client.
+
+이 QdrantClient클래스는 Qdrant 서비스에 연결을 설정할 수 있도록 해주
+며 , models모듈은 우리가 사용할 다양한 구성 및 매개변수에 대한 정의를 제공합니다.
+
+
+이 단계에서는 실행 중인 Qdrant 엔진과 Python 코드를 연결하는 작업을 수행합니다.
+
+1. Qdrant 클라이언트 초기화
+먼저, 설치한 라이브러리를 임포트하고 로컬호스트(localhost)에서 실행 중인 Qdrant 서버에 연결합니다.
+
+Python
+# 파일명: semantic_search.ipynb
+
+from qdrant_client import QdrantClient, models
+
+
+Initialize the client
+
+Python
+# 1. Qdrant 클라이언트 인스턴스 생성
+# Docker에서 6333 포트로 실행 중이므로 해당 주소로 연결합니다.
+
+# 수정된 클라이언트 초기화 코드 (REST 기본 타임아웃 5초는 부족할 수 있음)
+client = QdrantClient(
+    url="http://localhost:6333",
+    check_compatibility=False,
+    timeout=120,
+)
+
+# 연결 확인을 위해 서버 정보를 출력해봅니다.
+
+Python
+# 연결 확인용 테스트 코드
+try:
+    collections = client.get_collections()
+    print("연결 확인 완료! 현재 컬렉션 목록:", collections)
+except Exception as e:
+    print("연결에 문제가 있습니다:", e)
+
+결과:
+연결 확인 완료! 현재 컬렉션 목록: collections=[CollectionDescription(name='zoomcamp-rag')]
+
+
+
+---
+
+
+
+Step 2: 데이터셋 연구 (Study the Dataset)
+
+실제 작동하는 벡터 검색 솔루션을 구축하기 위해서는 (그리고 일반적으로 벡터 검색이 언제, 어떻게 필요한지 이해하기 위해), 데이터셋을 연구하고 우리가 다루는 데이터의 성격과 구조를 파악하는 것이 좋습니다. 예를 들어 다음과 같습니다:
+
+모달리티(modality) — 데이터가 텍스트, 이미지, 비디오 중 무엇입니까? 아니면 이들의 조합입니까?
+
+세부 사항(specifics) — 만약 텍스트라면: 어떤 언어가 사용되었는지, 텍스트 조각(chunk)의 크기는 어느 정도인지, 특수 문자가 포함되어 있는지 등을 확인해야 합니다.
+
+이러한 분석은 우리가 다음 사항을 정의하는 데 도움을 줍니다:
+
+올바른 데이터 "스키마(schema)" (무엇을 벡터화할지, 무엇을 메타데이터로 저장할지 등)
+
+적합한 임베딩 모델(embedding model) (도메인, 정확도 및 리소스 요구 사항을 기반으로 가장 적합한 모델 선택)
+
+
+>>> 여기 할 차례
+
+
+실험을 위해 제공된 샘플 데이터셋을 불러와서 확인해 보겠습니다:
+
+Python
+import requests
+
+# 데이터셋을 다운로드할 URL 정의
+docs_url = 'https://github.com/alexeygrigorev/llm-rag-workshop/raw/main/notebooks/documents.json'
+
+# requests 라이브러리를 사용하여 데이터 요청
+docs_response = requests.get(docs_url)
+
+# 응답받은 JSON 데이터를 파이썬 객체로 변환
+documents_raw = docs_response.json()
+
+Python
+# 가져온 로우(raw) 데이터 확인
+documents_raw
+
+
+//
+docs_response.json()에서 .json() 메서드는 JSON 형식의 문자열(텍스트)을 파이썬이 바로 요리할 수 있는 딕셔너리(dict)나 리스트(list) 같은 파이썬 객체로 변환(역직렬화)해주는 역할을 합니다.
+
+정확한 흐름은 이렇습니다:
+
+requests.get(docs_url): 서버로부터 데이터를 받아옵니다. 이때 docs_response 안에는 헤더, 상태 코드, 그리고 인코딩된 바이너리/텍스트 상태의 로우(raw) 데이터가 들어있습니다.
+
+docs_response.json(): 이 로우 데이터를 읽어서 "아, 이건 JSON 형식이네!"라고 판단하고, 파이썬에서 쓰기 편하게 객체로 만들어줍니다.
+
+결과적으로 documents_raw 변수에는 문자열이 아닌, 키(key)와 값(value)으로 이루어진 파이썬 딕셔너리 구조가 담기게 되는 것이죠.
+//
+
+
+
+결과: 작동
+
+
+데이터는 이미 정리되고 청킹(chunked, 임베딩 모델이 쉽게 처리할 수 있도록 작은 조각으로 나뉘어짐)된 상태입니다. 이제 우리가 정의해야 할 것은 다음과 같습니다:
+
+어떤 필드를 의미 검색(semantic search)에 사용할 수 있는가?
+
+어떤 필드를 필터링 조건 등에 사용할 메타데이터(metadata)로 저장해야 하는가?
+
+우리는 세 가지 강좌 유형(data-engineering-zoomcamp, machine-learning-zoomcamp, mlops-zoomcamp)으로 구성된 데이터셋을 가지고 있습니다. 각 강좌는 question(질문)과 text(답변) 쌍, 그리고 질문이 참조하는 section(섹션) 정보를 포함하고 있습니다.
+
+의미 검색에 사용할 수 있는 필드 (Which Fields Could Be Used for Semantic Search)
+
+여기서 우리는 의미적 유사성을 실제로 관찰할 수 있습니다. 일부 질문과 답변은 겹치는 단어가 많지 않음에도 불구하고, 분명히 같은 주제를 다루고 있습니다. 하나는 주제에 대해 묻고, 다른 하나는 그에 대한 답을 제시합니다.
+
+예를 들어:
+
+질문(Question):
+"데이터 엔지니어링 부트캠프에 등록(registered)했습니다. 확인 이메일은 언제쯤 받을 수 있을까요?"
+
+답변(Answer):
+"등록할 필요 없습니다. 이미 합격하셨습니다. 등록하지 않고도 바로 학습을 시작하고 과제를 제출할 수 있습니다. 등록 여부는 등록(registered) 명단과 대조하지 않습니다. 등록은 수업 시작 전에 관심도를 파악하기 위한 것입니다."
+
+이 두 문장은 'registered'라는 키워드를 통해 일치할 수 있지만, *"등록(registered)되지 않은 참가자는 수료증을 받지 못합니다"*와 같은 문장 역시 해당 키워드와 일치하지만 의미적 맥락은 전혀 다릅니다.
+
+따라서 질문 답변 기반의 RAG(Retrieval-Augmented Generation) 시스템을 구축한다면, text 필드(답변)를 임베딩(embeddings)으로 저장하고, 벡터 검색을 사용하여 주어진 question 쿼리에 가장 관련성이 높은 답변을 찾는 것이 합리적입니다.
+
+메타데이터로 저장해야 할 필드 (Which Fields Should Be Stored as Metadata)
+예를 들어, 우리는 course와 section 필드를 메타데이터로 저장할 수 있습니다. 이렇게 하면 특정 강좌나 특정 섹션과 관련된 질문을 할 때 검색 결과를 필터링할 수 있습니다.
+
+이제 텍스트와 코드 사이의 간격, 띄어쓰기를 모두 정돈했습니다.
+
+이 내용으로 Step 2를 확정하고, Step 3: FastEmbed를 사용한 임베딩 모델 선택으로 넘어가도 될까요? 허락해 주시면 바로 다음 단계를 진행하겠습니다.
+
+
+
+
+
+---
+
+
+
+
+
+네, zakard님. 말씀하신 내용이 Step 3: FastEmbed를 사용한 임베딩 모델 선택의 정확한 전체 흐름입니다.
+
+노트북 원본의 영문 텍스트와 코드, 그리고 그 안에 담긴 기술적인 의도를 하나도 빠짐없이, 오히려 더 디테일하고 직관적으로 이해하실 수 있도록 정리해 드리겠습니다.
+
+
+//
+나> 지침에서 말한 Embedding이란 무엇이며 여기서 FaseEmbed의 기능은
+
+GEM> 
+zakard님, 질문하신 Embedding(임베딩)의 개념과 FastEmbed의 구체적인 기능을 노트북의 맥락에서 아주 직관적으로 설명해 드릴게요.
+
+1. 임베딩(Embedding)이란 무엇인가?
+컴퓨터는 "등록 이메일은 언제 오나요?"라는 문장을 읽어도 그게 '기다림'이나 '절차'에 관한 것인지 이해하지 못합니다. 단지 텍스트(문자열) 데이터로만 인식하죠.
+
+임베딩은 이 텍스트의 '의미'를 컴퓨터가 계산할 수 있는 '숫자들의 목록(벡터)'으로 변환하는 기술입니다.
+
+의미의 공간화: 비슷한 의미를 가진 문장들은 숫자 공간상에서 서로 가까운 위치에 있게 됩니다.
+
+예: "등록 확인 메일"과 "언제 수강 확정되나요?"는 단어는 다르지만, 임베딩 공간에서는 매우 가까운 좌표에 위치합니다.
+
+고차원 벡터: 우리가 선택한 jina-embeddings-v2-small-en 모델은 문장 하나를 512개의 숫자(EMBEDDING_DIMENSIONALITY = 512)로 이루어진 하나의 점으로 표현합니다.
+
+2. FastEmbed의 기능과 장점
+노트북에서 강조하는 FastEmbed는 이 임베딩 과정을 수행하는 '엔진'입니다. 특히 Qdrant와 찰떡궁합인 최적화된 라이브러리죠.
+
+핵심 기능:
+밀집 임베딩(Dense Embedding) 생성: 텍스트를 고밀도의 숫자 벡터로 변환합니다. 우리가 오늘 실습에서 가장 주력으로 사용하는 기능입니다.
+
+경량화 및 속도: PyTorch나 TensorFlow 같은 거대한 프레임워크 없이도 ONNX Runtime을 사용해 CPU에서도 엄청나게 빠른 속도로 숫자를 계산해냅니다.
+
+다양한 모델 지원: 텍스트뿐만 아니라 이미지, 희소 벡터(Sparse), 다중 벡터(Multivector) 임베딩까지 지원하여 하이브리드 검색을 가능하게 합니다.
+
+Qdrant와의 직접 통합: 텍스트를 따로 변환해서 넣을 필요 없이, Qdrant 클라이언트를 통해 텍스트를 바로 전달하면 내부에서 자동으로 임베딩을 처리해주는 편리함을 제공합니다.
+
+한 문장 요약:
+임베딩은 텍스트를 **'의미가 담긴 좌표'**로 만드는 것이고, FastEmbed는 그 좌표를 **'매우 빠르고 가볍게 계산해주는 도구'**입니다.
+//
+
+
+
+
+Step 3: FastEmbed를 사용한 임베딩 모델 선택 (Choosing the Embedding Model with FastEmbed)
+이제 우리는 영어로 된 작은 텍스트 조각(강좌 관련 질문 및 답변 쌍)을 임베딩한다는 사실을 알고 있으므로, 이 데이터를 벡터로 변환하기에 적합한 임베딩 모델을 선택할 수 있습니다.
+
+임베딩 모델 선택은 다음과 같은 여러 요인에 따라 달라집니다:
+
+수행하려는 작업, 데이터의 모달리티(텍스트, 이미지 등) 및 데이터의 특성
+
+검색 정확도와 리소스 사용량 사이의 절충(Trade-off) (임베딩 크기가 클수록 더 많은 저장 공간과 메모리가 필요함)
+
+추론 비용 (특히 서드파티 API 제공업체를 사용하는 경우)
+
+기타 요인들
+
+임베딩 모델을 선택하는 가장 좋은 방법은 자신의 실제 데이터를 사용하여 다양한 옵션을 테스트하고 벤치마킹하는 것입니다.
+
+이 노트북에서는 임베딩 제공자로 FastEmbed를 사용합니다.
+FastEmbed는 Qdrant를 위해 특별히 설계된 최적화된 임베딩 솔루션입니다. PyTorch나 TensorFlow 같은 무거운 프레임워크 없이도 CPU 친화적이고 낮은 지연 시간(Low-latency)으로 임베딩을 생성합니다. 양자화된(Quantized) 모델 가중치와 ONNX Runtime을 사용하여, CPU 환경에서 기존의 Sentence Transformers보다 훨씬 빠르면서도 경쟁력 있는 정확도를 유지합니다.
+
+FastEmbed가 지원하는 기능:
+
+밀집 임베딩(Dense embeddings): 텍스트와 이미지용 (가장 일반적인 유형이며, 오늘 우리가 사용할 방식입니다)
+
+희소 임베딩(Sparse embeddings): 예: BM25, 희소 신경망 임베딩
+
+다중 벡터 임베딩(Multivector embeddings): 예: ColPali, ColBERT 등 후기 상호작용(Late interaction) 모델
+
+리랭커(Rerankers)
+
+이 모든 기능은 Qdrant에서 직접 사용할 수 있습니다. 또한 FastEmbed와 Qdrant의 통합 덕분에 텍스트나 이미지를 Qdrant 클라이언트에 직접 전달하여 임베딩을 처리할 수 있습니다. 이번 실습에서는 로컬 추론을 위해 FastEmbed를 사용할 것이므로, 기기의 리소스를 고려하여 모델을 선택해야 합니다.
+
+텍스트 데이터를 위한 FastEmbed 모델 탐색 (FastEmbed for Textual Data)
+FastEmbed가 지원하는 모델 옵션 중에서 강좌 문답(text 필드)에 사용할 모델을 찾아보겠습니다.
+
+Python
+from fastembed import TextEmbedding
+
+# 지원되는 모델 리스트 확인
+TextEmbedding.list_supported_models()
+우리의 단순한 설정에서 리소스를 과도하게 사용하지 않도록, 소형에서 중간 정도 크기(예: 512차원)의 임베딩을 생성하는 모델을 선택하는 것이 합리적입니다.
+
+결과:
+[{'model': 'BAAI/bge-base-en',
+  'sources': {'hf': 'Qdrant/fast-bge-base-en',
+   'url': 'https://storage.googleapis.com/qdrant-fastembed/fast-bge-base-en.tar.gz',
+   '_deprecated_tar_struct': True},
+  'model_file': 'model_optimized.onnx',
+  'description': 'Text embeddings, Unimodal (text), English, 512 input tokens truncation, Prefixes for queries/documents: necessary, 2023 year.',
+
+...
+
+//
+GEM> 제시해주신 결과물은 FastEmbed가 내부적으로 가지고 있는 모델 카탈로그의 상세 명세서입니다. 각 항목이 어떤 의미를 가지고 있으며, 우리가 왜 특정 모델을 선택해야 하는지 직관적으로 풀어서 설명해 드릴게요.
+
+📋 모델 명세서 항목별 상세 해석
+결과물에 나온 BAAI/bge-base-en 모델의 데이터를 예시로 분석해 보겠습니다.
+
+model: 모델의 고유 이름입니다. BAAI는 제작 기관(Beijing Academy of Artificial Intelligence)이고, bge-base-en은 모델의 브랜드와 체급(Base), 언어(English)를 뜻합니다.
+
+sources: 모델 파일을 가져오는 경로입니다. Hugging Face(hf) 저장소나 구글 스토리지(url)에서 최적화된 파일을 다운로드한다는 뜻입니다.
+
+model_file (model_optimized.onnx): 실제 계산이 일어나는 엔진 파일입니다. 일반적인 PyTorch 파일(.pt)이 아니라 ONNX라는 형식으로 최적화되어 있어, CPU에서도 매우 빠르게 돌아갑니다.
+
+description: 모델의 성적표이자 사용 설명서입니다.
+
+Unimodal (text): "나는 텍스트만 처리할 수 있어"라는 뜻입니다. (이미지는 못 함)
+
+512 input tokens truncation: "문장이 너무 길면 앞의 512단어(토큰)까지만 읽고 자를게"라는 뜻입니다.
+
+Prefixes for queries/documents: necessary: "검색할 때 질문 앞에 'query:' 같은 꼬리표를 붙여줘야 성능이 잘 나와"라는 뜻입니다. (우리가 선택한 Jina 모델은 이게 not necessary라 더 편합니다.)
+
+dim: 768: 가장 중요한 숫자입니다. 문장을 768개의 숫자로 변환한다는 뜻이며, 이 숫자가 곧 Qdrant 컬렉션을 만들 때 설정해야 할 크기가 됩니다.
+
+size_in_GB: 0.42: 모델의 무게입니다. 약 420MB 정도
+
+
+💡 왜 우리는 Jina 모델을 선택했는가?
+출력 결과물 중에 jinaai/jina-embeddings-v2-small-en을 선택한 이유는 명확합니다.
+
+입력 한도 (8192 tokens): 위 예시의 BGE 모델은 512단어만 읽지만, Jina는 무려 8,192단어까지 읽을 수 있습니다. 긴 답변도 잘리지 않고 벡터화됩니다.
+
+편의성: 질문과 문서에 별도의 접두사(Prefix)를 붙일 필요가 없어 코드가 깔끔해집니다.
+
+효율성: 512차원(dim)을 유지하면서도 모델 크기(size_in_GB)가 0.12GB로 매우 가벼워 로컬 CPU 환경에서 부담이 없습니다.
+
+이제 이 "숫자 변환기(모델)"의 정체를 확실히 알았으니, 이 모델이 뽑아준 숫자들을 저장할 저장소를 만들 차례입니다.
+//
+
+
+>>> 여기 할 차례. 운동하러 감
+
+간단한 설정에서 리소스를 과도하게 사용하지 않도록, 작거나 중간 크기의 임베딩(예: 512차원)을 생성하는 모델을 선택하는 것이 합리적입니다.
+
+Python
+import json
+
+# 우리가 목표로 하는 임베딩 차원수
+EMBEDDING_DIMENSIONALITY = 512
+
+# 512차원 모델들만 필터링해서 상세 정보 확인
+for model in TextEmbedding.list_supported_models():
+    if model["dim"] == EMBEDDING_DIMENSIONALITY:
+        print(json.dumps(model, indent=2))
+위 코드를 실행하면 다음과 같은 후보군이 출력됩니다:
+
+
+{
+  "model": "BAAI/bge-small-zh-v1.5",
+  "sources": {
+    "hf": "Qdrant/bge-small-zh-v1.5",
+    "url": "https://storage.googleapis.com/qdrant-fastembed/fast-bge-small-zh-v1.5.tar.gz",
+    "_deprecated_tar_struct": true
+  },
+  "model_file": "model_optimized.onnx",
+  "description": "Text embeddings, Unimodal (text), Chinese, 512 input tokens truncation, Prefixes for queries/documents: not so necessary, 2023 year.",
+  "license": "mit",
+  "size_in_GB": 0.09,
+  "additional_files": [],
+  "dim": 512,
+  "tasks": {}
+}
+...
+
+
+BAAI/bge-small-zh-v1.5: 중국어 모델이므로 제외합니다.
+
+Qdrant/clip-ViT-B-32-text: 멀티모달(이미지+텍스트) 모델입니다. 우리는 텍스트 전용 검색을 하므로 효율성이 떨어질 수 있습니다.
+
+
+//
+GEM> json.dumps는 파이썬 객체(리스트, 딕셔너리 등)를 JSON 형식의 문자열(String)로 변환해주는 함수입니다. 여기서 s는 String을 의미합니다.
+
+노트북 코드에서 사용된 방식을 바탕으로 왜 이 함수를 쓰는지, 그리고 주요 옵션들이 어떤 역할을 하는지 직관적으로 설명해 드릴게요.
+
+1. 왜 사용하는가? (객체 → 문자열)
+파이썬의 dict 객체를 그대로 print()하면 한 줄로 길게 출력되어 사람이 읽기 매우 힘듭니다. json.dumps를 사용하면 이 데이터를 구조화된 문자열로 바꾸어 예쁘게 출력하거나, 파일로 저장하거나, 네트워크를 통해 전송할 수 있는 상태로 만듭니다.
+
+2. 주요 파라미터 설명
+노트북 코드에 나온 예시를 보겠습니다.
+
+Python
+print(json.dumps(model, indent=2))
+model: 변환할 대상(여기서는 모델 정보가 담긴 딕셔너리)입니다.
+
+indent=2: 가장 중요한 옵션입니다. 들여쓰기를 2칸씩 적용하라는 뜻입니다. 이 옵션이 있어야 줄 바꿈이 정돈되어 우리가 보기 편한 "예쁜" 형태로 출력됩니다. 만약 이 옵션이 없으면 모든 데이터가 한 줄로 다닥다닥 붙어서 나옵니다.
+
+
+3. json.load vs json.dump (참고)
+헷갈리기 쉬운 용어들을 정리해 드릴게요.
+
+함수		방향		결과물
+json.loads()	문자열 → 객체	파이썬 딕셔너리/리스트 (메모리상 존재)
+json.dumps()	객체 → 문자열	JSON 텍스트 (출력/로그 확인용)
+json.load()	파일 → 객체	파일에서 데이터를 읽어와 파이썬 객체로 변환
+json.dump()	객체 → 파일	파이썬 객체를 JSON 파일로 직접 저장
+
+요약하자면
+노트북에서 json.dumps(model, indent=2)를 사용한 이유는, "수많은 모델 정보 중에서 우리가 필터링한 모델의 세부 명세서(차원, 설명, 크기 등)를 화면에 보기 좋게(들여쓰기 해서) 찍어보기 위해서"입니다.
+
+이제 json.dumps가 데이터를 예쁘게 보여주기 위한 "포장지" 역할이라는 점이 이해되셨나요?
+
+준비되셨다면, 이제 본격적으로 Qdrant 서버에 접속하는 Step 4: Qdrant 클라이언트 설정 및 컬렉션 생성으로 넘어가도 될까요? 허락해 주시면 진행하겠습니다.
+//
+
+
+
+우리는 영어 텍스트에 적합한 임베딩 모델이 필요합니다.
+
+또한, 이번 검색에는 이미지를 포함하지 않기 때문에 유니모달(unimodal, 단일 모드) 모델을 선택하는 것이 합리적입니다. 특정 용도에 맞춰진 전용 솔루션이 범용 모델보다 성능이 더 좋은 경우가 많기 때문입니다.
+
+확인 결과, jina-embedding-small-en이 아주 좋은 선택으로 보입니다!
+
+💡 용어 및 맥락 풀이
+Unimodal (유니모달): '하나의 양식'이라는 뜻입니다. 텍스트와 이미지를 동시에 처리하는 멀티모달(Multimodal)과 달리, 오직 텍스트 처리에만 집중하여 효율성과 정확도를 높인 모델을 의미합니다.
+
+Specifically tailored solutions (특정 용도에 맞춰진 솔루션): 이것저것 다 잘하는 모델보다는, 영어 텍스트 검색이라는 특정 목적에 최적화된 모델이 우리 데이터셋에서 더 정교한 결과를 낼 가능성이 높다는 뜻입니다.
+
+jina-embedding-small-en:
+
+jinaai: 모델을 만든 회사 이름입니다.
+
+small: 모델의 크기가 작아 로컬 환경(CPU)에서도 빠르게 돌아감을 의미합니다.
+
+en: 영어(English) 전용 모델임을 나타냅니다.
+
+이제 모델 선택 사유까지 명확해졌습니다. zakard님, 준비되셨다면 다음 단계인 Step 4: Qdrant 클라이언트 설정 및 컬렉션 생성으로 넘어가도 될까요? 허락해 주시면 바로 진행하겠습니다.
+
+
+Python
+# 선택한 모델 핸들 저장
+model_handle = "jinaai/jina-embeddings-v2-small-en"
+
+
+jinaai/jina-embeddings-v2-small-en: 영어 텍스트 전용(Unimodal)이며, 최대 8192 토큰까지 지원하는 강력한 모델입니다.
+
+결론: 영어 텍스트에 적합하고, 이미지를 포함하지 않는 우리 작업에 최적화된 jinaai/jina-embeddings-v2-small-en을 선택하는 것이 가장 좋습니다!
+
+
+
+대부분의 밀집 임베딩 모델(dense embedding models)과 마찬가지로, 이 모델은 코사인 유사도(Cosine Similarity)를 사용하여 의미적 가까움을 측정하도록 훈련되었습니다. 이 정보는 모델의 Hugging Face 카드 등에서 확인할 수 있으며( [Hugging Face card](https://huggingface.co/jinaai/jina-embeddings-v2-small-en).
+), 나중에 Qdrant에서 검색을 설정할 때 필수적으로 필요한 파라미터(차원 수 및 유사도 측정 방식)입니다.
+
+
+Qdrant 핵심 용어 미리보기
+Qdrant 설정을 시작하기 전, 이해를 돕기 위한 용어 정리입니다:
+
+포인트(Points): Qdrant가 다루는 중심 엔터티입니다. ID, 벡터(Vector), 그리고 선택적인 페이로드(Payload)로 구성된 하나의 레코드입니다.
+
+컬렉션(Collection): 검색 대상이 되는 포인트들의 명명된 집합입니다. 하나의 비즈니스 문제를 해결하기 위한 벡터 저장소 컨테이너라고 생각하면 됩니다.
+
+페이로드(Payload): 임베딩이 데이터의 '의미'를 포착한다면, 페이로드는 구조화된 메타데이터를 보유합니다. 필터링이나 정렬을 할 때 매우 유용하며, 불리언, 키워드, 지리 위치, 배열, 중첩 객체 등을 담을 수 있습니다.
+
+여기까지가 노트북의 Step 3 전체 내용입니다. 디테일한 설명과 함께 정리가 완료되었습니다.
+
+이제 실제 Qdrant 서버에 접속하고 컬렉션을 만드는 Step 4: Qdrant 클라이언트 설정 및 컬렉션 생성으로 넘어가도 될까요? 허락해 주시면 바로 진행하겠습니다.
+
+
+
+
+
+---
+
+
+
+
+Step 4: 컬렉션 생성 (Create a Collection)
+
+컬렉션을 생성할 때는 다음과 같은 사항들을 지정해야 합니다:
+
+이름 (Name): 컬렉션을 식별하기 위한 고유한 이름입니다.
+
+벡터 설정 (Vector Configuration):
+
+크기 (Size): 벡터의 차원 수(dimensionality)입니다.
+
+거리 메트릭 (Distance Metric): 벡터 간의 유사성을 측정하는 데 사용되는 방법입니다.
+
+저희 문서에서 더 많은 추가 파라미터들을 확인하실 수 있습니다. 또한, 일반적인 밀집 임베딩(dense embeddings) 외에도 Qdrant에서 다른 벡터 유형(예: 하이브리드 검색용)을 구성할 수도 있습니다. 하지만 이번 예제에서는 가장 단순한 기본 설정만으로도 충분합니다.
+
+//
+나> 한두줄 리마인더: 임베딩이란?
+GEM> 임베딩(Embedding)은 텍스트의 '의미'를 컴퓨터가 이해할 수 있는 '숫자 좌표'로 바꾸는 과정입니다.
+
+핵심 원리: 비슷한 뜻을 가진 문장은 숫자 공간상에서도 서로 가까운 거리에 위치하게 됩니다.
+
+비유: 단어를 지도 위의 위도와 경도처럼 좌표로 찍어서, "사과"와 "포도"가 "자동차"보다 가깝게 배치되도록 만드는 기술입니다.
+//
+
+
+
+
+>>> 여기 할 차례 
+
+Python
+# Step 4: 컬렉션 생성 (중복 방지 로직 포함)
+collection_name = "zoomcamp-rag"
+
+# 설정값 정의
+vectors_config = models.VectorParams(
+    size=EMBEDDING_DIMENSIONALITY,  # 512차원
+    distance=models.Distance.COSINE # 코사인 유사도
+)
+
+# 이미 있으면 생성 생략 (409 에러 방지)
+if client.collection_exists(collection_name):
+    print(f"Collection '{collection_name}' already exists — skipping create.")
+else:
+    client.create_collection(
+        collection_name=collection_name,
+        vectors_config=vectors_config,
+        timeout=120  # 넉넉하게 2분 대기
+    )
+    print(f"Collection '{collection_name}' created successfully.")
+
+
+//
+나> models는 갑자기 어디서 튀어나왔냐
+
+GEM> models.VectorParams나 models.Distance 같은 곳에 쓰인 models가 어디서 갑자기 튀어나왔는지 궁금하신 거죠?
+
+이 models는 우리가 만든 "AI 모델"이 아니라, Qdrant 클라이언트 라이브러리에서 미리 정의해둔 '데이터 규격(클래스) 모음집'입니다.
+
+보통 노트북 맨 윗부분(Step 1 근처)에서 이렇게 임포트(Import)를 먼저 했을 겁니다:
+
+Python
+from qdrant_client import QdrantClient, models
+
+
+💡 models의 정체
+여기서 models는 Qdrant 서버와 통신할 때 "데이터 형식을 딱딱 맞춰서 보내기 위한 약속"들이 담긴 꾸러미입니다.
+
+models.VectorParams: "자, 지금부터 벡터 설정을 보낼 건데, 이 양식에 맞춰서 봐줘"라고 알려주는 양식지입니다.
+
+models.Distance.COSINE: "유사도 계산 방법은 여러 개가 있겠지만, 그중에서 '코사인'이라는 방식을 쓸 거야"라고 선택지 중에서 하나를 고르는 것입니다.
+
+models.PointStruct: "이건 단순한 리스트가 아니라 Qdrant용 '포인트' 구조야"라고 정의해 주는 틀입니다.
+
+헷갈리는 이유!
+우리가 Step 3에서 정한 임베딩 모델(model_handle)과 이름이 비슷해서 헷갈릴 수 있습니다.
+
+models (복수형): Qdrant 라이브러리 도구 모음 (데이터 규격용)
+
+model (단수형/변수): 우리가 선택한 Jina AI의 실제 AI 모델 (계산용)
+
+결론적으로, Step 4의 models는 Qdrant 라이브러리를 설치하고 불러올 때(import) 같이 따라온 도구라고 보시면 됩니다!
+
+이제 이 models라는 녀석이 어디서 왔는지 의문이 풀리셨나요? 그럼 이제 진짜 이 도구들을 써서 데이터를 집어넣는 Step 5로 넘어가겠습니다! 준비되셨나요?
+//
+
+
+💡 직관적인 파라미터 설명
+이 단계는 데이터를 넣기 전, "어떤 규격의 데이터를 담을 것인가"를 결정하는 매우 중요한 단계입니다.
+
+size=EMBEDDING_DIMENSIONALITY (512):
+
+**우리가 선택한 Jina 모델은 문장을 512개의 숫자로 변환합니다. 만약 이 그릇(컬렉션)의 크기를 512가 아닌 다른 숫자(예: 768)로 만들면, 데이터가 들어갈 때 "규격 불일치" 에러가 발생합니다. 즉, 모델이 만드는 숫자 개수와 컬렉션의 크기를 반드시 맞춰야 합니다.
+
+distance=models.Distance.COSINE:
+
+코사인 유사도(Cosine Similarity)는 벡터 검색에서 가장 널리 쓰이는 방식 중 하나입니다.
+
+단순히 숫자의 크기를 비교하는 것이 아니라, 고차원 공간에서 두 벡터가 가리키는 '방향'이 얼마나 일치하는가를 측정합니다. 방향이 비슷할수록(각도가 작을수록) 의미가 비슷한 데이터라고 판단합니다.
+
+client.create_collection:
+
+이 명령어를 실행하면 Docker에서 실행 중인 Qdrant 서버 내부에 zoomcamp-rag라는 이름의 실제 저장 공간이 생성됩니다.
+
+이제 데이터를 담을 빈 방을 만들었습니다!
+
+준비되셨다면, 이제 준비한 documents_raw 데이터를 이 컬렉션에 실제로 집어넣는 Step 5: 포인트 생성 및 업로드로 넘어가도 될까요? 허락해 주시면 진행하겠습니다.
+
+
+
+
+---
+
+
+
+
+네, 드디어 데이터를 실제로 채워 넣는 가장 중요한 단계인 Step 5입니다. 이 단계는 단순히 데이터를 복사하는 게 아니라, 텍스트를 '의미가 담긴 숫자(벡터)'로 구워내서 저장하는 과정입니다.
+
+내용 하나도 스킵하지 않고 디테일하게 정리해 드릴게요.
+
+
+>>> 여기 할 차례
+
+Step 5: 포인트 생성, 임베딩 및 컬렉션 삽입 (Create, Embed & Insert Points)
+포인트(Points)는 Qdrant 데이터의 핵심 단위입니다. 각 포인트는 다음 세 가지로 구성됩니다:
+
+ID: 고유 식별자입니다. Qdrant는 64비트 정수와 UUID를 모두 지원합니다.
+
+Vector: 데이터의 의미를 나타내는 임베딩(숫자 목록)입니다.
+
+Payload (선택사항): 키-값 쌍으로 이루어진 추가 메타데이터입니다.
+
+
+1. 포인트 구조 생성 (Point Structuring)
+먼저 우리가 가진 데이터를 Qdrant가 이해할 수 있는 포인트 형태로 변환합니다.
+
+
+Python
+points = [] # 생성된 포인트들을 담을 리스트
+id = 0 # 포인트마다 부여할 고유 ID (0부터 시작)
+
+# 로드한 로우 데이터(documents_raw)를 순회하며 포인트 생성
+for course in documents_raw:
+    for doc in course['documents']:
+
+        # Qdrant의 포인트 구조(PointStruct)를 정의합니다.
+        point = models.PointStruct(
+            id=id, # 고유 정수 ID 부여
+            
+            # [핵심] FastEmbed를 사용하여 로컬에서 텍스트를 즉시 임베딩합니다.
+            # "jinaai/jina-embeddings-v2-small-en" 모델을 사용하여 text 필드를 벡터로 변환합니다.
+            vector=models.Document(text=doc['text'], model=model_handle),
+            
+            # 검색 결과와 함께 출력하거나 필터링에 사용할 메타데이터를 저장합니다.
+            payload={
+                "text": doc['text'],      # 원문 답변 텍스트
+                "section": doc['section'], # 속한 섹션 (예: General course-related questions)
+                "course": course['course'] # 강좌 이름 (예: data-engineering-zoomcamp)
+            }
+        )
+        points.append(point) # 생성된 포인트를 리스트에 추가
+
+        id += 1 # 다음 포인트를 위해 ID 증가
+
+
+
+2. 임베딩 및 업로드 (Embedding & Upsert)
+이제 생성된 포인트들을 컬렉션에 업로드합니다.
+
+동작 방식: 먼저 FastEmbed가 선택한 모델 파일을 다운로드합니다. (기본 경로는 임시 폴더입니다.) 그 후, 사용자의 컴퓨터(로컬)에서 직접 추론(Inference)을 수행하여 텍스트를 벡터로 바꿉니다.
+
+마지막으로, 생성된 포인트들이 컬렉션에 삽입(Upsert)되고 벡터 인덱스가 구축됩니다.
+
+Python
+# 컬렉션에 포인트들을 업서트(업데이트 + 삽입)합니다.
+client.upsert(
+    collection_name=collection_name,
+    points=points
+)
+
+출력 예시:
+UpdateResult(operation_id=0, status=<UpdateStatus.COMPLETED: 'completed'>)
+이 메시지가 나오면 성공적으로 데이터가 들어간 것입니다.
+
+결과:
+Download complete: 
+ 131M/? [05:03<00:00, 603kB/s]
+Fetching 5 files: 100%
+ 5/5 [04:21<00:00, 153.64s/it]
+
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+...
+
+environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+
+
+UpdateResult(operation_id=1, status=<UpdateStatus.COMPLETED: 'completed'>)
+
+CUR> 다운로드 쪽은 “끝난 것”에 가깝습니다
+로그만 보면:
+
+Download complete + 131M → 모델 파일 받기 완료
+Fetching 5 files: 100% · 5/5 → HF 쪽에서 가져오는 파일들도 끝
+그래서 “받기(fetch)” 단계는 완료로 보면 됩니다.
+
+그런데 경고 때문에 실패한 건 아닙니다
+아래 두 줄은 에러가 아니라 알림입니다.
+
+HF_TOKEN → 없어도 지금처럼 받을 수 있고, 토큰 있으면 제한·속도만 나을 수 있다는 뜻
+symlink → Windows에서 캐시가 링크 대신 복사 위주로 동작할 수 있어 디스크만 조금 더 쓸 수 있다는 뜻 (동작은 함)
+upsert 전체가 끝났는지
+client.upsert(...)는 보통:
+
+(첫 실행) 모델 다운로드 ← 지금 여기까지 끝난 상태
+모델 로드 + 문서마다 임베딩 ← 데이터 많으면 여기서 시간이 더 걸림
+Qdrant로 벡터/페이로드 업로드
+
+그래서 셀이 아직 실행 중이면 2~3이 진행 중일 수 있고,
+셀에 에러 없이 실행이 끝나고 다음 셀로 넘어갔다면 upsert까지 완료입니다.
+
+한 줄 요약: 메시지(경고)는 완료를 막는 실패가 아니고, 다운로드/페치는 완료로 보는 게 맞습니다. upsert 전체는 그 셀이 에러 없이 끝났는지로 판단하면 됩니다.
+
+
+
+//
+나> 여기서 데이터는 내 컴터 용량에 영향을 미치나? 아니면 .venv라 휘발성인가. 영향을 미친다면 데이터를 C:영향 안받고 E:에  넣고싶은데
+
+GEM> 결론부터 말씀드리면, 지금 다운로드된 데이터는 내 컴퓨터 용량(C: 드라이브)에 확실히 영향을 미칩니다. 그리고 .venv에 들어가는 것이 아니라 윈도우의 사용자 폴더(기본적으로 C:)에 쌓이게 됩니다.
+
+휘발성이 아니며, 수동으로 옮기지 않으면 계속 남아있게 됩니다. 이를 E: 드라이브로 옮기는 방법을 바로 알려드릴게요.
+
+1. 데이터가 쌓이는 두 가지 경로 (왜 C: 용량이 줄어드나?)
+AI 모델 저장소 (FastEmbed 캐시):
+
+경로: C:\Users\사용자이름\AppData\Local\fastembed\fastembed_cache
+
+아까 로그에서 본 131MB짜리 모델 파일이 저장되는 곳입니다.
+
+데이터베이스 저장소 (Qdrant 데이터):
+
+경로: 우리가 Docker를 실행할 때 마운트(연결)한 폴더입니다.
+
+만약 Docker 실행 시 -v qdrant_storage:/qdrant/storage라고 썼다면 도커 관리 영역에, 특정 경로를 지정했다면 그 경로에 쌓입니다.
+
+2. E: 드라이브로 옮기는 방법
+A. AI 모델(FastEmbed) 경로 변경
+가장 간편한 방법은 코드를 실행하기 전, 파이썬에게 "모델은 E:에 저장해!"라고 환경 변수를 설정해 주는 것입니다.
+
+Python
+import os
+
+# 1. 모델 저장 경로를 E 드라이브의 특정 폴더로 지정 (폴더는 미리 만드시는 게 좋습니다)
+os.environ["FASTEMBED_CACHE_PATH"] = "E:/fastembed_cache"
+
+# 2. 그다음 라이브러리를 불러오고 실행합니다.
+from fastembed import TextEmbedding
+# ... 이후 코드 진행
+이렇게 하면 앞으로 다운로드되는 모델들은 모두 E:/fastembed_cache에 담기게 됩니다.
+
+B. Qdrant 데이터베이스 경로 변경 (Docker 설정)
+만약 벡터 데이터 자체가 커지는 게 걱정된다면, Docker 실행 명령어를 수정해야 합니다.
+
+Bash
+# 기존 명령어에서 -v 옵션 뒤의 경로를 E: 드라이브로 바꿉니다.
+docker run -p 6333:6333 -p 6334:6334 \
+    -v E:/qdrant_data:/qdrant/storage \
+    qdrant/qdrant
+이렇게 하면 실제 검색 데이터들이 E:/qdrant_data 폴더에 저장됩니다.
+
+3. 요약 및 팁
+.venv는 휘발성인가?: 아니요, 설치한 라이브러리들이 들어있는 폴더일 뿐이며 삭제하지 않는 한 유지됩니다. 하지만 실제 대용량 모델 파일은 .venv 밖의 사용자 캐시 폴더에 들어가는 경우가 많습니다.
+
+C: 드라이브 정리: 이미 다운로드된 C:\Users\사용자이름\AppData\Local\fastembed 폴더는 삭제하셔도 무방합니다. (위의 환경 변수 설정 후 다시 실행하면 E:에 새로 받으니까요.)
+
+zakard님, 지금 이미 모델을 C:에 다 받으신 것 같은데, 용량이 넉넉하지 않다면 위 방법대로 E: 드라이브로 경로를 고정하고 다시 시작하시는 걸 추천드려요. 어떻게 할까요? 설정을 도와드릴까요?
+
+
+나> 앞으로는 C:에 영향을 안가게 하고 싶은데
+
+GEM> 확실하게 E: 드라이브만 사용하도록 세팅을 바꿔봅시다. 이미 C:에 받아진 파일들을 정리하고, 앞으로의 모든 데이터(모델 + 데이터베이스)가 E:에만 쌓이도록 하는 '완전 이주 플랜'입니다.
+
+1. AI 모델 경로 변경 (FastEmbed)
+FastEmbed는 별도 설정이 없으면 무조건 C:\Users\... 경로에 모델을 쌓습니다. 노트북 맨 윗부분에 아래 코드를 추가하면 해결됩니다.
+
+Python
+import os
+
+# 앞으로 모델 다운로드 및 로드는 무조건 E 드라이브의 이 폴더에서 진행합니다.
+# (폴더는 파이썬이 자동으로 만드니 걱정 마세요)
+os.environ["FASTEMBED_CACHE_PATH"] = "E:/fastembed_cache"
+
+from qdrant_client import QdrantClient, models
+효과: 아까 본 131MB 같은 모델 파일들이 이제 C:가 아닌 E:에 저장됩니다.
+
+기존 파일 삭제: 이미 C:에 받아진 파일이 아깝다면 C:\Users\사용자이름\AppData\Local\fastembed 폴더를 직접 삭제해서 용량을 확보하세요.
+
+2. Qdrant 데이터 저장소 변경 (Docker)
+실제 검색 데이터(벡터, 텍스트)가 저장되는 곳도 E:로 돌려야 합니다. 현재 실행 중인 Docker 컨테이너를 끄고 경로를 지정해서 다시 켭니다.
+
+현재 컨테이너 중지 및 삭제:
+
+Bash
+docker stop qdrant-zoomcamp-02
+docker rm qdrant-zoomcamp-02
+E: 드라이브 경로를 연결해서 새로 실행:
+
+Bash
+# E:/qdrant_storage 폴더를 데이터 저장소로 지정합니다.
+docker run -d -p 6333:6333 -p 6334:6334 \
+    --name qdrant-zoomcamp-02 \
+    -v E:/qdrant_storage:/qdrant/storage \
+    qdrant/qdrant
+효과: 이제 Qdrant에서 만드는 모든 컬렉션과 인덱스 파일은 E:/qdrant_storage에 물리적으로 저장됩니다.
+
+
+3. 요약: 앞으로의 작업 흐름이제 zakard님의 환경은 다음과 같이 깔끔하게 분리됩니다:
+
+항목	   	  저장 위치	관리 방법
+
+코드 & 라이브러리   C: (프로젝트 폴더/.venv)	용량이 작음 (텍스트 위주)
+
+AI 모델 (거대 파일)	E:/fastembed_cache	os.environ 설정으로 관리
+
+DB 데이터 (벡터 등)	E:/qdrant_storage	docker -v 옵션으로 관리
+
+💡 마지막 체크!
+방금 Docker 컨테이너를 새로 만드셨다면, 이전에 만든 컬렉션(zoomcamp-rag)은 사라졌을 겁니다. (새로운 빈 저장소를 연결했으니까요.)
+
+따라서 환경 변수 설정을 마친 후, 노트북을 Restart & Run All 하여 Step 4(컬렉션 생성)와 Step 5(데이터 업서트)를 다시 한 번 실행해 주세요. 이번에는 모든 데이터가 조용히 E: 드라이브로 들어갈 겁니다.
+
+준비되셨나요? 설정을 마치고 다시 돌려보신 후 결과를 알려주세요!
+//
+
+
+💡 보충 설명 (성능 및 팁)
+속도: 업서트 속도는 주로 로컬 컴퓨터의 계산 성능에 좌우됩니다. 더 빨리 처리하려면 GPU를 사용하거나 사양이 좋은 컴퓨터가 필요합니다.
+
+대량 업로드: Qdrant는 batch upsert(묶음 업로드)도 지원합니다. 파이썬 클라이언트는 병렬 처리, 재시도, 레이지 배칭(Lazy batching) 기능을 제공하여 대용량 데이터를 효율적으로 처리할 수 있게 해줍니다.
+
+📊 데이터 시각적으로 살펴보기 (Study Data Visually)
+데이터가 잘 들어갔는지 확인하기 위해 Qdrant 웹 UI 대시보드(http://localhost:6333/dashboard)에 접속해 보세요.
+
+zoomcamp-rag 컬렉션의 Visualize 탭을 클릭하면 948개의 답변들이 의미에 따라 어떻게 그룹화되어 있는지 2D 평면상에서 확인할 수 있습니다.
+
+설정값:
+
+JSON
+{
+  "limit": 948,
+  "color_by": {
+    "payload": "course"
+  }
+}
+이 시각화 자료는 512차원의 고차원 벡터를 2차원으로 축소해서 보여주는 것으로, 비슷한 주제를 가진 데이터들이 끼리끼리 모여 있는 것을 볼 수 있습니다. (강좌별로 색깔이 나뉘어 보일 거예요.)
+
+이제 데이터가 모두 저장되었습니다! 드디어 우리가 원했던 검색(Search)을 시작할 준비가 끝났네요.
+
+
+결과:
+
+logo
+Qdrant v1.17.1
+Collections
+​
+Search Collection
+
+Name	Status	Points (Approx)	Segments	Shards	Vectors Config	Actions
+zoomcamp-rag
+green
+
+948	
+4
+
+1
+
+Default
+512
+Cosine
+
+
+GEM> 오, 대시보드 접속까지 성공하셨군요! 화면에 보이는 수치들을 보니 데이터가 아주 정확하게 들어갔습니다.
+
+Points 948: 948개의 문서가 모두 벡터로 변환되어 저장됨.
+
+Vectors Config 512 / Cosine: 우리가 설정한 차원(512)과 거리 측정 방식(Cosine)이 정상 적용됨.
+
+지금 혼란스러우신 이유는 대시보드의 '목록 화면'과 제가 말씀드린 '시각화(Visualize) 탭'이 서로 다른 화면이라 그렇습니다. 차근차근 찾는 방법을 알려드릴게요.
+
+1. 시각화(Visualize) 화면으로 들어가는 방법
+지금 보시는 것은 전체 컬렉션을 관리하는 Collections 메인 화면입니다. 여기서 실제 점(Point)들이 모여 있는 그림을 보려면 아래 순서대로 클릭하세요.
+
+목록에 있는 zoomcamp-rag 이름을 클릭해서 상세 페이지로 들어갑니다.
+
+상단 탭 메뉴 중에서 Visualize (또는 그래프 아이콘)를 클릭합니다.
+
+화면 한쪽에 코드를 넣는 창이 보일 텐데, 거기에 제가 드린 JSON을 붙여넣고 실행(Run)하면 됩니다.
+
+2. 왜 제가 드린 JSON 설정이 필요한가요?
+방금 보신 메인 화면에는 숫자만 나오지만, Visualize 탭에 들어가면 948개의 데이터가 우주 공간의 별처럼 흩어져 있는 2D 그래프가 나옵니다.
+
+"limit": 948: 저장된 모든 데이터(948개)를 한 화면에 다 뿌려달라는 뜻입니다.
+
+"color_by": { "payload": "course" }: 점들의 색깔을 '강좌 이름'에 따라 다르게 칠해달라는 뜻입니다. (이렇게 해야 어떤 강좌 데이터끼리 뭉쳐 있는지 한눈에 보입니다.)
+
+
+
+3. 사이드바 메뉴 설명
+Console: SQL처럼 쿼리를 직접 타이핑해서 데이터를 조회하는 곳입니다.
+
+Collections (지금 계신 곳): DB 안에 어떤 방(테이블)이 있는지 관리하는 곳입니다.
+
+Tutorial/Datasets: Qdrant에서 제공하는 샘플들입니다. (지금은 무시하셔도 됩니다.)
+
+
+💡 요약
+지금 데이터는 100% 완벽하게 들어간 상태입니다! zoomcamp-rag 이름을 클릭하고 들어가서 Visualize 탭을 찾아보세요.
+
+혹시 그래프 화면이 안 보이거나 JSON을 어디 넣어야 할지 모르겠다면 말씀해 주세요. 바로 캡처한 것처럼 설명해 드릴게요. 이제 데이터가 준비됐으니 드디어 검색(Step 6)을 해볼까요? zakard님! 처음으로 AI에게 질문을 던질 준비가 되셨나요?
+
+
+
+
+나> Visualize 탭 결과:
+
+
+// Try me!
+
+{
+  "limit": 500
+}
+
+// Specify request parameters to select data for visualization.
+//
+// Available parameters:
+//
+// - 'limit': maximum number of vectors to visualize.
+//            *Warning*: large values may cause browser to freeze.
+//
+// - 'filter': filter expression to select vectors for visualization.
+//             See https://qdrant.tech/documentation/concepts/filtering/
+//
+// - 'color_by': specify score or payload field to use for coloring points.
+//               How to use:
+//
+//                "color_by": {
+//                  "payload": "field_name"
+//                }
+//
+// - 'using': specify which vector to use for visualization
+//                  if there are multiple.
+//
+// - 'algorithm': specify algorithm to use for visualization. Available options: 'TSNE', 'UMAP', 'PCA'.
+
+
+
+
+GEM> 네, 바로 그 창입니다! 지금 화면에 떠 있는 { "limit": 500 }은 그냥 "예시"일 뿐이에요.
+
+우리는 데이터를 더 자세히, 그리고 예쁘게 보고 싶으니까 그 창에 있는 내용을 싹 지우고 아래 코드를 복사해서 붙여넣은 뒤, 실행(Run 또는 좌측 하단의 재생 버튼)을 눌러보세요.
+
+JSON
+{
+  "limit": 948,
+  "color_by": {
+    "payload": "course"
+  }
+}
+
+
+결과:
+Point 311
+
+Payload
+{
+"text":"When accessing Looker Studio through the Google Cl…"
+"section":"Module 4: analytics engineering with dbt"
+"course":"data-engineering-zoomcamp"
+}
+
+
+{"text":"When accessing Looker Studio through the Google Cloud Project console, you may be prompted to subscribe to the Pro version and receive the following errors:\nInstead, navigate to https://lookerstudio.google.com/navigation/reporting which will take you to the free version.","section":"Module 4: analytics engineering with dbt","course":"data-engineering-zoomcamp"}
+
+
+
+실행하면 어떤 일이 벌어지나요?
+데이터 전체 로드: limit을 948로 올렸으니, 우리가 아까 넣은 모든 문서가 점으로 나타납니다.
+
+색상 구분: color_by 설정 덕분에, 단순히 회색 점들이 아니라 강좌별(Data Engineering, Machine Learning 등)로 서로 다른 색깔이 입혀집니다.
+
+의미적 군집(Clustering): 비슷한 주제의 답변들은 서로 가까이 모여 있는 것을 볼 수 있습니다.
+
+예를 들어 "Docker 설정"에 관한 질문들은 끼리끼리 모여 있고, "수료증 발급"에 관한 질문들은 또 다른 곳에 모여 있을 거예요.
+
+이게 바로 임베딩(Embedding)의 힘입니다!
+
+
+💡 팁
+화면의 점 위에 마우스를 올려보세요. 우리가 Payload에 넣었던 실제 텍스트 내용이 툴팁으로 뜰 겁니다.
+
+왼쪽 메뉴에 보이는 TSNE, UMAP, PCA는 512차원의 복잡한 데이터를 2차원으로 찌그러뜨려 보여주는 수학적 알고리즘들인데, 기본값인 UMAP이 가장 보기에 예쁠 겁니다.
+
+이렇게 점들이 예쁘게 모여 있는 걸 확인하셨다면, 데이터가 "의미 있게" 잘 저장된 것입니다.
+
+이제 눈으로 확인도 끝났으니, 진짜 질문을 던져서 답변을 찾아오는 Step 6: 벡터 검색(Search)으로 넘어가 볼까요? 준비되셨으면 "고!"를 외쳐주세요!
+
+
+점들이 예쁘게 뿌려졌다면 이제 시각적 검증은 끝났습니다! 드디어 코드로 돌아가서 검색을 해볼 차례인데, Step 6: 벡터 검색 코드를 작성해 볼까요? 도와드릴까요?
+
+
+>>> 여기까지 함. 운동하러 감. 
+
+
+Step 6: 벡터 검색 수행하기로 넘어가서 질문을 던져볼까요? 준비되셨으면 말씀해 주세요.
+
+
+
+---
+
+
+
+드디어 우리가 공들여 쌓은 데이터 진영에서 '정보'를 찾아낼 시간입니다. 지금까지 과정이 도서관에 책을 분류해서 꽂는 과정이었다면, 이제는 사서에게 질문을 던져 답변을 받아내는 과정이죠.
+
+
+Step 6를 세 단계로 나누어 설명해 드릴게요.
+
+
+
+Step 6: Running a Similarity Search
+단계 6: 유사도 검색 실행하기
+
+이제 주어진 쿼리 임베딩에 대해 Qdrant에서 가장 유사한 텍스트 벡터를 찾아봅시다. 즉, 주어진 질문에 대해 가장 관련성이 높은 답변을 찾는 과정입니다.
+
+유사도 검색 작동 원리 (How Similarity Search Works)
+Qdrant는 컬렉션을 생성할 때 정의된 거리 메트릭(Distance Metric)을 사용하여, 벡터 인덱스를 기반으로 쿼리 벡터와 저장된 벡터들을 비교합니다.
+
+가장 가깝게 일치하는 항목들이 유사도 순으로 정렬되어 반환됩니다.
+
+벡터 인덱스는 근사 최근접 이웃(Approximate Nearest Neighbor, ANN) 검색을 위해 구축되었으며, 이를 통해 대규모 벡터 검색이 가능해집니다.
+
+벡터 검색을 위한 벡터 인덱스 선택에 대해 더 자세히 알고 싶다면 "벡터 데이터베이스란 무엇인가" https://qdrant.tech/articles/what-is-a-vector-database/
+
+기사를 확인하거나, 더 기술적인 심층 분석을 원하신다면 "필터링 가능한 HNSW(Hierarchical Navigable Small World)"에 관한 기사
+
+https://qdrant.tech/articles/filtrable-hnsw/
+
+를 확인해 보세요.
+
+
+
+//
+나> 여기서 백터 인덱스란
+GEM> 벡터 인덱스(Vector Index)란, 수많은 벡터 데이터 사이에서 내가 원하는 데이터(쿼리 벡터)와 가장 비슷한 것을 빛의 속도로 찾아낼 수 있게 만든 '색인' 혹은 '길잡이'를 말합니다.
+
+도서관에 수만 권의 책이 꽂혀 있을 때, 책을 하나하나 다 펼쳐보며 내용을 확인하는 대신 '가나다' 순의 목록이나 장르별 분류표를 보고 바로 찾아가는 것과 같은 원리입니다.
+
+1. 왜 벡터 인덱스가 필요한가요?
+단순하게 생각하면, 내가 던진 질문과 DB에 있는 모든 답변을 하나하나 다 비교해보면 됩니다. 하지만 데이터가 100만 개, 1,000만 개로 늘어나면 이 작업은 너무 오래 걸립니다.
+
+인덱스가 없을 때: 모든 데이터와 일일이 거리를 계산함 (정확하지만 매우 느림).
+
+인덱스가 있을 때: 데이터를 비슷한 것끼리 미리 묶어두거나 지도를 그려두어, 관련 있는 구역만 뒤짐 (압도적으로 빠름).
+
+
+2. 우리가 실습 중인 Qdrant의 핵심 기술: HNSW
+원문에서 언급된 HNSW(Hierarchical Navigable Small World)가 바로 이 벡터 인덱스의 대표적인 방식입니다.
+
+계층형(Hierarchical): 마치 구글 지도에서 '국가 → 도시 → 동네' 순으로 줌인하는 것처럼, 여러 층의 지도를 만듭니다.
+
+탐색 가능한 작은 세상(Navigable Small World): 모든 점이 연결된 게 아니라, 몇 단계의 연결만 거치면 목적지에 도달할 수 있는 '좁은 세상' 네트워크를 만듭니다.
+
+
+3. ANN (Approximate Nearest Neighbor)의 관계
+인덱스를 사용하면 "완벽하게 똑같은 것"보다는 "거의 확실히 제일 가까운 것"을 찾게 됩니다. 이걸 근사 최근접 이웃(ANN) 검색이라고 합니다.
+
+100% 정확도를 조금 양보하는 대신, 수백만 개의 데이터를 0.001초 만에 검색할 수 있게 해주는 마법 같은 기술인 셈이죠.
+
+요약하자면
+벡터 인덱스는 데이터가 너무 많아서 하나하나 찾기 힘들 때, 비슷한 것끼리 길을 연결해두어 순식간에 정답 근처로 안내해주는 고속도로라고 이해하시면 됩니다.
+
+실습 코드에서 client.query_points를 실행할 때, Qdrant는 바로 이 인덱스 고속도로를 타고 zakard님의 질문과 가장 유사한 답변을 빛의 속도로 찾아오고 있는 것입니다.
+
+이제 벡터 인덱스가 어떤 역할을 하는지 감이 좀 잡히시나요? 다음 단계로 넘어가서 검색 결과를 직접 확인해 볼까요?
+//
+
+
+
+검색 함수를 정의해 봅시다:
+Python
+def search(query, limit=1): # 검색어(query)와 결과 개수(limit)를 인자로 받는 함수를 정의합니다.
+
+    results = client.query_points( # Qdrant 클라이언트의 query_points 메서드를 호출합니다.
+        collection_name=collection_name, # 검색을 수행할 컬렉션 이름을 지정합니다.
+        query=models.Document( # "jinaai/jina-embeddings-v2-small-en" 모델을 사용하여 검색어 텍스트를 로컬에서 임베딩합니다.
+            text=query, # 사용자가 입력한 질문 텍스트입니다.
+            model=model_handle # 앞서 정의한 Jina AI 모델 핸들을 사용합니다.
+        ),
+        limit=limit, # 가장 유사한 상위 결과의 개수를 설정합니다.
+        with_payload=True # 결과와 함께 메타데이터(원본 텍스트 등)를 가져오도록 설정합니다.
+    )
+
+    return results # 검색 결과 객체를 반환합니다.
+
+
+이제 코스 데이터에서 무작위로 질문을 하나 골라봅시다.
+기억하시겠지만, 우리는 질문(questions) 데이터를 Qdrant에 업로드하지 않았습니다. (텍스트 본문만 업로드했습니다.)
+
+//
+나> 리마인더: client.upsert(
+ collection_name=collection_name,
+    points=points) 
+//
+
+
+Python
+import random # 무작위 선택을 위해 random 라이브러리를 임포트합니다.
+
+course = random.choice(documents_raw) # 전체 코스 데이터 중 하나를 무작위로 선택합니다.
+course_piece = random.choice(course['documents']) # 선택된 코스의 문서 중 하나를 무작위로 선택합니다.
+print(json.dumps(course_piece, indent=2)) # 선택된 데이터 조각을 보기 좋게 출력합니다.
+
+결과:
+{
+  "text": "In case one would like to set a github repository (e.g. for Homeworks), one can follow 2 great tutorials that helped a lot\nSetting up github on AWS instance - this\nSetting up keys on AWS instance - this\nThen, one should be able to push to its repo\nAdded by Daniel Hen (daniel8hen@gmail.com)",
+  "section": "Module 1: Introduction",
+  "question": "Configuring Github to work from the remote VM"
+}
+
+
+어떤 답변을 얻게 되는지 확인해 봅시다:
+
+Python
+# 무작위로 뽑은 질문을 우리가 만든 검색 함수에 넣습니다.
+result = search(course_piece['question'])
+
+# 반환된 결과 객체를 출력합니다.
+result
+
+결과:
+
+QueryResponse(points=[ScoredPoint(id=466, version=5, score=0.85767186, payload={'text': 'Type the following command:\ngit config -l | grep url\nThe output should look like this:\nremote.origin.url=https://github.com/github-username/github-repository-name.git\nChange this to the following format and make sure the change is reflected using command in step 1:\ngit remote set-url origin "https://github-username@github.com/github-username/github-repository-name.git"\n(Added by Dheeraj Karra)', 'section': '1. Introduction to Machine Learning', 'course': 'machine-learning-zoomcamp'}, vector=None, shard_key=None, order_value=None)])
+
+
+score – 질문 임베딩과 텍스트 임베딩 사이의 코사인 유사도를 나타냅니다.
+
+나> 위의 경우, score=0.85767186
+
+
+
+무작위로 선택된 질문에 대해 원본 답변과 검색된 답변을 비교해 봅시다.
+
+Python
+# 무작위로 선택된 원본 질문을 출력합니다.
+print(f"Question:\n{course_piece['question']}\n")
+
+# Qdrant가 검색해 온 상위 답변의 텍스트를 출력합니다.
+print("Top Retrieved Answer:\n{}\n".format(result.points[0].payload['text']))
+
+# 데이터셋에 들어있던 실제 원본 답변을 출력합니다.
+print("Original Answer:\n{}".format(course_piece['text']))
+
+
+결과:
+Question:
+Configuring Github to work from the remote VM
+
+Top Retrieved Answer:
+Type the following command:
+git config -l | grep url
+The output should look like this:
+remote.origin.url=https://github.com/github-username/github-repository-name.git
+Change this to the following format and make sure the change is reflected using command in step 1:
+git remote set-url origin "https://github-username@github.com/github-username/github-repository-name.git"
+(Added by Dheeraj Karra)
+
+Original Answer:
+In case one would like to set a github repository (e.g. for Homeworks), one can follow 2 great tutorials that helped a lot
+Setting up github on AWS instance - this
+Setting up keys on AWS instance - this
+Then, one should be able to push to its repo
+Added by Daniel Hen (daniel8hen@gmail.com)
+
+
+이제 초기 데이터셋에 없었던 질문에 대한 답변을 검색해 봅시다.
+
+Python
+# "숙제를 늦게 제출하면 어떻게 되나요?"라는 새로운 질문을 던지고 결과의 텍스트만 출력합니다.
+print(search("What if I submit homeworks late?").points[0].payload['text'])
+
+결과:
+No, late submissions are not allowed. But if the form is still not closed and it’s after the due date, you can still submit the homework. confirm your submission by the date-timestamp on the Course page.y
+Older news:[source1] [source2]
+
+
+원문의 모든 기술적 설명과 단계별 로직을 하나도 빠짐없이 한글로 충실히 옮겼습니다. 이제 이 내용을 바탕으로 노트북에서 직접 실행해 보세요. 특히 마지막에 던진 새로운 질문에 대해 Qdrant가 얼마나 정확한 맥락의 답변을 찾아오는지 확인해 보시면 이 실습의 핵심을 완벽히 이해하실 수 있습니다.
+
+
+
+---
+
+
+
+
+이번 단계는 검색의 정확도를 한층 더 높여주는 '필터링' 기능입니다. 원문의 모든 설명을 한 글자도 빠뜨리지 않고 충실하게 한글로 번역하고, 코드에는 상세한 한글 주석을 달았습니다.
+
+
+
+단계 7: 필터를 사용한 유사도 검색 실행하기 (Running a Similarity Search with Filters)
+
+우리는 메타데이터 필터를 사용하여 검색 결과를 더욱 세밀하게 다듬을 수 있습니다.
+
+Qdrant의 독자적인 벡터 인덱스 구현 방식인 필터링 가능한 HNSW (Filterable HNSW)를 사용하면, 필터링 조건이 포함된 상태에서도 정밀하고 확장 가능한 벡터 검색이 가능합니다.
+
+예를 들어, 데이터셋에 포함된 세 가지 코스 중 특정 코스와 관련된 질문에 대한 답변만 검색할 수 있습니다.
+must 필터를 사용하면 데이터 포인트가 검색 결과에 포함되기 위해 지정된 모든 조건을 반드시 만족해야 함을 보장합니다.
+
+Qdrant는 should, must_not, range 등 다른 필터 유형도 지원합니다. 전체 개요를 확인하려면 필터링 가이드(Filtering Guide)를 참조하세요.
+
+효율적인 필터링을 위해서는 페이로드 필드(payload fields)의 인덱싱을 활성화해야 합니다.
+
+Python
+client.create_payload_index(
+    collection_name=collection_name, # 인덱스를 생성할 컬렉션 이름입니다.
+    field_name="course", # 인덱싱할 필드 이름을 "course"로 지정합니다.
+    field_schema="keyword" # 문자열 메타데이터 필드에 대해 정확한 일치(exact matching)를 수행하도록 설정합니다.
+)
+
+출력 예시: UpdateResult(operation_id=2, status=<UpdateStatus.COMPLETED: 'completed'>)
+
+결과:
+UpdateResult(operation_id=7, status=<UpdateStatus.COMPLETED: 'completed'>)
+
+
+이제 검색 함수를 업데이트해 봅시다
+
+
+Python
+def search_in_course(query, course="mlops-zoomcamp", limit=1): # 검색어와 코스 이름(기본값 mlops-zoomcamp)을 받는 함수를 정의합니다.
+
+    results = client.query_points( # Qdrant 클라이언트를 통해 쿼리를 수행합니다.
+        collection_name=collection_name, # 대상 컬렉션의 이름을 지정합니다.
+        query=models.Document( # "jinaai/jina-embeddings-v2-small-en"을 사용하여 쿼리 텍스트를 로컬에서 임베딩합니다.
+            text=query, # 사용자가 입력한 질문 텍스트입니다.
+            model=model_handle # 앞서 정의한 Jina 모델 핸들을 사용합니다.
+        ),
+        query_filter=models.Filter( # 코스 이름으로 결과를 필터링합니다.
+            must=[ # 아래 조건을 반드시 만족해야 합니다.
+                models.FieldCondition(
+                    key="course", # "course" 필드를 확인합니다.
+                    match=models.MatchValue(value=course) # 입력받은 코스 이름과 정확히 일치하는지 검사합니다.
+                )
+            ]
+        ),
+        limit=limit, # 가장 유사한 상위 매치 항목의 개수를 설정합니다.
+        with_payload=True # 결과와 함께 메타데이터(텍스트 내용 등)를 가져오도록 설정합니다.
+    )
+
+    return results # 검색 결과 객체를 반환합니다.
+
+
+동일한 질문이 서로 다른 코스에서 어떻게 답변되는지 확인해 봅시다:
+
+data-engineering-zoomcamp, machine-learning-zoomcamp, 그리고 mlops-zoomcamp에서 각각 확인해 볼 수 있습니다.
+
+Python
+# "숙제를 늦게 제출하면 어떻게 되나요?"라는 질문을 "mlops-zoomcamp" 코스로 한정하여 검색하고 답변을 출력합니다.
+print(search_in_course("What if I submit homeworks late?", "mlops-zoomcamp").points[0].payload['text'])
+
+결과:
+Please choose the closest one to your answer. Also do not post your answer in the course slack channel.
+
+
+//
+나> 
+결과:
+"Please choose the closest one to your answer. Also do not post your answer in the course slack channel."
+
+엉뚱한 답
+
+GEM> 정확한 지적입니다. 방금 나온 결과는 질문에 대한 직접적인 답변이라기보다, 퀴즈나 숙제 제출 시 주의사항 같은 '엉뚱한 문장'이 검색된 것이 맞습니다.
+
+이런 현상이 왜 발생하는지, 그리고 원문은 이를 어떻게 다루고 있는지 Step 7의 맥락에서 차근차근 짚어드릴게요.
+
+1. 왜 엉뚱한 답이 나왔을까? (유사도의 한계)
+우리가 던진 질문은 "What if I submit homeworks late?"입니다. 하지만 검색된 문장은 "답변 중 가장 가까운 것을 선택하세요..."라는 내용이죠.
+
+원인: mlops-zoomcamp 데이터 안에는 "늦은 제출"에 대한 명확한 문장이 없거나, 혹은 다른 문장에 "submit", "answer" 같은 단어들이 벡터 공간에서 질문과 더 가깝게 배치되었기 때문입니다.
+
+벡터 검색의 특징: 벡터 검색은 단어가 100% 일치하지 않아도 가장 '비슷해 보이는' 것을 무조건 가져옵니다. 점수가 낮더라도 limit=1을 주면 그중 1등을 가져오기 때문에 이런 엉뚱한 결과가 나올 수 있습니다.
+
+2. 원문에서의 의도 (비교를 위한 장치)
+원문 필터링 단계에서 이 예시를 굳이 보여준 이유는, "필터를 걸면 검색 범위가 좁아져서 결과가 완전히 달라진다"는 것을 보여주기 위함입니다.
+
+Step 6(필터 없을 때): 전체 데이터에서 찾으므로 data-engineering 코스의 정확한 답변("Late submissions are not allowed...")을 찾아왔습니다.
+
+Step 7(필터 있을 때): 범위를 mlops-zoomcamp로 강제 제한했더니, 그 코스 안에는 마땅한 답이 없어서 그나마 비슷해 보이는 엉뚱한 문장을 가져온 것입니다.
+
+3. 실습에서 확인해볼 점
+이 결과가 틀렸다고 당황하실 필요 없습니다. 오히려 "필터가 확실히 작동해서 다른 코스의 정답을 배제했구나!"라고 이해하시면 완벽합니다.
+
+확인을 위해 아래 코드를 노트북에 추가해서 비교해 보세요. (원문에는 없지만 이해를 돕는 테스트입니다.)
+
+Python
+# 1. 'data-engineering-zoomcamp'로 필터를 바꿔서 검색해보기
+# (아까 Step 6에서 봤던 그 정답이 다시 나오는지 확인)
+print("--- Data Engineering 코스 결과 ---")
+print(search_in_course("What if I submit homeworks late?", "data-engineering-zoomcamp").points[0].payload['text'])
+
+# 2. 'machine-learning-zoomcamp'로 필터를 바꿔서 검색해보기
+print("\n--- Machine Learning 코스 결과 ---")
+print(search_in_course("What if I submit homeworks late?", "machine-learning-zoomcamp").points[0].payload['text'])
+
+
+/
+시도: print(search_in_course("What if I submit homeworks late?", "data-engineering-zoomcamp").points[0].payload['text'])
+결과: No, late submissions are not allowed. But if the form is still not closed and it’s after the due date, you can still submit the homework. confirm your submission by the date-timestamp on the Course page.y
+Older news:[source1] [source2]
+/
+
+💡 요약
+지금 나온 엉뚱한 답변은 필터링 기능이 너무 잘 작동해서 발생한 현상입니다. mlops라는 좁은 울타리 안에서만 찾으려다 보니 벌어진 일이죠.
+
+zakard님, 검색 결과가 이상하게 나왔다는 건 이미 이 시스템의 원리를 정확히 파악하고 계신다는 증거입니다! 이제 필터링의 위력(과 한계)을 맛보셨으니, 다음 단계로 넘어가 볼까요?
+//
+
+
+💡 초보자를 위한 팁
+create_payload_index 왜 하나요?: 책의 맨 뒷장에 있는 '찾아보기' 색인을 만드는 것과 같습니다. "course"라는 필드에 미리 색인을 만들어두면, 수많은 데이터 중에서 특정 코스의 데이터만 순식간에 골라내어 그 안에서만 벡터 검색을 할 수 있어 훨씬 빠르고 정확합니다.
+
+must 필터: SQL의 WHERE 절과 비슷합니다. 조건에 맞지 않는 데이터는 아예 검색 대상에서 제외됩니다.
+
+이제 노트북에서 코드를 실행해 보세요. 같은 질문이라도 코스마다 운영 정책이 달라 답변이 다르게 나올 수 있는데, 필터링이 그 차이를 정확히 잡아내는지 확인하는 것이 이번 단계의 묘미입니다!
+
+
+
+---
+
+
+
+결론 (Conclusion)
+🎉 축하합니다! 이제 여러분은 Qdrant를 사용하여 간단한 시맨틱 검색(Semantic Search)을 실행하는 데 필요한 모든 것을 갖추게 되었습니다! 👏
+
+일반적으로, 상용 수준(Production-ready)의 벡터 검색 솔루션에서 데이터를 준비하고 조직하며 저장하는 과정은 그 자체만으로도 별도의 코스를 구성할 만큼 가치 있는 주제입니다.
+
+만약 효율적인 벡터 검색 설정에 대해 더 깊이 파고들고 싶다면, 저희의 벡터 검색 매뉴얼(Vector Search Manuals)을 확인해 보세요.
+https://qdrant.tech/articles/vector-search-manuals/
+
+다음 영상들에서는 키워드 기반 검색과 벡터 검색의 장점을 결합한 하이브리드 검색(Hybrid Search) 사용법을 보여드릴 예정입니다. 
+https://qdrant.tech/articles/hybrid-search/
+
+많은 실제 애플리케이션에서 이 두 방식은 서로 협력하며, 키워드의 정밀함과 임베딩의 유연성 사이의 균형을 맞추어 최상의 결과를 제공합니다.
+
+추신(P.S.): 저희는 여러분이 단순한 유사도 검색을 넘어 RAG(검색 증강 생성) 및 에이전트 파이프라인을 구동하는 Qdrant의 다양한 기능들을 살펴보시기를 권장합니다. (참고로, 여기 저희의 MCP 서버 링크도 있습니다 ;) 
+https://github.com/qdrant/mcp-server-qdrant
+).
+
+💡 실습을 마치며 (zakard님을 위한 요약)
+오늘 zakard님은 단순한 코드 복붙을 넘어, 실제 데이터 엔지니어링 환경에서 마주할 수 있는 아주 중요한 문제들을 해결하셨습니다.
+
+환경 설정: 모델 파일이 C: 드라이브를 점령하지 않도록 E: 드라이브로 경로를 돌리고, 권한 문제(심볼릭 링크)를 해결했습니다.
+
+데이터 무결성: 중복된 코드나 오타가 섞인 셀을 정리하여 깨끗한 파이프라인을 만들었습니다.
+
+필터링의 이해: mlops 코스에서 엉뚱한 답이 나온 이유를 통해, 필터가 검색 범위를 어떻게 제한하는지 몸소 체험하셨습니다.
+
+이제 이 노트북은 zakard님만의 '맞춤형 시맨틱 검색 엔진'이 되었습니다. 이 기초 위에 다음 단계인 하이브리드 검색을 쌓아 올린다면, 훨씬 더 강력한 AI 검색 시스템을 만드실 수 있을 거예요.
+
+정말 고생 많으셨습니다! 다음 실습이나 하이브리드 검색 단계로 넘어갈 준비가 되시면 언제든 말씀해 주세요. 조교로서 끝까지 서포트하겠습니다!
+
+
+

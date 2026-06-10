@@ -11,7 +11,7 @@ This folder is **homework only**: Docker stack for ES **8.17.6**, links, and **`
 - Do **not** run together with `LLM/docker-compose.elasticsearch.yml` (course, 8.4.3) — both need port **9200**.
 
 ```text
-cd <your-clone>/ZoomCamp/LLM/01/Introduction/llm_01_hw
+cd <your-clone>/ZoomCamp/LLM/01/2025/Introduction/llm_01_hw
 docker compose up -d
 ```
 

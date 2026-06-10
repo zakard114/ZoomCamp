@@ -1,0 +1,193 @@
+Module 1: Agentic RAG
+
+이 모듈에서는 LLM이 무엇인지 배우고 키워드 검색을 사용하여 간단한 RAG 파이프라인을 구축합니다. 그런 다음 고정된 파이프라인을 실행하는 대신 LLM이 언제 무엇을 검색할지 결정하도록 에이전트 방식으로 구현합니다.
+
+https://www.youtube.com/watch?v=KSItlTAsMsk
+
+
+파트 1: RAG
+첫 10개 강의에서는 키워드 검색을 사용하여 처음부터 작동하는 RAG 파이프라인을 구축하는 과정을 안내합니다.
+
+1.1 LLM 및 RAG 입문 (Introduction to LLM and RAG)
+이번 단원에서는 LLM(거대 언어 모델)의 실무적 활용에 초점을 맞추며, 특히 RAG(Retrieval-Augmented Generation, 검색 증강 생성)를 집중적으로 다룹니다. 우리는 코스 전반에 걸쳐 수강생들이 자주 묻는 질문(FAQ) 데이터를 활용하여 질문 답변(Q&A) 시스템을 구축할 것입니다. 여기서는 LLM의 내부 이론을 깊게 파고들기보다, 이를 어떻게 효과적으로 활용할 수 있는지에 대한 실무적인 방법을 배웁니다.
+
+해결하려는 문제 (The Problem)
+DataTalks.Club 커뮤니티에는 여러 코스가 개설되어 있으며, 각 코스마다 수강생들이 자주 묻는 질문을 모아둔 FAQ 문서가 있습니다. 이 문서들은 매우 유용하지만, 분량이 수백 페이지에 달해 학생들이 원하는 정보를 신속하게 찾아내기가 어렵습니다.
+
+우리가 만들고자 하는 시스템은 수강생이 질문을 입력하면, 시스템이 FAQ 문서에서 가장 연관성 높은 내용을 찾아내고, 이를 바탕으로 정확한 답변을 생성하여 사용자에게 전달하는 구조입니다.
+
+LLM의 이해 (Understanding LLMs)
+LLM은 Large Language Model(거대 언어 모델)의 약자입니다. 기본적으로 언어 모델이란, 지금까지 입력된 텍스트를 바탕으로 다음에 올 가장 논리적인 단어(또는 토큰)를 예측하는 시스템입니다. 스마트폰의 문자 자동 완성 기능이 대표적인 예시입니다.
+
+기존의 작은 언어 모델들과 달리, 거대 언어 모델(LLM)은 수십억 개의 파라미터(매개변수)를 가지고 있으며 방대한 양의 데이터로 학습되었습니다. 그 결과, 단순히 다음 단어를 예측하는 것을 넘어 마치 인간과 대화하는 듯한 고도의 지능적인 답변을 제공할 수 있습니다.
+
+이번 코스에서 우리는 LLM의 내부 구조(예: 트랜스포머 신경망 구조)를 상세히 분석하지 않고 하나의 '블랙박스(Black Box)'로 취급합니다. 즉, 프롬프트(Prompt)라는 텍스트 입력을 주면 의미 있는 답변(Answer)을 출력하는 똑똑한 도구로 활용할 것입니다.
+
+
+RAG란 무엇인가? (Exploring RAG)
+RAG는 Retrieval-Augmented Generation(검색 증강 생성)의 약자입니다. 이는 LLM이 답변을 생성(Generation)할 때, 외부 지식 베이스에서 관련 정보를 검색(Retrieval)하여 그 내용을 바탕으로 답변을 보강(Augmented)하는 기술입니다.
+
+일반적인 LLM은 자신이 학습한 데이터만을 바탕으로 대답합니다. 예를 들어 "연어 요리법" 같은 일반적인 질문에는 잘 답변하지만, "이 코스에 지금 등록해도 늦지 않나요?"와 같이 학습 데이터에 없는 특정 커뮤니티나 최신 정보에 대해서는 알지 못하며, 잘못된 정보를 지어내는 환각(Hallucination) 현상이 발생할 수 있습니다.
+
+RAG는 이러한 한계를 다음과 같은 과정으로 해결합니다:
+
+사용자 질문: 사용자가 시스템에 질문을 던집니다.
+
+검색(Retrieval): 질문을 지식 베이스(예: FAQ 데이터베이스)로 보내 연관된 문서들을 찾아냅니다.
+
+컨텍스트 포함 프롬프트 구성: 검색된 문서들을 '참고 자료(Context)'로 삼아 사용자 질문과 함께 하나의 프롬프트로 결합합니다.
+
+생성(Generation): LLM은 제공된 참고 자료를 바탕으로 정확하고 검증된 답변을 생성하여 사용자에게 반환합니다.
+
+이번 모듈에서는 먼저 아주 단순한 형태의 자체 제작 검색 엔진으로 시작하여, 이후 이를 Elasticsearch로 교체하고, 나아가 벡터 서치(Vector Search)와 에이전트 기능(Agentic functions)까지 확장 적용해 볼 것입니다. 또한 OpenAI API뿐만 아니라 다양한 오픈소스 LLM을 연동하는 방법도 함께 다루게 됩니다.
+
+가이드 진행 확인:
+원문 스크립트 번역이 완료되었습니다. 다음 문서나 실습 단계로 진행할 준비가 되시면 말씀해 주세요!
+
+
+
+---
+
+
+
+1.2 환경 구성하기 (Configuring Your Environment)
+이 단원에서는 코스 실습을 진행하기 위해 개발 환경을 설정하는 방법을 배웁니다. 가이드에서는 GitHub Codespaces를 기준으로 설명하지만, 본인의 로컬 머신(컴퓨터)이나 Google Colab, SageMaker 등 선호하는 다른 환경을 사용하셔도 됩니다.
+
+참고: 이번 모듈 1에서는 GPU가 필요하지 않습니다. 모듈 2부터 로컬 LLM을 실행할 때 GPU가 필요하게 되며, 해당 단원에서 관련 내용을 다시 다룰 예정입니다.
+
+GitHub Codespaces로 시작하기 (Using GitHub Codespaces)
+GitHub Codespaces는 브라우저에서 바로 사용할 수 있는 무료 클라우드 개발 환경을 제공합니다. Docker 등이 미리 설치되어 있어 편리합니다.
+
+GitHub 저장소 생성: 본인의 GitHub 계정에 llm-zoomcamp라는 이름으로 새로운 저장소를 만듭니다. 나중에 숙제 링크를 제출해야 하므로 반드시 Public(공개)으로 설정해야 합니다. .gitignore 템플릿은 Python으로 선택합니다.
+
+Codespace 생성: 저장소가 만들어지면 초록색 Code 버튼을 누르고, Codespaces 탭에서 Create codespace on main을 클릭합니다.
+
+VS Code Desktop 연동 (선택): 브라우저 환경이 불편하다면, VS Code 좌측 하단의 Codespaces 메뉴를 통해 본인의 컴퓨터에 설치된 Visual Studio Code 데스크톱 앱으로 연결하여 작업할 수 있습니다. (필요 시 Codespaces 확장 프로그램을 설치해야 합니다.)
+
+터미널을 열고(Ctrl + ~) docker --version 및 docker-compose --version을 입력하여 Docker 환경이 정상적으로 준비되었는지 확인합니다.
+
+결과:
+$ docker --version
+Docker version 26.0.0, build 2ae903e
+
+
+필요한 라이브러리 설치 (Installing Libraries)
+파이썬 환경에서 실습에 필요한 패키지들을 설치해야 합니다. 두 가지 접근 방법이 있습니다.
+
+방법 1: pip를 이용한 개별 설치
+기본 파이썬 환경에서 터미널에 아래 명령어를 입력하여 필요한 라이브러리만 골라 설치합니다.
+
+Bash
+pip install tqdm jupyter==7.1.2 openai elasticsearch scikit-learn pandas
+tupyter: 코드를 작성하고 실행할 노트북 환경입니다.
+
+CUR> 
+상태
+E:\IT_SPACES\AI\ZoomCamp\LLM\.venv에는 이미 notebook 7.1.2와 나머지 패키지가 설치되어 있습니다. 위 명령을 다시 실행해도 Requirement already satisfied만 나오면 정상입니다.
+
+Jupyter 실행:
+
+jupyter notebook
+
+openai: OpenAI API(GPT 모델)와 통신하기 위한 라이브러리입니다.
+
+elasticsearch: 검색 엔진 연결을 위한 클라이언트입니다.
+
+tqdm: 데이터 처리 시 진행 상황을 바(bar) 형태로 보여줍니다.
+
+pandas 및 scikit-learn: 데이터 정제 및 분석을 위한 도구입니다.
+
+
+
+방법 2: Miniconda 환경 구축 (대체 방법)
+데이터 과학 도구들을 더 체계적으로 관리하고 싶다면 Anaconda의 경량 버전인 Miniconda를 설치하는 것을 추천합니다. 아나콘다(약 1GB)보다 용량이 훨씬 작아 다운로드가 빠릅니다.
+
+리눅스용 Miniconda 설치 스크립트를 다운로드합니다.
+
+bash Miniconda3-latest-Linux-x86_64.sh 명령어로 설치를 진행하고 약관에 동의합니다.
+
+터미널을 새로 열면 (base) 환경이 활성화됩니다.
+
+이 환경에서는 jupyter, pandas, scikit-learn 등이 기본 포함되어 있으므로, 나머지 필요한 도구(openai, elasticsearch, tqdm)만 추가로 설치하면 됩니다.
+
+OpenAI API 키 설정 및 보안 (OpenAI API Configuration)
+시스템이 LLM과 통신하려면 OpenAI의 API 키가 필요합니다.
+
+platform.openai.com에 로그인한 후, API Keys 메뉴로 이동합니다.
+
+Create new secret key를 눌러 새 키를 생성하고 이름을 course로 지정합니다.
+
+중요: 이 키는 본인의 비밀번호와 같습니다. 절대로 코드에 직접 하드코딩하거나 GitHub 저장소에 커밋하여 타인에게 노출하면 안 됩니다.
+
+안전한 사용을 위해 터미널 환경 변수에 등록하여 사용합니다:
+
+Bash
+export OPENAI_API_KEY="your-actual-api-key-here"
+
+
+>>> 여기 할 차례. 밥먹으러 감.  
+
+//
+GEMMA 모델 사용 옵션
+New_Model_Inst.txt 참조
+//
+
+
+## 주피터 노트북 실행 및 테스트 (Running Jupyter Notebook)
+
+1. 터미널에 `jupyter notebook`을 입력하여 서버를 실행합니다.
+2. GitHub Codespaces를 사용하는 경우, 8888 포트를 자동으로 감지하여 로컬 머신으로 포워딩해 줍니다.
+3. 브라우저를 열고 `localhost:8888`로 접속합니다. 로그인 토큰을 요구하면 터미널에 출력된 토큰 값을 복사하여 붙여넣습니다.
+4. 새로운 `Python 3` 노트북을 생성하고 아래 코드를 입력하여 환경 변수에 등록된 API 키가 정상적으로 인식되는지, LLM 호출이 잘 되는지 테스트합니다.
+
+```python
+import os
+from openai import OpenAI
+
+# 클라이언트를 초기화하면 환경 변수의 OPENAI_API_KEY를 자동으로 읽어옵니다.
+client = OpenAI()
+
+# 간단한 챗 완성(Chat Completion) 요청 테스트
+# 파일명: 02-environment.md 관련 실습 코드
+
+import os  # 운영체제(OS) 환경 변수에 접근하기 위해 라이브러리를 가져옵니다.
+from openai import OpenAI  # OpenAI API와 통신할 핵심 도구를 가져옵니다.
+
+client = OpenAI()  # 환경 변수에 등록된 API 키를 자동으로 읽어와 연결 창구를 개설합니다.
+
+response = client.chat.completions.create(  # OpenAI 시스템에 새로운 대화 생성을 요청하고 결과를 response에 저장합니다.
+    model="gpt-4o",  # 답변을 생성할 인공지능 두뇌(모델)로 gpt-4o를 지정합니다.
+    messages=[  # 대화 내용을 담는 리스트입니다.
+        {
+            "role": "user",  # 말하는 사람의 역할이 '일반 사용자'임을 지정합니다.
+            "content": "Is it too late to join the course?",  # 인공지능에게 던질 실제 질문 내용입니다.
+        }
+    ],
+)
+
+print(
+    response.choices[0].message.content
+)  # 받은 답변 뭉치 중 첫 번째 후보(choices[0])의 텍스트 알맹이(content)만 화면에 출력합니다.
+
+
+참고: 아직 시스템에 코스 관련 참고 자료(Context)를 주지 않았기 때문에, LLM은 어떤 코스를 말하는지 알 수 없다는 일반적인 답변을 탈 것입니다. 이것이 정상적인 결과입니다.
+
+작업 내용 저장 및 깃 커밋 (Commit to GitHub)
+실습이 끝나면 변경 사항을 GitHub에 저장합니다.
+
+프로젝트 폴더 내에 01-intro라는 이름의 디렉토리를 만듭니다.
+
+작성한 노트북 파일 이름을 homework.ipynb 등 의미 있는 이름으로 변경한 후 해당 폴더로 이동시킵니다.
+
+터미널에서 다음 명령어를 실행하여 원격 저장소에 반영합니다:
+
+Bash
+git add 01-intro/
+git commit -m "environment setup and basic openai test"
+git push origin main
+4. 작업을 완전히 마쳤다면 사용 중인 Codespace를 중지하거나 삭제하여 리소스를 관리할 수 있습니다.
+
+---
+
+**가이드 진행 확인:**
+두 번째 문서의 번역도 깔끔하게 완료되었습니다. zakard님, 다음 문서(`03-search.md` 등)로 계속 넘어가 볼까요? 준비되시면 올려주세요!

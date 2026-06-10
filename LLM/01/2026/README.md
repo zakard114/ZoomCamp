@@ -11,10 +11,10 @@ Main workspace for the **2026 cohort**.
 | [`Agentic_RAG/HW_01/`](Agentic_RAG/HW_01/) | homework | Your homework notebooks |
 | [`Agentic RAG.txt`](Agentic%20RAG.txt) | — | Course / study notes |
 
-Re-sync course files:
+Re-sync course files (from `LLM/`):
 
-```powershell
-E:\IT_SPACES\AI\venv\Scripts\python.exe E:\IT_SPACES\AI\ZoomCamp\LLM\scripts\sync-01-agentic-rag-course.py
+```bash
+python scripts/sync-01-agentic-rag-course.py
 ```
 
 ## Shared environment

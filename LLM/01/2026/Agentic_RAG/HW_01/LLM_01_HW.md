@@ -329,15 +329,3 @@ Total times the agent called search: 3
 ```bash
 pip install gitsource minsearch ollama tiktoken
 ```
-
----
-
-## Homework URL
-
-Push `HW_01.ipynb` and this file to a **public** GitHub repo, then paste the link in the submission form, for example:
-
-```text
-https://github.com/<username>/<repo>/blob/main/LLM_01_HW.md
-```
-
-No need to host a local-only folder path in the form.

@@ -31,7 +31,11 @@ LLM/01/**/.env.*
 !LLM/01/**/.env.example
 
 # Optional offline copy of cohort FAQ (notebook can fetch JSON from GitHub instead)
-LLM/01/Introduction/llm_01_hw/documents.json
+LLM/01/2025/Introduction/llm_01_hw/documents.json
+
+# LLM Module 01 — personal study notes (local only)
+LLM/01/**/Agentic RAG.txt
+LLM/01/**/notes/
 
 # Docker bind-mount data & WSL export archives (large binaries)
 docker-data/volumes/

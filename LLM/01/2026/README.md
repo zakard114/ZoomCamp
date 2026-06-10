@@ -9,7 +9,6 @@ Main workspace for the **2026 cohort**.
 | [`materials/`](materials/) | [01-agentic-rag](https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag) | Upstream snapshot: `lessons/`, `README.md`, `code/` (read-only reference) |
 | [`Agentic_RAG/code/`](Agentic_RAG/code/) | same `code/` | **Run notebooks here** (`notebook.ipynb`, `agents.ipynb`, …) |
 | [`Agentic_RAG/HW_01/`](Agentic_RAG/HW_01/) | homework | Your homework notebooks |
-| [`Agentic RAG.txt`](Agentic%20RAG.txt) | — | Course / study notes |
 
 Re-sync course files (from `LLM/`):
 

@@ -2,8 +2,7 @@
 
 | Path | Notes |
 |------|-------|
-| [`Introduction/`](Introduction/) | Course notes, `llm_01_hw` (Elasticsearch 8.17.6 homework) |
-| [`Introduction.txt`](Introduction.txt) | Notes |
+| [`Introduction/`](Introduction/) | Course notebooks, `llm_01_hw` (Elasticsearch 8.17.6 homework) |
 
 Homework compose: `Introduction/llm_01_hw/docker-compose.yml`  
 ES data: `ZoomCamp/docker-data/volumes/elasticsearch-hw-data`

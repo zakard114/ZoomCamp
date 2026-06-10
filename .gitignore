@@ -35,6 +35,7 @@ LLM/01/2025/Introduction/llm_01_hw/documents.json
 
 # LLM Module 01 — personal study notes (local only)
 LLM/01/**/Agentic RAG.txt
+LLM/01/**/Introduction.txt
 LLM/01/**/notes/
 
 # Docker bind-mount data & WSL export archives (large binaries)

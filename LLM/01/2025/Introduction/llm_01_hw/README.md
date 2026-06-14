@@ -8,7 +8,7 @@ This folder is **homework only**: Docker stack for ES **8.17.6**, links, and **`
 
 - `docker-compose.yml` runs **Elasticsearch 8.17.6** (Q1 `build_hash` matches the 2025 assignment).
 - Data directory (bind mount): **`ZoomCamp/docker-data/volumes/elasticsearch-hw-data`** (relative to repo root; keep on the same drive as the clone if possible).
-- Do **not** run together with `LLM/docker-compose.elasticsearch.yml` (course, 8.4.3) — both need port **9200**.
+- Do **not** run together with `LLM/01/2025/docker-compose.elasticsearch.yml` (course, 8.4.3) — both need port **9200**.
 
 ```text
 cd <your-clone>/ZoomCamp/LLM/01/2025/Introduction/llm_01_hw

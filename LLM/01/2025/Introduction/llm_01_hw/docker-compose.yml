@@ -10,7 +10,7 @@
 #   docker compose down
 #   docker compose up -d
 #
-# Do not run at the same time as LLM/docker-compose.elasticsearch.yml (course stack) —
+# Do not run at the same time as LLM/01/2025/docker-compose.elasticsearch.yml (course stack) —
 # both bind host port 9200.
 #
 # Start:   docker compose up -d

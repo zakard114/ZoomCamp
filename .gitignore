@@ -20,10 +20,11 @@ DE/06/Batch/code/*.csv.gz
 DE/06/Batch/code/*.jar
 **/.ipynb_checkpoints/
 
-# LLM Zoomcamp — local venv and API keys (do not commit)
+# local-only
 LLM/.venv/
-LLM/.env*
-!LLM/.env.example
+LLM/.env
+LLM/.env.*
+!LLM/01/2026/.env.example
 
 # Module 01 homework folder: local .env copied next to notebooks
 LLM/01/**/.env
@@ -40,6 +41,7 @@ LLM/01/**/notes/
 LLM/00/*.txt
 LLM/02/*.txt
 LLM/03/*.txt
+LLM/03/Orchestration notes.txt
 LLM/0a/*.txt
 DE/0[1-7]/*.txt
 DE/01/Docker+Postgres/*.txt

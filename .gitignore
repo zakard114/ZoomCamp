@@ -48,6 +48,8 @@ LLM/05/**/.env
 LLM/05/**/.venv/
 LLM/05/**/grafana_data/
 LLM/05/**/postgres_backup.sql
+LLM/02/**/vector_search_homework.html
+LLM/02/**/vector_search_homework_files/
 LLM/0a/*.txt
 DE/0[1-7]/*.txt
 DE/01/Docker+Postgres/*.txt

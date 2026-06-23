@@ -1,4 +1,4 @@
-# Qdrant for LLM module 02 (Vector Search). Data on E: — run after Docker Desktop shows "Engine running".
+# Qdrant for LLM module 02 / 2025 cohort. Data on E: — run after Docker Desktop shows "Engine running".
 services:
   qdrant:
     image: qdrant/qdrant:latest

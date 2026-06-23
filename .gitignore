@@ -42,6 +42,12 @@ LLM/00/*.txt
 LLM/02/*.txt
 LLM/03/*.txt
 LLM/03/Orchestration notes.txt
+LLM/05/*.txt
+LLM/05/**/.env
+!LLM/05/**/.env.example
+LLM/05/**/.venv/
+LLM/05/**/grafana_data/
+LLM/05/**/postgres_backup.sql
 LLM/0a/*.txt
 DE/0[1-7]/*.txt
 DE/01/Docker+Postgres/*.txt

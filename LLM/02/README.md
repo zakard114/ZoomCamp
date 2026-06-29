@@ -2,7 +2,9 @@
 
 | Cohort | Path | Stack |
 |--------|------|-------|
-| **2025** | [`2025/`](2025/) | Qdrant, FastEmbed, minsearch RAG |
-| **2026** | [`2026/`](2026/) | ONNX Embedder, gitsource, minsearch (2026 homework) |
+| **2026** | [`2026/`](2026/) | Course materials, ONNX embedder, minsearch, sqlitesearch, pgvector |
+| **2025** | [`2025/`](2025/) | Qdrant, FastEmbed workshop notebooks |
 
-Shared local data (gitignored): `qdrant_storage/`, `fastembed_cache/` at this level.
+Shared local data (gitignored at `LLM/02/`): `qdrant_storage/`, `fastembed_cache/` (2025 only).
+
+Official module: [02-vector-search](https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search)

@@ -1,31 +1,34 @@
-# 2026 cohort — Vector Search homework
+# Module 02 — 2026 Vector Search
 
-**2026 homework** uses a different stack from the 2025 Qdrant notebooks in [`../2025/`](../2025/):
+Main workspace for the **2026 cohort**.
 
-- `uv` for dependencies
-- ONNX Embedder (`Xenova/all-MiniLM-L6-v2`) — not sentence-transformers
-- `gitsource` to load lesson markdown at commit `8c1834d`
-- `minsearch` VectorSearch, keyword search, hybrid RRF
+## Contents
 
-Official homework: https://github.com/DataTalksClub/llm-zoomcamp/blob/main/cohorts/2026/02-vector-search/homework.md  
-Submit: https://courses.datatalks.club/llm-zoomcamp-2026/homework/hw2
+| Path | Source | Notes |
+|------|--------|-------|
+| [`materials/`](materials/) | [02-vector-search](https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search) | Upstream snapshot: `lessons/`, `code/`, `embed/`, `README.md` |
+| [`Vector_Search/code/`](Vector_Search/code/) | same `code/` | **Run lesson notebooks here** |
+| [`Vector_Search/embed/`](Vector_Search/embed/) | same `embed/` | ONNX `download.py`, `embedder.py` (homework + lesson 9) |
+| [`Vector_Search/HW_02/`](Vector_Search/HW_02/) | homework | Your 2026 homework (uv + gitsource + minsearch) |
 
-## Setup (from homework)
+Re-sync course files (from `LLM/`):
 
 ```bash
-mkdir llm-zoomcamp-hw2 && cd llm-zoomcamp-hw2
-uv init --no-workspace
-uv add onnxruntime tokenizers numpy tqdm minsearch gitsource
-uv add --dev huggingface-hub jupyter
+python scripts/sync-02-vector-search-course.py
 ```
 
-Download course helpers:
+Download ONNX model (from `Vector_Search/embed/` or homework project):
 
 ```bash
-PREFIX=https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/embed
-wget $PREFIX/download.py
-wget $PREFIX/embedder.py
+cd Vector_Search/embed
 uv run python download.py
 ```
 
-Put your solution notebook under `HW_02/` in this folder when ready.
+## Homework
+
+Official: [cohorts/2026/02-vector-search/homework.md](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/cohorts/2026/02-vector-search/homework.md)  
+Submit: https://courses.datatalks.club/llm-zoomcamp-2026/homework/hw2
+
+## 2025 reference
+
+Qdrant + FastEmbed archive: [`../2025/`](../2025/)

@@ -26,8 +26,8 @@ uv run python download.py
 
 ## Homework
 
-Official: [cohorts/2026/02-vector-search/homework.md](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/cohorts/2026/02-vector-search/homework.md)  
-Submit: https://courses.datatalks.club/llm-zoomcamp-2026/homework/hw2
+Official homework: [cohorts/2026/02-vector-search/homework.md](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/cohorts/2026/02-vector-search/homework.md)  
+Submit: [Vector_Search/HW_02/LLM_02_HW.md](Vector_Search/HW_02/LLM_02_HW.md) (notebook: [`vector_search_homework.ipynb`](Vector_Search/HW_02/vector_search_homework.ipynb))
 
 ## 2025 reference
 

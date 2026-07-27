@@ -1,0 +1,11 @@
+# put your configuration values here
+
+[runtime]
+log_level="WARNING"  # the system log level of dlt
+# Offline / slow-network: never block on anonymous telemetry
+dlthub_telemetry = false
+workspace_id = "d7a0dfa0-b51d-4741-a880-334f88cf5cbe"
+organization_id = "4246a942-966e-4dc0-8275-7415bc86c554"
+
+[workspace.settings]
+name = "playground"

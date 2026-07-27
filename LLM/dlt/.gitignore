@@ -1,0 +1,40 @@
+# --- secrets / credentials (keep Korean comments OK inside these) ---
+.env
+.env.*
+!.env.example
+secrets.toml
+*.secrets.toml
+**/credentials.json
+
+# --- local envs & caches ---
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.python-version
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.cache/
+
+# --- data / pipeline local state ---
+*.duckdb
+*.duckdb.wal
+*.wal
+.dlt/state/
+.dlt/data/
+.dlt/profile-name
+
+# --- install / sync noise ---
+uv_sync_log.txt
+**/uv_sync_log.txt
+pip-log.txt
+
+# --- personal Korean scratch notes (not course materials) ---
+dlt_Workshop.txt
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -6,13 +6,6 @@ Submission write-up for **Homework: dlt** (Logfire observability → dlt → Duc
 **Instructions:** [homework.md](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/cohorts/2026/workshops/dlt/homework.md)  
 **Submit:** https://courses.datatalks.club/llm-zoomcamp-2026/homework/dlt  
 
-**Homework URL (for form):**  
-https://github.com/zakard114/ZoomCamp/blob/main/LLM/dlt/LLM_dlt_HW/LLM_dlt_HW.md  
-
-**Work dir:** `E:/IT_SPACES/AI/ZoomCamp/LLM/dlt/LLM_dlt_HW`  
-**Backend (submission):** Cerebras `gemma-4-31b` (OpenAI-compatible; not hosted OpenAI GPT)  
-**Logfire project:** https://logfire-us.pydantic.dev/zakard114/starter-project  
-
 ---
 
 ## Form answers
@@ -44,9 +37,9 @@ How do I run Ollama locally?
 
 Official homework suggests `uv init` / `uv add` / `uv run`. On this Windows machine **`uv` often hangs**, so the working path was:
 
-1. Homework folder: `LLM/dlt/LLM_dlt_HW`
+1. Homework folder under `LLM/dlt/LLM_dlt_HW`
 2. `.env` with write/read tokens (**never committed**)
-3. LLM via **Cerebras + Gemma** copied from shared `ZoomCamp/LLM/.env` (`LLM_BACKEND=cerebras`)
+3. LLM via **Cerebras + Gemma** (`gemma-4-31b`, OpenAI-compatible) instead of hosted OpenAI GPT
 4. Skip `logfire auth` / `uv run logfire …` — use **Write Token in `.env`** instead
 5. Run with venv Python directly (not `uv run`)
 

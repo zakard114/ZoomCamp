@@ -1,13 +1,5 @@
 # LLM Zoomcamp 2026 — Homework: dlt Workshop
 
-Submission write-up for **Homework: dlt** (Logfire observability → dlt → DuckDB).
-
-**Course:** [LLM Zoomcamp 2026](https://courses.datatalks.club)  
-**Instructions:** [homework.md](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/cohorts/2026/workshops/dlt/homework.md)  
-**Submit:** https://courses.datatalks.club/llm-zoomcamp-2026/homework/dlt  
-
----
-
 ## Form answers
 
 | Q | Answer | Evidence |

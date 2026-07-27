@@ -213,13 +213,6 @@ LLM_dlt_HW/
 
 ---
 
-## Learning in public / workshop links
-
-1. dltHub published dashboard (workshop): https://app.dlthub.com/n/d7a0dfa0-b51d-4741-a880-334f88cf5cbe/2c935ca4-dfd2-4828-81c0-734bfa70b152  
-2. Logfire Live: https://logfire-us.pydantic.dev/zakard114/starter-project  
-
----
-
 ## Process summary (learner trail)
 
 1. Prefer **token in `.env`** over `uv` + `logfire auth` when `uv` hangs.  

@@ -1,0 +1,23 @@
+# LLM module 04 — Qdrant (hybrid / BM25). Data on E: via repo bind mount.
+# Shared by 2025 and 2026 RAG_LLM_Eval workspaces under this folder.
+# Shared by 2025 and 2026 Evaluation workspaces under this folder.
+# Run (Docker Desktop must be running):
+#   docker compose -f docker-compose.qdrant.yml up -d
+# Stop:
+#   docker compose -f docker-compose.qdrant.yml down
+#
+# If module 02 Qdrant is already running on port 6333, stop it first or reuse that
+# instance (see README.md). Both stacks must not bind 6333 at the same time.
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant-zoomcamp-04
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - type: bind
+        source: ../../../docker-data/volumes/qdrant-data
+        target: /qdrant/storage

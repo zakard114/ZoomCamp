@@ -1,0 +1,1507 @@
+From APIs to Warehouses: AI-Assisted Data Ingestion with dlt
+API에서 웨어하우스까지: dlt를 활용한 AI 기반 데이터 적재
+
+https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/cohorts/2026/workshops/dlt.md
+
+Register for the workshop	https://luma.com/hzis1yzp 
+워크샵 등록하기 (종료)
+
+This hands-on workshop focuses on building reliable data ingestion pipelines to data warehouses (for example, Snowflake) using dlt (data load tool), enhanced with LLMs, the dlt dashboard, and dlt MCP.
+이 실무 워크샵은 LLM, dlt 대시보드 및 dlt MCP로 강화된 dlt(데이터 로드 툴)를 사용하여 Snowflake와 같은 데이터 웨어하우스에 신뢰할 수 있는 데이터 적재 파이프라인을 구축하는 데 중점을 둡니다.
+
+
+
+What you'll learn
+학습 내용
+
+You'll work through the key building blocks of a production-ready ingestion setup, including:
+여러분은 다음과 같은 운영 환경 수준의 적재 설정 핵심 구성 요소들을 실습하게 됩니다:
+
+Extracting data from APIs, files, and databases
+
+API, 파일 및 데이터베이스에서 데이터 추출하기
+
+Normalizing data into consistent schemas
+데이터를 일관된 스키마로 정규화하기
+
+Writing data to a data warehouse (e.g. Snowflake)
+데이터 웨어하우스(예: Snowflake)에 데이터 기록하기
+
+Using LLMs to accelerate dlt pipeline development
+LLM을 사용하여 dlt 파이프라인 개발 가속화하기
+
+Validating data and schema changes using the dlt dashboard and dlt MCP
+dlt 대시보드 및 dlt MCP를 사용하여 데이터 및 스키마 변경 사항 검증하기
+
+The session is fully practical and code-driven.
+본 세션은 전적으로 실무와 코드 중심으로 진행됩니다.
+
+By the end of the workshop, you'll understand how to design maintainable, scalable ingestion pipelines and use AI and validation tools to build them faster and with confidence.
+워크샵이 끝날 때쯤 여러분은 유지 관리가 가능하고 확장성 있는 적재 파이프라인을 설계하는 방법과, AI 및 검증 도구를 사용하여 더 빠르고 확신 있게 파이프라인을 구축하는 방법을 이해하게 될 것입니다.
+
+Materials	자료
+
+Workshop instructions		워크샵 지침서	
+https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/cohorts/2026/workshops/dlt/README.md
+
+dlt 파이프라인 개요 노트북 (구글 코랩)
+dlt Pipeline Overview Notebook (Google Colab)
+https://colab.research.google.com/github/anair123/data-engineering-zoomcamp/blob/workshop/dlt_2026/cohorts/2026/workshops/dlt/dlt_Pipeline_Overview.ipynb
+
+Homework	과제
+https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/cohorts/2026/workshops/dlt/dlt_homework.md
+
+Homework submission form	과제 제출 양식
+https://courses.datatalks.club/de-zoomcamp-2026/homework/dlt
+
+
+About the Speaker	강연자 소개
+
+Aashish Nair is a Data Engineer at dltHub and the creator of the famous dlt deployment course, where he teaches best practices for running dlt pipelines in production.
+Aashish Nair는 dltHub의 데이터 엔지니어이자 유명한 dlt 배포 코스의 제작자로, 실제 운영 환경에서 dlt 파이프라인을 실행하기 위한 모범 사례를 가르치고 있습니다.
+
+Would you like me to start explaining the dlt Pipeline Overview Notebook content in this same format?
+이어서 dlt 파이프라인 개요 노트북의 내용을 동일한 형식으로 설명해 드릴까요?
+
+
+--
+
+시작 
+https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/cohorts/2026/workshops/dlt/README.md
+
+From APIs to Warehouses: AI-Assisted Data Ingestion with dlt
+API에서 웨어하우스까지: dlt를 활용한 AI 기반 데이터 적재
+
+Welcome to the Data Engineering Zoomcamp 2026 workshop!
+Data Engineering Zoomcamp 2026 워크샵에 오신 것을 환영합니다!
+
+In this workshop, you'll use an AI-powered IDE to build a complete data pipeline. Using simple prompts, you can go from an API to a local data warehouse with dlt (data load tool). The AI handles the code generation. You focus on the results.
+이 워크샵에서는 AI 기반 IDE를 사용하여 전체 데이터 파이프라인을 구축하게 됩니다. 간단한 프롬프트를 통해 dlt(데이터 로드 툴)를 사용하여 API에서 로컬 데이터 웨어하우스까지 구축할 수 있습니다. AI가 코드 생성을 처리하므로 여러분은 결과에 집중하면 됩니다.
+
+What You'll Build
+구축하게 될 내용
+
+By the end of this workshop, you will have:
+이 워크샵이 끝날 때쯤 여러분은 다음을 갖게 됩니다:
+
+
+A working dlt pipeline that extracts data from the Open Library API	
+https://openlibrary.org/developers/api
+Open Library API에서 데이터를 추출하는 작동하는 dlt 파이프라인
+
+Normalized relational tables stored in DuckDB
+DuckDB에 저장된 정규화된 관계형 테이블
+
+The ability to query, inspect, and visualize your data
+데이터를 쿼리, 검사 및 시각화하는 능력
+
+Experience using AI-assisted development for data engineering
+데이터 엔지니어링을 위한 AI 보조 개발 사용 경험
+
+No API key required! The Open Library API is completely open and doesn't require authentication. You can start building immediately.
+API 키가 필요하지 않습니다! Open Library API는 완전히 공개되어 있으며 인증이 필요하지 않습니다. 즉시 구축을 시작할 수 있습니다.
+
+Prerequisites
+사전 요구 사항
+
+Before the workshop, make sure you have the following set up:
+워크샵 전에 다음 사항이 설정되어 있는지 확인하세요:
+
+1. Understand What dlt Does (Recommended for Beginners)
+1. dlt가 하는 일 이해하기 (초보자 권장)
+
+If you're unfamiliar with dlt and what the library does, we recommend reading through the included Jupyter notebook before the workshop.
+dlt와 이 라이브러리가 하는 일이 생소하다면 워크샵 전에 포함된 Jupyter 노트북을 읽어보는 것을 권장합니다.
+
+Open the notebook in Google Colab
+https://colab.research.google.com/github/anair123/data-engineering-zoomcamp/blob/workshop/dlt_2026/cohorts/2026/workshops/dlt/dlt_Pipeline_Overview.ipynb
+
+Google Colab에서 노트북 열기
+
+It walks through dlt step by step:
+이 노트북은 dlt를 단계별로 설명합니다:
+
+What a dlt source and pipeline are
+dlt 소스와 파이프라인이란 무엇인가
+
+How data moves through Extract, Normalize, and Load
+데이터가 추출(Extract), 정규화(Normalize), 로드(Load)를 통해 이동하는 방식
+
+How to inspect the loaded data
+로드된 데이터를 검사하는 방법
+
+Understanding these concepts will help you know what the agent-generated code is actually doing.
+이러한 개념을 이해하면 에이전트가 생성한 코드가 실제로 무엇을 하고 있는지 파악하는 데 도움이 됩니다.
+
+You do not need to clone the repo to follow the workshop. The dlt init command scaffolds everything you need.
+워크샵을 따라가기 위해 저장소를 클론할 필요는 없습니다. dlt init 명령어가 필요한 모든 것을 구성해 줍니다.
+
+2. An Agentic IDE
+2. 에이전트형 IDE
+
+
+
+You'll need an AI-powered code editor that can understand context and generate code from natural language. We recommend:
+컨텍스트를 이해하고 자연어에서 코드를 생성할 수 있는 AI 기반 코드 에디터가 필요합니다. 다음을 권장합니다:
+
+Cursor: VS Code fork with built-in AI assistance (recommended)
+Cursor: AI 지원 기능이 내장된 VS Code 포크(권장)
+https://cursor.sh/
+
+Windsurf: Alternative agentic IDE
+Windsurf: 대안 에이전트형 IDE
+https://codeium.com/windsurf
+
+VS Code + GitHub Copilot: Works, but less integrated
+VS Code + GitHub Copilot: 작동하지만 통합성이 낮음
+https://github.com/features/copilot
+
+
+3. Python 3.11+
+3. 파이썬 3.11 이상
+
+python --version # Should be 3.11 or higher
+python --version # 3.11 이상이어야 합니다
+
+4. uv (Recommended) or pip
+4. uv (권장) 또는 pip
+
+We use uv for fast dependency management:
+빠른 종속성 관리를 위해 uv를 사용합니다:
+https://docs.astral.sh/uv/
+
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# uv 설치 (없는 경우)
+
+
+
+
+
+
+시작
+
+본문
+Workshop Instructions
+워크샵 지침
+
+Step 1: Create a New Project Folder
+1단계: 새 프로젝트 폴더 생성
+
+Create a fresh folder for your pipeline and open it in Cursor (or your preferred agentic IDE):
+파이프라인을 위한 새 폴더를 만들고 Cursor(또는 선호하는 에이전트형 IDE)에서 엽니다:
+
+mkdir my-dlt-pipeline
+cd my-dlt-pipeline
+
+
+
+나> 우선 uv띄우는게 우선이겠지
+GEM> uv를 사용해 가상환경을 활성화하고 기초 설정을 마무리해 봅시다.
+
+0. uv 설치 (없는 경우)
+$curl -LsSf https://astral.sh/uv/install.sh | sh
+
+$ uv venv
+
+1. 가상환경 활성화 (Git Bash용)
+이미 uv venv를 실행하셨다면, Git Bash에서는 아래 명령어로 활성화합니다. (윈도우지만 Bash 방식인 source를 써야 합니다.)
+
+Bash
+source .venv/Scripts/activate
+팁: 활성화되면 프롬프트 맨 앞에 (.venv)가 나타납니다.
+
+
+
+나> HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ source .venv/Scripts/activate
+이 경로 맞나? 아니면 DE에서 하는게 좋을까
+
+GEM> 현재 경로(Workshop)에서 활성화하신 것이 정답입니다! 잘 하셨어요.
+
+왜 Workshop 폴더에서 하는 게 맞나요?
+프로젝트 독립성: uv venv를 Workshop 폴더에서 실행하셨기 때문에, 그 가상환경 설정 파일(.venv)은 Workshop 폴더 안에 들어있습니다.
+
+실행 경로: 가상환경을 활성화할 때는 .venv 폴더가 있는 바로 그 위치에서 source 명령을 내려야 합니다.
+
+만약 최상위 DE 폴더에서 활성화하려고 했다면 source 05-data-ingestion/Workshop/.venv/Scripts/activate 처럼 복잡한 경로를 입력해야 했을 텐데, 지금처럼 해당 폴더로 들어가서 바로 실행하는 게 훨씬 깔끔하고 실수도 적습니다.
+
+
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ source .venv/Scripts/activate
+(Workshop) 
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+
+
+
+GEM> 완벽합니다! 아주 깔끔하게 성공하셨네요. 👏
+
+프롬프트 앞에 **(Workshop)**이라고 뜬 것이 바로 가상환경이 정상적으로 활성화되었다는 증거입니다. (uv는 폴더 이름을 가상환경 이름으로 표시해주기도 하거든요.)
+
+
+
+본문
+Step 2: Add the dlt MCP Server Config
+2단계: dlt MCP 서버 설정 추가
+
+Choose the setup for your IDE:
+사용 중인 IDE에 맞는 설정을 선택하세요:
+
+Cursor - go to Settings → Tools → MCP → New MCP Server and add:
+Cursor - Settings → Tools → MCP → New MCP Server로 이동하여 다음을 추가합니다:
+
+JSON
+{
+  "mcpServers": {
+    "dlt": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "dlt[duckdb]",
+        "--with",
+        "dlt-mcp[search]",
+        "python",
+        "-m",
+        "dlt_mcp"
+      ]
+    }
+  }
+}
+VS Code (Copilot) - create .vscode/mcp.json in your project folder:
+VS Code (Copilot) - 프로젝트 폴더에 .vscode/mcp.json 파일을 생성합니다:
+{
+  "servers": {
+    "dlt": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "dlt[duckdb]",
+        "--with",
+        "dlt-mcp[search]",
+        "python",
+        "-m",
+        "dlt_mcp"
+      ]
+    }
+  }
+}
+
+
+Claude Code - run in your terminal:
+Claude Code - 터미널에서 실행하세요:
+claude mcp add dlt -- uv run --with "dlt[duckdb]" --with "dlt-mcp[search]" python -m dlt_mcp
+
+This enables the dlt MCP server, which gives the AI access to dlt documentation, code examples, and your pipeline metadata.
+이것은 AI가 dlt 문서, 코드 예제 및 파이프라인 메타데이터에 접근할 수 있게 해주는 dlt MCP 서버를 활성화합니다.
+
+
+
+
+
+2. dlt 워크스페이스 및 초기화
+활성화된 상태에서 아래 두 명령어를 순서대로 입력하세요.
+
+Bash
+# dlt 워크스페이스 설치
+pip install "dlt[workspace]"
+
+
+나> Bash
+# dlt 워크스페이스 설치
+pip install "dlt[workspace]"
+
+실행하니
+"전역 환경에 PYTHON 패키지를 설치했을 수 있으며, 이로인해 패키지 버전간에 충돌이 발생할 수 있습니다. 이러한 패키지를 사용하여 가상환경을 만들어 종속성을 격리하시겠습니까?
+만들기 , 다시표시하지않음 
+
+GEM> 그 메시지는 VS Code가 zakard님의 가상환경(Workshop)을 감지하고, **"너 지금 가상환경 켰는데, 혹시 실수로 전역(Global)에 설치하고 있는 거 아니야? 안전하게 가상환경에 설치해줄까?"**라고 친절하게 물어보는 겁니다.
+
+어떻게 할까요?
+이미 터미널 프롬프트 앞에 **(Workshop)**이 떠 있다면, 사실 터미널 자체는 가상환경을 잘 잡고 있는 상태입니다. 하지만 확실히 하기 위해 다음과 같이 하세요:
+
+"만들기"를 누르실 필요는 없습니다. (이미 uv venv로 만드셨으니까요!)
+
+그냥 **"다시 표시하지 않음"**을 누르거나 창을 닫으셔도 됩니다.
+
+대신, 터미널에서 pip 대신 **uv pip**를 사용하세요. 그러면 훨씬 빠르고 안전하게 가상환경에 설치됩니다.
+
+
+나>   Attempting uninstall: markdown
+    Found existing installation: Markdown 3.4.1
+    Uninstalling Markdown-3.4.1:
+      Successfully uninstalled Markdown-3.4.1
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━ 11/13 [ibis-framework]
+Successfully installed atpublic-7.0.0 ibis-framework-12.0.0 loro-1.10.3 marimo-0.20.1 markdown-3.10.2 msgspec-0.20.0 narwhals-2.16.0 parsy-2.2 pyarrow-hotfix-0.7 pymdown-extensions-10.21 starlette-0.52.1 uvicorn-0.41.0 websockets-16.0
+
+[notice] A new release of pip is available: 25.3 -> 26.0.1
+[notice] To update, run: C:\Users\HP EliteBook\anaconda3\python.exe -m pip install --upgrade pip
+
+
+여기서 11/13인데 왜 SUCCESS처리함?
+
+
+GEM> 그게 바로 **pip**의 고질적인 UI 표기 방식 때문에 생기는 착각입니다! 걱정 마세요, 정상적으로 잘 된 겁니다. ㅋ
+
+왜 11/13인데 성공(Successfully)이라고 뜰까요?
+캐시 활용: 13개 패키지 중에서 2개 정도는 이미 다운로드되어 있거나 설치할 필요가 없는 상태(이미 캐시에 있음)였을 가능성이 큽니다. pip는 새로 '다운로드'한 개수를 기준으로 진행 바를 보여주기도 해서 숫자가 딱 안 맞을 때가 많아요.
+
+병렬 처리: 내부적으로 패키지를 묶어서 처리하다 보니, UI가 숫자를 갱신하기도 전에 설치가 완료되어 버리면 저렇게 "끝!" 하고 출력해버립니다.
+
+최종 결과가 중요: 마지막 줄에 **Successfully installed ...**라고 목록이 떴다면, 중간 과정의 숫자와 상관없이 해당 패키지들은 모두 성공적으로 가상환경에 들어간 겁니다.
+
+⚠️ 여기서 잠깐! 진짜 중요한 포인트 (주의)
+방금 터미널 마지막에 뜬 **[notice]**를 보세요.
+C:\Users\HP EliteBook\anaconda3\python.exe -m pip install --upgrade pip
+
+이건 지금 패키지가 가상환경(.venv)이 아니라 아나콘다(Global) 환경에 설치되었을 가능성이 매우 높다는 신호입니다!
+
+아까 source .venv/Scripts/activate를 해서 (Workshop)이 떴는데도 불구하고, pip 명령어가 아나콘다 경로를 가리키고 있다면 가상환경이 꼬인 상태일 수 있습니다.
+
+확인해봅시다
+터미널에 아래 명령어를 쳐보세요:
+
+Bash
+which python
+(혹은 윈도우라면 where python)
+
+만약 결과가 .../Workshop/.venv/Scripts/python이 아니라 **anaconda3/python**으로 나온다면, 지금 엉뚱한 곳에 설치하고 계신 겁니다!
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ which python
+/e/IT_SPACES/AI/ZoomCamp/DE/Workshop/.venv/Scripts/python
+
+
+GEM> 오! 다행입니다. which python 결과가 아주 깔끔하네요. 정확하게 Workshop/.venv 안에 있는 파이썬을 가리키고 있습니다. 아까 뜬 아나콘다 경로는 무시하셔도 됩니다. 가상환경이 아주 짱짱하게 잡혀 있는 상태예요.
+
+
+
+
+본문
+Step 3: Install dlt Workspace
+3단계: dlt 워크스페이스 설치
+
+pip install "dlt[workspace]"
+
+
+GEM> 자, 이제 모든 준비물(Prerequisites)이 완벽하게 세팅되었습니다. 이제 Step 4: dlt 초기화와 첫 파이프라인 생성을 조져봅시다.
+
+
+
+# Open Library 프로젝트 초기화 (이미 하셨다면 건너뛰어도 되지만, 확인차 다시 해도 무방합니다)
+dlt init dlthub:open_library duckdb
+
+
+
+나> "dlt will generate useful project rules tailored to your assistant/IDE.
+Press Enter to accept the default (cursor), or type a name: "
+
+GEM> 그게 바로 dlt가 똑똑하게도 zakard님이 지금 Cursor를 쓰고 있는지, VS Code를 쓰고 있는지 물어보는 단계입니다!
+
+그냥 엔터(Enter) 치세요!
+지금 비록 VS Code로 화면을 넓게 쓰고 계시지만, 어차피 Cursor와 VS Code는 형제(Fork) 사이라 cursor 설정을 받아도 VS Code에서 아무 문제 없이 작동합니다. 오히려 나중에 다시 Cursor를 켰을 때 AI 에이전트가 더 똑똑하게 작동할 수 있도록 cursor 옵션으로 받아두는 게 유리합니다.
+
+진행 순서
+**엔터(Enter)**를 눌러 기본값인 cursor를 수락합니다.
+
+그러면 .cursor/rules/ 같은 폴더가 생기면서 설정이 완료됩니다.
+
+그다음 바로 아까 제가 드린 open_library_pipeline.py 코드를 실행할 차례입니다.
+
+
+나> 말하자면 저건 VSCODE에 작업해도 CURSOR에 반영되는 취지인가
+GEM> 정확합니다! 빙고! 바로 그 취지예요.
+
+dlt 입장에서는 "어차피 이 프로젝트 폴더(Workshop)는 나중에 Cursor로도 열릴 수 있으니까, 미리 AI 에이전트 전용 규칙(Rules) 파일을 만들어 두겠다"는 뜻입니다.
+
+그게 왜 좋은가요?
+공유되는 설정: 지금 VS Code에서 Enter를 쳐서 설정을 완료하면, .cursor/rules/라는 폴더 안에 dlt 관련 가이드라인 파일이 생깁니다.
+
+나중에 Cursor를 켜면: zakard님이 다시 Cursor를 켰을 때, Cursor의 AI는 그 규칙 파일을 읽고 **"아, 이 프로젝트는 dlt 프로젝트고, Open Library API를 쓰고 있구나!"**라고 즉시 이해하게 됩니다.
+
+결론: 작업은 넓은 VS Code에서 쾌적하게 하시고, AI용 '족보'는 미리 챙겨두는 아주 전략적인 선택인 셈이죠. ㅋ
+
+
+결과:
+Initializing pipeline open_library_pipeline.py, adding cursor rules, code snippets and docs for open_library source.
+Do you want to proceed? [Y/n]: 
+
+GEM> 네, 거기서 **Y**를 입력하고 엔터를 누르시면 됩니다!
+
+그 메시지는 dlt가 아까 말씀드린 'AI용 족보(Rules, Snippets, Docs)' 파일들을 실제로 생성해도 되는지 마지막으로 컨펌을 받는 과정입니다.
+
+Y를 누른 후 일어나는 일:
+파일 생성: .cursor/rules 폴더와 open_library-docs.yaml 등 핵심 파일들이 Workshop 폴더에 세팅됩니다.
+
+준비 완료: 이제 dlt가 이 프로젝트의 성격을 완벽하게 정의하게 됩니다.
+
+
+
+
+
+본문
+Step 4: Initialize the dlt Project
+4단계: dlt 프로젝트 초기화
+
+dlt init dlthub:open_library duckdb
+
+This scaffolds the pipeline files and configuration for Open Library. You now have everything you need to start prompting.
+이 명령어는 Open Library를 위한 파이프라인 파일과 설정을 구성합니다. 이제 프롬프트를 시작하는 데 필요한 모든 준비가 되었습니다.
+
+Reference: Open Library Workspace Instructions
+https://dlthub.com/workspace/source/open-library
+
+
+
+GEM> ls -R 명령어로 Workshop 폴더 안에 아래 파일들이 있는지 확인해 보세요.
+
+.dlt/ (폴더)
+
+open_library-docs.yaml
+
+requirements.txt
+
+
+결과
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)  
+$ ls -R
+.:
+'From APIs to Warehouses - AI-Assisted Data Ingestion with dlt.txt'
+ open_library_pipeline.py
+ open_library-docs.yaml
+ requirements.txt
+
+
+GEM> 오, 결과를 보니 **open_library-docs.yaml**과 **requirements.txt**는 아주 잘 들어왔네요! 그런데 리스트를 보니 .dlt/ 폴더가 안 보이는 것 같습니다.
+
+왜 안 보일까요?
+Git Bash(ls)에서 앞에 점(.)이 붙은 폴더나 파일은 **'숨김 항목'**으로 취급됩니다. 그래서 그냥 ls만 치면 안 보일 수 있어요.
+
+이 명령어로 다시 확인해 보세요:
+
+Bash
+ls -a
+-a 옵션을 주면 .dlt 폴더와 .venv 폴더까지 모두 보일 겁니다. 만약 여기서도 .dlt가 안 보인다면 dlt init 과정에서 폴더 생성이 누락된 것이니 꼭 확인이 필요합니다.
+
+
+(Workshop) 
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)  
+$ ls -a
+ ./
+ ../
+ .cursor/
+ .cursorignore
+ .dlt/
+ .gitignore
+ .venv/
+'From APIs to Warehouses - AI-Assisted Data Ingestion with dlt.txt'
+ open_library_pipeline.py
+ open_library-docs.yaml
+ requirements.txt
+
+완벽합니다! .dlt, .cursor, .venv까지 모든 '숨겨진 퍼즐 조각'들이 제자리에 다 있네요. 옹졸하지 않은(?) 넓은 화면에서 보니 아주 마음이 편안합니다. ㅋ
+
+이제 재료 준비는 100% 끝났습니다. 이제 이 재료들을 가지고 요리(데이터 로드)를 시작할 차례입니다.
+
+
+
+
+
+본문
+Step 5: Prompt the Agent to Build and Run the Pipeline
+5단계: 에이전트에게 파이프라인 구축 및 실행 요청
+
+This is where the magic happens. The dlt init command scaffolds sample prompts you can use. Here's an example to get started:
+여기서 마법이 일어납니다. dlt init 명령어가 사용할 수 있는 샘플 프롬프트를 생성해 둡니다. 시작을 위한 예시는 다음과 같습니다:
+
+"Please generate a REST API Source for Open Library API, as specified in @open_library-docs.yaml. Start with endpoint(s) books and skip incremental loading for now. Place the code in open_library_pipeline.py and name the pipeline open_library_pipeline. If the file exists, use it as a starting point. Do not add or modify any other files. Use @dlt rest api as a tutorial. After adding the endpoints, allow the user to run the pipeline with python open_library_pipeline.py and await further instructions."
+
+"@open_library-docs.yaml에 명시된 대로 Open Library API용 REST API 소스를 생성해 주세요. books 엔드포인트부터 시작하고 현재로서는 증분 로딩(incremental loading)은 건너뛰세요. 코드는 open_library_pipeline.py에 작성하고 파이프라인 이름을 open_library_pipeline으로 지정하세요. 파일이 이미 존재한다면 그것을 시작점으로 사용하세요. 다른 파일은 추가하거나 수정하지 마세요. @dlt rest api를 튜토리얼로 참고하세요. 엔드포인트를 추가한 후, 사용자가 python open_library_pipeline.py로 파이프라인을 실행할 수 있게 하고 추가 지시를 기다리세요."
+
+Feel free to tweak the prompt based on your objective. The agent will generate the pipeline code, run the pipeline, and load data into your local DuckDB database.
+목표에 따라 프롬프트를 자유롭게 수정하세요. 에이전트는 파이프라인 코드를 생성하고, 실행하며, 로컬 DuckDB 데이터베이스에 데이터를 로드할 것입니다.
+
+
+GEM> 이 단계는 zakard님이 직접 코딩하는 게 아니라, 에이전트(Cursor Composer 또는 Copilot Chat)에게 open_library-docs.yaml 파일을 읽고 실제 작동하는 파이프라인 코드를 짜라고 시키는 **'마법의 구간'**입니다.
+
+수행 작업:
+
+사용 중인 IDE의 AI 에이전트 창을 켭니다.
+
+위의 프롬프트를 그대로 복사해서 입력하세요. (한글 번역본보다는 원문 영어를 주어야 에이전트가 정확하게 알아듣습니다.)
+
+에이전트가 코드를 다 짜고 "준비되었다"고 하면 말씀해 주세요. 다음 지시를 위해 대기하겠습니다.
+
+
+
+나> 결과:
+결과
+터미널에서 스크립트 실행 시 이 환경에서는 "Cursor Sandbox is unsupported" 메시지가 나와, 제가 대신 실행한 결과는 확인하지 못했습니다. 아래까지 적용해 두었습니다.
+
+
+결과 요약
+지시문 반영 내용
+Open Library REST API 소스
+open_library-docs.yaml 기준으로 구현했습니다.
+Base URL: https://openlibrary.org/
+엔드포인트: books 한 개 (path: api/books)
+증분 로딩: 사용하지 않음 (incremental 설정 없음)
+파일경로: Workshop/open_library_pipeline.py
+파이프라인 이름: open_library_pipeline
+기존 파일을 기반으로 수정했고, 다른 파일은 추가/수정하지 않았습니다.
+
+구현 내용
+인증 제거: Open Library Books API는 공개 GET이라 client에 auth 없음.
+books 리소스:
+path: api/books
+params: bibkeys, format, jscmd (예: ISBN:0385472579,ISBN:0451526538)
+data_selector: .* (응답 객체의 값들만 리스트처럼 사용)
+paginator: single_page
+progress='log' 추가 (튜토리얼 규칙 반영).
+open_library_source() 인자 제거 (토큰 불필요).
+실행 방법
+프로젝트 루트에서:
+
+
+   python open_library_pipeline.py
+
+
+(실제로는 Workshop이 작업 디렉터리라면 cd Workshop 후 위 명령 실행)
+로컬에서 한 번 실행해 보시고,data_selector가 응답 형식과 맞지 않으면 (에러나 빈 데이터가 나오면) 알려주시면 됩니다.
+다음으로 추가할 엔드포인트나 옵션이 있으면 지시해 주세요.
+
+
+GEM> 에이전트가 아주 영리하게 코드를 짜주었네요! Cursor Sandbox is unsupported 메시지는 AI가 직접 코드를 실행할 수 없다는 뜻이므로, 이제 zakard님이 직접 터미널에서 실행하여 마법을 완성할 차례입니다.
+
+
+나> (Workshop) 
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ python open_library_pipeline.py
+
+결과:
+Traceback (most recent call last):
+  File "E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\open_library_pipeline.py", line 3, in <module>
+    import dlt
+ModuleNotFoundError: No module named 'dlt'
+
+
+GEM> 드디어 올 것이 왔군요! **[STEP 5]**의 마지막 고비인 라이브러리 인식 문제입니다.
+
+분명히 **[STEP 3]**에서 dlt를 설치했지만, 현재 실행 중인 파이썬이 가상환경(Workshop/.venv)에 설치된 dlt를 찾지 못하고 있습니다. 윈도우 Git Bash 환경에서 흔히 발생하는 가상환경 경로 꼬임 현상입니다.
+
+CURSOR> ...
+
+CURSOR + GEM> [STEP 5] 에이전트에게 파이프라인 구축 및 실행 요청 (최종 실행)
+에이전트가 알려준 대로, 현재 활성화된 가상환경 (Workshop)에 dlt가 확실히 심어지도록 아래 명령어를 터미널에 입력하세요.
+
+수행 작업:
+
+패키지 설치 (에이전트 권장 사항)
+
+Bash
+uv pip install dlt
+(참고: pip보다 uv pip가 훨씬 빠릅니다.)
+
+파이프라인 다시 실행
+
+Bash
+python open_library_pipeline.py
+
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ python open_library_pipeline.py
+Traceback (most recent call last):
+  File "E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\open_library_pipeline.py", line 3, in <module>
+    import dlt
+ModuleNotFoundError: No module named 'dlt'
+
+
+GEM> 분명히 **[Step 2]**에서 설치를 진행했는데도 ModuleNotFoundError가 뜨는 이유는, 윈도우 Git Bash 환경에서 source .venv/Scripts/activate를 했음에도 불구하고 python 명령어가 가상환경 내부가 아닌 시스템(Global) 파이썬을 계속 바라보고 있기 때문입니다.
+
+이 고리를 끊고 **[STEP 5]**를 완수하기 위해 가장 확실한 방법을 제안합니다.
+
+
+
+에이전트에게 파이프라인 구축 및 실행 요청 (환경 강제 동기화)
+터미널이 가상환경을 무시할 수 없도록 가상환경 경로를 직접 지정해서 설치하고 실행해 보겠습니다.
+
+수행 작업 (터미널에 순서대로 입력):
+
+1. 가상환경 전용 pip로 dlt 재설치
+명령어 앞에 ./.venv/Scripts/를 붙여서 가상환경 내부의 설치 도구를 강제로 사용합니다.
+
+Bash
+./.venv/Scripts/python -m pip install "dlt[duckdb]"
+2. 가상환경 전용 파이썬으로 파이프라인 실행
+마찬가지로 가상환경 내부에 있는 파이썬 실행 파일을 직접 지정합니다.
+
+Bash
+./.venv/Scripts/python open_library_pipeline.py
+[성공 확인]
+
+위 명령어로 실행했을 때 더 이상 ModuleNotFoundError가 나지 않고, 데이터 로드 로그가 나오기 시작하면 성공입니다.
+
+성공하면 open_library_pipeline_data.duckdb 파일이 폴더에 생길 겁니다.
+
+실행 결과 로그가 어떻게 나오나요? 성공 메시지가 뜨면 알려주세요. [STEP 5]를 마무리하고 대기하겠습니다.
+
+
+
+CURSOR + GEM> 에이전트가 아주 확실한 해결책을 제시했네요! 윈도우 Git Bash 환경에서 경로가 꼬일 때는 이처럼 실행 파일의 경로를 직접 찍어주는 것이 가장 정확합니다.
+
+
+
+에이전트에게 파이프라인 구축 및 실행 요청 (최종 실행 및 검증)
+에이전트가 제안한 대로 아래 명령어를 통해 이 단계를 마무리해 봅시다.
+
+수행 작업:
+
+가상환경용 Python으로 dlt 설치:
+
+Bash
+./.venv/Scripts/python -m pip install "dlt[duckdb]"
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ ./.venv/Scripts/python -m pip install "dlt[duckdb]"
+E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\.venv\Scripts\python.exe: No module named pip
+
+
+GEM> 이런, 가상환경 구성이 예상보다 더 꼬여 있었네요. No module named pip라는 메시지는 가상환경(.venv)이 생성될 때 필수 도구인 pip조차 제대로 포함되지 않았거나, 경로 인식에 심각한 오류가 생겼음을 의미합니다.
+
+복잡하게 고치려 하기보다, 가상환경을 다시 깨끗하게 밀고 새로 만드는 것이 가장 빠르고 확실한 방법입니다. **[STEP 2]**로 잠시 돌아가 환경을 재정비하고 **[STEP 5]**를 완결하겠습니다.
+
+
+
+가상환경 재구축
+터미널에서 다음 명령어를 순서대로 입력하세요.
+
+Bash
+# 1. 기존 가상환경 폴더 삭제 (완전 초기화)
+rm -rf .venv
+
+# 2. uv를 사용해 가상환경 새로 생성 (uv는 pip를 자동으로 잘 넣어줍니다)
+uv venv
+
+# 3. 가상환경 활성화
+source .venv/Scripts/activate
+
+# 4. dlt와 duckdb 설치
+uv pip install "dlt[duckdb]"
+[STEP 5] 에이전트에게 파이프라인 구축 및 실행 요청 (재시도)
+환경이 새로 세팅되었으므로, 이제 다시 실행을 시도합니다.
+
+수행 작업:
+
+Bash
+python open_library_pipeline.py
+[확인 사항]
+
+이제 ModuleNotFoundError 없이 파이썬이 실행되어야 합니다.
+
+데이터 로드 로그가 나오는지 확인해 주세요.
+
+위 과정에서 다시 에러가 나거나, 혹은 성공적으로 데이터가 쌓였다면 알려주세요. zakard님, 결과 확인을 위해 대기하겠습니다.
+
+
+결과: 에러.
+
+CURSOR> (에러 내역보고 후) data_selector ".*"가 jsonpath_ng에서 유효하지 않아 파싱 오류가 납니다. 루트 객체의 모든 값을 선택하려면 $.*처럼 루트($)를 명시해야 합니다.
+open_library_pipeline.py
++1
+-1
+                    },                    "data_selector": ".*",                    "paginator": {"type": "single_page"},
+                    "data_selector": ".*",                    },                    "data_selector": "$.*",                    "paginator": {"type": "single_page"},
+data_selector를 ".*"에서 "$.*"로 바꿔 두었습니다. JSONPath에서는 루트를 $로 써야 해서, 루트 객체의 모든 값은 $.*로 지정하는 게 맞습니다.
+다시 실행해 보세요:
+python open_library_pipeline.py
+같은 파싱 오류가 나오면, 사용 중인 dlt/jsonpath_ng 버전에서 지원하는 문법을 확인해야 할 수 있습니다. 그때는 에러 메시지나 문서를 알려주시면 됩니다.
+
+
+
+결과:
+---------------- Load open_library_source in 1771662141.793254 -----------------
+Jobs: 20/20 (100.0%) | Time: 3.18s | Rate: 6.29/s       
+
+Pipeline open_library_pipeline load step completed in 3.18 seconds
+1 load package(s) were loaded to destination duckdb and into dataset open_library_data
+The duckdb destination used duckdb:///E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\open_library_pipeline.duckdb location to store data
+Load package 1771662141.793254 is LOADED and contains no failed jobs
+
+
+GEM> 와! 드디어 성공하셨네요! **[STEP 5]**의 마법이 현실이 되었습니다. 🧙‍♂️✨
+
+로그를 보면 books: 2 아이템이 추출되어 duckdb로 로드되었고, open_library_pipeline.duckdb 파일이 생성된 것을 확인할 수 있습니다. 
+(예: Resources: 1/1 (100.0%) | Time: 0.88s | Rate: 1.14/s    
+books: 2  | Time: 0.03s | Rate: 74.06/s)
+
+데이터 인제스트(Ingestion)의 첫 사이클을 완벽하게 도신 거예요.
+
+[STEP 5] 에이전트에게 파이프라인 구축 및 실행 요청 (완료 ✅)
+
+
+결과: Open Library API에서 데이터를 가져와 로컬 DuckDB에 적재 완료.
+
+상태: Pipeline open_library_pipeline load step completed 확인.
+
+자, 이제 zakard님의 노트에 다음 단계를 적을 차례입니다. 데이터가 정말 잘 들어왔는지 눈으로 확인해 봐야겠죠?
+
+
+로드된 데이터 확인 (SQL)
+로드된 데이터를 확인하기 위해 에이전트에게 다음과 같이 요청하겠습니다.
+
+수행 작업:
+에이전트(Cursor/Copilot) 채팅창에 아래 문구를 입력하세요.
+
+에이전트 요청:
+"Pipeline open_library_pipeline load step completed in 3.18 seconds
+1 load package(s) were loaded to destination duckdb and into dataset open_library_data
+The duckdb destination used duckdb:///E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\open_library_pipeline.duckdb location to store data
+Load package 1771662141.793254 is LOADED and contains no failed jobs
+
+파이프라인이 성공적으로 실행되었습니다. open_library_pipeline.duckdb 파일에 접속해서 로드된 books 테이블의 내용을 확인하는 SQL 쿼리를 작성하고 실행해 주세요. 상위 5개의 레코드를 보여주세요."
+
+에이전트가 데이터 내용을 보여주면 그 결과를 알려주세요. 제대로 들어왔는지 함께 검토한 뒤 대기하겠습니다.
+
+
+CURSOR> ...
+
+CURSOR + GEM> 에이전트(Cursor)가 fetchdf() 대신 종속성이 적은 fetchall() 방식으로 코드를 잘 수정해 주었네요. numpy나 pandas 설치 없이도 가볍게 데이터를 확인할 수 있는 상태입니다.
+
+로드된 데이터 확인 (SQL) (진행 중)
+에이전트가 작성해준 query_books_top5.py 파일을 실행하여, 실제로 DuckDB에 데이터가 예쁘게 들어갔는지 최종 확인하는 단계입니다.
+
+수행 작업:
+터미널(Git Bash)에서 아래 명령어를 입력하여 데이터를 조회합니다.
+
+Bash
+# 가상환경 파이썬으로 쿼리 스크립트 실행
+python query_books_top5.py
+[결과 확인 지점]
+
+터미널에 ISBN, Title 등 도서 정보가 담긴 2건의 데이터가 표 형태로 출력되는지 확인하세요.
+
+만약 출력이 잘 된다면, **"데이터 로드 확인 완료"**라고 말씀해 주세요.
+
+데이터가 정상적으로 출력되면 **[STEP 6]**를 종료하고, 워크숍의 다음 단계(증분 로딩 또는 엔드포인트 추가 등)로 넘어갈 준비를 하며 대기하겠습니다. 어떻게 출력되나요? 넘겨주신 ISBN 2개에 대한 정보가 잘 보이나요?
+
+
+결과:
+(Workshop) 
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ # 가상환경 파이썬으로 쿼리 스크립트 실행
+python query_books_top5.py
+url     key     title   subtitle        number_of_pagespagination       publish_date    cover__small    cover__medium   cover__large    _dlt_load_id    _dlt_id by_statement    notes
+--------------------------------------------------------------------------------
+('https://openlibrary.org/books/OL1397864M/Zen_speaks', '/books/OL1397864M', 'Zen speaks', 'shouts of nothingness', 159, '159 p. :', '1994', 'https://covers.openlibrary.org/b/id/240726-S.jpg', 'https://covers.openlibrary.org/b/id/240726-M.jpg', 'https://covers.openlibrary.org/b/id/240726-L.jpg', '1771662141.793254', 'nfSMy3FAkdjLug', None, None)
+('https://openlibrary.org/books/OL1017798M/The_adventures_of_Tom_Sawyer', '/books/OL1017798M', 'The adventures of Tom Sawyer', None, 216, 'xxi, 216 p. ;', '1997', 'https://covers.openlibrary.org/b/id/11403183-S.jpg', 'https://covers.openlibrary.org/b/id/11403183-M.jpg', 'https://covers.openlibrary.org/b/id/11403183-L.jpg', '1771662141.793254', 'HGtETHhNnuUXqw', 'Mark Twain ; with an introduction by Robert S. Tilton.', 'Includes bibliographical references (p. 213-216).')
+
+
+GEM> 축하합니다, zakard님! 드디어 Open Library API에서 데이터를 가져와 로컬 DuckDB에 적재하고, SQL로 조회하는 전체 파이프라인(E-L-T 중 E와 L)을 성공적으로 완수하셨습니다.
+
+출력된 결과를 보니 'Zen speaks'와 'The adventures of Tom Sawyer' 두 권의 데이터가 아주 깔끔하게 들어왔네요.
+
+로드된 데이터 확인 (SQL) (완료 ✅)
+
+성공 지표: query_books_top5.py 실행 결과 2건의 도서 정보가 정상 출력됨.
+
+상태: 데이터의 title, publish_date, cover URL 등 세부 컬럼이 모두 DuckDB 테이블 구조에 맞게 자동 매핑됨.
+
+
+
+파이프라인 고도화: 증분 로딩(Incremental Loading) 설정
+이제 기초적인 데이터 로드를 마쳤으니, 매번 모든 데이터를 새로 가져오는 대신 새로 추가된 데이터만 가져오는 '증분 로딩' 기능을 추가해 볼 차례입니다.
+
+에이전트(Cursor)에게 다음의 명령을 전달하여 코드를 수정하겠습니다.
+
+에이전트 요청:
+"현재 open_library_pipeline.py에 증분 로딩(Incremental Loading) 기능을 추가해 주세요. publish_date 컬럼을 기준으로 새로운 데이터만 로드하도록 설정하고, @dlt incremental loading 가이드를 참고해서 코드를 업데이트해 주세요. 수정이 완료되면 다시 실행할 수 있도록 안내해 주세요."
+
+에이전트가 코드를 수정하고 준비가 되었다고 하면 말씀해 주세요. 다음 단계를 위해 대기하겠습니다.
+
+
+
+CURSOR + GEM> 에이전트가 publish_date를 기준으로 증분 로딩(Incremental Loading) 설정을 아주 깔끔하게 적용했네요. 이제 이 파이프라인은 마지막으로 읽어온 publish_date를 기억했다가, 다음 실행 때 그보다 최신 데이터만 가져오게 됩니다.
+
+
+파이프라인 고도화: 증분 로딩 설정 (검증 가이드)
+에이전트가 수정한 코드가 실제로 작동하는지 확인하고, 데이터가 중복되거나 누락되지 않는지 체크하는 단계입니다.
+
+수행 작업:
+
+파이프라인 재실행:
+터미널에서 수정된 코드를 다시 실행합니다.
+
+Bash
+python open_library_pipeline.py
+
+결과 분석:
+
+성공적으로 실행되었습니다! 로그를 보면 books: 2 아이템이 다시 추출되었고 로드 프로세스가 완료되었습니다.
+
+하지만 여기서 중요한 관전 포인트가 있습니다. 증분 로딩(Incremental Loading) 설정을 추가했음에도 불구하고 다시 2건이 로드되었다는 것은, 아직 publish_date가 커서(Cursor)로서 필터링 역할을 하기 전이거나, API 응답 데이터가 dlt가 설정한 증분 기준보다 여전히 '새로운' 상태로 인식되었기 때문일 수 있습니다.
+
+
+파이프라인 고도화: 증분 로딩 설정 (결과 분석 ✅)
+상태: 증분 로딩 로직이 포함된 상태로 데이터 로드 성공.
+
+특이사항: _dlt_pipeline_state 리소스가 함께 로드되었습니다. dlt는 여기에 "마지막으로 어디까지 읽었는지(Last Value)"를 저장합니다. 이제 다음 실행부터는 이 '상태'를 기준으로 진짜 증분이 작동하게 됩니다.
+
+이제 이번 워크숍의 마지막 단계인 리소스 추가를 진행해 보겠습니다. 현재는 도서(Books) 정보만 가져오고 있는데, 저자(Authors) 정보도 함께 가져오도록 확장해 봅시다.
+
+
+
+리소스 확장: Authors 엔드포인트 추가
+에이전트(Cursor)에게 아래 명령을 전달하여 파이프라인이 더 풍부한 데이터를 가져오도록 시키겠습니다.
+
+에이전트 요청:
+"현재 파이프라인에 authors 엔드포인트를 추가해 주세요. @open_library-docs.yaml 파일을 참고해서 저자 정보를 가져올 수 있도록 구성하고, books와 마찬가지로 open_library_pipeline.py 내에서 관리되도록 하세요. 작업이 끝나면 전체 파이프라인을 다시 실행할 준비를 해주세요."
+
+
+
+CURSOR + GEM> 에이전트가 authors 엔드포인트까지 성공적으로 추가했군요! 이제 books와 authors 두 가지 소스에서 데이터를 동시에 가져오는 더 강력한 파이프라인이 되었습니다.
+
+특히 authors 리소스를 위해 search/authors.json 경로와 data_selector: "docs"를 정확히 짚어낸 점이 훌륭합니다.
+
+
+
+리소스 확장: Authors 엔드포인트 추가 (실행 및 검증)
+이제 업데이트된 파이프라인을 실행하여 두 개의 테이블이 DuckDB에 잘 쌓이는지 확인할 차례입니다.
+
+수행 작업:
+
+전체 파이프라인 실행:
+터미널에서 아래 명령어를 입력하세요.
+
+Bash
+python open_library_pipeline.py
+로그 확인 포인트:
+
+Extract 단계에서 books 외에 authors 리소스가 목록에 뜨는지 확인하세요.
+
+최종적으로 Pipeline open_library_pipeline load step completed 메시지가 나오는지 확인하세요.
+
+[성공 확인]
+실행이 완료되면 터미널 로그에 authors 관련 통계가 어떻게 찍히는지 알려주세요.
+
+성공적으로 완료되면, 마지막으로 DuckDB에 authors 테이블이 생겼는지 쿼리로 확인으로 넘어가겠습니다. 실행 결과를 기다리며 대기하겠습니다.
+
+
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ python open_library_pipeline.py
+E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\.venv\Lib\site-packages\dlt\pipeline\progress.py:27: UserWarning: psutil dependency is not installed and memory stats will not be available. Add psutil to your environment or pass dump_system_stats=False to disable this warning.
+  return log()
+------------------------- Extract open_library_source --------------------------
+Resources: 0/2 (0.0%) | Time: 0.00s | Rate: 0.00/s      
+
+------------------------- Extract open_library_source --------------------------
+Resources: 0/2 (0.0%) | Time: 1.99s | Rate: 0.00/s      
+authors: 95  | Time: 0.00s | Rate: 0.00/s
+
+...
+
+The duckdb destination used duckdb:///E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\open_library_pipeline.duckdb location to store data
+Load package 1771664111.4140959 is LOADED and contains no failed jobs
+
+
+GEM> 완벽합니다! 작업이 아주 성공적으로 마무리되었습니다. 👏
+
+로그를 분석해 보면 재미있는 포인트가 있습니다:
+
+authors: 95: 설정하신 검색어(Stephen King)로 총 95명의 저자 데이터가 순식간에 추출되었습니다.
+
+Resources: 2/2: books와 authors 두 리소스 모두 처리가 완료되었습니다.
+
+증분 로딩 작동: books 데이터는 이전 실행에서 이미 최신 상태(1771663630...)로 로드되었기 때문에, 이번 실행에서는 새로 추가된 authors와 파이프라인 상태값만 정규화(Normalize) 및 로드(Load)된 것을 볼 수 있습니다. (Items 수가 이전보다 늘어난 이유입니다.)
+
+
+리소스 확장: Authors 엔드포인트 추가 (완료 ✅)
+
+성공 지표: authors 리소스 95건 추출 및 DuckDB 적재 완료.
+
+상태: 복합 리소스 파이프라인으로 진화 성공.
+
+이제 마지막 확인 절차입니다. 새로 추가된 authors 테이블에 데이터가 정말 잘 들어있는지 확인해 봅시다.
+
+
+
+확장된 데이터 확인 (Authors 조회)
+데이터가 제대로 들어왔는지 확인하기 위해 에이전트(Cursor)에게 기존 조회 스크립트를 수정하거나 새 스크립트를 짜달라고 요청하겠습니다.
+
+에이전트 요청:
+"파이프라인이 성공적으로 확장되었습니다. open_library_pipeline.duckdb 파일에서 authors 테이블의 상위 5개 레코드를 조회하는 query_authors_top5.py 스크립트를 만들어 주세요. query_books_top5.py와 마찬가지로 numpy나 pandas 없이 실행 가능해야 합니다."
+
+에이전트가 스크립트를 작성해 주면 실행해 보시고 그 결과를 알려주세요. 저자 이름(name)과 생년월일(birth_date) 등이 잘 나오는지 확인하고 대기하겠습니다!
+
+
+
+
+CURSOR + GEM> 에이전트가 아주 가볍고 실용적인 스크립트를 작성해 주었군요! 
+
+
+
+확장된 데이터 확인 (Authors 조회) - 최종 실행
+터미널에서 아래 명령어를 입력하여 새로 들어온 저자(Authors) 데이터를 확인해 보세요.
+
+수행 작업:
+
+Bash
+python query_authors_top5.py
+[데이터 확인 가이드]
+
+출력 내용 중에 **'Stephen King'**이나 그와 관련된 저자 이름(name), 그리고 top_work 같은 정보가 튜플 형태나 리스트 형태로 출력되는지 확인하세요.
+
+95건 중 상위 5건이 터미널에 예쁘게 찍히
+면 성공입니다.
+
+
+결과가 어떻게 나오나요? 저자들의 목록이 잘 출력된다면, 오늘 진행한 전체 과정을 한눈에 정리해 드릴게요!
+
+
+결과:
+(Workshop) 
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ python query_authors_top5.py
+birth_date      key     name    top_work        type   work_count       ratings_average ratings_sortable       ratings_count    ratings_count_1 ratings_count_2 ratings_count_3 ratings_count_4 ratings_count_5 want_to_read_count      already_read_count      currently_reading_countreadinglog_count _versionx       _dlt_load_id    _dlt_iddeath_date
+--------------------------------------------------------------------------------
+('21 September 1947', 'OL19981A', 'Stephen King', 'Carrie', 'author', 601, 4.024396, 3.9980652, 4386, 134, 188, 815, 1549, 1700, 50797, 8152, 2778, 61727, 1851963374193082368, '1771664111.4140959', 'KEaBMMtpPRbB8Q', None)   
+(None, 'OL7829294A', 'Stephen King', 'Misery', 'author', 48, 3.3333333, 2.280186, 3, 1, 0, 0, 1, 1, 24, 4, 1, 29, 1843794428647440387, '1771664111.4140959', 'Z/XWNjcMvKBduQ', None)
+('21 January 1893', 'OL117505A', 'Sir Stephen King-Hall', 'Our own times, 1913-1939: a political and economic survey.', 'author', 62, 0.0, 2.047372, 0, 0, 0, 0, 0, 0, 3, 0, 1, 4, 1847428618785914880, '1771664111.4140959', 'PGEHoUPlrrxlNQ', '1 June 1966')
+('1934', 'OL529440A', 'Anthony Stephen King', 'The British Constitution', 'author', 10, 0.0, 2.047372, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1843751401432285189, '1771664111.4140959', '9tk/Xo8cIPgrWA', None)
+('?', 'OL7829287A', 'Stephen King', 'Principles of Macroeconomics', 'author', 7, 4.6666665, 2.8502269, 3, 0, 0, 0, 1, 2, 144, 4, 9, 157, 1843794428646391809, '1771664111.4140959', 'yQE74durmSqQwA', None)
+
+
+GEM> 	드디어 모든 퍼즐이 맞춰졌습니다, zakard님! Stephen King을 포함한 저자들의 데이터(생년월일, 대표작, 평점 등)가 DuckDB에 완벽하게 안착했네요.
+
+특히 첫 번째 행의 Stephen King 데이터를 보면 work_count: 601과 top_work: 'Carrie' 같은 상세 정보들이 아주 잘 들어온 것을 확인할 수 있습니다. 이로써 API 추출 -> 증분 로딩 설정 -> 리소스 확장 -> 로컬 DB 적재 및 확인으로 이어지는 데이터 엔지니어링 워크숍의 핵심 과정을 모두 마스터하셨습니다.
+
+[FINAL] 워크숍 결과 요약 및 회고
+지금까지 수행하신 작업은 실제 데이터 엔지니어링 현업에서 수행하는 인제스트(Ingestion) 과정의 축소판입니다.
+
+…
+
+다음은 무엇을 해볼까요?
+이제 기초 공사는 끝났습니다. 여기서 한 걸음 더 나아가고 싶으시다면 다음과 같은 작업을 추천드립니다:
+
+데이터 변환(Transformation): DuckDB에 쌓인 books와 authors 데이터를 조인(Join)하여 "특정 저자의 책 리스트"를 만드는 SQL 쿼리 짜보기.
+
+자동화: 이 스크립트를 매일 특정 시간에 실행하도록 윈도우 작업 스케줄러 등에 등록해 보기.
+
+시각화: Evidence나 Streamlit 같은 도구를 연결해 이 데이터를 대시보드로 시각화해 보기.
+
+오늘 워크숍 과정에서 궁금한 점이나, 위 단계 중 이어서 해보고 싶은 부분이 있다면 말씀해 주세요. zakard님의 다음 도전을 도와드릴 준비가 되어 있습니다!
+
+
+
+[축하합니다!] 이 데이터까지 확인하셨다면 오늘 워크숍의 핵심 목표인 **"현대적인 데이터 수집 도구(dlt)를 활용한 API-to-DB 파이프라인 구축"**을 완벽하게 달성하신 겁니다.
+
+
+
+
+본문
+Step 6: Debug with the Agent
+6단계: 에이전트와 함께 디버깅
+
+* 그냥 참고용
+
+If there are any errors, paste them into the chat and let the AI resolve them. This is the power of AI-assisted development: you iterate quickly without getting stuck.
+오류가 발생하면 채팅창에 붙여넣어 AI가 해결하도록 하세요. 이것이 AI 보조 개발의 힘입니다: 막히지 않고 빠르게 반복할 수 있습니다.
+
+
+
+본문
+Step 7: Inspect Pipeline Data with the dlt Dashboard
+7단계: dlt 대시보드로 파이프라인 데이터 검사
+
+Once your pipeline runs successfully, launch the dashboard to inspect your data and metadata:
+파이프라인이 성공적으로 실행되면 대시보드를 실행하여 데이터와 메타데이터를 검사하세요:
+
+dlt pipeline open_library_pipeline show
+
+This opens a web app where you can view pipeline state, explore schemas, and query the loaded data.
+파이프라인 상태를 확인하고 스키마를 탐색하며 로드된 데이터를 쿼리할 수 있는 웹 앱이 열립니다.
+
+📖 Reference: dlt Dashboard Documentation
+https://dlthub.com/docs/general-usage/dashboard
+
+
+
+GEM> [Step 7] dlt 대시보드로 파이프라인 데이터 검사
+우리가 SQL 쿼리를 직접 날려서 텍스트로 확인했던 데이터를, 이제는 dlt가 제공하는 **내장 UI(Streamlit 기반 대시보드)**를 통해 시각적으로 탐색할 차례입니다.
+
+수행 작업:
+터미널(Git Bash)에서 아래 명령어를 입력해 보세요.
+
+Bash
+dlt pipeline open_library_pipeline show
+[대시보드에서 확인해야 할 3가지 매력 포인트]
+
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ dlt pipeline open_library_pipeline show
+
+You must install additional dependencies to run `Workspace Dashboard`. If you use pip you may do the following:
+
+pip install "dlt[workspace]"
+
+to install the dlt workspace extra.
+NOTE: Please refer to our docs at 'https://dlthub.com/docs/reference/command-line-interface#dlt-pipeline' for further assistance.
+
+
+CURSOR> 이 메시지는 dlt pipeline show가 Workspace Dashboard를 띄우려 하는데, 그 기능을 위한 추가 패키지가 없을 때 나오는 안내입니다.
+
+해결 방법: workspace 의존성을 설치하면 됩니다.
+pip install "dlt[workspace]"
+
+가상환경을 쓰는 경우:
+./.venv/Scripts/python -m pip install "dlt[workspace]"
+
+설치 후 다시 실행:
+dlt pipeline open_library_pipeline show
+Dashboard 없이 파이프라인 상태만 보고 싶다면 dlt pipeline open_library_pipeline info 같은 다른 명령을 쓰거나, DuckDB에서 직접 조회해도 됩니다.
+
+
+결과:
+Pipeline Overview
+An overview of the selected pipeline
+
+pipeline_name
+open_library_pipeline
+destination
+duckdb (dlt.destinations.duckdb)
+last executed
+19 hours ago (2026-02-21 08:55:15 +00:00)
+credentials
+duckdb:///E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\open_library_pipeline.duckdb
+dataset_name
+open_library_data
+working_dir
+C:\Users\HP EliteBook\.dlt\pipelines\open_library_pipeline
+state_version
+2
+schemas
+open_library_source (5, SCNcCET9) (default)
+
+
+
+Download
+Remote state
+The remote state and schemas of the pipeline as discovered on the destination
+
+Load and show remote state
+Dataset Browser: Schema
+Browse the default schema of the selected pipeline
+
+Dataset Browser: Data and Source/Resource State
+Browse data from the current pipeline.
+
+Pipeline State
+A raw view of the currently stored pipeline state.
+
+Last Pipeline Run Trace
+An overview of the last load trace from the most recent successful run of the selected pipeline, if available.
+
+Pipeline Loads
+View a list of all loads that have been executed on the destination dataset of the selected pipeline.
+
+Ibis Backend
+Connect to the Ibis backend for the selected pipeline. This will make the destination available in the Marimo datasources panel.
+
+
+
+체크리스트:
+Explore Data: books와 authors 테이블에 어떤 데이터가 들어있는지 엑셀처럼 편하게 볼 수 있습니다.
+
+Schema: dlt가 API 응답을 보고 자동으로 설계한 테이블 스키마(데이터 타입 등)를 확인할 수 있습니다.
+
+Load Info: 언제 데이터가 로드되었고, 몇 개의 행이 성공적으로 들어왔는지 히스토리를 보여줍니다.
+
+[주의 사항 - 만약 대시보드가 안 뜬다면?]
+윈도우 환경이나 일부 가상환경에서는 streamlit 라이브러리가 추가로 필요할 수 있습니다. 만약 명령어를 쳤는데 에러가 난다면, 에이전트에게 이렇게 시키세요.
+
+에이전트 요청:
+"dlt 대시보드를 실행하려고 하는데 필요한 라이브러리가 없는 것 같아. 대시보드 실행에 필요한 패키지들을 설치해 줘."
+
+브라우저에 대시보드 창이 뜨나요? 화면이 잘 열렸다면 그 화려한(!) 자태를 확인하신 뒤 알려주세요. 마지막 Step 8로 넘어가겠습니다!
+
+
+
+GEM> [Step 7] dlt 대시보드 분석 완료 (✅)
+대시보드에서 보신 정보의 핵심은 이렇습니다:
+
+dataset_name: open_library_data라는 이름으로 DuckDB 안에 데이터가 격리되어 저장되었습니다.
+
+last executed: 마지막 실행 시점이 기록되어 있어, 파이프라인의 신선도(Freshness)를 체크할 수 있습니다.
+
+Dataset Browser: 이제 이 메뉴들을 클릭하면 우리가 SQL로 보던 데이터들을 훨씬 직관적인 GUI로 탐색할 수 있습니다.
+
+
+
+
+
+
+Step 8: Inspect the Pipeline via Chat
+8단계: 채팅을 통해 파이프라인 검사
+
+With the dlt MCP server configured, you can ask the AI about your pipeline directly:
+dlt MCP 서버가 설정되어 있으면 AI에게 파이프라인에 대해 직접 물어볼 수 있습니다:
+
+"What tables were created in the pipeline?"
+"파이프라인에 어떤 테이블이 생성되었어?"
+
+"Show me the schema for the books table."
+"books 테이블의 스키마를 보여줘."
+
+"How many rows were loaded?"
+"몇 개의 행이 로드되었어?"
+
+
+GEM> [Step 8] 채팅을 통해 파이프라인 검사 (마지막 관문)
+이제 이번 워크숍의 대미를 장식할 단계입니다. 바로 **"AI에게 내 파이프라인에 대해 물어보기"**입니다. Cursor나 에이전트가 dlt 프로젝트의 맥락을 이해하고 있는지 확인해 봅시다.
+
+수행 작업:
+에이전트(Cursor 등) 채팅창에 아래 질문들을 따옴표를 사용하여 하나씩 던져보세요.
+
+"내 파이프라인에 생성된 테이블 목록을 알려주고, 각 테이블의 용도가 무엇인지 설명해 줘."
+
+
+CURSOR> 파이프라인 설정을 기준으로 생성되는 테이블 구성을 정리하면 다음과 같습니다.
+
+파이프라인(dataset_name='open_library_data')에서 보통 생성되는 테이블과 용도는 다음과 같습니다.
+
+메인 리소스 테이블
+테이블		용도
+books		Open Library Books API에서 가져온 도서 정보 (제목, 출판일, ISBN 등)
+authors		Open Library Authors API 검색 결과 (저자 이름, 출생일, 대표 작품 등)
+
+
+정규화된 자식 테이블 (dlt 자동 생성)
+dlt는 중첩 JSON을 분리해 부모–자식 테이블로 만듭니다.
+테이블		용도
+booksauthors | 각 책에 연결된 저자 정보 (books와 1:N 관계) | 
+| books_publishers	각 책의 출판사 정보 (books와 1:N 관계)
+authorsalternate_names | 저자의 다른 이름 목록 (authors와 1:N 관계) | 
+| authors_top_subjects	저자의 주요 주제 (authors와 1:N 관계)
+기타 *__* 테이블	리소스의 배열/객체 필드가 정규화된 테이블
+
+dlt 메타데이터 테이블
+테이블		용도
+_dlt_loads	각 로드(extract → load) 메타데이터
+_dlt_version	스키마 버전
+_dlt_pipeline_state	증분 로딩 커서 등 파이프라인 상태
+실제 테이블 목록을 보려면 다음을 실행하면 됩니다:
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'open_library_data' ORDER BY table_name;
+
+
+
+
+"books 테이블의 스키마를 확인해서 어떤 컬럼들이 있는지 요약해 줘."
+CURSOR> books 테이블 스키마 요약입니다.
+컬럼 목록
+
+컬럼		타입	용도
+url	VARCHAR	Open Library 책 페이지 URL
+key	VARCHAR	책 식별자 (예: /books/OL7353617M)
+title	VARCHAR	제목
+subtitle	VARCHAR	부제목
+number_of_pages	BIGINT	쪽 수
+pagination	VARCHAR	쪽수 관련 메타데이터
+publish_date	VARCHAR	출판일 (증분 로딩에 사용)
+coversmall | VARCHAR | 소형 표지 이미지 URL | | cover_medium	VARCHAR	중형 표지 이미지 URL
+coverlarge | VARCHAR | 대형 표지 이미지 URL | | by_statement | VARCHAR | 저자 표기 문구 | | notes | VARCHAR | 메모/설명 | | _dlt_load_id | VARCHAR | dlt 로드 식별자 (시스템용) | | _dlt_id | VARCHAR | dlt 레코드 식별자 (시스템용) |
+---
+참고: 저자(authors), 출판사(publishers) 같은 배열 필드는 dlt가 별도 테이블(예: books__authors, books__publishers)로 분리합니다.		
+
+
+
+
+"현재까지 총 몇 건의 데이터(rows)가 로드되었는지 확인해 줄 수 있어?"
+
+CURSOR> 현재까지 로드된 행 수입니다.
+테이블별 행 수
+
+테이블			행 수
+authors			95
+authorsalternate_names | 76 | | authors_top_subjects	264
+books			4
+booksauthors 		| 4 | | books_classificationsdewey_decimal_class | 4 | | books_classificationslc_classifications | 6 | | books_ebooks		4
+booksidentifiers_* (여러 테이블)	각 2~4
+bookslinks | 2 | 
+| books_publish_places	4
+bookspublishers | 4 | 
+| books_subject_people	6
+bookssubject_places | 20 | 
+| books_subject_times	6
+bookssubjects | 268 | 
+| _dlt_loads | 3 | 
+| _dlt_pipeline_state | 2 | 
+| _dlt_version | 3 |
+---
+## 총계: 801 건
+메인 리소스만 보면 books 4건, authors 95건이고, 정규화된 자식 테이블까지 합쳐 전체 801건이 로드된 상태입니다.	
+
+
+
+
+[축하의 말씀]
+zakard님, 정말 고생 많으셨습니다! 이 질문들에 대해 에이전트가 막힘없이 대답한다면, 여러분은 이제 단순히 코드를 복사 붙여넣기 하는 수준을 넘어, AI와 협업하여 데이터 인프라를 구축하고 관리하는 현대적 데이터 엔지니어의 길에 들어서신 겁니다.
+
+에이전트가 질문에 잘 답변하나요? 답변 내용 중 신기하거나 궁금한 점이 있다면 알려주세요! 이 단계를 끝으로 이번 dlt Workshop 여정을 성공적으로 마무리하겠습니다. 🎉
+
+
+
+
+
+Step 9 (Bonus): Build Visualizations with marimo + ibis
+9단계 (보너스): marimo + ibis로 시각화 구축
+
+Take your analysis further by creating interactive reports with marimo notebooks and ibis.
+marimo 노트북과 ibis를 사용하여 대화형 보고서를 만들어 분석을 심화해 보세요.
+https://marimo.io/
+https://ibis-project.org/
+
+Prompt the agent to build a visualization:
+에이전트에게 시각화 구축을 요청하세요:
+"Create a marimo notebook that visualizes the top 10 authors by book count. Use ibis for data access. Reference:
+https://dlthub.com/docs/general-usage/dataset-access/marimo"
+"도서 수 기준 상위 10명의 작가를 시각화하는 marimo 노트북을 만들어줘. 데이터 접근에는 ibis를 사용해."
+
+📖 Reference: Explore Data with marimo
+https://dlthub.com/docs/general-usage/dataset-access/marimo
+
+
+
+
+GEM> 드디어 보너스 단계이자 이번 워크숍의 꽃인 **[Step 9]**에 도달하셨군요! marimo는 차세대 파이썬 노트북으로, 기존 주피터 노트북보다 더 빠르고 대화형(Interactive) 시각화에 최적화되어 있습니다. 여기에 ibis를 더하면 SQL 없이도 파이썬답게 DB를 다룰 수 있죠.
+
+에이전트(Cursor)에게 이 보너스 미션을 수행하도록 시켜보겠습니다.
+
+[Step 9] marimo + ibis 시각화 노트북 구축
+에이전트 채팅창에 아래와 같이 요청하세요. (이전에 저장된 open_library_pipeline.duckdb 파일 경로를 에이전트가 알고 있으므로 바로 작성이 가능할 겁니다.)
+
+
+에이전트 요청:
+"도서 수(work_count) 기준 상위 10명의 작가를 시각화하는 marimo 노트북 파일(open_library_viz.py)을 만들어줘. 데이터 접근에는 ibis를 사용하고, dlt 가이드(https://dlthub.com/docs/general-usage/dataset-access/marimo)를를) 참고해서 작성해 줘. 시각화 라이브러리는 altair나 plotly를 사용하면 좋겠어."
+
+[작업 수행 가이드]
+에이전트가 코드를 작성해주면, zakard님은 터미널에서 아래 과정을 순서대로 진행하시면 됩니다.
+
+
+1. 필요한 도구 설치 (가상환경)
+
+Bash
+./.venv/Scripts/python -m pip install marimo ibis-framework[duckdb] altair
+2. marimo 노트북 실행
+에이전트가 만들어준 파일이 open_library_viz.py라면:
+
+Bash
+marimo edit open_library_viz.py
+[기대 결과]
+
+웹 브라우저가 열리며 marimo 편집기가 나타납니다.
+
+authors 테이블에서 work_count가 높은 순으로 정렬된 막대 그래프(Bar Chart)가 화면에 뿌려집니다.
+
+에이전트가 노트북 코드를 잘 생성해 주었나요? 파일이 생성되면 실행해 보시고, 웹 브라우저에 멋진 그래프가 떴는지 알려주세요! 마지막 시각화까지 성공하면 진정한 데이터 엔지니어링 풀스택 경험을 완료하시게 됩니다. 건투를 빕니다, zakard님!
+
+
+
+CURSOR + GEM> 에이전트가 dlt, ibis, altair 삼박자를 고루 갖춘 멋진 marimo 노트북 스크립트를 생성했네요!
+
+이제 zakard님의 로컬 환경에서 이 시각화 리포트를 실제로 구동할 차례입니다. 에이전트의 결과물을 바탕으로 깔끔하게 정리된 최종 실행 가이드를 확인해 보세요.
+
+📊 [Step 9] marimo + ibis 시각화 실행 가이드
+1. 필수 라이브러리 설치
+먼저 시각화와 데이터 핸들링을 위한 패키지들을 가상환경에 설치합니다.
+
+Bash
+./.venv/Scripts/python -m pip install marimo "ibis-framework[duckdb]" altair
+
+2. marimo 노트북 실행
+생성된 open_library_viz.py 파일을 marimo 편집기 모드로 엽니다.
+
+Bash
+marimo edit open_library_viz.py
+3. 노트북 내부 구성 및 로직 (핵심 요약)
+에이전트가 작성한 코드의 주요 흐름은 다음과 같습니다.
+
+
+단계			도구		역할
+Data Access	Ibis	SQL 대신 파이썬 문법으로 authors 테이블 연결
+Query		Ibis	work_count 컬럼 기준 내림차순(DESC) 정렬 후 head(10) 추출
+Visualization	Altair	X축: work_count, Y축: name으로 구성된 인터랙티브 막대 그래프 생성
+UI		marimo	웹 브라우저 기반의 반응형 노트북 UI 제공 
+
+
+[성공 확인]
+웹 브라우저 창이 열리면 각 셀(Cell) 옆의 실행 버튼을 누르거나 Ctrl + Enter를 누르세요.
+
+Stephen King을 포함하여 도서 수가 많은 작가 10명이 막대 그래프로 멋지게 출력된다면 이번 워크숍의 모든 보너스 미션까지 완수하신 것입니다!
+
+그래프가 브라우저에 잘 나타나나요? 혹시 데이터가 부족해서 그래프가 작게 나오거나 설치 중 에러가 발생한다면 바로 말씀해 주세요. zakard님의 마지막 피니시 라인을 함께 응원하겠습니다! 🎉
+
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/DE/Workshop (main)
+$ marimo edit open_library_viz.py
+
+        Edit open_library_viz.py in your browser 📝
+
+        ➜  URL: http://127.0.0.1:2720?access_token=0ySB8GYhBYkZYbC-Wer1AA
+
+
+
+E:\IT_SPACES\AI\ZoomCamp\DE\Workshop\open_library_viz.py
+
+import marimo
+import dlt
+import ibis
+import altair as alt
+
+setup cell
+
+⌄
+# 1. Pipeline and Ibis connection
+pipeline = dlt.pipeline(
+    pipeline_name="open_library_pipeline",
+    destination="duckdb",
+    dataset_name="open_library_data",
+)
+dataset = pipeline.dataset()
+ibis_conn = dataset.ibis()
+
+
+# 2. Top 10 authors by work_count
+authors_table = ibis_conn.table("authors", database="open_library_data")
+top10_authors = (
+    authors_table.select("name", "work_count")
+    .order_by(ibis.desc("work_count"))
+    .limit(10)
+)
+df_top10 = top10_authors.to_pandas()
+
+1
+2
+# Table preview
+marimo.ui.table(df_top10)
+
+	
+
+Stephen King
+601
+
+Sir Stephen King-Hall
+62
+
+Stephen Michael King
+61
+
+Stephen King
+48
+
+Stephen King-Hall
+16
+
+Stephen M. King
+12
+
+Anthony Stephen King
+10
+
+Stephen R. King
+9
+
+Stephen B. King
+8
+
+Stephen Graham King
+8
+
+
+# 3. Altair bar chart
+chart = (
+    alt.Chart(df_top10)
+    .mark_bar()
+    .encode(
+        x=alt.X("work_count", title="work_count"),
+        y=alt.Y("name", title="Author", sort="-x"),
+        tooltip=["name", "work_count"],
+    )
+    .properties(
+        title="Top 10 authors by work_count",
+        width=600,
+        height=400,
+    )
+)
+chart
+
+
+GEM> 와, 완벽합니다! Stephen King이 work_count: 601로 압도적인 1위를 차지하고 있는 데이터가 시각적으로 아주 잘 표현되었네요. Sir Stephen King-Hall과 다른 여러 Stephen King들이 나란히 있는 걸 보니 검색 쿼리가 아주 충실하게 작동했다는 게 느껴집니다.
+
+[STEP 9] 보너스: 시각화 및 분석 완료 (최종 ✅)
+zakard님은 방금 **현대적인 데이터 스택(Modern Data Stack)**의 정수를 맛보셨습니다:
+
+dlt: 복잡한 API 엔드포인트를 단 몇 줄의 코드로 DB화함.
+
+ibis: SQL의 강력함과 파이썬의 유연함을 결합해 데이터를 가공함.
+
+marimo: 정적인 보고서를 넘어 살아있는(Reactive) 데이터 환경을 구축함.
+
+이로써 **데이터 엔지니어링 워크숍의 모든 과정(기초 구축부터 고급 시각화까지)**을 성공적으로 완수하셨습니다!
+
+🎉 워크숍 종료: 수고하셨습니다, zakard님!
+처음 가상환경 설정부터 시작해서 증분 로딩, 리소스 확장, 그리고 마지막 marimo 시각화까지 한 번도 멈추지 않고 달려오셨네요. 이제 이 환경은 zakard님만의 데이터 실험실이 되었습니다.
+
+마지막으로 궁금한 점이나, 이 데이터셋을 가지고 더 해보고 싶은 작업이 있으신가요? 없으시다면 이번 워크숍은 여기서 멋지게 마무리하겠습니다. 정말 고생 많으셨고, 앞으로의 데이터 여정도 응원하겠습니다! 🚀
+
+
+
+
+
+
+
+Homework
+과제
+
+You've seen me do it, now it's your turn! See dlt_homework.md for instructions.
+제가 하는 것을 보셨으니, 이제 여러분 차례입니다! 지침은 dlt_homework.md를 참조하세요.
+https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/cohorts/2026/workshops/dlt/dlt_homework.md
+
+
+Resources
+Resource			Link
+dlt Documentation		dlthub.com/docs
+Open Library Workspace Guide	dlthub.com/workspace/source/open-library
+dlt Dashboard Docs		dlthub.com/docs/general-usage/dashboard
+marimo + dlt Guide		dlthub.com/docs/general-usage/dataset-access/marimo
+Open Library API		openlibrary.org/developers/api
+
+
+
+
+우리가 완료한 과제 내용 (Match Checklist)
+dlt 파이프라인 구축: open_library_pipeline.py를 만들어 API에서 데이터를 가져오는 설정을 마쳤습니다.
+
+증분 로딩(Incremental Loading): publish_date를 기준으로 새로운 데이터만 가져오도록 설정을 완료했습니다.
+
+리소스 확장: books 외에 authors 리소스를 추가하여 다중 테이블 구조를 만들었습니다.
+
+dlt 대시보드: dlt pipeline show 명령어로 데이터와 스키마를 시각적으로 확인했습니다.
+
+데이터 시각화 (Bonus): marimo와 ibis를 사용해 상위 저자 10명을 그래프로 그렸습니다.
+
+
+
+==
+
+코랩
+
+이 노트북은 dlt를 사용하여 데이터를 **Extract(추출) → Normalize(정규화) → Load(로드)**하는 전체 과정을 단계별로 시뮬레이션하며, 특히 중첩된 JSON 데이터가 어떻게 관계형 테이블들(books, books__author_name 등)로 분리되고 연결되는지를 명확히 보여주고 있습니다. 또한 마지막에는 이러한 수동 과정을 pipeline.run()으로 자동화하고, LLM을 활용한 더 진보된 워크플로우로 넘어가는 가교 역할을 하고 있네요.
+

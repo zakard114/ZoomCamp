@@ -1,0 +1,21 @@
+# 2025 cohort — course Elasticsearch (8.4.3)
+# Data: ../../../docker-data/volumes/elasticsearch-data (keep repo on E: when possible)
+# Windows: Docker Desktop → File sharing — add the drive (E:\ etc.) or bind mounts fail.
+# Run: docker compose -f docker-compose.elasticsearch.yml up -d
+# Stop: docker compose -f docker-compose.elasticsearch.yml down
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.3
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    volumes:
+      - type: bind
+        source: ../../../docker-data/volumes/elasticsearch-data
+        target: /usr/share/elasticsearch/data

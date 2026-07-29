@@ -1,0 +1,11 @@
+# Qdrant for LLM module 02 / 2025 cohort. Data on E: — run after Docker Desktop shows "Engine running".
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant-zoomcamp-02
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - E:/IT_SPACES/AI/ZoomCamp/LLM/02/qdrant_storage:/qdrant/storage

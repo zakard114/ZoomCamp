@@ -1,0 +1,11 @@
+# 06 Batch (PySpark)
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+*.parquet
+.pytest_cache/
+.mypy_cache/
+*.log

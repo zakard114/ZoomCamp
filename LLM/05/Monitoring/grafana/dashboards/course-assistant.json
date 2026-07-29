@@ -1,0 +1,256 @@
+{
+  "uid": "course-assistant",
+  "title": "Course Assistant Monitoring",
+  "tags": ["llm-zoomcamp", "monitoring"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 2,
+  "refresh": "30s",
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Recent Conversations",
+      "type": "table",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp AS time, question, answer, response_time, cost FROM conversations WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo() ORDER BY timestamp DESC LIMIT 5",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Model Usage",
+      "type": "barchart",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "options": {
+        "orientation": "horizontal",
+        "xField": "model",
+        "legend": { "displayMode": "list", "placement": "bottom" },
+        "showValue": "auto"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT model, COUNT(*) as count FROM conversations WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo() GROUP BY model ORDER BY count DESC",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "title": "Relevance Distribution",
+      "type": "piechart",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "right" },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "/^count$/",
+          "values": true
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT relevance, COUNT(*) as count FROM feedback WHERE source = 'judge' AND timestamp BETWEEN $__timeFrom() AND $__timeTo() GROUP BY relevance",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Response Time",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 16 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp AS time, response_time FROM conversations WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo() ORDER BY timestamp",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Token Usage",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 16 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT $__timeGroup(timestamp, $__interval) AS time, AVG(total_tokens) AS avg_tokens FROM conversations WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo() GROUP BY 1 ORDER BY 1",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Cost",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 16 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT $__timeGroup(timestamp, $__interval) AS time, SUM(cost) AS total_cost FROM conversations WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo() GROUP BY 1 ORDER BY 1",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "User Feedback",
+      "type": "stat",
+      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 24 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "textMode": "auto",
+        "colorMode": "value"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT SUM(CASE WHEN score > 0 THEN 1 ELSE 0 END) as thumbs_up, SUM(CASE WHEN score < 0 THEN 1 ELSE 0 END) as thumbs_down FROM feedback WHERE source = 'user' AND timestamp BETWEEN $__timeFrom() AND $__timeTo()",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "thumbs_up" },
+            "properties": [{ "id": "displayName", "value": "Thumbs up" }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "thumbs_down" },
+            "properties": [{ "id": "displayName", "value": "Thumbs down" }]
+          }
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "title": "Agent Tool Calls",
+      "type": "table",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 30 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp AS time, session_id, tool_name, tool_input, duration_ms FROM agent_tool_calls WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo() ORDER BY timestamp DESC LIMIT 20",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Agent Tool Usage",
+      "type": "barchart",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 38 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT tool_name, COUNT(*) as count FROM agent_tool_calls WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo() GROUP BY tool_name ORDER BY count DESC",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Agent Tool Duration",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 38 },
+      "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" },
+      "fieldConfig": {
+        "defaults": { "unit": "ms", "color": { "mode": "palette-classic" } },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "editorMode": "code",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp AS time, duration_ms FROM agent_tool_calls WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo() ORDER BY timestamp",
+          "datasource": { "type": "grafana-postgresql-datasource", "uid": "postgres-course-assistant" }
+        }
+      ]
+    }
+  ]
+}

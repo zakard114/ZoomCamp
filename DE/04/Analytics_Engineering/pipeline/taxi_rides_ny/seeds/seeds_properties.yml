@@ -1,0 +1,32 @@
+version: 2
+
+seeds:
+  - name: taxi_zone_lookup
+    description: >
+      NYC 택시 구역(Zone) 정보입니다. 승하차 지점의 행정구(Borough)와 구역 명칭을 확인하는 데 사용됩니다.
+      associated service_zone (EWR, Boro Zone, Yellow Zone) 정보를 포함합니다.
+    columns:
+      - name: location_id
+        description: "구역 고유 ID"
+        data_tests:
+          - unique
+          - not_null
+      - name: borough
+        description: "뉴욕 행정구 (Manhattan, Brooklyn, etc.)"
+      - name: zone
+        description: "상세 구역 명칭"
+
+  - name: payment_type_lookup
+    description: >
+      결제 수단 코드와 그에 대한 설명을 매핑하는 참조 데이터입니다.
+      분석용 모델에서 가독성을 높이기 위해 사용됩니다.
+    columns:
+      - name: payment_type
+        description: "결제 수단 숫자 코드"
+        data_tests:
+          - unique
+          - not_null
+      - name: payment_type_description
+        description: "사람이 읽기 쉬운 결제 수단 설명 (예: Credit card, Cash)"
+        data_tests:
+          - not_null

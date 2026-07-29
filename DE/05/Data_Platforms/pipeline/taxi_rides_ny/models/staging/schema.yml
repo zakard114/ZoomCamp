@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: staging
+    database: taxi_rides_ny # 사용자님의 duckdb 데이터베이스 이름 확인
+    schema: main
+    tables:
+      - name: green_tripdata
+      - name: yellow_tripdata
+
+models:
+  - name: stg_green_tripdata
+    description: "Green 택시의 원천 데이터입니다."
+    columns:
+      - name: vendor_id
+        data_tests:
+          - not_null
+      - name: pickup_datetime
+        data_tests:
+          - not_null
+
+  - name: stg_yellow_tripdata
+    description: "Yellow 택시의 원천 데이터입니다."
+    columns:
+      - name: vendor_id
+        data_tests:
+          - not_null
+      - name: pickup_datetime
+        data_tests:
+          - not_null

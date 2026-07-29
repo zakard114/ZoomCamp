@@ -1,0 +1,22 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.duckdb
+*.duckdb.wal
+data/*.duckdb
+.python-version
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+*.secrets.toml
+secrets.toml
+
+# install / sync noise
+uv_sync_log.txt
+**/uv_sync_log.txt
+
+# personal Korean scratch notes (not course materials)
+dlt_Workshop.txt

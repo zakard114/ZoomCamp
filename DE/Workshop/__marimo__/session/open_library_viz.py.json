@@ -1,0 +1,92 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.20.1"
+  },
+  "cells": [
+    {
+      "id": "setup",
+      "code_hash": "c91ef2af1590849c3e14a8960e77ea3f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hbol",
+      "code_hash": "74a05eb0f68d938a1ef7358da34151c7",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "014865b77def78fa35740df2097fa888",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "ffe60cf5f9c257d41b779fb2843ccb65",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='vblA-0' random-id='3202eecc-7e01-5c2d-e802-dc5842d16279'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;_marimo_row_id&#92;&quot;:0,&#92;&quot;name&#92;&quot;:&#92;&quot;Stephen King&#92;&quot;,&#92;&quot;work_count&#92;&quot;:601},{&#92;&quot;_marimo_row_id&#92;&quot;:1,&#92;&quot;name&#92;&quot;:&#92;&quot;Sir Stephen King-Hall&#92;&quot;,&#92;&quot;work_count&#92;&quot;:62},{&#92;&quot;_marimo_row_id&#92;&quot;:2,&#92;&quot;name&#92;&quot;:&#92;&quot;Stephen Michael King&#92;&quot;,&#92;&quot;work_count&#92;&quot;:61},{&#92;&quot;_marimo_row_id&#92;&quot;:3,&#92;&quot;name&#92;&quot;:&#92;&quot;Stephen King&#92;&quot;,&#92;&quot;work_count&#92;&quot;:48},{&#92;&quot;_marimo_row_id&#92;&quot;:4,&#92;&quot;name&#92;&quot;:&#92;&quot;Stephen King-Hall&#92;&quot;,&#92;&quot;work_count&#92;&quot;:16},{&#92;&quot;_marimo_row_id&#92;&quot;:5,&#92;&quot;name&#92;&quot;:&#92;&quot;Stephen M. King&#92;&quot;,&#92;&quot;work_count&#92;&quot;:12},{&#92;&quot;_marimo_row_id&#92;&quot;:6,&#92;&quot;name&#92;&quot;:&#92;&quot;Anthony Stephen King&#92;&quot;,&#92;&quot;work_count&#92;&quot;:10},{&#92;&quot;_marimo_row_id&#92;&quot;:7,&#92;&quot;name&#92;&quot;:&#92;&quot;Stephen R. King&#92;&quot;,&#92;&quot;work_count&#92;&quot;:9},{&#92;&quot;_marimo_row_id&#92;&quot;:8,&#92;&quot;name&#92;&quot;:&#92;&quot;Stephen B. King&#92;&quot;,&#92;&quot;work_count&#92;&quot;:8},{&#92;&quot;_marimo_row_id&#92;&quot;:9,&#92;&quot;name&#92;&quot;:&#92;&quot;Stephen Graham King&#92;&quot;,&#92;&quot;work_count&#92;&quot;:8}]&quot;' data-total-rows='10' data-total-columns='2' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='10' data-field-types='[[&quot;name&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;work_count&quot;,[&quot;integer&quot;,&quot;int64&quot;]]]' data-selection='&quot;multi&quot;' data-show-filters='true' data-show-download='true' data-show-column-summaries='false' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-has-stable-row-id='true' data-lazy='false' data-preload='false' data-download-file-name='&quot;df_top10&quot;'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "8428e738e3f588e512b5af010cc3d1ba",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/vnd.vegalite.v6+json": "{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v6.1.0.json\",\n  \"config\": {\n    \"view\": {\n      \"continuousHeight\": 300,\n      \"continuousWidth\": 300\n    }\n  },\n  \"data\": {\n    \"name\": \"data-331b1e206e051a34a9d30bae90134bff\"\n  },\n  \"datasets\": {\n    \"data-331b1e206e051a34a9d30bae90134bff\": [\n      {\n        \"name\": \"Stephen King\",\n        \"work_count\": 601\n      },\n      {\n        \"name\": \"Sir Stephen King-Hall\",\n        \"work_count\": 62\n      },\n      {\n        \"name\": \"Stephen Michael King\",\n        \"work_count\": 61\n      },\n      {\n        \"name\": \"Stephen King\",\n        \"work_count\": 48\n      },\n      {\n        \"name\": \"Stephen King-Hall\",\n        \"work_count\": 16\n      },\n      {\n        \"name\": \"Stephen M. King\",\n        \"work_count\": 12\n      },\n      {\n        \"name\": \"Anthony Stephen King\",\n        \"work_count\": 10\n      },\n      {\n        \"name\": \"Stephen R. King\",\n        \"work_count\": 9\n      },\n      {\n        \"name\": \"Stephen B. King\",\n        \"work_count\": 8\n      },\n      {\n        \"name\": \"Stephen Graham King\",\n        \"work_count\": 8\n      }\n    ]\n  },\n  \"encoding\": {\n    \"tooltip\": [\n      {\n        \"field\": \"name\",\n        \"type\": \"nominal\"\n      },\n      {\n        \"field\": \"work_count\",\n        \"type\": \"quantitative\"\n      }\n    ],\n    \"x\": {\n      \"field\": \"work_count\",\n      \"title\": \"work_count\",\n      \"type\": \"quantitative\"\n    },\n    \"y\": {\n      \"field\": \"name\",\n      \"sort\": \"-x\",\n      \"title\": \"Author\",\n      \"type\": \"nominal\"\n    }\n  },\n  \"height\": 400,\n  \"mark\": {\n    \"type\": \"bar\"\n  },\n  \"title\": \"Top 10 authors by work_count\",\n  \"usermeta\": {\n    \"embedOptions\": {}\n  },\n  \"width\": 600\n}"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "XtZG",
+      "code_hash": null,
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TrMs",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
+    }
+  ]
+}

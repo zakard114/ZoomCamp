@@ -1,0 +1,24 @@
+version: 2
+
+macros:
+  - name: get_trip_duration_minutes
+    description: >
+      승차 시간(pickup)과 하차 시간(dropoff) 사이의 차이를 '분(minute)' 단위로 계산합니다.
+      DuckDB의 `date_diff` 기능을 dbt 표준 문법으로 구현하여 환경에 구애받지 않고 작동합니다.
+    arguments:
+      - name: pickup_datetime
+        type: timestamp
+        description: "승차 시간 컬럼"
+      - name: dropoff_datetime
+        type: timestamp
+        description: "하차 시간 컬럼"
+
+  - name: get_vendor_data
+    description: >
+      숫자로 된 vendor_id를 사람이 읽기 쉬운 업체명(Vendor Name)으로 변환하는 CASE 문을 생성합니다.
+      Jinja 딕셔너리를 사용하여 유지보수가 간편하며, 컴파일 시점에 SQL로 변환됩니다.
+      지원 ID: 1 (Creative Mobile Technologies), 2 (VeriFone Inc.), 4 (Unknown/Other).
+    arguments:
+      - name: vendor_id_column
+        type: string
+        description: "vendor_id가 들어있는 컬럼명 (예: 'vendor_id')"

@@ -1,0 +1,94 @@
+{% comment %}
+  Where the meeting has got to. Included by the upload page and served on its
+  own to htmx, so what the page shows and what a poll returns are one piece of
+  markup.
+
+  It asks for itself again every three seconds while there is something to
+  wait for, and comes back without the hx- attributes once the record is READY
+  or FAILED — which is how the polling stops: the last fragment to arrive is
+  the one that does not ask again.
+
+  The address it polls is reversed here, with the plain `{% url %}` tag. It sits
+  inside the `{% if polling %}`, which is only ever true when there is a record,
+  so the tag always has a pk — and a renamed route raises instead of rendering
+  `hx-get=""`, which is a fragment that stops polling and says nothing (#62).
+{% endcomment %}
+<div
+  id="meeting-status"
+  class="panel mt-8"
+  data-meeting-record="{{ record.pk }}"
+  data-polling="{% if polling %}true{% else %}false{% endif %}"
+  {% if polling %}
+    hx-get="{% url 'meeting-record-status' record.pk %}"
+    hx-trigger="every 3s"
+    hx-swap="outerHTML"
+  {% endif %}
+>
+  <h2 class="section-heading">Progress</h2>
+
+  {% if record %}
+    <p class="mt-2 text-sm" role="status">{{ record.progress }}</p>
+
+    {% if failed %}
+      {% comment %}
+        The failure, in the terms `_docs/decisions.md` item 6 settles: the
+        recording is deleted whether transcription worked or not, so there is
+        nothing left to run again and no button that could. Saying so is the
+        whole of the recovery instruction.
+      {% endcomment %}
+      <p class="mt-2 text-sm text-red-900">{{ record.error_message }}</p>
+      <p class="mt-2 text-sm text-slate-600">
+        The recording was deleted as the attempt ended, so it cannot be run
+        again from here. Upload the file once more to start over.
+      </p>
+    {% endif %}
+
+    {% if retained %}
+      {% comment %}
+        The unlink was refused by the filesystem, so the recording is still on
+        the volume after the pipeline finished with it. `_docs/decisions.md`
+        item 6 says it should not be, and the row honestly records that it is —
+        this is that fact on the page, so no status here implies the media is
+        gone when it is not (#71). `manage.py sweep_media` is what comes back
+        for it; there is nothing for the facilitator to do, and the sentence
+        says so rather than offering a button that would not work.
+      {% endcomment %}
+      <p class="mt-2 text-sm text-red-900">
+        The recording could not be deleted from the shared volume when the
+        attempt ended, so it is still there. It has been logged and it is
+        collected automatically; nothing needs doing here.
+      </p>
+    {% endif %}
+
+    <dl class="list-rows">
+      <div class="flex gap-2">
+        <dt class="font-medium text-slate-700">Handed over</dt>
+        {% comment %}
+          The filename is the one thing on this page a person chose, so it is
+          printed as text and nothing else. Django escapes it here; a file
+          called `<img onerror=...>` reads as its own name and does nothing.
+        {% endcomment %}
+        <dd>{% if record.original_filename %}{{ record.original_filename }}{% else %}Pasted transcript{% endif %}</dd>
+      </div>
+      <div class="flex gap-2">
+        <dt class="font-medium text-slate-700">Kind</dt>
+        <dd>{{ record.get_kind_display }}</dd>
+      </div>
+      <div class="flex gap-2">
+        <dt class="font-medium text-slate-700">Size</dt>
+        <dd>{{ record.size_bytes|filesizeformat }}</dd>
+      </div>
+    </dl>
+
+    {% if record.skips_transcription %}
+      <p class="mt-2 text-sm text-slate-600">
+        This one arrived as text, so there is nothing to transcribe — it goes
+        straight to reading out the decisions and the actions.
+      </p>
+    {% endif %}
+  {% else %}
+    <p class="mt-2 text-sm">
+      Nothing has been handed over for this retrospective yet.
+    </p>
+  {% endif %}
+</div>

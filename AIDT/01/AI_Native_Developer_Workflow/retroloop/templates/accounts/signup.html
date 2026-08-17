@@ -1,0 +1,22 @@
+{% extends "base_app.html" %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+  <h1 class="page-heading">Sign up</h1>
+
+  <form method="post" class="form-fields">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit" class="btn-primary">Create account</button>
+  </form>
+
+  <p class="mt-6 text-sm text-slate-600">
+    Already have an account?
+    <a
+      href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}"
+      class="link"
+    >Log in</a>.
+  </p>
+{% endblock %}

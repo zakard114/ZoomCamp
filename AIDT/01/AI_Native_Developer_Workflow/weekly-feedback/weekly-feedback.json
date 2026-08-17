@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "key": "api",
+      "name": "Billing API",
+      "path": "E:\\IT_SPACES\\AI\\ZoomCamp\\AIDT\\01\\weekly-feedback",
+      "owner": "alexey",
+      "tags": [
+        "core"
+      ],
+      "archived": false,
+      "created_at": "2026-08-03T05:46:40+00:00"
+    },
+    {
+      "key": "web",
+      "name": "Web app",
+      "path": "",
+      "owner": "sam",
+      "tags": [
+        "core"
+      ],
+      "archived": false,
+      "created_at": "2026-08-03T05:46:43+00:00"
+    }
+  ],
+  "entries": [
+    {
+      "project": "api",
+      "week": "2026-W32",
+      "status": "red",
+      "score": 2,
+      "highlights": [
+        "refunds endpoint live"
+      ],
+      "issues": [
+        "flaky integration tests"
+      ],
+      "blockers": [
+        "vendor sandbox is down"
+      ],
+      "next_steps": [
+        "retry the migration"
+      ],
+      "notes": "",
+      "author": "",
+      "created_at": "2026-08-03T05:46:48+00:00",
+      "updated_at": "2026-08-03T05:46:48+00:00"
+    },
+    {
+      "project": "web",
+      "week": "2026-W32",
+      "status": "green",
+      "score": 4,
+      "highlights": [
+        "shipped login page"
+      ],
+      "issues": [],
+      "blockers": [],
+      "next_steps": [
+        "start dashboard"
+      ],
+      "notes": "",
+      "author": "",
+      "created_at": "2026-08-03T05:46:49+00:00",
+      "updated_at": "2026-08-03T05:46:49+00:00"
+    }
+  ]
+}

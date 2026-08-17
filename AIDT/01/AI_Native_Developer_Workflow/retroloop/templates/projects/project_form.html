@@ -1,0 +1,21 @@
+{% extends "base_app.html" %}
+
+{% block title %}Create a project{% endblock %}
+
+{% block content %}
+  <h1 class="page-heading">Create a project</h1>
+
+  <form method="post" class="form-fields">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <button type="submit" class="btn-primary">Create project</button>
+  </form>
+
+  <p class="mt-6 text-sm text-slate-600">
+    You will be its facilitator, and you can invite the rest of the team with a link.
+  </p>
+
+  <p class="mt-6 text-sm">
+    <a href="{% url 'project-list' %}" class="link">Back to your projects</a>
+  </p>
+{% endblock %}

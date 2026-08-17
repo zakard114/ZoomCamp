@@ -1,0 +1,33 @@
+{% extends "base_app.html" %}
+
+{% comment %}
+  Messages are not looped over here. base.html renders the flash region for
+  every page, so "You have joined …" arrives in the styled success box instead
+  of as a bare bullet in a list of its own.
+{% endcomment %}
+
+{% block title %}Your projects{% endblock %}
+
+{% block content %}
+  <h1 class="page-heading">Your projects</h1>
+
+  {% if projects %}
+    <ul class="mt-6 flex flex-col gap-2">
+      {% for project in projects %}
+        <li class="panel">
+          <a href="{{ project.get_absolute_url }}" class="link">{{ project.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="mt-2 text-slate-600">You are not a member of any project yet.</p>
+  {% endif %}
+
+  <p class="mt-6">
+    <a href="{% url 'project-create' %}" class="btn-primary">Create a project</a>
+  </p>
+
+  <p class="mt-6 text-sm">
+    <a href="{% url 'home' %}" class="link">Home</a>
+  </p>
+{% endblock %}

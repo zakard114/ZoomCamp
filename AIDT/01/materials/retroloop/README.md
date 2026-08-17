@@ -1,0 +1,136 @@
+# Weekly Team Feedback Tool
+
+A Django app for running weekly Start/Stop/Continue feedback cycles and the
+retrospectives that follow them.
+
+## Requirements
+
+- Python 3.14
+- PostgreSQL 18
+- [uv](https://docs.astral.sh/uv/) for dependency management
+
+## Getting started
+
+```bash
+uv sync
+cp .env.example .env
+npm install
+npm run build:css
+uv run manage.py migrate
+uv run manage.py runserver
+```
+
+Configuration comes entirely from the environment — `DATABASE_URL`,
+`SECRET_KEY`, `DEBUG`, and `ALLOWED_HOSTS`. In development those are read from
+`.env`; in production they are set directly and no `.env` file is shipped.
+`SECRET_KEY` has no fallback when `DEBUG` is off: the app refuses to start
+rather than run on a default key.
+
+## Frontend assets
+
+Assets are built on the host, not in a container. Node is a build-time tool
+only: no image in this project ships a Node runtime, and the app serves nothing
+but the files the build leaves behind.
+
+```bash
+npm install          # the build-time toolchain: Tailwind CLI and Vite
+npm run build:css    # assets/css/app.css -> static/css/app.css
+npm run watch:css    # the same, rebuilding as you edit templates
+npm run build:js     # assets/js/board.jsx -> static/board/, hashed
+npm run watch:js     # the same, rebuilding as you edit the island
+```
+
+`static/css/app.css` and `static/board/` are generated and git-ignored, so build
+them once after cloning and again after pulling template or island changes.
+Tailwind 4 is configured CSS-first inside `assets/css/app.css` — there is no
+`tailwind.config.js`.
+
+The retrospective page mounts one React component, built by Vite from
+`assets/js/board.jsx`. The bundle's filename carries a content hash, so
+templates never name it: `{% vite_bundle "assets/js/board.jsx" %}` reads
+`static/board/manifest.json` and renders the script tag. A missing or
+unreadable manifest raises an error naming `npm run build:js` rather than
+serving a page with a script tag that loads nothing.
+
+htmx and Alpine are committed under `static/vendor/` at pinned versions and
+served from this project's own domain. Nothing on a page reaches a CDN.
+
+Compose bind-mounts the working tree into the container, so a stylesheet built
+on the host is picked up there without a rebuild.
+
+## Docker Compose
+
+Compose replaces the manual Postgres setup described in "Getting started" — on
+a machine with only Docker installed, it brings up the database, the app, and
+the background worker:
+
+```bash
+docker compose up
+docker compose run --rm web uv run manage.py migrate
+docker compose run --rm web uv run pytest
+```
+
+The app is served at `http://localhost:8000/`. Migrations never run
+automatically on container start, so `migrate` is an explicit command. The
+`db` service also publishes port 5432, so `uv run pytest` on the host works
+against the same database.
+
+Database rows live in a named volume: `docker compose down` keeps them and
+`docker compose down -v` discards them. The `worker` service is a placeholder
+that idles until the task backend arrives.
+
+## Tests and linting
+
+```bash
+uv run pytest
+uv run ruff check .
+uv run ruff format .
+```
+
+The suite uses `config.settings_test`, which supplies fixed environment values
+and then imports the production settings unchanged, so tests need no local
+configuration.
+
+## Accounts
+
+There is no email backend anywhere in this project — no verification, no
+password reset. A user who forgets their password is reset by an administrator:
+
+```bash
+uv run manage.py changepassword <username>
+```
+
+## Demo data
+
+`seed_demo` fills a development database with one realistic team so every screen
+can be opened and clicked through without running the flow by hand or spending
+anything on the OpenAI API:
+
+```bash
+uv run manage.py seed_demo
+```
+
+It **refuses to run unless `DEBUG` is on** — this is development-only data and
+must never be seeded anywhere real. There is no flag or environment variable
+that overrides that. Run it again and it deletes the demo projects and users it
+owns and rebuilds exactly the same data, touching nothing else.
+
+It creates two projects — `Platform Team` (three weeks of history: a completed
+retrospective, a middle one paused at its draft-review screen, and an open
+collection week) and `Design Guild` (empty, for the empty-state screens). Every
+demo user shares one password, printed on success along with the URLs worth
+opening:
+
+| username | display name | role | notes |
+| --- | --- | --- | --- |
+| `demo_priya` | Priya Raman | owner, facilitator | open most screens as this user |
+| `demo_mei` | Mei Lin | facilitator | |
+| `demo_sam` | Sam Okafor | member | facilitates cycle 2; the draft-review screen is hers |
+| `demo_alex_n` | Alex Novak | member | shares a first name with Alex Turner on purpose |
+| `demo_alex_t` | Alex Turner | member | |
+| `demo_tom` | Tom Weber | member | submits nothing, so "did not submit" is visible |
+| `demo_admin` | Demo Admin | superuser, on no project | opening a demo project gives 404 |
+
+The shared password is **`retro-demo-2026`** (override with `--password`). It is
+published here on purpose: this data is disposable and lives only where `DEBUG`
+is on. `--seed <int>` produces a different but reproducible dataset.

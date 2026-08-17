@@ -1,0 +1,5 @@
+# Local override: keep Postgres data on E: (not Docker named volume on C:)
+services:
+  db:
+    volumes:
+      - E:/IT_SPACES/AI/ZoomCamp/AIDT/01/AI_Native_Developer_Workflow/retroloop/docker/pgdata:/var/lib/postgresql

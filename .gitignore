@@ -40,6 +40,7 @@ LLM/01/**/Introduction.txt
 LLM/01/**/notes/
 LLM/00/*.txt
 LLM/02/*.txt
+LLM/02/2026/*.txt
 LLM/03/*.txt
 LLM/03/Orchestration notes.txt
 LLM/05/*.txt
@@ -59,3 +60,23 @@ DE/03/Data_Warehouse_and_BigQuery/*.txt
 # Docker bind-mount data & WSL export archives (large binaries)
 docker-data/volumes/
 docker-data/archive/
+
+# AIDT (AI Dev Tools Zoomcamp) — local envs, DB, caches, Docker bind data
+AIDT/**/.venv/
+AIDT/**/.env
+AIDT/**/.env.*
+!AIDT/**/.env.example
+AIDT/**/db.sqlite3
+AIDT/**/node_modules/
+AIDT/**/docker/pgdata/
+AIDT/**/.pytest_cache/
+AIDT/**/.ruff_cache/
+AIDT/**/.cache/
+AIDT/**/__pycache__/
+AIDT/**/*.py[cod]
+# retroloop generated frontend assets (built on host)
+AIDT/**/static/css/app.css
+AIDT/**/static/board/
+# leftover nested-repo metadata (never commit)
+AIDT/**/*.git-removed-for-monorepo/
+AIDT/**/retroloop.git-removed-for-monorepo/

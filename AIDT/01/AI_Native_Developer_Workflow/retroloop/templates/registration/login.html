@@ -1,0 +1,30 @@
+{% extends "base_app.html" %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+  <h1 class="page-heading">Log in</h1>
+
+  <form method="post" class="form-fields">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit" class="btn-primary">Log in</button>
+  </form>
+
+  {% comment %}
+    The `next` travels with the link, so a join link survives signing up
+    instead of landing the new member on the homepage.
+  {% endcomment %}
+  <p class="mt-6 text-sm text-slate-600">
+    No account yet?
+    <a
+      href="{% url 'signup' %}{% if next %}?next={{ next|urlencode }}{% endif %}"
+      class="link"
+    >Sign up</a>.
+  </p>
+  <p class="mt-2 text-sm text-slate-600">
+    Forgotten your password? There is no self-serve reset — ask an
+    administrator to set a new one.
+  </p>
+{% endblock %}

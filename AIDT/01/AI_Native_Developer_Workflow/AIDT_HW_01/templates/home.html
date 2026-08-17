@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{% if editing %}Edit TODO{% else %}TODO List{% endif %}{% endblock %}
+
+{% block content %}
+  <h1>TODO App</h1>
+
+  <section>
+    <h2>{% if editing %}Edit #{{ editing.pk }}{% else %}New TODO{% endif %}</h2>
+    <form method="post"
+          action="{% if editing %}{% url 'edit_todo' editing.pk %}{% else %}{% url 'create_todo' %}{% endif %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">{% if editing %}Save{% else %}Add{% endif %}</button>
+      {% if editing %}
+        <a href="{% url 'home' %}">Cancel</a>
+      {% endif %}
+    </form>
+  </section>
+
+  <section>
+    <h2>Your TODOs</h2>
+    {% if todos %}
+      <ul>
+        {% for todo in todos %}
+          <li>
+            <span class="{% if todo.resolved %}resolved{% endif %}">
+              {{ todo.title }}
+              {% if todo.due_date %} — due {{ todo.due_date }}{% endif %}
+            </span>
+            <form class="inline" method="post" action="{% url 'toggle_resolved' todo.pk %}">
+              {% csrf_token %}
+              <button type="submit">{% if todo.resolved %}Mark open{% else %}Resolve{% endif %}</button>
+            </form>
+            <a href="{% url 'edit_todo' todo.pk %}">Edit</a>
+            <form class="inline" method="post" action="{% url 'delete_todo' todo.pk %}">
+              {% csrf_token %}
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No TODOs yet.</p>
+    {% endif %}
+  </section>
+{% endblock %}

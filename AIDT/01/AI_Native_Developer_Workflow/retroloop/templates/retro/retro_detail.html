@@ -1,0 +1,173 @@
+{% extends "base_app.html" %}
+{% load vite %}
+
+{% block title %}Retrospective — week of {{ cycle.week_start|date:'j F Y' }}{% endblock %}
+
+{% block extra_head %}
+  {% comment %}
+    The only React island in the application. The tag reads the Vite manifest
+    and renders the hashed filename the build produced, so no template ever
+    names a built file; a missing build raises here rather than loading
+    nothing. A module script defers, so the mount element below exists by the
+    time it runs.
+  {% endcomment %}
+  {% vite_bundle "assets/js/board.jsx" %}
+{% endblock %}
+
+{% block content %}
+  <h1 class="page-heading">Retrospective</h1>
+  <p class="mt-2 text-sm text-slate-600">
+    <a href="{{ project.get_absolute_url }}" class="link">{{ project.name }}</a>
+    —
+    <a href="{{ cycle.get_absolute_url }}" class="link">
+      week of {{ cycle.week_start|date:'j F Y' }}
+    </a>
+  </p>
+
+  <section class="panel mt-8">
+    <h2 class="section-heading">Stages</h2>
+    {% comment %}
+      The six stages in order, with the one it is in marked. A retrospective
+      moves through them one at a time and never backwards, so the list doubles
+      as the answer to what happens next.
+    {% endcomment %}
+    <ol class="list-rows" data-retro-stage="{{ retro.stage }}">
+      {% for value, label in stages %}
+        {% if value == retro.stage %}
+          <li class="font-medium text-slate-700" aria-current="step">{{ label }} — now</li>
+        {% else %}
+          <li>{{ label }}</li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </section>
+
+  <section class="panel mt-8">
+    <h2 class="section-heading">This retrospective</h2>
+    {% comment %}
+      Each pair is a row of its own, so the label and its value read on one
+      line. `.list-rows` is the column; the pairs only need to stop being two
+      lines each.
+    {% endcomment %}
+    <dl class="list-rows">
+      <div class="flex gap-2">
+        <dt class="font-medium text-slate-700">Facilitator</dt>
+        <dd>{{ cycle.facilitator }}</dd>
+      </div>
+      <div class="flex gap-2">
+        <dt class="font-medium text-slate-700">Started</dt>
+        <dd>{% if retro.started_at %}{{ retro.started_at }}{% else %}Not yet{% endif %}</dd>
+      </div>
+      <div class="flex gap-2">
+        <dt class="font-medium text-slate-700">Completed</dt>
+        <dd>{% if retro.completed_at %}{{ retro.completed_at }}{% else %}Not yet{% endif %}</dd>
+      </div>
+      <div class="flex gap-2">
+        <dt class="font-medium text-slate-700">Votes per member</dt>
+        <dd data-votes-per-member="{{ retro.votes_per_member }}">{{ retro.votes_per_member }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="panel mt-8">
+    {% comment %}
+      Where the board goes. The mount element is empty here and filled by the
+      bundle, which is how a person tells the island is alive: view-source
+      shows an empty div, the browser shows the board.
+
+      The bootstrap is rendered with `json_script`, never marked safe and never
+      interpolated into a script body, so a card containing a closing script
+      tag is data rather than markup.
+
+      It carries the retrospective's id, stage and version and this viewer's
+      own cards, and nothing else — see board_bootstrap() in retro/views.py.
+      Every other member's card reaches the board through #11's state endpoint,
+      which decides what each stage may show, and never through this page.
+    {% endcomment %}
+    {{ board_bootstrap|json_script:"retro-bootstrap" }}
+    <div id="retro-board"></div>
+  </section>
+
+  {% if retro.clustering_error %}
+    {% comment %}
+      The clustering job (#22) runs after the reveal has committed, so a failure
+      here does not touch the stage — the cards are simply ungrouped. It is
+      recorded on the retrospective so a facilitator reads what happened here,
+      rather than it disappearing into the worker log. The message carries no
+      card text and no traceback; it says what to do next.
+    {% endcomment %}
+    <section class="panel mt-8" data-clustering-error>
+      <h2 class="section-heading">Automatic grouping</h2>
+      <p class="mt-2 text-sm text-slate-600">{{ retro.clustering_error }}</p>
+    </section>
+  {% endif %}
+
+  {% if retro.is_complete %}
+    <p class="mt-6 text-sm text-slate-600">
+      This retrospective is complete. It does not move again, and there is no
+      stage after this one.
+    </p>
+  {% else %}
+    <p class="mt-6 text-sm text-slate-600">
+      A retrospective moves forward one stage at a time, and never backwards.
+      {% if retro.stage == 'DRAFT' %}
+        Advancing to Reveal closes the feedback cycle: once the cards are
+        revealed nothing more can be submitted.
+      {% endif %}
+    </p>
+  {% endif %}
+
+  {% if can_advance %}
+    {% comment %}
+      Shown only to this cycle's facilitator, and only while there is a stage
+      left to move to. The button is a courtesy: advance_stage() asks
+      can_advance_stage again, refuses everyone else, and refuses a
+      retrospective that is already complete. The version below is the one this
+      page was rendered from, so a second click on a stale page is rejected
+      rather than advancing the board twice.
+    {% endcomment %}
+    <form method="post" action="{% url 'retro-advance' retro.pk %}" class="mt-6">
+      {% csrf_token %}
+      <input type="hidden" name="version" value="{{ retro.version }}">
+      <button type="submit" class="btn-primary">Advance to {{ next_stage_label }}</button>
+    </form>
+  {% endif %}
+
+  {% if can_hand_over_meeting %}
+    {% comment %}
+      Shown to this cycle's facilitator once the board has reached Discuss,
+      which is the first moment there is a meeting to hand over. The page
+      itself asks the same two questions again and refuses anyone who arrives
+      at the address without being shown this link.
+    {% endcomment %}
+    <p class="mt-6 text-sm">
+      <a href="{% url 'meeting-upload' retro.pk %}" class="link">
+        Hand over the meeting recording or transcript
+      </a>
+    </p>
+  {% endif %}
+
+  <p class="mt-6 text-sm">
+    {% comment %}
+      Every project member reaches the decisions and action items from here.
+      The page itself refuses a non-member, so this is a way in and not what
+      guards it.
+    {% endcomment %}
+    <a href="{% url 'retro-outcomes' retro.pk %}" class="link">Decisions and action items</a>
+  </p>
+
+  {% if can_review %}
+    <p class="mt-6 text-sm">
+      {% comment %}
+        This cycle's facilitator reviews the drafts extraction produced (#24)
+        before any of them reaches the record. The link is shown to the
+        facilitator alone; the screen refuses everyone else with a 404.
+      {% endcomment %}
+      <a href="{% url 'retro-review' retro.pk %}" class="link">Review the extracted drafts</a>
+    </p>
+  {% endif %}
+
+  <p class="mt-6 text-sm">
+    <a href="{{ cycle.get_absolute_url }}" class="link">Back to the week</a>
+  </p>
+{% endblock %}

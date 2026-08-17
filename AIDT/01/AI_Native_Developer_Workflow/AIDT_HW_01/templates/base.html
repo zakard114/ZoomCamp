@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TODO App{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.5rem; }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #ddd; }
+    .resolved { text-decoration: line-through; color: #666; }
+    form.inline { display: inline; }
+    label { display: block; margin-top: 0.5rem; }
+    button, .btn { cursor: pointer; }
+  </style>
+</head>
+<body>
+  {% block content %}{% endblock %}
+</body>
+</html>

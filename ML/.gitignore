@@ -1,0 +1,11 @@
+.venv/
+.venv_*/
+.venv_old_*/
+_wheels/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.python-version
+uv.lock
+*.bak-corrupt
+*.ipynb.bak*

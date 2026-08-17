@@ -1,0 +1,2054 @@
+
+Machine Learning Zoomcamp 요약
+이 과정은 모델 학습부터 배포까지 ML 엔지니어링의 전체 파이프라인을 다루는 4개월 과정의 무료 커리큘럼입니다.
+
+
+1. 핵심 특징
+
+실무 중심: 이론뿐만 아니라 Docker, FastAPI, Kubernetes, AWS Lambda 등을 활용한 실제 프로덕션 환경 배포를 강조합니다.
+
+과정 구성: 기초적인 지도 학습부터 심층 학습(Deep Learning), 서버리스 배포까지 순차적으로 학습합니다.
+
+운영 방식: 연 1회 열리는 '라이브 코호트'와 상시 참여 가능한 '자율 학습(Self-Paced)' 방식으로 나뉩니다.
+
+라이브 코호트 참여 시 마감 기한, 평가, 리더보드, 동료 리뷰(Peer Review), 수료증 발급 기회가 주어집니다.
+
+2. 커리큘럼 주요 모듈
+
+기초 및 지도 학습: ML 개념, CRISP-DM, 회귀(Regression), 분류(Classification), 모델 평가 지표.
+
+모델 배포: 모델 직렬화(Pickle), API 서비스 구축, Docker 컨테이너화 및 클라우드 배포.
+
+심화 학습: 의사결정 나무 및 앙상블 학습, 신경망(TensorFlow/PyTorch), 서버리스 딥러닝, Kubernetes를 활용한 모델 서빙.
+
+3. 프로젝트 및 수료 요건
+
+프로젝트: 중간 프로젝트와 캡스톤 프로젝트를 포함하여 총 2개의 프로젝트를 수행해야 합니다.
+
+수료증: 2개의 프로젝트 제출, 기한 준수, 동료 리뷰 참여를 완료하면 수료증이 발급됩니다.
+
+4. 대상 및 선수 지식
+
+대상: ML 엔지니어로 성장하려는 소프트웨어 엔지니어 및 데이터 분석가.
+
+선수 지식: 1년 이상의 프로그래밍 경험과 기본적인 커맨드 라인(CLI) 활용 능력이 필요합니다. (ML 사전 지식은 요구되지 않음)
+
+더 구체적인 학습 계획이나 특정 모듈에 대한 상세 정보가 필요하시면 말씀해 주세요.
+
+
+==============
+
+
+
+
+모듈 01: 머신러닝 소개 (Introduction to Machine Learning)
+https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/main/01-intro
+
+학습 목차:
+
+머신러닝 소개 (Introduction to Machine Learning)
+
+머신러닝 vs 규칙 기반 시스템 (ML vs Rule-Based Systems)
+
+지도 머신러닝 (Supervised Machine Learning)
+
+CRISP-DM 방법론 (CRISP-DM)
+
+모델링 단계: 모델 선택 프로세스 (The Modelling Step - Model Selection Process)
+
+환경 설정 (Setting up the Environment)
+
+NumPy 소개 (Introduction to NumPy)
+
+선형 대수 복습 (Linear Algebra Refresher)
+
+Pandas 소개 (Introduction to Pandas)
+
+요약 (Summary)
+
+숙제 (Homework)
+
+커뮤니티 노트 (Community notes):
+학습 내용을 정리한 노트들을 확인하고 공유할 수 있습니다.
+
+Ayoub Berdeddouch의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/ayoub-berdeddouch.md
+
+Sebastián Ayala Ruano의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/sebastian-ayala-ruano.md
+
+Alvaro Navas의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/alvaro-navas.md
+
+Luis Evaristo Caraballo de la Cruz의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/luis-evaristo-caraballo-de-la-cruz.md
+
+Jon Areas의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/jon-areas.md
+
+Hareesh Tummala의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/hareesh-tummala.md
+
+Peter Ernicke의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/peter-ernicke.md
+
+Josiah Adesola의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/josiah-adesola.md
+
+Kemal의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/kemal.md
+
+Maximilien Eyengue의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/maximilien-eyengue.md
+
+Mahrukh Tariq의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/mahrukh-tariq.md
+
+Revathy Ramalingam의 노트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/notes/revathy-ramalingam.md
+
+
+
+==============
+
+
+모듈 01 시작
+
+
+모듈 01: 머신러닝 소개 (Introduction to Machine Learning)
+https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/main/01-intro
+
+1.1 머신러닝 소개 (Introduction to Machine Learning)
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/01-what-is-ml.md
+
+강의 영상:
+https://www.youtube.com/watch?v=csxKescwJYM&list=PL3MmuxUbc_hLZFNgSad56pDBKK8KO0XIv
+
+머신러닝(ML)의 개념은 자동차 가격 예측의 예시를 통해 설명됩니다. 머신러닝 모델은 연식, 주행 거리 등과 같은 특성(features)으로 표현되는 데이터와, 이 경우 자동차의 가격인 타겟 변수(target variable)로부터 데이터 속의 패턴을 추출하여 학습합니다.
+
+그 후, 모델에게 가격(타겟) 정보가 없는 새로운 자동차 데이터가 주어지면 가격(타겟)을 예측하게 됩니다.
+
+요약하자면, 머신러닝은 데이터로부터 패턴을 추출하는 과정이며, 데이터는 두 가지 유형으로 나뉩니다:
+
+특성(Features): 객체에 대한 정보
+
+타겟(Target): 보이지 않는 객체에 대해 예측하고자 하는 속성
+
+따라서 새로운 특성 값이 모델에 주어지면, 모델은 학습된 패턴을 바탕으로 예측을 수행합니다.
+
+⚠️ 이 노트는 커뮤니티에 의해 작성되었습니다. 오류를 발견하시면 수정하여 Pull Request를 보내주시기 바랍니다.
+
+내용 출처:
+
+Peter Ernicke의 노트
+
+탐색(Navigation):
+
+머신러닝 줌캠프 코스 (Machine Learning Zoomcamp course)
+
+강의 1: 머신러닝 소개 (Lesson 1: Introduction to Machine Learning)
+
+다음: 머신러닝 대 규칙 기반 시스템 (Next: ML vs Rule-Based Systems)
+
+여기까지 내용을 먼저 살펴보았습니다. 다음 소단계(1.2 ML vs Rule-Based Systems)로 진행할까요?
+
+
+
+---
+
+
+
+>>> 여기까지 
+
+1.2 머신러닝 vs 규칙 기반 시스템 (ML vs Rule-Based Systems)
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/01-intro/02-ml-vs-rules.md
+
+머신러닝(ML)과 규칙 기반 시스템(Rule-Based Systems)의 차이점은 스팸 메일 필터 예시를 통해 설명됩니다.
+
+기존의 전통적인 규칙 기반 시스템은 이메일이 스팸인지 아닌지를 식별하기 위한 일련의 특성(키워드, 이메일 길이 등)을 바탕으로 작동합니다. 시간이 지나면서 스팸 메일은 계속해서 변하기 때문에 시스템을 지속해서 업그레이드해야 합니다. 하지만 시스템이 커질수록 코드 유지보수의 복잡성으로 인해 이 과정은 다루기 힘들 정도로 어려워집니다.
+
+머신러닝을 사용하면 다음 단계를 통해 이 문제를 해결할 수 있습니다:
+
+1. 데이터 수집 (Get data)
+사용자의 스팸 폴더와 받은편지함(inbox)에 있는 이메일들은 스팸인 경우와 스팸이 아닌 경우의 예시를 제공해 줍니다.
+
+2. 특성 정의 및 계산 (Define and calculate features)
+규칙 기반 시스템에서 사용하던 규칙이나 특성들을 머신러닝 모델의 특성을 정의하기 위한 출발점으로 활용할 수 있습니다. 각 이메일의 타겟 변수 값은 해당 이메일이 어디에서 수집되었는지(스팸 폴더인지 받은편지함인지)에 따라 정의될 수 있습니다.
+각 이메일은 그 특성과 타겟의 값으로 인코딩(변환)될 수 있습니다.
+
+3. 모델 학습 및 사용 (Train and use the model)
+인코딩된 이메일에 머신러닝 알고리즘을 적용하여, 새로운 이메일이 스팸인지 아닌지를 예측할 수 있는 모델을 구축합니다. 예측 결과는 확률로 나오며, 결정을 내리기 위해서는 이메일을 스팸과 스팸 아님으로 분류할 임계값(threshold)을 정의해야 합니다.
+
+⚠️ 이 노트는 커뮤니티에 의해 작성되었습니다. 오류를 발견하시면 수정하여 Pull Request를 보내주시기 바랍니다.
+
+내용 출처:
+
+Peter Ernicke의 노트
+
+탐색(Navigation):
+
+머신러닝 줌캠프 코스 (Machine Learning Zoomcamp course)
+
+이전: 머신러닝 소개 (Previous: Introduction to Machine Learning)
+
+다음: 지도 머신러닝 (Next: Supervised Machine Learning)
+
+1.2절의 본문 내용이 모두 번역 및 정리되었습니다. 다음 단계로 넘어가도 될까요?
+
+
+
+---
+
+
+
+알겠습니다! 1.3절의 첫 번째 클러스터(지도 머신러닝의 개념과 구체적인 예시, 그리고 학습의 의미)부터 영상 스크립트의 풍부한 설명과 비유를 살려 초보자가 이해하기 쉽도록 길고 친절한 내러티브 방식으로 풀어보겠습니다.
+
+1.3 지도 머신러닝 (Supervised Machine Learning) — 첫 번째 클러스터: 개념과 예시
+자, 이제 세 번째 레슨인 지도 머신러닝(Supervised Machine Learning)으로 들어왔습니다. 이름이 조금 딱딱하게 느껴질 수 있지만, 알고 보면 아주 직관적이고 쉬운 개념입니다.
+
+우리가 일상에서 누군가를 가르칠 때를 생각해 볼까요? 예를 들어 아이에게 자전거를 가르치거나 공부를 가르칠 때, 우리는 정답(레이블, Label)이 적힌 예시들을 보여주며 가르칩니다. "이건 사과야", "이건 자전거야" 하고 말이죠. 지도 머신러닝도 정확히 똑같은 방식을 컴퓨터에 적용한 것입니다.
+
+1. 선생님이 된 우리와 학생이 된 기계
+첫 번째 레슨에서 다뤘던 자동차 가격 예측 예시를 다시 떠올려 봅시다. 어떤 중고차의 가격을 예측하고 싶을 때, 우리는 기계에게 훌륭한 '선생님'이 되어주었습니다.
+
+가지고 있는 다양한 자동차들의 정보(브랜드, 연식, 주행거리 등)를 기계에게 보여줍니다.
+
+그리고 각 자동차의 실제 가격(정답, 레이블)도 함께 알려줍니다.
+
+"이런 조건의 차는 이 정도 가격이야"라는 것을 모든 자동차 데이터마다 반복해서 가르쳐 주는 것이죠.
+
+이렇게 알고리즘(기계)에게 정답이 포함된 예시를 보여주며 감독하고 가르치는 방식을 바로 지도 머신러닝이라고 부릅니다. 기계는 우리가 보여준 수많은 예시 속에서 스스로 공통된 규칙이나 패턴을 찾아냅니다. 그리고 나중에 가격을 전혀 모르는 새로운 자동차가 나타나면, 그동안 학습했던 패턴을 활용해 "이 차는 대략 이 정도 가격일 거야"라고 똑똑하게 예측해 낼 수 있게 되는 것입니다.
+
+2. 또 다른 예시: 스팸 메일 분류
+스팸 메일 예측 예시도 완전히 똑같습니다. 이번에도 우리가 선생님입니다.
+
+기계에게 "이 메일은 스팸이야", "저 메일은 정상적인 메일이야" 하고 각각의 예시를 보여줍니다.
+
+기계는 이 메시지들을 살펴보며 패턴을 분석합니다. 예를 들어, 메일 내용 중에 "deposit(입금)" 같은 특정 단어가 자주 등장하면 "아, 이런 단어가 있을 때 스팸일 확률이 높구나!" 하고 스스로 터득하게 되는 것이죠.
+
+3. 실제 데이터는 어떻게 생겼을까?
+그렇다면 기계에게 가르쳐줄 때 실제로 사진이나 긴 텍스트를 통째로 보여주기만 할까요? 물론 그런 경우도 있지만, 대부분의 머신러닝 모델은 그 자체로는 글자나 사진을 이해하지 못합니다.
+
+그래서 우리는 데이터를 기계가 이해할 수 있는 형태로 잘 다듬어서 전달해야 합니다.
+
+특성(Features): 모델에게 무엇을 보고 판단해야 할지 알려줍니다. (예: 이메일의 길이, 특정 키워드 포함 여부 등)
+
+타깃 변수(Target variable): 우리가 모델에게 최종적으로 예측하게 만들고 싶은 정답입니다. 예를 들어 스팸 메일 문제라면 "스팸이면 1, 스팸이 아니면 0"처럼 숫자로 변환해서 알려줍니다. 모델은 "스팸"이라는 단어의 의미 자체에는 관심이 없고, 오직 이 0과 1이라는 정답 숫자를 맞추는 데 집중합니다.
+
+즉, 우리는 기계에게 여러 가지 특성과 정답(타깃)이 담긴 데이터를 건네주고, 기계는 이를 통해 학습을 시작하게 됩니다.
+
+여기까지 1.3절의 첫 번째 클러스터(개념 도입과 예시, 그리고 데이터의 형태)를 초보자의 눈높이에 맞춰 풀어보았습니다.
+
+다음 소단계(특성 행렬 X, 타깃 벡터 y, 그리고 함수 g와 학습 과정)로 넘어가도 될까요?
+
+
+
+
+1.3 지도 머신러닝 (Supervised Machine Learning) — 두 번째 클러스터: 특성 행렬과 함수, 그리고 학습
+자, 이제 조금 더 들어가서 기계가 실제로 다루는 데이터의 구조와 모델이 어떻게 작동하는지를 수학적, 형식적으로 조금 더 멋지게(supervised machine learning) 정의해 보겠습니다. 머신러닝은 응용 수학과 통계학(applied mathematics and statistics)에 뿌리를 두고 있는 컴퓨터 과학(computer science)의 한 분야입니다.
+
+1. 특성 행렬(feature matrix)과 타깃 벡터(target vector)
+우리가 기계에게 데이터를 보여줄 때, 데이터를 그냥 뭉뚱그려 주는 것이 아니라 아주 깔끔한 표 형태로 정리해서 전달합니다.
+
+특성 행렬(feature matrix, X): 보통 대문자 X로 표현합니다. 행렬(matrix)이란 가로줄과 세로줄이 있는 2차원 배열(two-dimensional array), 즉 표(table)를 의미합니다.
+
+여기서 행(rows)은 우리가 예측하고자 하는 각각의 관측치 또는 객체(observations or objects)들입니다. (예: 개별 이메일 메시지들, 개별 자동차들)
+
+열(columns)은 그 객체들이 가진 특성(features)들입니다. (예: 자동차의 브랜드, 연식, 주행거리 등)
+
+타깃 변수(target variable, y): 보통 소문자 y로 표현하며, 1차원 배열(one-dimensional array)인 벡터(vector) 형태입니다.
+
+특성 행렬 X의 각 행(개별 데이터)마다 딱 하나씩 대응되는 우리가 예측하고자 하는 정답 정보가 들어 있습니다. (예: 자동차의 실제 가격, 스팸 여부를 나타내는 0과 1)
+
+수학이나 파이썬 배열에 익숙하지 않으시다면, X는 표(엑셀 시트) 같은 2차원 구조이고, y는 그저 숫자들이 나열된 한 줄짜리 1차원 목록이라고 생각하시면 아주 편합니다.
+
+2. 모델을 함수 g로 표현하기
+그렇다면 머신러닝의 궁극적인 목표는 무엇일까요? 바로 어떤 함수 g(function g)를 찾아내는 것입니다.
+
+여기서 함수 g가 바로 우리가 만드는 모델(model) 그 자체입니다.
+
+이 함수 g는 특성 행렬 X를 입력(input)으로 받습니다.
+
+그리고 우리가 진짜로 알고 싶어 하는 정답인 타깃 변수 y와 최대한 가까운 값(as close as possible to the targets, y)을 예측해 냅니다.
+
+예를 들어 자동차 가격 예측 문제라면:
+
+입력 X는 자동차의 모든 정보(모델, 제조사, 주행거리 등)가 됩니다.
+
+우리의 모델인 함수 g에 이 X를 넣으면, 모델은 가격을 뱉어냅니다.
+
+실제 자동차 가격이 1,100달러(1.1 thousand)였는데, 모델이 1,500달러(1.5 thousand)로 예측했다고 해봅시다. 완벽하게 똑같지는 않지만, 우리의 목적에 맞을 만큼 충분히 가까운 값을 찾아내는 것이죠!
+
+3. 학습(training)이란 무엇인가?
+이처럼 기계가 특성 행렬 X를 바라보고, 그 안에 숨겨진 패턴(예: "deposit이라는 단어가 있으면 스팸일 확률이 높더라" 같은 통계적 규칙)을 스스로 추출해서, 입력값을 넣었을 때 정답 y와 가장 가까운 결과를 뱉어내는 함수 g를 완성해 가는 과정 전체를 바로 학습(training)이라고 부릅니다.
+
+여기까지 1.3절의 두 번째 클러스터(특성 행렬 X, 타깃 벡터 y, 함수 g와 학습)를 초보자 눈높이에 맞춰 풀어보았습니다.
+
+다음 소단계(회귀, 분류, 랭킹 등 지도 머신러닝의 구체적인 문제 유형들)로 넘어가도 될까요?
+
+
+
+
+1.3 지도 머신러닝 (Supervised Machine Learning) — 세 번째 클러스터: 지도 머신러닝 문제의 유형들 (Types of SML problems)
+자, 이제 마지막 세 번째 클러스터로 넘어가 보겠습니다. 머신러닝 모델이 학습을 통해 만들어내는 예측 결과물(출력값)의 성격에 따라, 지도 머신러닝(supervised machine learning) 문제는 크게 몇 가지 종류로 나눌 수 있습니다.
+
+1. 회귀 (Regression)
+첫 번째 유형은 회귀(regression)입니다.
+
+출력값이 숫자(number)인 경우를 말합니다. (예: 0부터 무한대, 혹은 마이너스부터 플러스를 아우르는 실수 형태의 숫자)
+
+앞서 보았던 자동차 가격 예측이나 집값 예측(방의 개수, 면적, 지하철역과의 거리 등을 종합해 1백만 원 또는 1억 원 같은 구체적인 숫자를 도출하는 것)이 모두 대표적인 회귀 문제입니다.
+
+2. 분류 (Classification)
+두 번째 유형은 숫자가 아니라 카테고리(category)를 출력하는 분류(classification) 문제입니다.
+
+예를 들어 사진을 보고 "이것은 자동차다"라고 판별하거나, 이메일을 보고 "스팸이다/아니다"를 나누는 것이 여기에 해당합니다.
+
+분류 문제는 세부적으로 두 가지로 또 나뉩니다:
+
+이진 분류 (binary classification): 카테고리가 딱 두 개만 존재하는 특수한 형태입니다. (예: 스팸 맞음(1) 또는 아님(0)). 실무에서 가장 널리 쓰이는 형태이기도 합니다.
+
+다중 클래스 분류 (multiclass classification): 카테고리가 두 개보다 많은 경우입니다. (예: 사진 속 이미지가 자동차인지, 고양이인지, 강아지인지 3가지 이상 중에서 맞추는 경우)
+
+3. 랭킹 (Ranking)
+세 번째 유형은 랭킹(ranking)입니다.
+
+출력값으로 단순한 숫자나 카테고리가 아니라, 여러 항목들에 대해 관련성이 높은 순서대로 점수를 매겨 상위 목록을 뽑아내는 것을 말합니다.
+
+주로 추천 시스템(recommender systems)이나 검색 엔진에 적용됩니다.
+
+예를 들어, 쇼핑몰에 들어가서 수많은 상품 중 내가 살 만한 물건을 찾거나, 구글에서 특정 검색어를 쳤을 때 수십억 개의 문서 중 가장 관련성이 높은 문서를 위쪽부터 차례대로 보여주는 것이 모두 랭킹 문제입니다.
+
+요약하자면, 지도 머신러닝(supervised machine learning)은 특성 행렬(feature matrix, X)을 입력으로 받아 타깃 변수(target variable, y)와 가장 가까운 결과를 내는 함수 g를 찾아내는 과정입니다. 그리고 그 타깃의 성격에 따라 회귀(숫자 예측), 분류(카테고리 예측), 랭킹(순위 매기기)으로 나뉘게 됩니다.
+
+⚠️ 이 노트는 커뮤니티에 의해 작성되었습니다. 오류를 발견하시면 수정하여 Pull Request를 보내주시기 바랍니다.
+
+내용 출처:
+
+Peter Ernicke의 노트
+
+탐색(Navigation):
+
+머신러닝 줌캠프 코스 (Machine Learning Zoomcamp course)
+
+강의 1: 머신러닝 소개 (Lesson 1: Introduction to Machine Learning)
+
+이전: 머신러닝 vs 규칙 기반 시스템 (Previous: ML vs Rule-Based Systems)
+
+다음: CRISP-DM (Next: CRISP-DM)
+
+클러스터 3/3
+
+
+
+----
+
+
+
+1.4 CRISP-DM — 첫 번째 클러스터 (1.4.1): CRISP-DM이란 무엇인가?와 비즈니스 이해(Business understanding)
+
+자, 이제 네 번째 레슨인 CRISP-DM으로 넘어왔습니다. 이전 레슨에서 우리는 지도 머신러닝(supervised machine learning)이 무엇인지, 그리고 모델이 어떻게 특성과 타깃을 학습하는지 배웠죠? 이제 한 걸음 물러서서, 실제 머신러닝 프로젝트 전체가 어떤 흐름과 과정(processes for machine learning projects)으로 조직되고 진행되는지 그 큰 그림(big picture)을 살펴보겠습니다.
+
+1. CRISP-DM이란 무엇인가?
+머신러닝 프로젝트를 체계적으로 수행하기 위해 우리가 사용할 방법론(methodology)의 이름이 바로 CRISP-DM입니다.
+
+CRISP-DM은 Cross-Industry Standard Process for Data Mining의 약자입니다. 이름이 조금 길지만, 직역하면 '데이터 마이닝을 위한 산업 간 표준 프로세스'라는 뜻입니다.
+
+이 방식은 데이터 마이닝 전문가들이 공통으로 사용하는 접근 방식들을 정리해 둔 공개 표준 프로세스 모델(open standard process model)로, 오늘날에도 가장 널리 쓰이는 분석 모델(most widely-used analytics model) 중 하나입니다.
+
+이 프로세스는 무려 1996년에 처음 구상되어, 1997년에는 유럽연합(EU)의 ESPRIT 자금 지원 프로젝트로 채택되었습니다. 무척 오래된(90년대에 만들어진) 방식이지만, 놀랍게도 25년이 지난 지금까지도 거의 수정 없이 그대로 쓰일 만큼 시간의 검증을 훌륭하게 견뎌냈습니다.
+
+2. CRISP-DM의 첫 번째 단계: 비즈니스 이해 (Business understanding)
+이 방법론에는 총 6가지 단계가 존재하는데요, 그중 첫 번째가 바로 비즈니스 이해(business understanding) 단계입니다.
+
+이 단계에서의 핵심 목표는 우리가 해결하고자 하는 문제(problem)가 무엇인지 정확히 파악하고 이해하는 것입니다.
+
+"이 문제가 과연 우리 프로젝트에 정말 중요한가?"를 따져봐야 하며, 가장 중요한 것은 이 프로젝트의 성공 여부를 어떻게 측정할 것인가(how we measure the success of our project)?에 대한 명확한 기준을 세우는 것입니다.
+
+여기서 아주 중요하고 날카로운 질문 하나를 던져야 합니다.
+
+"이 프로젝트에 정말로 머신러닝(machine learning)이 꼭 필요할까?"
+
+사람들은 흔히 망치를 들면 모든 못이 박아 보인다고 하죠? 머신러닝을 알게 되면 모든 문제를 머신러닝으로 풀려고 하는 경향이 생깁니다. 하지만 실제로 많은 문제들은 굳이 복잡한 머신러닝 없이, 단순한 규칙 기반 시스템(rule-based system)이나 간단한 휴리스틱(heuristic)만으로도 충분히 해결할 수 있습니다. 따라서 이 단계에서는 정말 머신러닝이 최선의 도구인지 냉정하게 고민해 보아야 합니다.
+
+클러스터 1/6
+
+여기까지 1.4절의 첫 번째 소단계(CRISP-DM의 개념과 첫 번째 단계인 비즈니스 이해)를 살펴보았습니다.
+다음 소단계(스팸 검출 예시를 통한 비즈니스 이해 구체화 및 데이터 이해(Data understanding) 단계)로 넘어가도 될까요?
+
+
+
+
+1.4 CRISP-DM — 두 번째 클러스터 (1.4.2): 스팸 검출 예시로 보는 비즈니스 이해와 데이터 이해 (Data understanding)
+자, 그럼 앞서 배운 내용을 우리가 익숙하게 보아온 스팸 검출(spam detection) 예시에 직접 적용해서 구체적으로 살펴보겠습니다.
+
+1. 스팸 검출 예시로 보는 '비즈니스 이해(business understanding)'
+앞서 우리는 사용자들이 메일함에 쌓이는 스팸 때문에 불만을 제기한다는 문제를 알고 있었습니다. 이 문제를 CRISP-DM의 첫 번째 단계에 대입해 보면 이렇습니다.
+
+문제 파악: 사용자들이 실제로 스팸(spam messages) 때문에 얼마나 불만을 터뜨리고 있는지 그 규모를 파악해야 합니다. 전체 사용자 중 대다수가 불평을 하는지, 아니면 단 한 명의 유저만 불만을 갖는 것인지에 따라 이 프로젝트가 얼마나 임팩트가 있고 중요한지(임팩트 평가) 알 수 있겠죠.
+
+머신러닝이 꼭 필요한가?: 여기서도 "정말 머신러닝이 답인가?"를 고민합니다. 굳이 복잡한 머신러닝 시스템을 구축하는 데 막대한 시간과 자원을 쏟아붓지 않고, 그냥 간단한 규칙(Rule-based system)이나 수동 휴리스틱으로 막을 수 있는 일은 아닌지 점검합니다.
+
+측정 가능한 성공 목표(Measurable goal) 세우기: 만약 머신러닝을 쓰기로 결정했다면, "그냥 스팸을 줄이고 싶어요"라고 막연하게 말하면 안 됩니다. "프로젝트가 성공했다고 어떻게 증명할 것인가?"에 대한 명확한 숫자가 필요합니다. 예를 들어, "현재 스팸 메시지의 양을 50% 줄이겠다(reduce the amount of spam messages by 50%)"처럼 KPI(핵심 성과 지표)에 구체적인 숫자를 반드시 결합해야 합니다.
+
+2. CRISP-DM의 두 번째 단계: 데이터 이해 (Data understanding)
+비즈니스 목표를 세우고 머신러닝이 필요하다는 결론이 내려졌다면, 이제 두 번째 단계인 데이터 이해(data understanding)로 넘어갑니다. 머신러닝을 하려면 데이터(data)가 반드시 필요하니까요!
+
+이 단계에서는 현재 우리에게 어떤 데이터가 실제로 가용 가능한지(what data is actually available) 샅샅이 파악해야 합니다. 데이터가 아예 없다면 머신러닝을 시작조차 할 수 없기 때문입니다. 만약 데이터가 부족하다면 어떤 데이터가 빠졌는지, 데이터를 새로 사 와야 할지(buy a data source) 아니면 직접 수집을 시작해야 할지(start collecting some data) 결정해야 합니다.
+
+스팸 검출 예시로 데이터 이해 살펴보기:
+
+우리가 메일함에 만들어 둔 '스팸 버튼(spam button)'을 예로 들어봅시다. 유저가 이 버튼을 누를 때 데이터가 제대로, 신뢰성 있게(reliable) 수집되고 있을까요? 유저가 클릭할 때마다 그 기록이 빠짐없이 잘 쌓이고 있는지 점검해야 합니다.
+
+데이터의 품질(Data quality): 유저들이 항상 정확하게 스팸 버튼을 누를까요? 가끔은 실수로 정상적인 메일을 스팸으로 신고하거나, 반대로 스팸인데 신고를 안 할 수도 있습니다. 만약 이런 노이즈(noise)나 잘못된 라벨이 섞인 데이터를 그대로 사용하면, 머신러닝 모델은 이 잘못된 행동 방식을 그대로 학습(mimic this behavior)해서 엉뚱한 메일을 스팸으로 예측하게 됩니다. 따라서 이 단계에서 데이터를 직접 눈으로 확인하고 분석하여 품질이 충분히 좋은지 검증해야 합니다.
+
+데이터의 규모(Data size): 데이터 양이 너무 적지는 않은지 확인해야 합니다. 예를 들어 기록이 겨우 10개밖에 없다면 모델이 제대로 학습할 수 없겠죠? 이 단계에서 "최소 2~3천 개의 레코드(records)가 모이기 전에는 다음 단계로 넘어갈 수 없다" 같은 결론이 나올 수도 있습니다.
+
+💡 Tip: 프로젝트를 진행하다 보면 데이터 이해 단계에서 새로운 사실을 깨닫고, 처음 세웠던 비즈니스 목표나 계획이 비현실적임을 알게 되기도 합니다. 그럴 때는 주저하지 않고 **첫 번째 단계(비즈니스 이해)로 다시 돌아가서 목표를 수정(revise)**하는 유연함이 필요합니다.
+
+클러스터 2/6
+
+여기까지 1.4절의 두 번째 클러스터(비즈니스 이해의 구체적 적용과 데이터 이해 단계)를 살펴보았습니다.
+다음 소단계(데이터 준비(Data preparation) 단계와 파이프라인(pipelines) 구축)로 넘어가도 될까요?
+
+
+
+
+1.4 CRISP-DM — 세 번째 클러스터 (1.4.3): 데이터 준비 (Data preparation) 단계와 파이프라인 구축
+
+데이터가 충분하고 신뢰할 수 있다는 점을 확인했다면, 이제 세 번째 단계인 데이터 준비(data preparation) 단계로 넘어갑니다.
+
+1. 데이터 준비의 핵심 역할
+이 단계의 주된 목적은 수집된 원본 데이터를 머신러닝 알고리즘에 곧바로 집어넣을 수 있는 형태(tabular format)로 완전히 변형하고 다듬는 것입니다. 앞서 앞선 레슨들에서 다루었던 내용들이 바로 이 단계에서 구현됩니다.
+
+특성 추출 (Feature extraction): 원본 데이터(예: 이메일 텍스트나 사용자 정보)에서 모델이 학습에 사용할 수 있는 의미 있는 특성들을 뽑아냅니다. (예: 메일 본문 중에 특정 키워드인 "deposit"이라는 단어가 들어 있는지 여부를 판단하여 특성 열로 만드는 것)
+
+데이터 정제 및 노이즈 제거 (Cleaning data and removing noise): 사용자가 실수로 정상적인 메일을 스팸으로 신고했거나, 그 반대의 경우처럼 데이터에 섞여 있는 오류나 잡음(noise)을 정제하는 작업을 거칩니다.
+
+2. 파이프라인 (Pipelines) 구축
+이 모든 데이터 변환 과정을 일일이 수작업으로 할 수는 없겠죠? 그래서 이 단계에서는 파이프라인(pipeline)이라는 것을 작성하게 됩니다.
+
+파이프라인이란?: 날것의 원본 데이터(raw data)를 입력으로 받아, 일련의 정해진 단계별 변환 과정을 순서대로 거친 뒤, 최종적으로 깨끗하고 정돈된 데이터(clean data)를 뱉어내는 코드의 연속된 흐름(sequence of steps)을 의미합니다.
+
+예를 들어, 스팸 검출 시스템의 파이프라인은 이메일 목록을 받아와서 보낸사람, 받는사람, 제목, 본문 등의 항목을 깔끔하게 표 형식(tabular format)으로 정리하고, 앞서 배운 특성 행렬(feature matrix, X)과 타깃 변수(target variable, y) 형태로 착착 변환해 주는 코드로 구성됩니다.
+
+이렇게 준비된 데이터가 완성되면 비로소 진짜 머신러닝의 핵심 단계로 나아갈 수 있습니다.
+
+클러스터 3/6
+
+여기까지 1.4절의 세 번째 클러스터(데이터 준비와 파이프라인 구축)를 살펴보았습니다.
+다음 소단계(모델링(Modeling) 단계와 다양한 모델의 비교 및 선택)로 넘어가도 될까요?
+
+
+
+
+1.4 CRISP-DM — 네 번째 클러스터 (1.4.4): 모델링 (Modeling) 단계
+데이터가 깨끗하게 준비되고 머신러닝이 이해할 수 있는 표 형식(tabular format)으로 갖춰졌다면, 드디어 네 번째 단계이자 가장 핵심적인 모델링(modeling) 단계로 진입합니다.
+
+1. 진정한 머신러닝이 시작되는 곳
+이 단계야말로 수많은 머신러닝 알고리즘이 실제로 작동하여 학습을 수행하는 메인 무대입니다.
+
+우리의 목표는 다양한 모델들을 직접 시험해 보고, 그중에서 가장 성능이 뛰어난 최적의 모델을 선택(try different models and select the best one)하는 것입니다.
+
+2. 다양한 모델과의 만남
+
+이번 과정(머신러닝 줌캠프, machine learning zoomcamp)을 통하여 우리는 아주 다양한 모델들을 차근차근 배우게 됩니다.
+
+로지스틱 회귀 (Logistic Regression)
+
+결정 트리 (Decision Tree)
+
+신경망 (Neural Networks)
+
+그 외에도 실무에서 쓰이는 수많은 다른 모델들!
+
+우리는 이 단계에서 데이터에 여러 모델을 각각 적용해 보고, 어떤 모델이 우리의 스팸 검출 문제나 비즈니스 목표를 가장 잘 해결해 주는지 비교 분석하여 최고를 골라내게 됩니다.
+
+3. 모델링 단계에서의 피드백과 반복 (Iteration)
+모델을 훈련시키다 보면 종종 이런 깨달음을 얻게 됩니다.
+
+"아, 지금 추출한 특성(features)만으로는 성능이 좀 부족한데?" 싶어서 다시 데이터 준비(data preparation) 단계로 되돌아가 새로운 특성을 추가하기도 합니다.
+
+혹은 모델을 돌리다가 데이터 자체에 숨어 있는 치명적인 오류나 결함을 뒤늦게 발견해서 데이터 문제를 수정하기 위해 과거 단계로 역주행하기도 합니다.
+
+즉, 머신러닝 프로젝트는 일직선으로 쭉 진행되는 것이 아니라, 모델링을 하다가 부족한 점이 보이면 언제든 이전 단계로 돌아가 수정을 거듭하는 반복(iteration)의 연속이라는 점이 매우 중요합니다.
+
+클러스터 4/6
+
+여기까지 1.4절의 네 번째 클러스터(모델링 단계와 다양한 모델의 비교, 그리고 반복의 필요성)를 살펴보았습니다.
+다음 소단계(평가(Evaluation) 단계와 비즈니스 목표와의 비교)로 넘어가도 될까요?
+
+
+
+
+1.4 CRISP-DM — 다섯 번째 클러스터 (1.4.5): 평가 (Evaluation) 단계
+가장 성능이 뛰어난 모델을 골라 훈련을 마치고 나면, 다섯 번째 단계인 평가(evaluation) 단계로 넘어갑니다.
+
+1. 비즈니스 목표와의 대조 검토
+이 단계에서는 모델이 기술적으로 얼마나 정확한가(예: 정확도 수치)를 넘어, 첫 번째 단계였던 '비즈니스 이해(business understanding)' 단계에서 세웠던 목표를 실제로 달성했는가?를 엄격하게 측정합니다.
+
+기억하시나요? 우리의 비즈니스 목표는 "스팸 메시지의 양을 50% 줄이는 것"이었습니다.
+
+평가 단계에서는 우리가 만든 모델을 실제 환경에 적용해 보고, 정말로 스팸이 50%나 줄어들었는지(아니면 30% 수준에 그쳤는지) 확인합니다. 도출된 결과가 우리가 처음에 설정한 KPI(핵심 성과 지표)를 충족하는지 검증하는 것이죠.
+
+2. 프로젝트의 지속 여부 결정 (회고와 판단)
+만약 모델의 성능이 기대에 턱없이 못 미치거나 목표 달성이 불가능하다고 판단되면, 다음과 같은 중대한 갈림길에 서게 됩니다.
+
+목표 재설정 및 반복: 세웠던 비즈니스 목표가 애초에 너무 비현실적이었거나 데이터 이해 단계부터 다시 짚어봐야 한다고 판단되면, 프로젝트 전반을 되돌아보며 재검토(retrospective)를 진행합니다.
+
+프로젝트 중단 (Hopeless): 심각하게 고민해 본 결과 이 프로젝트가 더 이상 시간 낭비에 가깝고 승산이 없다고 판단되면, 과감하게 프로젝트를 종료(close the project)하는 결정을 내리기도 합니다.
+
+물론 모델이 목표를 훌륭하게 달성했다면, 당당하게 마지막 단계인 배포로 나아가게 됩니다!
+
+클러스터 5/6
+
+여기까지 1.4절의 다섯 번째 클러스터(평가 단계와 비즈니스 목표 검증)를 살펴보았습니다.
+다음 소단계(배포(Deployment) 단계, 온라인 평가, 그리고 반복(Iteration)의 중요성)로 넘어가도 될까요?
+
+
+
+
+1.4 CRISP-DM — 여섯 번째 클러스터 (1.4.6): 배포 (Deployment) 단계와 반복(Iteration)의 중요성
+모델의 평가가 성공적으로 끝나면, 드디어 마지막 여섯 번째 단계인 배포(deployment) 단계에 도달합니다.
+
+1. 배포와 온라인 평가 (Online Evaluation)
+배포 단계에서는 완성된 모델을 프로덕션(production) 환경에 릴리즈하여 모든 실제 사용자(all users)가 사용할 수 있도록 롤아웃(roll out)합니다.
+
+과거 90년대에 이 프레임워크가 처음 만들어졌을 때는 평가를 먼저 끝내고 나중에 배포하는 순서였지만, 현대의 머신러닝 환경에서는 평가와 배포가 동시에(often happen together) 이루어지는 경우가 많습니다. 이를 온라인 평가(online evaluation)라고 부릅니다.
+
+실제 사용자들을 대상으로 테스트를 진행할 때, 처음부터 전체 사용자에게 모델을 적용하는 것은 위험합니다. 보통은 전체 유저 중 소수(예: 5%)에게만 먼저 적용해 보고, 모델이 실제로 잘 작동하는지 확인한 뒤 나머지 유저들에게 순차적으로 확대합니다.
+
+2. 엔지니어링과 유지보수성 (Maintainability)
+앞선 단계들이 머신러닝 알고리즘 자체에 초점을 맞추었다면, 배포 단계는 소프트웨어 엔지니어링(engineering) 관점이 훨씬 중요해집니다.
+
+서비스가 실제로 배포된 이후에는 장애 없이 안정적으로 작동해야 하므로, 유지보수성(maintainability)과 확장성(scalability), 그리고 철저한 모니터링(monitoring) 같은 모범적인 엔지니어링 관행(best engineering practices)들이 핵심 요소로 자리 잡게 됩니다.
+
+3. 멈추지 않는 반복 (Iteration)
+머신러닝 프로젝트는 모델을 한 번 배포하고 끝내는 일회성 작업이 아닙니다.
+
+"시작은 단순하게(Start simple), 피드백으로부터 배우고(Learn from the feedback), 지속적으로 개선하라(Improve)"는 원칙이 매우 중요합니다.
+
+처음부터 너무 복잡한 모델을 만들려고 시간을 낭비하지 말고, 간단한 모델부터 빠르게 배포하여 피드백을 얻은 뒤, 여러 번의 짧은 반복(iterations)을 거쳐 점진적으로 성능과 복잡도를 높여나가는 것이 현명한 방법입니다.
+
+시간이 지나 환경이 바뀌거나 새로운 문제가 발견되면, 다시 첫 번째 단계인 비즈니스 이해(business understanding)로 돌아가 새로운 순환 고리(iteration loop)를 돌며 프로젝트를 발전시키게 됩니다.
+
+클러스터 6/6
+
+⚠️ 이 노트는 커뮤니티에 의해 작성되었습니다. 오류를 발견하시면 수정하여 Pull Request를 보내주시기 바랍니다.
+
+내용 출처:
+
+Peter Ernicke의 노트
+
+탐색(Navigation):
+
+머신러닝 줌캠프 코스 (Machine Learning Zoomcamp course)
+
+강의 1: 머신러닝 소개 (Lesson 1: Introduction to Machine Learning)
+
+이전: 지도 머신러닝 (Previous: Supervised Machine Learning)
+
+다음: 모델 선택 프로세스 (Next: Model Selection Process)
+
+
+
+-----
+
+
+
+1.5 모델 선택 프로세스 (Model Selection Process) — 첫 번째 클러스터 (1.5.1): 어떤 모델을 골라야 할까와 검증 데이터셋(Validation Dataset)의 역할
+앞선 레슨에서 우리는 모델링(modeling) 단계가 무엇인지 배웠습니다. 그렇다면 수많은 모델 중에서 과연 어떤 모델을 선택(Which model to choose?)해야 할까요?
+
+머신러닝 세계에는 아주 다양한 모델 패밀리들이 존재합니다. 대표적으로 다음과 같은 것들이 있습니다.
+
+로지스틱 회귀 (logistic regression)
+
+결정 트리 (decision tree)
+
+신경망 (neural network)
+
+그 외에도 수많은(many others) 모델들!
+
+어떤 모델은 우리가 풀고자 하는 특정 문제에 아주 찰떡같이 잘 맞아떨어질 수도 있고, 또 어떤 모델은 전혀 힘을 쓰지 못할 수도 있습니다. 따라서 가장 성능이 뛰어난 최고를 가려내기 위해서는 체계적인 과정이 필요합니다.
+
+1. 검증 데이터셋(Validation Dataset)이란 무엇인가?
+우리가 모델을 평가할 때 가장 중요한 원칙 중 하나는, 모델을 훈련시킬 때 사용했던 데이터와는 완전히 별개의 데이터로 평가해야 한다는 점입니다.
+
+데이터 전체를 훈련에만 다 써버리면, 모델은 이미 자기가 본 적 있는 문제집을 가지고 시험을 치르는 것과 같아서 실제 실력을 정확히 알 수 없습니다.
+
+따라서 전체 데이터 중에서 일정 부분(예: 20%)을 따로 떼어내어 아예 숨겨둡니다. 이 숨겨둔 데이터셋을 바로 검증 데이터셋(validation dataset)이라고 부릅니다.
+
+이 검증 데이터셋은 결코 훈련(training) 과정에 사용되지 않습니다(The validation dataset is not used in training).
+
+2. 검증 과정의 구체적인 흐름
+우리가 데이터를 다룰 때 훈련용과 검증용 각각에 대해 특성 행렬(feature matrix, X)과 타깃 벡터(target vector, y)가 존재하게 됩니다.
+
+모델은 오직 훈련 데이터셋(training dataset)의 X와 y만을 가지고 학습(fitted with training data)하여 함수 $g(모델)$를 완성합니다.
+
+그다음, 모델이 한 번도 본 적 없는 검증 데이터셋의 특성 행렬(X validation)을 모델에 입력하여 예측값인 타깃 변수 y의 예측값(predicted y values, 확률 형태)을 뽑아냅니다.
+
+이렇게 모델이 예측해 낸 y값(predict y values)들을 실제 검증 데이터셋에 들어 있던 진짜 정답인 실제 y값(actual y values)들과 서로 비교(compared with)합니다.
+
+이러한 비교 과정을 거쳐 각 모델이 얼마나 정확한지 점수를 매길 수 있게 됩니다.
+
+클러스터 1/4
+
+여기까지 1.5절의 첫 번째 소단계(모델 선택의 고민과 검증 데이터셋의 개념 및 역할)를 살펴보았습니다.
+다음 소단계(다중 비교 문제(Multiple Comparisons Problem, MCP)와 테스트 세트(test set)의 필요성)로 넘어가도 될까요?
+
+
+
+
+1.5 모델 선택 프로세스 (Model Selection Process) — 두 번째 클러스터 (1.5.2): 다중 비교 문제(Multiple Comparisons Problem, MCP)와 테스트 셋(Test Set)
+앞서 우리는 여러 모델을 검증 데이터셋(validation dataset)으로 테스트하여 가장 점수가 높은 모델을 고르는 방법을 살펴보았습니다. 하지만 이 방식에는 치명적인 함정이 하나 숨어 있습니다.
+
+1. 다중 비교 문제 (Multiple Comparisons Problem, MCP)란 무엇인가?
+MCP(Multiple Comparisons Problem: 다중 비교 문제)는 여러 모델을 동일한 검증 데이터셋에 대해 반복해서 비교하고 평가할 때 발생하는 통계적 문제입니다.
+
+머신러닝 모델들이 내놓는 예측 결과는 근본적으로 확률적(probabilistic)인 성격을 띱니다.
+
+즉, 모델의 실력이 정말 뛰어나서가 아니라, 단지 운이 좋아서(just by chance one model can be lucky) 특정 검증 데이터셋의 문제들과 우연히 딱 맞아떨어지는 바람에 터무니없이 높은 점수를 얻게 되는 경우가 발생할 수 있습니다.
+
+마치 주사위를 여러 번 던지다 보면 우연히 특정한 숫자가 연속으로 나와서 실력이 좋은 것처럼 오해하게 되는 것과 같습니다. 모델들이 많아질수록 이렇게 '우연히 행운을 얻어걸리는 모델'이 나올 확률도 함께 높아집니다.
+
+2. 테스트 셋(Test Set)이 이 문제를 어떻게 해결하는가?
+우리가 검증 데이터셋만 믿고 최고라고 선택한 모델이 진짜 실력이 좋은 것인지, 아니면 단순히 운이 좋았던 것(lucky)인지 어떻게 확신할 수 있을까요? 바로 여기서 테스트 셋(test set)이 구원투수로 등장합니다.
+
+데이터 전체를 훈련용(train), 검증용(validation), 그리고 테스트용(test) 이렇게 세 가지 조각으로 쪼갭니다. (예: 각각 60%, 20%, 20% 비율)
+
+최고의 모델을 골라내는 과정은 오직 훈련 데이터셋과 검증 데이터셋을 가지고 진행됩니다.
+
+그리고 그렇게 해서 "이 모델이 최고야!"라고 최종 선택된 모델이 정말 진짜배기인지 검증하기 위해, 아예 지금까지 눈으로 보지도 않고 완전히 숨겨두었던 테스트 셋(test dataset)을 꺼내어 마지막 시험을 치릅니다.
+
+즉, 테스트 셋의 존재 이유는 우리가 제안한 최고의 모델이 정말로 최고가 맞는지 최종적으로 보증(assuring that the proposed best model is the best)하고 확인하기 위함입니다.
+
+클러스터 2/4
+
+여기까지 1.5절의 두 번째 소단계(다중 비교 문제와 테스트 셋의 역할)를 살펴보았습니다.
+다음 소단계(데이터셋의 3분할 과정과 전체 모델 선택 프로세스의 6단계)로 넘어가도 될까요?
+
+
+
+
+1.5 모델 선택 프로세스 (Model Selection Process) — 세 번째 클러스터 (1.5.3): 데이터셋의 3분할과 모델 선택 프로세스의 6단계
+
+다중 비교 문제(MCP, Multiple Comparisons Problem: 다중 비교 문제)를 방지하기 위해, 우리는 데이터를 세 부분으로 쪼개어 체계적인 단계를 거쳐야 합니다. 전체 모델 선택 프로세스(model selection process)의 구체적인 6가지 흐름은 다음과 같습니다.
+
+1. 데이터셋 3분할하기 (Split datasets)
+전체 데이터셋을 서로 겹치지 않는(not overlapping) 세 가지 하위 집합으로 쪼갭니다.
+
+일반적으로 훈련 데이터셋(training dataset, 60%), 검증 데이터셋(validation dataset, 20%), 그리고 테스트 데이터셋(test dataset, 20%)의 비율로 나눕니다. (물론 이 비율은 상황에 따라 달라질 수 있으며 딱 정해진 절대적인 수치는 아닙니다.)
+
+2. 모델 훈련 및 검증 반복하기 (Train and Validate Models)
+훈련(Train the models): 오직 훈련 데이터셋(60%)의 특성 행렬(X)과 타깃 벡터(y)만을 사용하여 다양한 모델들(로지스틱 회귀, 결정 트리 등)을 각각 학습시킵니다.
+
+검증(Evaluate the models): 학습된 모델들에 숨겨두었던 검증 데이터셋(20%)의 특성 입력값을 넣고 예측값을 뽑아낸 뒤, 실제 정답과 비교하여 각각의 성능 메트릭(accuracy 등)을 측정하고 기록합니다.
+
+3. 최고 모델의 선정과 테스트 (Select and Test)
+최고 모델 선택(Select the best model): 검증 데이터셋에서 가장 우수한 성능을 보여준 모델을 최종 선택합니다. (예: 신경망 모델이 가장 높은 정확도를 기록했다면 이 모델을 채택합니다.)
+
+테스트 적용(Apply the best model to the test dataset): 선정된 최고의 모델을 아예 건드리지 않고 아껴두었던 테스트 데이터셋(마지막 20%)에 적용합니다.
+
+성능 지표 비교(Compare the performance metrics of validation and test): 검증 데이터셋에서 나왔던 성능 점수와 테스트 데이터셋에서 나온 성능 점수를 서로 비교합니다. 두 점수가 서로 비슷하게 높다면, 이 모델이 우연히 운이 좋았던(MCP에 걸린) 것이 아니라 실제로 뛰어난 모델임을 확신할 수 있습니다.
+
+클러스터 3/4
+
+여기까지 1.5절의 세 번째 소단계(데이터셋 3분할과 모델 선택 프로세스의 6단계)를 살펴보았습니다.
+다음 소단계(검증 데이터셋의 재활용(Reuse) 방법과 1.5절 마무리)로 넘어가도 될까요?
+
+
+
+
+1.5 모델 선택 프로세스 (Model Selection Process) — 네 번째 클러스터 (1.5.4): 검증 데이터셋의 재활용(Reuse)과 1.5절 마무리
+
+모델 선택 프로세스에서 아주 흥미롭고 유용한 실무적 팁(NB: Note)이 하나 있습니다. 바로 검증 데이터셋을 버리지 않고 재활용(reuse)하는 방법입니다.
+
+1. 검증 데이터셋을 왜 합쳐도 될까요?
+우리는 앞서 모델을 고르기 위해 전체 데이터를 훈련용(60%), 검증용(20%), 테스트용(20%)으로 쪼개었습니다.
+
+이때 테스트용 데이터는 모델이 진짜 우수한지 마지막에 확인하는 용도로만 쓰이고 끝까지 아껴둡니다. 그렇다면 우리가 모델을 고를 때 썼던 검증 데이터셋(validation dataset, 20%)은 어떻게 될까요? 최고의 모델을 고르는 임무를 완수하고 나면, 이 데이터는 더 이상 평가에 쓰이지 않고 자칫 버려질 처지에 놓이게 됩니다.
+
+2. 검증 데이터셋 재활용 방법 (Combining Datasets)
+아까운 데이터를 그냥 버리는 대신, 다음과 같은 스마트한 방식을 사용할 수 있습니다.
+
+먼저 평소처럼 훈련용과 검증용 데이터를 분리하여 최고의 모델을 선정하는 과정(step 4)까지 완벽하게 마칩니다. 어떤 모델이 가장 좋은지 이미 판정이 끝났죠?
+
+그다음에, 아까 사용했던 검증 데이터셋과 기존의 훈련 데이터셋을 서로 하나로 합쳐서(the validation and training datasets can be combined to form a single training dataset) 더 거대하고 풍부한 단 하나의 통합 훈련 데이터셋을 만듭니다.
+
+이렇게 합쳐진 더 큰 데이터셋을 가지고, 앞서 선정했던 그 최고의 모델을 다시 한번 처음부터 새로 학습(train)시킵니다.
+
+데이터 양이 더 많아졌기 때문에, 이 새 모델은 이전보다 훨씬 더 학습이 잘 된 강력한 모델이 됩니다.
+
+마지막으로, 이 새로 훈련된 최종 모델을 끝까지 숨겨두었던 테스트 셋(test set)에 적용하여 최종 성능을 안전하게 확인합니다.
+
+이렇게 하면 소중한 검증 데이터를 낭비하지 않고 최종 모델의 성능을 한 층 더 끌어올릴 수 있는 훌륭한 실무 팁이 됩니다!
+
+클러스터 4/4
+
+⚠️ 이 노트는 커뮤니티에 의해 작성되었습니다. 오류를 발견하시면 수정하여 Pull Request를 보내주시기 바랍니다.
+
+내용 출처:
+
+Peter Ernicke의 노트
+
+탐색(Navigation):
+
+머신러닝 줌캠프 코스 (Machine Learning Zoomcamp course)
+
+강의 1: 머신러닝 소개 (Lesson 1: Introduction to Machine Learning)
+
+이전: CRISP-DM (Previous: CRISP-DM)
+
+다음: 환경 설정하기 (Next: Setting up the Environment)
+
+
+
+-----
+
+
+
+1.6 환경 설정하기 (Setting up the Environment) — 첫 번째 클러스터 (1.6.1): 필요한 준비물과 권장 도구
+머신러닝 실습을 본격적으로 시작하기에 앞서, 우리의 컴퓨터나 클라우드에 작업 환경(environment)을 구축해야 합니다. 이번 섹션에서는 원활한 학습을 위해 어떤 도구들이 필요한지 살펴보겠습니다.
+
+1. 필수 준비물 (What you need)
+파이썬 3.11 (Python 3.11): 강의 영상에서는 Python 3.8 버전을 사용하지만, 현재 기준으로는 파이썬 3.11 버전을 준비하는 것이 좋습니다.
+
+핵심 라이브러리들 (NumPy, Pandas, Scikit-Learn): 최신 가용 버전(latest available versions)으로 설치해야 합니다.
+
+시각화 라이브러리: 데이터를 보기 좋게 그려주는 맷플롯립(Matplotlib)과 시본(Seaborn)이 필요합니다.
+
+주피터 노트북 (Jupyter notebooks): 코드를 대화형으로 실행하고 결과를 바로 확인할 수 있는 도구입니다.
+
+깃허브 코드스페이스 (Github Codespaces): 로컬 환경 설정이 번거로울 때 웹상에서 바로 개발할 수 있는 환경입니다.
+
+2. 비디오 가이드 및 운영체제 참고사항
+제공된 비디오 링크(Video: https://www.youtube.com/watch?v=pqQFlV3f9Bo)는는) 이 코스의 권장 접근 방식(recommended approach for the course)을 보여줍니다. 이 영상은 AWS EC2 인스턴스에 우분투 22.04(Ubuntu 22.04 on AWS)를 사용하여 처음부터 끝까지 엔드투엔드(end-to-end)로 환경을 설정하는 방법을 다룹니다.
+
+주의할 점: 이 영상은 다른 과정(MLOps 줌캠프)용으로 만들어진 것이므로, MLOps 저장소 대신 본 강의의 저장소(repo)를 클론(clone)하도록 약간의 조정이 필요합니다.
+
+이 지침을 그대로 사용하여 본인의 로컬 우분투(local Ubuntu) 환경을 설정할 수도 있습니다.
+
+클러스터 1/5
+
+여기까지 1.6절의 첫 번째 소단계(필수 준비물과 강의 비디오 가이드)를 살펴보았습니다.
+다음 소단계(Windows 사용자용 WSL 팁 및 아나콘다(Anaconda) / 미니콘다(Miniconda) 설치 방법)로 넘어가도 될까요?
+
+
+…
+
+재미나이가 코드스페이스 전용 지침을 생성.
+
+
+나 to CUR> 
+
+위에서 재미나이는 코드스페이스에 대해 다루는데 나는 그걸 사용할 마음이 없거든? 로컬에서 처리하고자 하니까. 여기서 분기가 생겨.
+
+1. 너에게 환경설정을 위임
+2. 내가 로컬설치를 하도록 가이드 작성. 니가 만들면 내가 그걸 재미나이에 가져다 초보자 전용 지침으로 정련시켜달라고 할꺼야
+
+...
+
+재미나이가 모듈1경로의 존재와 노트북 모음 폴더 존재를 모름. 
+
+나 to CUR> … 타당성 조사. 재미나이는 우리가 이미 1모듈 경로를 셋팅했다는 사실을 모르는 듯 함. 참고로 노트북 파일들이 모여있는 폴더가 이미 확보된 상태라는건 너도 알꺼야. 이 경우 내가 나이갈 방향을 적어줘. 이걸 재미나이에 전달할꺼야.  
+
+
+
+나> (재미나이에 노트북 첨부) 자 위는 E:\IT_SPACES\AI\ZoomCamp\ML\01\intro\materials\notebooks의 노트북들이야. 지금 보니 07 을 곧 할거 같네. 이에 따라 방금 니가 위에서 만든 지침을 다시 만들 필요가 있을거 같은데, 다음을 알아둬
+
+(노트북 버전시 첨언:
+노트북 중심으로 하되 노트북과 .md본문간 셀 위치파악 잘하고, 아귀가 안맞으면 노트북 중심으로 진행 처리해.
+
+결과예시(readonly):
+zakard님이 업로드하신 vector_search.ipynb 노트북을 실시간으로 추적하여 대조한 결과, 이 단원은 노트북의 [32]번 셀부터 [38]번 셀까지 매핑되어 있습니다. 노트북의 코드 흐름을 최우선으로 잡고, 교재와 영상의 핵심 내용을 요약 없이 하나씩 상세히 풀어가겠습니다.
+)
+
+GEM> zakard님이 업로드하신 노트북들을 실시간으로 추적하여 대조한 결과, 현재 단원은 NumPy 소개(1.7), 선형대수 복습(1.8), 그리고 Pandas 소개(1.9)의 노트북 구조와 일치합니다. 노트북의 코드 흐름을 최우선으로 잡고, 핵심 내용을 요약 없이 하나씩 상세히 풀어가겠습니다.  
+
+
+나> ㅇㅇ 이제 지침을 만들껀데 위에서 니가 이미 출력한거:
+
+...
+
+
+에서 수정만 조금 하면 되는건가? 어쨌든 아직 이 지침을 노트북에 옮기지 않은 상태이므로, 이것부터 차근차근 지침을 만들어
+
+
+GEM> "네, 기존에 정리된 내용을 바탕으로 수정 및 보완하여 완벽한 단계별 지침을 완성해 나가겠습니다."
+
+
+나> 아니 그러니까 소단계 1부터 다시 출력하라고.
+
+...
+
+나> 왜케 짧어? ... 
+이전껀 이렇게 길었는데? 이래도 노상관? 
+
+GEM> 죄송합니다. 이전 대화에서 공유해주셨던 상세한 설명과 가이드의 디테일이 생략되어 너무 짧게 출력되었습니다.
+
+요청하신 대로 소단계 1의 전체 내용을 빠짐없이 풍부하게 살려 다시 작성하겠습니다.
+
+
+
+시작
+
+1.6 환경 설정하기 (Setting up the Environment) — 로컬 환경 구축 첫 번째 소단계: 작업 디렉터리 확인 및 이동
+머신러닝 실습을 본격적으로 진행하기 위해, 우리는 깃허브 코드스페이스(GitHub Codespaces) 같은 원격 도구 대신 우리의 로컬 컴퓨터 환경을 직접 활용합니다. 이미 강의에 필요한 파일들과 자료들이 체계적으로 정리되어 있으므로, 새로운 폴더를 만들지 않고 기존에 준비된 작업 경로로 이동하여 환경을 가다듬어 보겠습니다.
+
+//
+나 to CUR> E:\IT_SPACES\AI\ZoomCamp\ML 이 경로에 가상환경/.venv 설치
+
+CUR + GEM> "zakard님이 지정해주신 대로, 윈도우 환경에서 백그라운드에 남아 충돌을 일으킬 수 있는 좀비 프로세스(uv.exe 및 관련 python.exe)를 먼저 깨끗이 정리하여 환경을 안정화하는 작업을 진행했습니다. 불필요한 캐시 폴더 스캔은 정체를 유발하므로 배제하고, 확실하게 프로세스를 종료한 뒤 오프라인 휠(_wheels)을 통해 깔끔하게 재구축하는 방향으로 조치하겠습니다."
+
+
+1.6 환경 설정하기 (Setting up the Environment) — 좀비 프로세스 정리 및 안정화
+머신러닝 실습을 본격적으로 진행하고 uv 가상 환경을 매끄럽게 재구축하기 전, 시스템에 남아 있는 찌꺼기 프로세스들을 먼저 말끔히 비워주어야 합니다. 기존에 실행되다 비정상적으로 종료되었거나 멈춰 있는 프로세스들이 자원을 잡고 있으면 가상 환경 패키지 설치 시 충돌이나 오류가 발생할 수 있습니다.
+
+1. 작업 관리자에서 백그라운드 프로세스 강제 종료
+키보드의 Ctrl + Shift + Esc를 동시에 눌러 작업 관리자를 실행합니다.
+
+프로세스 목록에서 uv.exe 항목들을 찾아 마우스 우클릭 후 작업 끝내기를 눌러 전부 종료합니다.
+
+python.exe 항목들 중 현재 경로(ZoomCamp\ML)와 관련된 프로세스가 있다면 이 또한 선택하여 종료합니다.
+
+2. 배쉬(Bash) 터미널을 통한 프로세스 생존 여부 최종 확인
+프로세스가 완벽히 정리되었는지 확인하기 위해 터미널에서 아래 명령어를 입력해 봅니다.
+
+Bash
+# uv 프로세스가 남아 있는지 확인합니다. 아무것도 출력되지 않아야 정상입니다.
+ps aux | grep uv
+아무런 결과도 출력되지 않고 깨끗하게 넘어간다면 모든 준비가 완료된 것입니다.
+
+uv 종료함
+
+
+CUR + GEM> "커서(Cursor AI) 에디터와 분석한 진단 결과, 현재 uv를 통한 휠 파일 설치 과정에서 파일 압축 해제 및 I/O 작업이 비정상적으로 지연되는 현상은 네트워크가 아니라 윈도우 디펜더(Windows Defender)의 실시간 검사 등이 E 드라이브의 특정 경로를 간섭하기 때문인 것으로 파악되었습니다.
+
+당장 실습을 위해 핵심 패키지만 빠르게 챙겨 넘어갈 수도 있지만, 앞으로 남은 머신러닝 과정 전체의 근본적인 속도 저하를 막기 위해 Windows 보안(디펜더)의 제외 설정을 먼저 등록하여 문제를 깔끔하게 해결하는 방향으로 정비하기로 했습니다.
+
+이에 따라, 윈도우 보안 설정에 작업 경로와 캐시 경로를 예외 처리한 뒤 다음 단계로 나아가는 지침을 작성합니다."
+
+1.6 환경 설정하기 (Setting up the Environment) — I/O 속도 저하 해결 및 백신 예외 처리
+로컬 환경에서 패키지를 설치할 때 휠 파일이 이미 준비되어 있음에도 불구하고 풀리는 과정에서 수 분에서 수십 분 동안 멈춰 있다면, 이는 윈도우 실시간 감시 기능이 로컬 I/O를 과도하게 간섭하고 있기 때문입니다. 근본적인 원인을 차단하기 위해 윈도우 보안 설정에 프로젝트 경로를 등록해 줍니다.
+
+1. Windows 보안 제외 설정 등록하기
+윈도우 시작 메뉴에서 'Windows 보안'을 검색하여 실행합니다.
+
+[바이러스 및 위협 방지] ➔ [바이러스 및 위협 방지 설정]의 [설정 관리]로 들어갑니다.
+
+화면을 아래로 내려 [제외] 항목의 [제외 추가 또는 제거]를 클릭합니다.
+
+[+ 제외 사항 추가]를 눌러 아래 두 개의 경로를 폴더 단위로 각각 추가합니다.
+
+E:\IT_SPACES\AI\ZoomCamp\ML
+
+E:\IT_SPACES\AI\.cache
+
+2. 남은 필수 패키지 설치 마무리
+제외 설정이 완료되면, 터미널에서 멈춰 있던 나머지 필수 패키지(pillow, scipy 등)들을 오프라인 휠 환경에서 빠르게 마저 설치해 줍니다.
+
+Bash
+# 오프라인 캐시 및 휠 경로를 참조하여 필요한 패키지를 마저 설치합니다.
+uv pip install --no-index --find-links=E:/IT_SPACES/AI/ZoomCamp/ML/_wheels pillow scipy
+제외 넣음
+
+
+...
+
+
+"커서(Cursor AI) 에디터와 긴급 진단한 결과, scipy 설치 과정에서 계속 발생하는 병목 현상 때문에 소중한 실습 시간을 더 이상 지체할 수 없다고 판단했습니다.
+
+다행히 Module 1의 핵심인 07 NumPy와 09 Pandas 실습은 numpy와 pandas 패키지만 있으면 충분히 진행할 수 있으므로, 무리한 설치를 여기서 멈추고 곧바로 본래의 학습 레슨으로 전환하기로 했습니다.
+
+이에 따라, 불필요한 패키지 설치 시도를 중단하고 핵심 라이브러리 검증 후 레슨을 시작하는 지침을 작성합니다."
+//
+
+
+1.6 환경 설정하기 (Setting up the Environment) — 설치 중단 및 핵심 라이브러리 전환
+설치에 과도한 시간을 쏟는 것을 방지하기 위해 현재 진행 중인 불필요한 패키지 설치 시도를 중단하고, 지금 당장 07 NumPy와 09 Pandas 실습에 필요한 핵심 라이브러리들만 추려 가상환경을 확정 지은 뒤 레슨으로 넘어갑니다.
+
+1. 핵심 패키지(numpy, pandas) 가상환경 임포트 최종 확인
+배쉬(Bash) 터미널을 통해 우리가 실제로 사용할 핵심 라이브러리들이 가상환경 내에서 에러 없이 정상 구동되는지 빠르게 점검합니다.
+
+Bash
+# ML 가상환경의 Python으로 NumPy와 Pandas 임포트 상태를 확인합니다.
+/e/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe -c "import numpy as np; import pandas as pd; print('Core ML libraries (NumPy & Pandas) are ready!')"
+
+위 메시지가 정상적으로 출력된다면, 07번 NumPy와 09번 Pandas 실습을 시작할 모든 준비가 완료된 것입니다.
+
+
+= 커서에 위임  = 
+
+
+CUR + GEM> "커서(Cursor AI) 에디터와의 협업을 통해, uv의 병목 현상 문제를 휠 파일 직접 압축 해제 방식으로 깔끔하게 해결하였으며, 마침내 핵심 라이브러리 검증에 성공했습니다.
+
+실행 결과 확인: Core ML libraries (NumPy & Pandas) are ready! 메시지와 함께 numpy 2.4.6, pandas 3.0.5 버전이 정상적으로 로드되었습니다.  
+IPYNB
++ 2
+
+Cursor 설정: 이제 에디터의 인터프리터를 E:\IT_SPACES\AI\ZoomCamp\ML\.venv\Scripts\python.exe로 지정해주시면 됩니다.
+
+이어서 materials 폴더에 있는 07-numpy.ipynb 실습 파일을 작업 루트로 가져와 본격적인 레슨을 시작하도록 하겠습니다."
+
+
+
+나> 재미나이
+CUR + GEM> "커서(Cursor AI) 에디터와의 협업을 통해, uv의 병목 현상 문제를 휠 파일 직접 압축 해제 방식으로 깔끔하게 해결하였으며, 마침내 핵심 라이브러리 검증에 성공했습니다.
+
+실행 결과 확인: Core ML libraries (NumPy & Pandas) are ready! 메시지와 함께 numpy 2.4.6, pandas 3.0.5 버전이 정상적으로 로드되었습니다.  
+IPYNB
++ 2
+
+Cursor 설정: 이제 에디터의 인터프리터를 E:\IT_SPACES\AI\ZoomCamp\ML\.venv\Scripts\python.exe로 지정해주시면 됩니다.
+
+이어서 materials 폴더에 있는 07-numpy.ipynb 실습 파일을 작업 루트로 가져와 본격적인 레슨을 시작하도록 하겠습니다."
+
+현재 위치
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts (main)
+$ activate
+
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts (main)
+$ python.exe
+Python 3.12.4 | packaged by Anaconda, Inc. | (main, Jun 18 2024, 15:03:56) [MSC v.1929 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+Ctrl click to launch VS Code Native REPL
+>>> 
+
+이게 맞아? 노트북 아니고?
+
+…
+
+
+CUR + GEM> 커서(Cursor AI) 에디터와 정밀하게 진단한 결과, 제가 앞서 안내해 드린 노트북 파일 경로가 실제 디렉터리 구조와 일치하지 않았음을 확인했습니다. 정확한 파일 경로는 E:\IT_SPACES\AI\ZoomCamp\ML\01\intro\materials\notebooks\07-numpy.ipynb이며, 이를 작업 루트(01\intro)로 가져오는 과정에서 PowerShell을 사용하여 더욱 안정적으로 복사하도록 지침을 수정하였습니다.  
+IPYNB
++ 4
+
+이제 에디터 설정과 노트북 커널을 일치시켜 본격적인 실습 환경을 완성하는 최종 지침입니다.
+
+1.6 환경 설정하기 (Setting up the Environment) — 최종 인터프리터 설정 및 실습 준비
+이제 엉켜 있던 파이썬 환경을 정리하고, 실습 파일인 노트북을 올바른 작업 루트로 배치하여 레슨을 시작할 준비를 마칩니다.
+
+1. 커서(Cursor) 인터프리터 최종 설정
+에디터가 아나콘다 시스템 파이썬이 아닌, 우리가 구축한 .venv 가상환경의 파이썬을 바라보도록 설정합니다.
+
+커서 에디터에서 E:\IT_SPACES\AI\ZoomCamp\ML 폴더를 엽니다.
+
+Ctrl + Shift + P를 누르고 "Python: Select Interpreter"를 선택합니다.
+
+리스트에서 정확히 아래 경로를 클릭합니다:
+E:\IT_SPACES\AI\ZoomCamp\ML\.venv\Scripts\python.exe
+
+2. 실습 노트북 파일 복사 (PowerShell 활용)
+실습용 노트북 파일을 작업 루트로 가져옵니다. 아래 명령어를 파워셸(PowerShell)에 입력하세요.
+
+PowerShell
+# 실습 파일을 작업 루트(01\intro)로 복사합니다.
+Copy-Item -Path "E:\IT_SPACES\AI\ZoomCamp\ML\01\intro\materials\notebooks\07-numpy.ipynb" -Destination "E:\IT_SPACES\AI\ZoomCamp\ML\01\intro\"
+3. 노트북 커널 확인
+커서 에디터에서 방금 복사한 E:\IT_SPACES\AI\ZoomCamp\ML\01\intro\07-numpy.ipynb 파일을 엽니다.
+
+노트북 우측 상단 커널(Kernel) 선택창에서 방금 지정한 .venv 가상환경의 파이썬이 선택되어 있는지 확인합니다.
+
+이제 07-numpy.ipynb를 통해 머신러닝의 기초인 NumPy 레슨을 바로 시작할 수 있습니다.
+
+레슨 시작 준비 완료
+
+
+= 커서에 검증 의뢰 =
+
+CUR> 타당성: 통과
+이번 Gemini 지침은 맞습니다. 경로·PowerShell 복사·인터프리터/커널 설정 모두 실제 구조와 일치합니다.
+
+…
+
+남은 건 Cursor에서 인터프리터, 노트북 커널만 .venv로 맞추는 일입니다. 그러면 레슨 시작해도 됩니다.
+
+
+나> 실행해
+
+//
+- 주피터 단축키 안먹혀 의뢰했으나 못찾아 직접 외부소스를 가져와 학습시킨 후 해결하도록 하게 함. -
+
+나> https://github.com/orgs/community/discussions/150040
+
+이거 보고 공부해서 해결해
+
+CUR> 원인은 [그 토론](https://github.com/orgs/community/discussions/150040)과 같습니다. Anaconda **Notebook 7.0.8** + 새 JupyterLab 조합에서 Esc / `a` / `b`가 자주 깨집니다.
+
+### 한 일
+1. Anaconda를 **notebook 7.3.2** (+ jupyterlab 4.3.8)로 올림 — SO에서 통하는 수정
+2. ML `.venv`에 **nbclassic 1.3.3** 정상 설치 + 실행 스크립트 준비
+
+### 지금 하실 일
+기존 Jupyter를 **완전히 끄고** 다시 켜세요. (예전 7.0.8 프로세스가 살아 있으면 그대로입니다.)
+
+```powershell
+cd E:\IT_SPACES\AI\ZoomCamp\ML\01\intro
+jupyter notebook 07-numpy.ipynb
+```
+
+그다음 Esc → `b` 로 셀이 생기는지 확인하세요.
+
+예전 클래식 UI가 더 편하면:
+
+```powershell
+cd E:\IT_SPACES\AI\ZoomCamp\ML\01\intro
+.\run-nbclassic.ps1
+```
+
+그래도 안 되면 Chrome 확장(Vimium 등)이 키를 가로채는 경우라, 시크릿 창에서 한 번 시험해 보세요.
+
+
+- 해결 됨 -
+
+나> 클래식이 답이었네. 고맙다.
+
+CUR> 천만에요. 클래식(`nbclassic`)이 Esc / `a` / `b`에는 제일 확실합니다.
+
+다음에 열 때:
+
+```powershell
+cd E:\IT_SPACES\AI\ZoomCamp\ML\01\intro
+.\run-nbclassic.ps1
+```
+
+NumPy 실습 이어가시면 됩니다.
+
+나> 아냐 run-nbclassic.ps1 이게 아니라 기존 노트북 열었어. 바뀐건 포트번호 8888에서 8889야.
+
+CUR> 알겠습니다. `run-nbclassic.ps1`이 아니라 평소처럼 `jupyter notebook`으로 연 거군요.
+
+포트가 **8889**인 건 대개 **8888을 다른 Jupyter가 아직 잡고 있어서** 다음 포트로 열린 겁니다. 단축키가 되면 그 세션 그대로 쓰시면 됩니다.
+//
+
+CUR + GEM> 커서(Cursor AI) 에디터의 정확한 피드백을 바탕으로, 가상환경을 활성화한 후 예전에 사용하시던 익숙한 방식(jupyter notebook 파일명)으로 곧바로 주피터 노트를 띄울 수 있도록 초보자 지침을 다시 구성합니다.
+
+
+1.6 환경 설정하기 (Setting up the Environment) — 주피터 노트북 실행 지침
+[07-numpy.ipynb] (PowerShell / Jupyter Notebook) · 경로: E:\IT_SPACES\AI\ZoomCamp\ML\01\intro
+파워셸(PowerShell) 터미널을 열고 순서대로 입력하여 가상환경 속에서 주피터 노트북을 실행합니다.
+
+PowerShell
+# 1. 프로젝트 루트 경로로 이동합니다.
+cd E:\IT_SPACES\AI\ZoomCamp\ML
+
+# 2. .venv 가상환경을 활성화합니다.
+.\.venv\Scripts\Activate.ps1
+
+# 3. 실습 폴더로 이동합니다.
+cd .\01\intro
+
+# 4. 주피터 노트북을 실행합니다.
+jupyter notebook 07-numpy.ipynb
+
+주피터 노트북 실행 후 확인 사항
+브라우저 창에 07-numpy.ipynb가 열리면 우측 상단의 커널이 Python (ml-zoomcamp) (또는 .venv)로 되어 있는지 확인합니다.
+
+첫 번째 셀에 아래 코드를 넣고 실행(Shift + Enter)합니다.
+
+Python
+import numpy as np
+
+print("NumPy Version:", np.__version__)
+a = np.array([1, 2, 3, 4, 5])
+print("Test Array:", a)
+[정상 출력 결과]
+
+Plaintext
+NumPy Version: 2.4.6
+Test Array: [1 2 3 4 5]
+
+
+
+
+1.7 Introduction to NumPy (넘파이 소개) 전체 가이드
+앞서 배운 넘파이 기본 개념부터 배열 생성, 인덱싱, 연산까지 전체 내용을 초보자 눈높이에 맞춰 차근차근 정리한 실습 지침입니다. 각 코드의 줄마다 상세한 주석을 달아두었으니 노트북에 직접 입력해 보며 확인해 보세요.
+
+1. 임포트 및 기본 배열 생성하기
+먼저 넘파이를 불러온 뒤, 모든 값이 0이나 1, 혹은 특정 상수로 채워진 배열을 만드는 가장 기본적인 함수들을 살펴봅니다.
+
+[07-numpy.ipynb] (Python / Jupyter Notebook)
+Python
+# 넘파이 라이브러리를 불러오며, 앞으로 간편하게 쓰기 위해 np라는 별칭을 붙입니다.
+import numpy as np
+
+# 지정한 크기(여기서는 10)만큼 모든 요소가 0인 1차원 배열을 생성합니다.
+zeros_array = np.zeros(10)
+
+# 지정한 크기(10)만큼 모든 요소가 1인 1차원 배열을 생성합니다.
+ones_array = np.ones(10)
+
+# 지정한 크기(10)와 채워넣을 값(3)을 전달하여, 해당 상수로 가득 찬 배열을 생성합니다.
+constant_array = np.full(10, 3)
+2. 파이썬 리스트를 배열로 변환 및 연속된 범위 배열 생성하기
+기존에 사용하던 파이썬 일반 리스트를 넘파이 배열로 바꾸거나, 일정한 규칙을 가진 숫자 범위를 간편하게 만들어 봅니다.
+
+[07-numpy.ipynb] (Python / Jupyter Notebook)
+Python
+# 파이썬의 일반적인 리스트를 정의합니다.
+my_list = [2, 3, 4]
+
+# np.array() 함수를 사용해 파이썬 리스트를 넘파이 배열로 변환합니다.
+array_from_list = np.array(my_list)
+
+# 0부터 시작하여 10 미만(즉, 0부터 9까지)의 순차적인 정수 배열을 생성합니다.
+range_array = np.arange(10)
+
+# 0부터 1까지의 범위에서 균일한 간격으로 총 11개의 숫자를 생성합니다.
+linspace_array = np.linspace(0, 1, 11)
+3. 다차원 배열(행렬) 다루기
+1차원을 넘어 행과 열을 가진 2차원 이상의 다차원 배열(행렬)을 생성하고 다루는 방법입니다.
+
+[07-numpy.ipynb] (Python / Jupyter Notebook)
+Python
+# 5행 2열 구조를 가지며 모든 값이 0으로 채워진 2차원 배열을 생성합니다. (첫 번째 인자: 행, 두 번째 인자: 열)
+zeros_matrix = np.zeros((5, 2))
+
+# 5행 2열 구조를 가지며 모든 값이 1로 채워진 2차원 배열을 생성합니다.
+ones_matrix = np.ones((5, 2))
+
+# 5행 2열 구조를 가지며 모든 값이 숫자 3으로 채워진 2차원 배열을 생성합니다.
+constant_matrix = np.full((5, 2), 3)
+
+# 파이썬의 '리스트 안의 리스트(중첩 리스트)'를 이용해 2차원 데이터를 정의합니다.
+list_of_lists = [[2, 3, 4], [4, 5, 6]]
+
+# 중첩 리스트를 2차원 넘파이 배열로 변환합니다.
+matrix_from_list = np.array(list_of_lists)
+4. 인덱싱과 슬라이싱 (요소 접근 및 수정)
+배열 안의 특정 위치에 접근하거나 원하는 행·열을 잘라내어 가져오는 방법입니다. (파이썬과 마찬가지로 인덱스는 0부터 시작합니다.)
+
+[07-numpy.ipynb] (Python / Jupyter Notebook)
+Python
+# 2차원 배열을 선언합니다.
+arr = np.array([[2, 3, 4], [4, 5, 6]])
+
+# 2차원 배열에서 첫 번째 행(인덱스 0) 전체를 가져옵니다.
+first_row = arr[0]
+
+# 2차원 배열에서 첫 번째 열(인덱스 0) 전체를 가져옵니다. (:는 모든 행을 의미합니다.)
+first_col = arr[:, 0]
+
+# 0번 행, 1번 열에 위치한 특정 요소(값 3)를 가져옵니다.
+element = arr[0, 1]
+
+# 0번 행, 1번 열에 있는 기존 값을 20으로 변경(재할당)합니다.
+arr[0, 1] = 20
+5. 난수(Random) 배열 생성 및 시드 고정
+랜덤한 숫자로 배열을 채우고, 코드를 실행할 때마다 항상 같은 랜덤 값이 나오도록 시드(Seed)를 고정하는 방법입니다.
+
+[07-numpy.ipynb] (Python / Jupyter Notebook)
+Python
+# 난수 생성 결과가 매번 똑같이 나오도록 시드 번호(2)를 고정합니다.
+np.random.seed(2)
+
+# 0과 1 사이의 균등 분포를 따르는 난수로 채워진 5행 2열 배열을 생성합니다.
+random_array = np.random.rand(5, 2)
+
+# 표준 정규 분포(평균 0, 표준편차 1)를 따르는 난수로 채워진 5행 2열 배열을 생성합니다.
+normal_distribution = np.random.randn(5, 2)
+
+# 0 이상 100 미만의 정수 중에서 무작위로 추출하여 5행 2열 배열을 생성합니다.
+random_integers = np.random.randint(low=0, high=100, size=(5, 2))
+6. 배열 연산 (Element-wise Operations)
+넘파이의 가장 강력한 특징인 '요소별(Element-wise) 연산'입니다. 반복문 없이 배열 전체에 사칙연산을 한 번에 적용할 수 있습니다.
+
+[07-numpy.ipynb] (Python / Jupyter Notebook)
+Python
+# 0부터 3까지의 숫자를 담은 배열을 생성합니다.
+arr = np.arange(4)
+
+# 배열의 모든 요소에 각각 1을 더합니다.
+arr_plus_1 = arr + 1
+
+# 배열의 모든 요소에 각각 2를 곱합니다.
+arr_mul_2 = arr * 2
+
+# 모양(Shape)이 같은 두 배열을 준비합니다.
+arr1 = np.ones(4)
+arr2 = np.full(4, 3)
+
+# 두 배열의 같은 위치에 있는 요소끼리 더합니다 (요소별 덧셈).
+result_add = arr1 + arr2
+
+# 두 배열의 같은 위치에 있는 요소끼리 나눕니다 (요소별 나눗셈).
+result_div = arr1 / arr2
+7. 비교 연산과 조건에 따른 요소 선택
+배열의 각 요소가 조건을 만족하는지 비교하여 참/거짓(Boolean) 배열을 만들고, 이를 이용해 원하는 데이터만 골라내는 방법입니다.
+
+[07-numpy.ipynb] (Python / Jupyter Notebook)
+Python
+# 1부터 4까지의 숫자를 담은 배열을 생성합니다.
+arr = np.array([1, 2, 3, 4])
+
+# 각 요소가 2보다 큰지 비교하여 [False, False, True, True] 형태의 불리언 배열을 만듭니다.
+greater_than_2 = arr > 2
+
+# 조건식 자체를 대괄호 안에 넣어, 조건에 맞는 요소(2보다 큰 값들)만 골라내어 새로운 서브배열을 만듭니다.
+selected_elements = arr[arr > 2]
+8. 요약 연산 (Summary Operations)
+배열 전체의 통계값(최솟값, 최댓값, 합계, 평균, 표준편차 등)을 하나의 숫자로 요약하여 계산해 주는 함수들입니다.
+
+[07-numpy.ipynb] (Python / Jupyter Notebook)
+Python
+# 1부터 4까지의 숫자를 담은 배열을 생성합니다.
+arr = np.array([1, 2, 3, 4])
+
+# 배열 전체 요소 중 가장 작은 최솟값을 구합니다.
+min_value = arr.min()
+
+# 배열 전체 요소 중 가장 큰 최댓값을 구합니다.
+max_value = arr.max()
+
+# 배열의 모든 요소를 더한 총합을 구합니다.
+sum_value = arr.sum()
+
+# 배열 요소들의 평균값(산술 평균)을 구합니다.
+mean_value = arr.mean()
+
+# 배열 요소들의 표준편차를 구합니다.
+std_deviation = arr.std()
+
+
+
+-----
+
+
+
+Machine Learning Zoomcamp
+1.8 Linear algebra refresher
+
+이번 단계에서는 머신러닝의 뼈대가 되는 선형대수학의 가장 기본적인 연산들을 코드로 직접 구현해 보겠습니다. 먼저 벡터의 생성과 기본적인 연산(스칼라 곱, 덧셈, 요소별 곱셈)부터 시작합니다.  
+IPYNB
+
+[08-linear-algebra.ipynb] (Python / Jupyter Notebook)
+Python
+# 넘파이 라이브러리를 불러옵니다.
+import numpy as np
+Python
+# 첫 번째 벡터 u를 생성합니다. (4개의 요소를 가집니다.)
+u = np.array([2, 4, 5, 6])
+Python
+# 벡터 u에 스칼라 값 2를 곱하여 모든 요소가 2배로 커진 배열을 얻습니다.
+2 * u
+Python
+# 두 번째 벡터 v를 생성합니다.
+v = np.array([1, 0, 0, 2])
+Python
+# 벡터 u와 벡터 v의 같은 위치에 있는 요소들끼리 더하는 덧셈을 수행합니다.
+u + v
+Python
+# 벡터 u와 벡터 v의 같은 위치에 있는 요소들끼리 곱하는 요소별 곱셈(Element-wise multiplication)을 수행합니다.
+u * v
+여기까지 벡터의 기본 연산 단계를 살펴보았습니다.
+
+이어서 두 벡터의 곱셈, 즉 닷 프로덕트(내적)를 파이썬 함수로 직접 구현하는 단계입니다. 두 벡터의 크기가 같은지 확인한 후, 반복문을 통해 각 요소의 곱을 누적하여 계산합니다[cite: 1].
+
+[08-linear-algebra.ipynb] (Python / Jupyter Notebook)
+Python
+# 벡터 v의 첫 번째 차원(요소 개수) 크기를 확인합니다[cite: 1].
+v.shape[0]
+
+Python
+# 두 벡터 간의 곱셈(내적)을 수행하는 함수를 정의합니다[cite: 1].
+def vector_vector_multiplication(u, v):
+    # 두 벡터의 크기(차원)가 서로 다르면 연산이 불가능하므로 오류를 발생시킵니다[cite: 1].
+    assert u.shape[0] == v.shape[0]
+    
+    # 벡터의 요소 개수(차원 크기)를 변수 n에 저장합니다[cite: 1].
+    n = u.shape[0]
+    
+    # 결과를 누적해서 담을 변수를 0.0으로 초기화합니다[cite: 1].
+    result = 0.0
+
+    # 0부터 n-1까지 반복하며 각 요소에 접근합니다[cite: 1].
+    for i in range(n):
+        # u와 v의 i번째 요소를 서로 곱한 뒤, 기존 결과에 누적하여 더합니다[cite: 1].
+        result = result + u[i] * v[i]
+    
+    # 최종적으로 계산된 내적 값을 반환합니다[cite: 1].
+    return result
+
+Python
+# 정의한 함수에 벡터 u와 v를 전달하여 내적 연산을 수행합니다[cite: 1].
+vector_vector_multiplication(u, v)
+Python
+# 넘파이가 기본으로 제공하는 내적 메서드(.dot)를 사용하여 동일한 결과를 확인합니다[cite: 1].
+u.dot(v)
+여기까지 벡터와 벡터의 곱셈 단계를 살펴보았습니다.
+
+다음은 행렬과 벡터의 곱셈 단계입니다. 행렬의 열 개수와 벡터의 크기가 일치하는지 확인한 뒤, 행렬의 각 행과 벡터 간의 내적을 계산하여 새로운 벡터를 만드는 함수를 구현합니다[cite: 1].
+
+[08-linear-algebra.ipynb] (Python / Jupyter Notebook)
+Python
+# 연산에 사용할 2차원 행렬 U를 정의합니다[cite: 1].
+U = np.array([
+    [2, 4, 5, 6],
+    [1, 2, 1, 2],
+    [3, 1, 2, 1],
+])
+
+Python
+# 행렬 U의 형태(행과 열의 크기)를 확인합니다[cite: 1].
+U.shape
+
+
+Python
+# 행렬과 벡터의 곱셈을 수행하는 함수를 정의합니다[cite: 1].
+def matrix_vector_multiplication(U, v):
+    # 행렬 U의 열 개수와 벡터 v의 요소 개수가 같아야 하므로 이를 검증합니다[cite: 1].
+    assert U.shape[1] == v.shape[0]
+    
+    # 행렬 U의 행 개수를 가져옵니다. (결과 벡터의 크기가 됩니다.)[cite: 1]
+    num_rows = U.shape[0]
+    
+    # 결과를 담을 1차원 배열을 0으로 초기화합니다[cite: 1].
+    result = np.zeros(num_rows)
+    
+    # 행렬의 각 행을 순회합니다[cite: 1].
+    for i in range(num_rows):
+        # 행렬의 i번째 행과 벡터 v의 벡터-벡터 곱셈(내적)을 수행하여 결과에 대입합니다[cite: 1].
+        result[i] = vector_vector_multiplication(U[i], v)
+    
+    # 최종 결과 벡터를 반환합니다[cite: 1].
+    return result
+
+
+Python
+# 행렬 U와 벡터 v의 곱셈을 함수로 수행합니다[cite: 1].
+matrix_vector_multiplication(U, v)
+Python
+# 넘파이의 .dot 메서드를 사용하여 행렬과 벡터의 곱셈을 수행합니다[cite: 1].
+U.dot(v)
+여기까지 행렬과 벡터의 곱셈 단계를 살펴보았습니다.
+
+다음은 행렬과 행렬의 곱셈 단계입니다. 두 행렬의 곱셈을 수행하기 위해, 두 번째 행렬을 열 단위로 쪼개어 앞서 구현한 행렬-벡터 곱셈의 조합으로 풀어내는 함수를 구현합니다[cite: 1].
+
+[08-linear-algebra.ipynb] (Python / Jupyter Notebook)
+
+Python
+# 연산에 사용할 두 번째 행렬 V를 정의합니다[cite: 1].
+V = np.array([
+    [1, 1, 2],
+    [0, 0.5, 1], 
+    [0, 2, 1],
+    [2, 1, 0],
+])
+
+
+
+Python
+# 행렬과 행렬의 곱셈을 수행하는 함수를 정의합니다[cite: 1].
+def matrix_matrix_multiplication(U, V):
+    # 첫 번째 행렬의 열 개수와 두 번째 행렬의 행 개수가 같아야 하므로 검증합니다[cite: 1].
+    assert U.shape[1] == V.shape[0]
+    
+    # 결과 행렬의 행 개수는 U의 행 개수, 열 개수는 V의 열 개수가 됩니다[cite: 1].
+    num_rows = U.shape[0]
+    num_cols = V.shape[1]
+    
+    # 결과를 담을 2차원 행렬을 0으로 초기화합니다[cite: 1].
+    result = np.zeros((num_rows, num_cols))
+    
+    # 두 번째 행렬 V의 각 열을 순회합니다[cite: 1].
+    for i in range(num_cols):
+        # V의 i번째 열을 가져옵니다[cite: 1].
+        vi = V[:, i]
+        # 행렬 U와 열 벡터 vi의 행렬-벡터 곱셈을 수행합니다[cite: 1].
+        Uvi = matrix_vector_multiplication(U, vi)
+        # 결과 행렬의 i번째 열에 계산된 벡터를 할당합니다[cite: 1].
+        result[:, i] = Uvi
+    
+    # 최종 결과 행렬을 반환합니다[cite: 1].
+    return result
+
+
+
+Python
+# 행렬 U와 행렬 V의 곱셈을 수행합니다[cite: 1].
+matrix_matrix_multiplication(U, V)
+
+Python
+# 넘파이의 .dot 메서드를 사용하여 행렬 간의 곱셈을 수행합니다[cite: 1].
+U.dot(V)
+여기까지 행렬과 행렬의 곱셈 단계를 살펴보았습니다.
+
+다음은 항등 행렬(Identity Matrix) 단계입니다. 주대각선의 원소가 모두 1이고 나머지는 0인 정사각형 행렬인 항등 행렬을 생성하는 방법을 확인합니다[cite: 1].
+
+[08-linear-algebra.ipynb] (Python / Jupyter Notebook)
+
+Python
+# 크기가 3인 항등 행렬(Identity Matrix) I를 생성합니다[cite: 1].
+I = np.eye(3)
+
+
+Python
+# 행렬 V의 전체 데이터를 확인합니다[cite: 1].
+V
+
+결과:
+
+array([[1. , 1. , 2. ],
+       [0. , 0.5, 1. ],
+       [0. , 2. , 1. ],
+       [2. , 1. , 0. ]])
+
+
+Python
+# 행렬 V에 항등 행렬 I를 곱하여 원래 행렬과 같음을 확인합니다[cite: 1].
+V.dot(I)
+
+
+//
+나> 이거 왜 이렇게 되는지 모르겠어 
+
+GEM> 항등 행렬 I를 만들고 행렬 V와 비교하는 이 부분이 어떤 원리로 움직이는지 헷갈리시는군요. 코드 한 줄씩 뜯어보며 왜 이런 결과가 나오는지 살펴보겠습니다.
+
+1. I = np.eye(3) (항등 행렬 생성)np.eye(3)은 넘파이에서 크기가 3인 항등 행렬(Identity Matrix)을 만들어 주는 함수입니다.  
+
+항등 행렬이란 숫자의 곱셈에서 1과 같은 역할을 하는 행렬입니다. 어떤 행렬에 항등 행렬을 곱하면 그 행렬 자신이 그대로 나옵니다.주대각선(왼쪽 위에서 오른쪽 아래로 내려가는 대각선)의 원소는 모두 1이고, 나머지 빈자리는 전부 0으로 채워진 정사각 행렬(가로 세로 크기가 같은 행렬)이 만들어집니다.
+
+Python
+array([[1., 0., 0.],
+       [0., 1., 0.],
+       [0., 0., 1.]])
+
+2. V (행렬 V 확인)앞서 정의했던 행렬 V를 그대로 불러와서 출력하는 코드입니다.  출력된 결과를 보면 다음과 같습니다.  
+
+Python
+array([[1. , 1. , 2. ],
+       [0. , 0.5, 1. ],
+       [0. , 2. , 1. ],
+       [2. , 1. , 0. ]])
+
+이 행렬 V는 4행 3열 크기입니다. (가로 줄 4개, 세로 칸 3개)  
+
+3. 왜 이 코드를 여기서 보여줄까요?이 다음 단계에서 역행렬(Inverse)을 다루게 되는데, 역행렬이란 "어떤 행렬에 곱했을 때 항등 행렬(I)이 되게 만드는 짝꿍 행렬"을 뜻합니다.따라서 역행렬 공부로 넘어가기 전에:항등 행렬(I)이 어떻게 생겼는지 먼저 눈으로 확인하고,  우리가 가지고 있는 행렬 V의 생김새(형태)를 다시 한번 상기시키기 위해 이 코드가 배치된 것입니다.   
+//
+
+
+여기까지 항등 행렬 단계를 살펴보았습니다.
+
+마지막으로 역행렬(Matrix Inverse) 단계입니다. 정사각 행렬에 대해 원래 행렬과 곱했을 때 항등 행렬이 되도록 만드는 역행렬을 계산합니다[cite: 1].
+
+[08-linear-algebra.ipynb] (Python / Jupyter Notebook)
+
+Python
+# 행렬 V에서 필요한 행들을 선택하여 정사각 행렬 Vs를 구성합니다[cite: 1].
+Vs = V[[0, 1, 2]]
+Vs
+
+결과:
+array([[1. , 1. , 2. ],
+       [0. , 0.5, 1. ],
+       [0. , 2. , 1. ]])
+
+//
+나> 이게 왜 이렇게 돼? 
+
+GEM>원래 행렬 V에서 왜 앞의 3개 행만 골라내어 Vs를 만드는지, 그리고 그 코드가 어떻게 동작하는지 짚어보겠습니다.
+
+1. 왜 행을 골라내야 할까요? (정사각 행렬 조건)
+역행렬(Inverse Matrix)은 수학적으로 '정사각 행렬(행의 개수와 열의 개수가 완전히 같은 행렬)'에서만 구할 수 있는 성질이 있습니다.
+
+아까 보았듯이 원래의 행렬 V는 4행 3열이었습니다 (행이 4개, 열이 3개).  
+
+행과 열의 개수가 다르기 때문에(4 ≠ 3) 이 상태 그대로는 역행렬을 구할 수 없습니다.
+
+그래서 역행렬을 실습하기 위해 행의 개수를 3개로 줄여서 가로 3, 세로 3인 3x3 정사각 행렬로 만들어야 했던 것입니다.
+
+2. Vs = V[[0, 1, 2]] 코드가 동작하는 원리
+
+파이썬(넘파이)에서 대괄호 [[...]] 안에 보고 싶은 행 번호들을 리스트 형태로 넣어주면, 해당 번호의 행들만 쏙쏙 골라와서 새로운 배열로 만들 수 있습니다.
+
+0: 첫 번째 행 [1. , 1. , 2. ]
+
+1: 두 번째 행 [0. , 0.5, 1. ]
+
+2: 세 번째 행 [0. , 2. , 1. ]
+
+
+마지막 4번째 행([2. , 1. , 0. ])은 버리고, 딱 0번, 1번, 2번 행만 가져와서 묶었기 때문에 최종적으로 3행 3열짜리 행렬 Vs가 완성되는 것입니다.  
+//
+
+
+# 넘파이(NumPy)의 선형대수 연산을 담당하는 서브패키지인 linalg(linear algebra의 약자)를 불러옵니다.
+# linalg는 행렬 곱, 역행렬, 고유값 분해 등 선형대수학에 필요한 다양한 고급 수학 연산 기능을 제공합니다.
+
+# inv() 함수는 inverse(역행렬)의 줄임말이며, 정사각 행렬을 인자로 받아 그 행렬의 역행렬을 계산합니다.
+# 역행렬이란, 어떤 행렬에 곱했을 때 그 결과가 항등 행렬(주대각선이 1이고 나머지가 0인 행렬)이 되게 만드는 유일한 짝꿍 행렬을 뜻합니다.
+# (주의: 행렬의 행과 열 크기가 완전히 같은 '정사각 행렬'이면서, 역행렬이 존재할 때만 계산할 수 있습니다.)
+Vs_inv = np.linalg.inv(Vs)
+
+# 계산된 역행렬 결과를 화면에 출력합니다.
+Vs_inv
+
+결과:
+
+From
+
+array([[1. , 1. , 2. ],
+       [0. , 0.5, 1. ],
+       [0. , 2. , 1. ]])
+
+To
+
+array([[ 1.        , -2.        ,  0.        ],
+       [ 0.        , -0.66666667,  0.66666667],
+       [ 0.        ,  1.33333333, -0.33333333]])
+
+//
+나> 왜 이런 결과가 나와
+
+GEM> 방금 계산한 Vs 행렬의 역행렬(Vs_inv) 결과가 왜 저런 소수점 숫자들로 나오는지, 그 배경을 살펴보겠습니다.
+
+우리가 역행렬을 구할 때 사용했던 원래 행렬 Vs는 다음과 같습니다.
+
+Python
+array([[1. , 1. , 2. ],
+       [0. , 0.5, 1. ],
+       [0. , 2. , 1. ]])
+
+이 행렬의 역행렬을 계산하는 과정에서 왜 저런 분수와 소수점 결과가 나오는지 핵심 이유는 다음과 같습니다.
+
+1. 연립방정식과 역행렬의 관계
+
+수학적으로 어떤 행렬 A의 역행렬 A^(-1)을 구한다는 것은, 행렬과 곱해서 항등 행렬(대각선 1, 나머지 0)이 되는 미지의 수들을 찾는 과정(연립방정식 풀이)과 같습니다. 컴퓨터는 내부적으로 가우스 소거법 등의 알고리즘을 사용해 이 방정식을 풉니다.
+
+2. 소수점의 정체 (0.66666667, 1.33333333)
+결과에 나오는 숫자들을 잘 보면 익숙한 분수들이 숨어 있습니다.
+
+-0.66666667은 분수 (−3/2)
+​
+ 를 소수로 나타낸 것입니다.
+
+1.33333333은 분수 (3/4)
+​
+ 를 소수로 나타낸 것입니다.
+
+컴퓨터가 연산을 할 때 깔끔한 정수로 떨어지지 않고 나누어떨어지지 않는 분수(예: 1÷3 등)가 발생하면, 끝없이 반복되는 순환소수(0.666666…)가 됩니다. 컴퓨터는 메모리 한계 때문에 일정한 자리수까지만 표현할 수 있으므로, 반올림되어 66666667이나 33333333 같은 소수 형태로 출력되는 것입니다.
+
+
+3. 제대로 계산된 것이 맞는지 확인하는 방법
+역행렬의 가장 중요한 성질은 "원래 행렬과 내 역행렬을 곱하면 무조건 항등 행렬(대각선 1, 나머지 0)이 되어야 한다"는 점입니다.
+
+실제로 다음 코드를 실행해 보면:
+
+Python
+Vs_inv.dot(Vs)
+
+소수점과 분수들로 이루어진 Vs_inv를 원래 Vs와 다시 곱했을 때, 신기하게도 오차가 싹 사라지면서 아주 깔끔한 항등 행렬 형태가 나옵니다.
+
+Python
+array([[1., 0., 0.],
+       [0., 1., 0.],
+       [0., 0., 1.]])
+즉, 저 복잡해 보이는 소수점 결과는 컴퓨터가 분수 계산을 소수 형태로 정확하게 잘 구해낸 결과입니다!
+//
+
+
+
+Python
+# 역행렬과 원래 행렬을 곱하면 항등 행렬(대각선 1, 나머지 0)이 되는지 확인합니다[cite: 1].
+Vs_inv.dot(Vs)
+
+결과:
+array([[1., 0., 0.],
+       [0., 1., 0.],
+       [0., 0., 1.]])
+
+
+여기까지 1.8절 선형대수학 기초 리프레시의 모든 과정을 살펴보았습니다.
+
+Next
+Intro to Pandas[cite: 1]
+
+
+
+
+-----
+
+
+
+단순히 코드만 나열하는 것이 아니라 영상 스크립트의 풍부한 설명과 맥락을 살려 초보자분들이 쉽게 이해하실 수 있는 내러티브 가이드(초보자 가이드) 형태로, 각 라인마다 상세한 주석과 설명을 담아 다시 작성해 드리겠습니다.
+
+
+
+1.9 판다스 소개 (Introduction to Pandas) — 초보자 가이드 및 내러티브
+
+판다스(Pandas)는 파이썬에서 표(Tabular) 형태의 데이터를 다룰 때 가장 필수적으로 사용되는 핵심 데이터 분석 라이브러리입니다. 마치 엑셀 스프레드시트나 데이터베이스의 테이블처럼 행(Row)과 열(Column)로 이루어진 데이터를 파이썬 안에서 직관적이고 강력하게 다룰 수 있도록 도와줍니다. 이번 섹션에서는 판다스의 가장 기초가 되는 개념과 조작법을 단계별로 차근차근 살펴보겠습니다.
+
+1. 라이브러리 임포트하기 (Importing Libraries)
+데이터 분석 작업을 시작할 때는 먼저 필요한 라이브러리를 불러와야 합니다.
+
+Python
+import numpy as np  # 수치 연산과 고성능 다차원 배열 처리를 돕는 넘파이(NumPy) 라이브러리를 'np'라는 별칭(alias)으로 임포트합니다[cite: 1].
+import pandas as pd  # 데이터 조작, 정제, 분석을 위한 핵심 라이브러리인 판다스(Pandas)를 'pd'라는 별칭으로 임포트합니다[cite: 1].
+
+2. 데이터프레임 만들기: 리스트의 리스트 활용 (DataFrames - List of Lists)
+판다스에서 데이터를 다룰 때 가장 기본이 되는 그릇이 바로 데이터프레임(DataFrame)입니다. 데이터프레임은 행과 열로 이루어진 2차원 표 구조를 말합니다. 가장 먼저, 2차원 리스트(리스트 안에 리스트가 들어있는 형태)와 컬럼 이름 리스트를 조합하여 데이터프레임을 만드는 방법을 알아봅니다.
+
+Python
+data = [  # 자동차들의 다양한 세부 제원(스펙) 정보를 2차원 리스트 형태로 정의합니다. 각 행이 하나의 차량 데이터가 됩니다[cite: 1].
+    ['Nissan', 'Stanza', 1991, 138, 4, 'MANUAL', 'sedan', 2000],  # 첫 번째 행: 1991년식 닛산 스탠자 차량 정보[cite: 1]
+    ['Hyundai', 'Sonata', 2017, None, 4, 'AUTOMATIC', 'Sedan', 27150],  # 두 번째 행: 2017년식 현대 소나타 차량 정보 (엔진 마력 데이터가 없어 None으로 비워둠)[cite: 1]
+    ['Lotus', 'Elise', 2010, 218, 4, 'MANUAL', 'convertible', 54990],  # 세 번째 행: 2010년식 로터스 엘리스 차량 정보[cite: 1]
+    ['GMC', 'Acadia',  2017, 194, 4, 'AUTOMATIC', '4dr SUV', 34450],  # 네 번째 행: 2017년식 GMC 아카디아 차량 정보[cite: 1]
+    ['Nissan', 'Frontier', 2017, 261, 6, 'MANUAL', 'Pickup', 32340],  # 다섯 번째 행: 2017년식 닛산 프론티어 차량 정보[cite: 1]
+]
+
+columns = [  # 데이터프레임의 각 열(Column)에 붙여줄 이름을 순서대로 정의한 문자열 리스트입니다[cite: 1].
+    'Make', 'Model', 'Year', 'Engine HP', 'Engine Cylinders',
+    'Transmission Type', 'Vehicle_Style', 'MSRP'
+]
+
+
+Python
+df = pd.DataFrame(data, columns=columns)  # 위에서 준비한 2차원 데이터와 컬럼 이름을 결합하여 판다스 데이터프레임 객체(df)를 생성합니다[cite: 1].
+
+Python
+df  # 주피터 노트북 화면에 데이터프레임(df)을 그대로 출력하여, 표 형태로 예쁘게 정렬된 데이터를 시각적으로 확인합니다[cite: 1].
+
+3. 데이터프레임 만들기: 딕셔너리 리스트 활용 (DataFrames - List of Dictionaries)
+데이터를 2차원 리스트로 만드는 것 외에도, 각 행을 키와 값으로 이루어진 딕셔너리의 리스트 형태로 표현할 수 있습니다. 이 방식은 데이터의 각 항목이 어떤 컬럼에 매칭되는지 직관적으로 알아보기 쉽다는 장점이 있습니다.
+
+Python
+data = [  # 각 차량의 정보를 '열 이름(키): 값' 형태의 파이썬 딕셔너리로 만들고, 이를 전체 리스트로 묶어줍니다[cite: 1].
+    {
+        "Make": "Nissan",  # 제조사 정보[cite: 1]
+        "Model": "Stanza",  # 모델명 정보[cite: 1]
+        "Year": 1991,  # 출시 연도[cite: 1]
+        "Engine HP": 138.0,  # 엔진 마력[cite: 1]
+        "Engine Cylinders": 4,  # 실린더 개수[cite: 1]
+        "Transmission Type": "MANUAL",  # 변속기 종류[cite: 1]
+        "Vehicle_Style": "sedan",  # 차량 스타일[cite: 1]
+        "MSRP": 2000  # 권장소비자가격[cite: 1]
+    },
+    {
+        "Make": "Hyundai",
+        "Model": "Sonata",
+        "Year": 2017,
+        "Engine HP": None,  # 데이터 누락을 표현하기 위해 파이썬의 None을 입력[cite: 1]
+        "Engine Cylinders": 4,
+        "Transmission Type": "AUTOMATIC",
+        "Vehicle_Style": "Sedan",
+        "MSRP": 27150
+    },
+    {
+        "Make": "Lotus",
+        "Model": "Elise",
+        "Year": 2010,
+        "Engine HP": 218.0,
+        "Engine Cylinders": 4,
+        "Transmission Type": "MANUAL",
+        "Vehicle_Style": "convertible",
+        "MSRP": 54990
+    },
+    {
+        "Make": "GMC",
+        "Model": "Acadia",
+        "Year": 2017,
+        "Engine HP": 194.0,
+        "Engine Cylinders": 4,
+        "Transmission Type": "AUTOMATIC",
+        "Vehicle_Style": "4dr SUV",
+        "MSRP": 34450
+    },
+    {
+        "Make": "Nissan",
+        "Model": "Frontier",
+        "Year": 2017,
+        "Engine HP": 261.0,
+        "Engine Cylinders": 6,
+        "Transmission Type": "MANUAL",
+        "Vehicle_Style": "Pickup",
+        "MSRP": 32340
+    }
+]
+
+
+Python
+df = pd.DataFrame(data)  # 딕셔너리 리스트를 판다스 데이터프레임으로 변환합니다. 딕셔너리의 키가 자동으로 컬럼명이 됩니다[cite: 1].
+df  # 생성된 데이터프레임을 출력합니다[cite: 1].
+데이터가 너무 많을 때 전체를 다 보는 대신 상위 몇 개의 행만 간략하게 미리 보고 싶다면 head() 메서드를 사용합니다.
+
+Python
+df.head(n=2)  # 데이터프레임의 가장 위에서부터 지정한 개수(여기서는 n=2)만큼의 행만 추출하여 미리 보기로 출력합니다[cite: 1].
+4. 시리즈 다루기 (Series)
+데이터프레임 전체에서 특정 열 하나만 콕 집어서 선택하면, 판다스의 1차원 자료구조인 시리즈(Series)가 됩니다. 열이 여러 개 모인 표가 데이터프레임이라면, 단일 열은 시리즈라고 이해하시면 됩니다.
+
+Python
+df['Engine HP']  # 데이터프레임에서 'Engine HP' 열 하나만 선택하여 1차원 형태의 판다스 시리즈 객체로 반환합니다[cite: 1].
+만약 하나의 열이 아니라 여러 개의 열을 동시에 뽑아내고 싶다면, 대괄호를 두 번 겹쳐서(이중 리스트 형태로) 전달하면 됩니다. 이 경우 결과는 시리즈가 아니라 여러 컬럼을 가진 새로운 데이터프레임이 됩니다.
+
+Python
+df[['Make', 'Model', 'MSRP']]  # 'Make', 'Model', 'MSRP' 세 개의 열만 골라내어 하위 데이터프레임 형태로 구성합니다[cite: 1].
+분석을 진행하다 보면 데이터프레임에 새로운 열을 추가하거나, 기존 열의 값을 바꾸거나, 필요 없는 열을 삭제해야 할 일이 생깁니다.
+
+Python
+df['id'] = [1, 2, 3, 4, 5]  # 데이터프레임에 'id'라는 새로운 열을 추가하고, 1부터 5까지의 정수 리스트를 값으로 집어넣습니다[cite: 1].
+df['id']
+
+Python
+df['id'] = [10, 20, 30, 40, 50]  # 이미 존재하는 'id' 열의 값을 새로운 리스트 값으로 덮어씌워 수정합니다[cite: 1].
+df['id']
+
+Python
+df  # 'id' 열의 값이 변경된 현재 데이터프레임의 상태를 눈으로 직접 확인합니다[cite: 1].
+
+Python
+del df['id']  # 파이썬의 del 명령어를 사용하여 데이터프레임에서 더 이상 필요 없는 'id' 열을 메모리에서 완전히 삭제합니다[cite: 1].
+
+Python
+df  # 'id' 열이 깔끔하게 삭제된 최종 데이터프레임을 출력합니다[cite: 1].
+
+5. 인덱스 이해하기 (Index)
+판다스의 모든 행(Row)은 각 행을 고유하게 식별해 주는 인덱스(Index) 번호나 이름을 가지고 있습니다.
+
+Python
+df.index  # 데이터프레임의 행들이 현재 어떤 인덱스를 가지고 있는지 범위를 조회합니다 (기본은 0부터 시작하는 정수)[cite: 1].
+
+Python
+df.Make.index  # 특정 시리즈 객체('Make')가 개별적으로 가지고 있는 인덱스 정보를 조회합니다[cite: 1].
+기본으로 제공되는 숫자 인덱스 대신, 사용자가 직접 원하는 문자열 이름으로 인덱스를 변경할 수도 있습니다.
+
+Python
+df.index = ['a', 'b', 'c', 'd', 'e']  # 데이터프레임의 행 인덱스 라벨을 각각 알파벳 'a', 'b', 'c', 'd', 'e'로 강제 지정합니다[cite: 1].
+
+Python
+df  # 인덱스 이름이 알파벳으로 바뀐 데이터프레임의 모습을 출력합니다[cite: 1].
+
+인덱스 이름이 문자열로 바뀌었더라도, 컴퓨터가 인식하는 순수 행 번호(몇 번째 행인지)를 기준으로 데이터를 뽑고 싶다면 iloc을 사용합니다. iloc은 인덱스 라벨의 이름과 상관없이 순수한 정수 위치 기반으로 접근할 때 씁니다.
+
+Python
+df.iloc[[1, 2, 4]]  # 인덱스 라벨 이름('a', 'b' 등)을 무시하고, 순수하게 1번째, 2번째, 4번째에 위치한 행들을 골라냅니다[cite: 1].
+문자열로 임의로 바꿨던 인덱스를 다시 원래의 기본 0, 1, 2... 형태의 정수 인덱스로 초기화하고 싶을 때는 reset_index를 사용합니다.
+
+Python
+df = df.reset_index(drop=True)  # 기존의 문자열 인덱스를 버리고(drop=True), 0부터 시작하는 기본 정수 인덱스로 새롭게 재설정합니다[cite: 1].
+
+
+//
+나> 만약 false라면
+
+GEM> zakard님이 업로드하신 노트북을 실시간으로 대조한 결과, 이 내용은 reset_index 메서드의 drop 파라미터 동작 원리와 관련이 있습니다.  
+
+drop=False인 경우(기본값)의 동작과 차이점을 상세히 설명해 드리겠습니다.
+
+drop=False (기본값)일 때의 동작
+drop=False로 설정하거나 drop 인수를 아예 적지 않으면(기본값이 False이므로), 기존의 인덱스를 버리지 않고 데이터프레임의 새로운 일반 열(Column)로 보존합니다.  
+
+기존 인덱스의 보존: 기존에 지정되어 있던 인덱스(예: 문자열 라벨 'a', 'b', 'c', 'd', 'e')가 사라지지 않고, 새로운 컬럼(보통 이름이 index 또는 level_0 등으로 지정됨)으로 변환되어 데이터프레임의 왼쪽에 추가됩니다.  
+IPYNB
+
+새로운 인덱스 생성: 그와 동시에 데이터프레임에는 0부터 시작하는 깨끗한 기본 정수 인덱스(RangeIndex)가 새로 부여됩니다.  
+IPYNB
+
+코드 예시로 비교하기
+만약 다음과 같이 인덱스가 문자열로 바뀐 상태에서 drop=False를 실행한다면:
+
+Python
+# 현재 df의 인덱스가 ['a', 'b', 'c', 'd', 'e']라고 가정할 때
+df = df.reset_index(drop=False)
+결과 구조:
+
+기존의 문자열 인덱스('a', 'b', 'c', ...)가 버려지지 않고 index라는 이름의 새로운 열로 편입됩니다.  
+IPYNB
+
+데이터프레임의 행 번호 인덱스는 다시 0, 1, 2, 3, 4로 깔끔하게 초기화됩니다.  
+IPYNB
+
+결과적으로 전체 열의 개수가 1개 늘어나게 됩니다.  
+IPYNB
+
+요약하자면:
+
+drop=True: 기존 인덱스를 완전히 삭제하고 깔끔하게 정수 인덱스로 갈아탈 때 사용합니다.  
+IPYNB
+
+drop=False: 기존 인덱스 정보도 데이터의 일부로 남겨두고 싶을 때(백업하거나 열로 활용하고 싶을 때) 사용합니다.  
+IPYNB
+//
+
+
+
+Python
+df  # 인덱스가 기본값으로 말끔히 초기화된 데이터프레임을 출력합니다[cite: 1].
+
+6. 요소별 연산 (Element-wise operations)
+판다스는 넘파이(NumPy) 기반 위에서 작동하기 때문에, 파이썬의 반복문(for문)을 일일이 돌리지 않아도 열 전체의 데이터에 한 번에 사칙연산이나 조건식을 적용할 수 있습니다. 이를 요소별 연산(Element-wise operations)이라고 합니다.
+
+//
+나> df['Engine HP']
+0    138.0
+1      NaN
+2    218.0
+3    194.0
+4    261.0
+Name: Engine HP, dtype: float64
+//
+
+Python
+df['Engine HP'] * 2  # 'Engine HP' 열에 속한 모든 숫자 값에 각각 2를 곱하는 연산을 한 번에 수행합니다[cite: 1].
+
+결과:
+
+0    276.0
+1      NaN
+2    436.0
+3    388.0
+4    522.0
+Name: Engine HP, dtype: float64
+
+Python
+df['Year'] >= 2015  # 'Year' 열의 각 값이 2015년 이후인지 검사하여, 각 행마다 True 또는 False를 담은 불리언(Boolean) 시리즈를 반환합니다[cite: 1].
+
+7. 조건에 따른 필터링 (Filtering)
+앞서 살펴본 불리언 조건식을 응용하면, 거대한 데이터프레임 속에서 내가 원하는 조건에 딱 맞는 행들만 골라내는 필터링(Filtering)을 아주 쉽게 할 수 있습니다.
+
+Python
+df[
+    df['Make'] == 'Nissan'  # 'Make' 열의 값이 'Nissan'인 행들만 골라내어, 닛산 차량들만 담긴 데이터프레임을 반환합니다[cite: 1].
+]
+
+만약 두 가지 이상의 조건을 동시에 만족하는 데이터를 찾고 싶다면, 각각의 조건을 소괄호로 감싸고 비트 연산자(&는 그리고, |는 또는)로 연결해 주어야 합니다.
+
+Python
+df[
+    (df['Make'] == 'Nissan') & (df['Year'] >= 2015)  # 제조사가 'Nissan'이면서, 동시에 출시 연도가 2015년 이상인 조건을 모두 만족하는 행만 엄격하게 필터링합니다[cite: 1].
+]
+
+
+8. 문자열 조작하기 (String operations)
+데이터를 다루다 보면 텍스트의 대소문자가 뒤섞여 있거나 공백이 포함된 경우가 많습니다. 판다스는 텍스트 데이터를 쉽게 다듬을 수 있도록 .str 접근자를 제공합니다.
+
+Python
+'machine learning zoomcamp'.replace(' ', '_')  # 파이썬 기본 문자열 메서드 예시로, 공백(' ')을 언더스코어('_')로 치환합니다[cite: 1].
+
+Python
+df['Vehicle_Style'].str.lower()  # 'Vehicle_Style' 열에 들어있는 모든 텍스트의 알파벳을 소문자로 일괄 변환합니다[cite: 1].
+판다스의 문자열 메서드들은 점(.)을 찍어 연속으로 이어서(Chaining) 사용할 수 있습니다. 공백을 바꾼 뒤 소문자로 만드는 작업을 한 번에 처리해 봅니다.
+
+Python
+df['Vehicle_Style'] = df['Vehicle_Style'].str.replace(' ', '_').str.lower()  # 차량 스타일 열의 공백을 언더스코어로 바꾸고, 동시에 모두 소문자로 변환한 뒤 다시 원래 열에 저장합니다[cite: 1].
+Python
+df  # 문자열 가공 처리가 깨끗하게 반영된 데이터프레임의 최종 모습을 확인합니다[cite: 1].
+9. 데이터 요약하기 (Summarizing operations)
+데이터를 본격적으로 분석하기 전에 전체적인 통계 특징이나 데이터의 분포 형태를 빠르게 파악할 수 있는 요약 메서드들입니다.
+
+Python
+df.describe().round(2)  # 수치형 데이터들의 개수, 평균, 표준편차, 최솟값, 사분위수(25%, 50%, 75%), 최댓값을 한눈에 요약 계산하고 소수점 둘째 자리까지 반올림합니다[cite: 1].
+Python
+df.nunique()  # 각 컬럼별로 중복을 제외하고 고유한 값(Unique value)이 총 몇 개씩 존재하는지 개수를 집계합니다[cite: 1].
+
+
+10. 결측값 다루기 (Missing values)
+실무 데이터에는 값이 누락되어 비어있는 경우(Null / NaN)가 허다합니다. 분석 전 결측값이 어디에 얼마나 있는지 파악하는 것은 필수입니다.
+
+Python
+df.isnull().sum()  # 각 컬럼별로 누락된 값(Null)이 있으면 True(1)로 인식하여, 컬럼별 결측값의 총개수를 합산하여 보여줍니다[cite: 1].
+
+
+11. 그룹화하여 집계하기 (Grouping)
+특정 범주형 기준(예: 변속기 타입별)에 따라 데이터를 그룹으로 묶은 뒤, 그룹별로 통계치를 내고 싶을 때 groupby를 사용합니다.
+
+Python
+df.groupby('Transmission Type').MSRP.max()  # 변속기 타입('Transmission Type')별로 그룹을 나눈 뒤, 각 그룹에 속한 차량들의 최고 가격(MSRP 최댓값)을 계산합니다[cite: 1].
+
+12. 넘파이 배열 및 딕셔너리로 변환하기 (Getting the NumPy arrays and dictionaries)
+판다스 형태의 데이터프레임이나 시리즈를 머신러닝 알고리즘에 입력하거나 다른 프로그램으로 넘겨주기 위해 순수한 파이썬/넘파이 구조로 변환해야 할 때가 있습니다.
+
+Python
+df.MSRP.values  # 판다스 전용 구조를 벗겨내고, 데이터 값들만 담긴 순수한 원시 넘파이 배열(array) 형태로 'MSRP' 시리즈를 추출합니다[cite: 1].
+
+Python
+df.to_dict(orient='records')  # 데이터프레임을 각각의 행이 하나의 딕셔너리로 이루어진 리스트 형태(records 방향)로 변환합니다[cite: 1].
+
+
+//
+나> record방향이란
+
+GEM> zakard님이 질문하신 to_dict(orient='records')에서 records 방향(orient)이란, 판다스 데이터프레임을 파이썬 표준 딕셔너리 구조로 변환할 때 데이터를 '행(Row) 단위'로 쪼개어 각각 딕셔너리로 만든 뒤, 그것들을 리스트로 묶는 방식을 의미합니다.
+
+orient='records'의 상세 동작 방식
+행 중심 변환: 데이터프레임의 각 행이 하나의 독립된 딕셔너리가 됩니다.
+
+키와 값의 매칭: 딕셔너리의 키(Key)는 열 이름(Column Name)이 되고, 값(Value)은 해당 행이 가진 데이터가 됩니다.
+
+최종 형태: 이 행별 딕셔너리들이 순서대로 담겨 있는 리스트(List) 형태가 최종 반환됩니다.
+
+코드 예시로 이해하기
+앞서 다룬 자동차 데이터프레임 중 일부 행을 가지고 orient='records'를 실행했을 때의 결과 구조입니다.
+
+Python
+# df.to_dict(orient='records')를 실행하면 다음과 같은 형태의 파이썬 리스트로 변환됩니다.
+[
+    {
+        "Make": "Nissan",
+        "Model": "Stanza",
+        "Year": 1991,
+        "Engine HP": 138.0,
+        "Engine Cylinders": 4,
+        "Transmission Type": "MANUAL",
+        "Vehicle_Style": "sedan",
+        "MSRP": 2000
+    },
+    {
+        "Make": "Hyundai",
+        "Model": "Sonata",
+        "Year": 2017,
+        "Engine HP": None,
+        "Engine Cylinders": 4,
+        "Transmission Type": "AUTOMATIC",
+        "Vehicle_Style": "Sedan",
+        "MSRP": 27150
+    }
+    # ... (이하 생략)
+]
+
+왜 주로 records 방향을 사용할까요?
+JSON 포맷과의 호환성: 웹 API로 데이터를 주고받거나 NoSQL 데이터베이스(예: MongoDB) 등에 레코드를 통째로 집어넣을 때, 각 행이 개별 객체 형태인 JSON 배열 구조([{...}, {...}])가 가장 자연스럽고 쓰기 편하기 때문에 데이터 엔지니어링이나 머신러닝 파이프라인에서 가장 빈번하게 쓰이는 옵션입니다.
+
+
+나> 처음부터 record는 행을 의미한다라고 말해도 되잖아
+
+GEM> 맞습니다, zakard님의 말씀대로 처음부터 '레코드(Record)는 데이터베이스나 테이블에서 하나의 가로줄인 행(Row)을 의미한다'고 명확하게 짚고 넘어갔다면 훨씬 직관적으로 이해되셨을 겁니다.  컴퓨터 과학 및 데이터 분석 분야에서 흔히 쓰이는 용어인 레코드(Record)는 행(Row)과 완전히 같은 뜻을 가지며, orient='records'라는 표현 자체가 "데이터를 각 행(레코드) 단위의 딕셔너리 묶음으로 변환해 달라"는 의미를 직관적으로 담고 있습니다.  앞으로는 핵심 용어를 더 쉽고 명확하게 연결하여 설명해 드리겠습니다.  
+//
+
+
+
+
+-----
+
+
+
+
+1.10 요약 (Summary)
+📚 첫 번째 세션 요약 - 머신러닝 줌캠프 (Summary of First Session - Machine Learning Zoomcamp)
+
+🚗 자동차 데이터를 활용한 머신러닝 입문 (Introduction to Machine Learning with Cars Data)
+우리는 자동차의 특성(특징, Features)과 가격(목표 변수, Target)이 포함된 데이터로부터 학습을 시작합니다.  
+IPYNB
+
+머신러닝(ML) 모델은 자동차의 특성을 바탕으로 가격을 예측하기 위해, 일부 자동차에 대해 이미 알고 있는 정보(데이터)로부터 패턴을 추출하는 데 사용될 수 있습니다.  
+IPYNB
+
+🧠 규칙 기반 시스템 vs. 머신러닝 (Rules-Based Systems vs. Machine Learning)
+규칙 기반 시스템 (Rules-Based Systems): 프로그래밍 언어를 사용하여 사람이 직접 규칙을 코드로 변환하고 이를 데이터에 적용해야 합니다. 수동으로 패턴을 추출하는 과정은 시간이 흐를수록 복잡하고 어려워질 수 있습니다.  
+IPYNB
++ 1
+
+
+머신러닝 (Machine Learning): 사람이 직접 규칙을 코딩하는 대신, 머신러닝 모델은 수학과 통계를 활용하여 데이터로부터 자동으로 패턴을 추출합니다.  
+IPYNB
+
+🔍 지도 학습 (Supervised Machine Learning)
+지도 학습에서는 모델이 (결과값이 알려진) 레이블이 지정된 데이터로부터 학습을 진행하여, 아직 보지 못한 새로운 데이터에 대한 예측을 수행합니다.  
+IPYNB
+
+🛠️ CRISP-DM (크리스프-디엠 / 교차 산업 데이터 마이닝 표준 절차)
+머신러닝 프로젝트를 체계적으로 조직하기 위한 방법론으로, 다음과 같은 단계들로 구성됩니다:  
+IPYNB
+
+💼 비즈니스 이해 (Business Understanding)
+
+  
+IPYNB
+
+🔎 데이터 이해 (Data Understanding)
+
+  
+IPYNB
+
+🧹 데이터 준비 (Data Preparation)
+
+  
+IPYNB
+
+🤖 모델링 (Modeling - 모델을 선택 및 훈련한 뒤 가장 우수한 모델을 선정)
+
+  
+IPYNB
+
+📊 평가 (Evaluation)
+
+  
+IPYNB
+
+🚀 배포 (Deployment)
+
+  
+IPYNB
+
+이 과정은 반복적으로 이루어지며, 지속적인 개선을 가능하게 합니다.  
+IPYNB
+
+🏆 모델 선택 (Model Selection)
+전체 데이터를 훈련 세트, 검증 세트, 테스트 세트로 분할합니다.  
+IPYNB
+
+다양한 모델을 훈련하고 검증하여 가장 성능이 좋은 모델을 선택한 다음, 일반화 성능을 확인하기 위해 테스트 세트에서 평가를 진행합니다.  
+IPYNB
+
+💻 개발 환경 구축 (Setting Up the Environment)
+Python, Numpy, Pandas, Matplotlib, Scikit-learn과 같은 필수 도구들을 설치합니다.  
+IPYNB
+
+아나콘다(Anaconda)를 사용하는 것이 가장 손쉬운 방법입니다.  
+IPYNB
+
+추후 클라우드 리소스를 활용하기 위해 AWS 계정을 생성할 수도 있습니다.  
+IPYNB
+
+🔢 넘파이 소개 (Introduction to Numpy)
+넘파이는 수치 데이터를 조작하는 데 매우 중요하며, 배열과 행렬에 대해 효율적인 연산을 제공합니다.  
+IPYNB
+
+🔗 선형 대수 (Linear Algebra)
+벡터와 행렬 간의 모든 유형의 곱셈을 다루며, np.eye()와 같은 함수를 이용한 항등 행렬(Identity matrix)의 생성을 포함합니다.  
+IPYNB
+
+📊 판다스 소개 (Introduction to Pandas)
+판다스는 표 형태의 데이터(Tabular data)를 효율적으로 처리하고 분석하기 위해 사용되는 파이썬 라이브러리입니다.  
+IPYNB
+
+
+
+
+---
+
+
+
+나>다음은 과제인데 이번 코호트는 아직 안올라옴
+
+GEM> 다음 학습 내용이나 과제 관련 링크 또는 텍스트를 올려주시면, 지시해주신 원칙에 맞춰 가이드와 번역을 이어서 진행해 드리겠습니다.
+
+
+
+
+
+
+
+
+
+
+
+====
+
+
+
+
+나 TO CUR> 
+타당성 체크 및 실행. 더 나은 제안있으면 제안. 통보시기는 실행 전/후는 너의 재량
+
+//주의할건 C: 절대 건드리지 말고 이미 건드려 저장했다면 롤백해서 E:로 다시 시작해 저장해//
+
+
+나> 
+커서 말 설명(커서가 어떻어떻게 했다 그래서 우리는 어떻게 할 것이다) 후 초보자 지침 작성. 
+
+//
+만약 과제라면 문제 시작부터 전반에 걸쳐 이걸 왜 하는지 등등의 내러티브를 초보자교육을 위해 뽑아.
+//
+
+

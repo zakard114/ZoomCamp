@@ -9,3 +9,8 @@ __pycache__/
 uv.lock
 *.bak-corrupt
 *.ipynb.bak*
+
+# Module 02: downloaded car-price CSV (notebook fetches it)
+02/**/data.csv
+# local venv-repair notes
+02/**/GEMINI_INSTALL.md

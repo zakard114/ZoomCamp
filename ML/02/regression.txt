@@ -1,0 +1,3802 @@
+
+ML 줌캠프 module 02 - Regression
+
+
+Settings
+
+나 to CUR> 
+"ML 줌캠프 module 02 - Regression" 제목으로 챗 생성
+
+
+CUR> ...
+작업용 루트 `E:\IT_SPACES\AI\ZoomCamp\ML\02\regression\`는 비워 두었습니다. 다음 단계에서 필요한 파일만 `materials`에서 복사하면 됩니다.
+
+
+나 to GEM> 
+모듈 2의 메인페이지 주소:
+https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/main/02-regression
+
+내용:
+
+
+을 요약하지 말고 한글로 매끄럽게 번역. 링크가 끼워진 문장에는 문장 끝난 후 그 아래줄에 주소를 명시
+
+
+예시: …
+
+
+- GEM 이 링크를 누락 -
+
+
+나> 링크를 https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/main/02-regression 여기서 긁어와 붙여야할꺼아냐
+
+
+GEM> 
+
+2. 회귀를 위한 머신러닝 (Machine Learning for Regression)
+https://github.com/DataTalksClub/machine-learning-zoomcamp/tree/main/02-regression
+
+2.1 자동차 가격 예측 프로젝트
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/01-car-price-project.md
+
+2.2 데이터 준비
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/02-data-prep.md
+
+2.3 탐색적 데이터 분석
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/03-eda.md
+
+2.4 검증 프레임워크 설정
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/04-validation-framework.md
+
+2.5 선형 회귀
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/05-linear-regression.md
+
+2.6 선형 회귀: 벡터 형태
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/06-linear-regression-vector.md
+
+2.7 선형 회귀 학습: 정규 방정식
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/07-normal-equation.md
+
+2.8 자동차 가격 예측 프로젝트를 위한 베이스라인 모델
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/08-baseline-model.md
+
+2.9 평균 제곱근 오차(RMSE)
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/09-rmse.md
+
+2.10 검증 데이터에 RMSE 사용하기
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/10-rmse-validation.md
+
+2.11 특성 공학
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/11-feature-engineering.md
+
+2.12 범주형 변수
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/12-categorical-variables.md
+
+2.13 정규화
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/13-regularization.md
+
+2.14 모델 튜닝
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/14-tuning-model.md
+
+2.15 모델 사용하기
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/15-using-model.md
+
+2.16 자동차 가격 예측 프로젝트 요약
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/16-car-price-summary.md
+
+2.17 더 알아보기
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/17-explore-more.md
+
+2.18 숙제
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/18-homework.md
+
+
+==========================================
+
+
+
+시작
+
+
+나 to CUR> 노트북을  02-regression/notebook 경로에 옮겨. 해당 노트북이 커버하는 단원들은 어떤건지 말해
+
+CUR> 노트북을 02-regression/notebook으로 옮기고, 커버하는 단원을 확인합니다. 먼저 모듈 01의 노트북 배치를 맞춰 보겠습니다.
+
+모듈 01과 맞춰 작업용 notebook 폴더로 옮기고, materials의 원본은 참고용으로 남겨 둡니다.
+
+노트북을 작업 경로로 옮겨 두었습니다.
+
+작업본: E:\IT_SPACES\AI\ZoomCamp\ML\02\regression\notebook\notebook.ipynb
+원본 참고본: materials\notebook.ipynb (그대로 유지)
+
+이 노트북이 커버하는 단원은 2. Machine Learning for Regression 전체 실습입니다. 파트는 아래와 같습니다.
+
+포함 (실습 핵심)
+2.2 Data preparation → 2.3 EDA → 2.4 Validation framework → 2.5 Linear regression → 2.6 Vector form → 2.7 Normal equation → 2.8 Baseline model → 2.9 RMSE → 2.10 Validation RMSE → 2.11 Feature engineering → 2.12 Categorical variables → 2.13 Regularization → 2.14 Tuning → 2.15 Using the model
+
+끝부분 (번호가 README와 조금 다름)
+노트북 2.16 Next steps ≈ 단원 2.17 Explore more
+노트북 2.17 Summary ≈ 단원 2.16 Project summary
+
+없음
+2.1은 프로젝트 소개(영상/슬라이드)만 있고, 2.18 Homework는 이 노트북에 없습니다.
+
+
+나> E:\IT_SPACES\AI\ZoomCamp\ML\02\regression 에 .venv와 노트북을 설치. 만약 설치되어있다면 무시
+
+CUR> 
+점검 결과입니다.
+
+오래 걸리던 numpy 재설치와 .venv 통째 복사 작업은 중단되었습니다. 이제 02\regression\.venv는 E:\IT_SPACES\AI\ZoomCamp\ML\.venv를 가리키는 정션(Junction)으로 연결되어 있으며, 기존의 깨진 로컬 환경은 .venv_broken으로 백업해 두었습니다.
+
+주피터 노트북은 모듈 01과 마찬가지로 nbclassic을 통해 실행할 수 있습니다 (jupyter-notebook.exe는 존재하지 않습니다).
+
+현재 공용 머신러닝 환경의 경우 numpy는 정상 작동하지만, matplotlib과 scipy._lib 부재로 인해 sklearn 등의 패키지가 손상된 상태입니다. 즉시 재설치를 진행하지는 않았으며, 복구를 원하실 경우 5분 이내의 제한 시간을 두고 한 번에 처리할 수 있습니다.
+
+또한 앞으로 모든 다운로드 및 캐시 처리는 E 드라이브에서만 수행하며, 소요 시간이 5분을 초과할 경우 즉시 중단하고 상태를 점검한다는 규칙을 추가했습니다.
+
+
+CUR + GEM> 패키지 설치 도구 자체(uv/pip)는 같지만, 작업을 수행하는 방식과 제어권에서 분명한 차이와 맹점이 있습니다.
+
+동시 다발적 작업 충돌: 에이전트는 여러 명령(설치, 확인, 복사 등)을 병렬적이거나 연속적으로 밀어붙이다가 Windows 파일 잠금(os error 32) 같은 시스템 레벨의 충돌을 유발하기 쉽습니다.
+
+불필요한 중복 작업: 이미 존재하는 공유 환경을 활용하지 않고 독립된 로컬 환경을 새로 구축하려다 불필요하게 대량의 패키지를 다시 다운로드하며 디스크 I/O 병목을 악화시켰습니다.
+
+파괴적인 복구 시도: --reinstall 같은 옵션을 제어하는 과정에서 기존에 잘 작동하던 패키지(numpy 등)까지 건드려 오히려 상태를 악화시키는 맹점이 있었습니다.
+
+직접 터미널에서 제어하시는 편이 훨씬 안전하며, 향후 수정이 필요할 때는 말씀하신 대로 '단일 명령, 5분 시간 제한, 공유 .venv 단일화' 원칙을 엄수하겠습니다.
+
+
+
+CUR + GEM> 
+
+🛠️ ML 줌캠프 모듈 02 최종 안전 실행 가이드 (Windows Git Bash 전용)
+
+⚠️ 주의: 아래 코드를 한 덩어리로 통째로 복사해서 붙여넣지 마세요.
+각 단계별로 결과를 확인하며 수동으로 순서대로 실행해야 안전합니다.
+
+[1단계] E 드라이브 캐시 및 환경 변수 고정
+
+현재 경로가 /e/IT_SPACES/AI/ZoomCamp/ML/02/regression이므로, 1단계 (export 및 mkdir -p 등 환경 변수 설정)는 어느 폴더에서 실행하든 상관없습니다.
+
+터미널 세션만 유지되어 있다면 그 경로에서 바로 1단계를 실행하셔도 무방합니다.
+
+Bash
+export UV_PYTHON_INSTALL_DIR="E:/IT_SPACES/AI/.cache/uv-python"
+
+export 
+UV_CACHE_DIR="E:/IT_SPACES/AI/.cache/uv"
+
+export 
+PIP_CACHE_DIR="E:/IT_SPACES/AI/.cache/pip"
+
+export HF_HOME="E:/IT_SPACES/AI/.cache/hf"
+
+export TEMP="E:/IT_SPACES/AI/.cache/tmp"
+
+export TMP="E:/IT_SPACES/AI/.cache/tmp"
+
+export TMPDIR="E:/IT_SPACES/AI/.cache/tmp"
+
+mkdir -p "$UV_PYTHON_INSTALL_DIR" "$UV_CACHE_DIR" "$PIP_CACHE_DIR" "$TEMP"
+
+[2단계] 실행 중인 uv 프로세스 확인 및 락 파일 정리 (조건부 수동 실행)
+먼저 아래 명령어로 uv.exe가 실행 중인지 확인합니다.
+
+Bash
+tasklist | grep -i "uv.exe"
+
+결과 확인: 다른 작업(예: dlt-mcp 등)으로 인해 uv.exe가 떠 있다면 절대 락 파일을 지우지 마세요.
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/ML/02/regression (main)
+$ tasklist | grep -i "uv.exe"
+
+CUR> 출력이 비어 있으면 실행 중인 uv.exe는 없습니다. lock을 지워도 됩니다.
+
+rm -f "E:/IT_SPACES/AI/ZoomCamp/ML/.venv/.lock"
+
+//
+지운 다음, 그 창에서 3단계 scipy 설치만 실행하세요. 설치가 끝날 때까지 다른 명령은 치지 마세요. 5분이 넘으면 Ctrl+C입니다.
+
+
+uv.exe가 아예 출력되지 않고 깨끗할 때만 아래 명령어로 락 파일을 지웁니다.
+
+Bash
+rm -f "E:/IT_SPACES/AI/ZoomCamp/ML/.venv/.lock"
+//
+
+…
+
+나> (위 // 마킹된 지점에 대해) 왜케 중구난방이야 정리좀 해 그 지점
+
+CUR + GEM> 락 파일(.lock)은 이미 지우셨으므로 다시 지울 필요가 없습니다.
+
+지금 바로 그 창에서 오직 3단계 scipy 설치 명령 하나만 실행하시면 됩니다.
+
+
+
+[3단계] SciPy 단독 복구 설치 (5분 제한)
+금지: 설치 중에 절대 다른 명령을 치거나 import를 겹쳐서 실행하지 마세요.
+
+numpy와 pandas는 건드리지 않고 손상된 scipy만 재설치합니다.
+
+Bash
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+uv pip install --python "$PY" --force-reinstall --no-deps scipy
+
+참고: 5분이 지나도 끝나지 않으면 Ctrl + C로 즉시 중단하세요.
+
+
+결과:
+HP EliteBook@DESKTOP-S8AKIBU MINGW64 /e/IT_SPACES/AI/ZoomCamp/ML/02/regression (main)
+$ PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+uv pip install --python "$PY" --force-reinstall --no-deps scipy
+Using Python 3.11.14 environment at: E:\IT_SPACES\AI\ZoomCamp\ML\.venv
+Resolved 1 package in 1.18s
+Prepared 1 package in 96ms
+Installed 1 package in 3m 22s
+ + scipy==1.17.1
+
+
+CUR> 설치는 성공입니다. scipy==1.17.1, 3분 22초라 5분 안입니다.
+
+
+[4단계] 설치 완료 후 필수 검증
+설치가 끝난 뒤에만 아래 검증 명령을 실행합니다. (경로 슬래시 / 통일)
+
+Bash
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+
+test -d "E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Lib/site-packages/scipy/_lib" && echo "True" || echo "False"
+
+결과:
+True
+
+"$PY" -c "import numpy, pandas, scipy, sklearn, matplotlib, seaborn; print(scipy.__version__)"
+
+결과:
+실패.
+
+
+CUR>
+scipy/_lib는 생겼습니다. import가 어디서 깨지는지 에러를 확인합니다. matplotlib는 연쇄 재설치하지 않습니다.
+
+scipy 복구는 됐습니다. scipy/_lib = True, scipy 1.17.1 import도 됩니다. numpy/pandas도 됩니다.
+
+한 줄로 묶은 import가 실패한 이유는 scipy가 아니라 그 다음 패키지입니다.
+
+패키지	결과
+numpy, pandas, scipy
+OK
+sklearn
+threadpoolctl 없음
+matplotlib
+
+겉 import는 되나 _api가 없음 (이전 불완전 설치)
+seaborn
+matplotlib _api 때문에 실패
+가이드대로 matplotlib를 지금 연쇄 --reinstall 하지 마세요.
+
+다음은 작은 것 하나만 합니다. sklearn용:
+
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+
+uv pip install --python "$PY" --force-reinstall --no-deps threadpoolctl
+
+끝난 뒤 sklearn만 확인:
+
+"$PY" -c "import sklearn; print(sklearn.__version__)"
+
+결과:	
+1.9.0
+
+
+🛠️ 현재 진척 상황 및 다음 실행 가이드
+
+현재 scipy와 sklearn은 복구되었으나, matplotlib의 _api 모듈 오류로 인해 아직 노트북 실행 단계로 넘어가면 안 되는 상태입니다.
+
+기존에 완료된 작업(락 파일 정리, scipy 설치, sklearn 확인)은 다시 하지 않으며, 오직 matplotlib 하나만 단독으로 복구한 뒤 검증을 거쳐 노트북을 실행합니다.
+
+
+[B단계] matplotlib 단독 복구 설치 (5분 제한)
+주의: 설치 중에 절대 다른 명령을 치거나 겹쳐서 실행하지 마세요.
+
+창을 새로 열었다면 1단계 export 환경 변수를 먼저 실행한 뒤 이어서 하세요.
+
+Bash
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+
+uv pip install --python "$PY" --force-reinstall --no-deps matplotlib
+
+참고: 5분이 지나도 끝나지 않으면 Ctrl + C로 중단하세요.
+
+
+결과:
+Using Python 3.11.14 environment at: E:\IT_SPACES\AI\ZoomCamp\ML\.venv
+Resolved 1 package in 2.91s
+Prepared 1 package in 265ms
+Installed 1 package in 3m 29s
+ + matplotlib==3.11.1
+
+CUR> matplotlib 3.11.1 설치가 3분 29초에 끝났습니다. 5분 안입니다.
+
+다음이 C단계 검증이고, 지금은 실행하지 않습니다. 준비되면 알려 주세요.
+
+
+[C단계] 설치 완료 후 검증
+설치가 끝난 뒤에만 아래 검증 명령을 실행합니다.
+
+Bash
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+
+"$PY" -c "from matplotlib import _api; import matplotlib, seaborn; print('matplotlib', matplotlib.__version__); print('seaborn', seaborn.__version__)"
+
+결과 판단:
+
+정상: matplotlib과 seaborn의 버전 두 줄이 에러 없이 출력되면 다음 [D단계]로 진행합니다.
+
+실패: matplotlib가 또 실패할 경우 연쇄 재설치를 멈추고 정지합니다. (seaborn만 실패할 경우에만 추후 seaborn 단독 재설치 진행)
+
+결과: 실패
+
+
+CUR> matplotlib 본체는 올라갔습니다. 지금은 _api가 아니라 의존성 pyparsing이 없는 것입니다. sklearn 때 threadpoolctl과 같은 경우입니다.
+
+matplotlib를 다시 깔지 마세요. pyparsing만 설치하세요.
+
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+
+uv pip install --python "$PY" --force-reinstall --no-deps pyparsing
+
+끝난 뒤에 C 검증을 다시 하세요.
+
+"$PY" -c "from matplotlib import _api; import matplotlib, seaborn; print('matplotlib', matplotlib.__version__); print('seaborn', seaborn.__version__)"
+
+설치 중에는 다른 명령을 치지 마세요. 끝나면 결과를 붙여 주세요.
+
+결과: 실패
+
+
+CUR> pyparsing은 넘어갔습니다. 이번엔 matplotlib 의존성 **kiwisolver**가 없습니다. --no-deps로 matplotlib만 넣어서, 의존성이 하나씩 빠져 있습니다.
+
+matplotlib를 다시 깔지 마세요. numpy도 건드리지 마세요. 빠진 의존성만 한 번에 넣습니다.
+
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+
+uv pip install --python "$PY" kiwisolver contourpy fonttools pillow cycler packaging
+
+끝난 뒤 C를 다시:
+
+"$PY" -c "from matplotlib import _api; import matplotlib, seaborn; print('matplotlib', matplotlib.__version__); print('seaborn', seaborn.__version__)"
+
+설치 중에는 다른 명령을 치지 마세요. 끝나면 결과를 붙여 주세요.
+
+결과:
+Matplotlib is building the font cache; this may take a moment.
+matplotlib 3.11.1
+seaborn 0.13.2
+
+성공
+
+CUR> 맞습니다. C단계는 통과입니다. matplotlib 3.11.1, seaborn 0.13.2이고, font cache 메시지는 처음 한 번 나오는 정상 동작입니다.
+
+다음은 노트북입니다. 
+
+
+[D단계] 주피터 노트북 실행 (위 단계 / C단계 검증 통과 시에만)
+
+검증이 완벽하게 통과된 경우에만 아래 명령을 실행하여 모듈 02 노트북을 엽니다.
+
+Bash
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+
+cd "E:/IT_SPACES/AI/ZoomCamp/ML/02/regression/notebook"
+
+"$PY" "E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/jupyter-nbclassic-script.py" notebook.ipynb
+
+
+
+
+--
+
+
+본문 시작
+
+나> 영상을 참고해 초보자교육용 네러티브형식으로 지침 작성. 그리고 앞으로 내가 준 파트 이외에 아직 안준건 할루시네이션 하지말고 나에게 보고해. 지침을 줄께. 
+
+
+GEM> 2.1 Car price prediction project
+2.1 자동차 가격 예측 프로젝트
+
+영상:
+https://www.youtube.com/watch?v=vM3SqPNlStE&list=PL3MmuxUbc_hIhxl5Ji8t4O6lPAOpHaCLR&index=12
+
+슬라이드:
+https://www.slideshare.net/slideshow/ml-zoomcamp-21-car-price-prediction-project/250166939
+
+
+>>> 여기 할 차례
+
+
+자, 여러분! 이번 세션부터는 드디어 우리의 첫 번째 머신러닝 프로젝트를 본격적으로 시작해 보겠습니다. 이번 시간에 우리가 함께 다룰 주제는 바로 '자동차 가격 예측 프로젝트'입니다.
+
+슬라이드와 노트를 보시면 아시겠지만, 이 프로젝트는 실제 캐글(Kaggle)에 공개된 경진대회 데이터셋을 가지고 와서 진행합니다. 우리가 흔히 중고차를 살 때 "이 차 시세가 과연 적정한가?" 고민하게 되잖아요? 바로 그 자동차의 여러 가지 스펙과 특징들을 보고 가격을 정확하게 예측해 주는 모델을 직접 만들어 볼 겁니다.
+
+이번 장에서 우리가 어떤 흐름으로 공부하게 될지 전체 프로젝트 계획을 먼저 짚어볼게요.
+
+데이터 준비 및 EDA (탐색적 데이터 분석): 우선 데이터를 가져와서 코드로 뜯어보고, 데이터가 어떻게 생겼는지 눈으로 확인하는 탐색적 데이터 분석을 수행합니다.
+
+선형 회귀(Linear Regression) 사용하기: 가격처럼 연속적인 숫자를 예측하는 데 가장 기본적이면서도 강력한 알고리즘인 선형 회귀를 본격적으로 적용해 봅니다.
+
+선형 회귀의 내부 원리 이해하기: 단순히 코드로 쓰고 끝내는게 아니라, 이 선형 회귀가 컴퓨터 내부에서 도대체 어떤 수학적 원리와 구조로 작동하는지 그 뼈대를 깊이 있게 파고들 겁니다.
+
+RMSE로 모델 평가하기: 우리가 만든 모델이 과연 예측을 잘하고 있는지 객관적으로 검증하기 위해 RMSE(평균 제곱근 오차)라는 평가 지표를 활용합니다.
+
+특성 공학(Feature Engineering): 모델의 성능을 한 단계 더 끌어올리기 위해 기존 데이터를 다듬고 새로운 유용한 특성들을 만들어내는 가공 작업을 거칩니다.
+
+정규화(Regularization): 모델이 학습 데이터에만 너무 찰싹 붙어서 실제 세상의 새로운 데이터는 맞추지 못하는 현상, 즉 과적합(Overfitting)을 방지하기 위한 정규화 기법을 배웁니다.
+
+모델 사용하기: 이렇게 완성된 최종 모델을 실제 환경에서 어떻게 가져다 쓰고 활용하는지까지 쭉 살펴볼 겁니다.
+
+참고로 오늘 우리가 다루는 모든 소스 코드와 데이터셋은 제공되는 링크를 통해 언제든지 직접 다운로드하고 확인하실 수 있습니다.
+
+(아, 그리고 이 노트는 우리 같은 수강생 커뮤니티에서 함께 만들어가는 오픈 노트입니다. 공부하시다가 혹시 오탈자나 수정할 부분을 발견하시면 언제든지 깃허브에 PR(Pull Request)을 날려주셔서 기여해 주시면 감사하겠습니다! 이 노트는 Peter Ernicke님의 기여로 작성되었습니다.)
+
+자, 전체적인 길잡이는 모두 마쳤습니다.
+
+머신러닝 줌캠프 세션 2, 본격적인 '회귀를 위한 머신 러닝'의 첫걸음! 다음 소단사인 데이터 준비(Data preparation) 단계로 바로 넘어가 보겠습니다.
+
+슬라이드의 뼈대와 노트의 디테일(캐글 출처, 커뮤니티 PR 안내, 피터 에르니케 노트 등)을 모두 녹여낸 내러티브 형식입니다. 이 방향이 맞는지 확인해 주시고, 다음 파트를 이어가시려면 텍스트를 던져주세요!
+
+
+
+슬라이드 (Slides)
+https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/02-regression/01-car-price-intro.md
+
+노트 (Notes)
+이 프로젝트는 사용자가 자동차 가격을 예측하는 것을 돕는 모델을 만드는 것에 대한 내용입니다. 데이터셋은 이 캐글(Kaggle) 경진대회에서 가져왔습니다.
+
+프로젝트 계획:
+
+데이터를 준비하고 탐색적 데이터 분석(EDA) 수행하기
+
+가격 예측을 위해 선형 회귀(Linear Regression) 사용하기
+
+선형 회귀의 내부 원리 이해하기
+
+RMSE로 모델 평가하기
+
+특성 공학(Feature Engineering)
+
+정규화(Regularization)
+
+모델 사용하기
+
+코드와 데이터셋은 이 링크에서 확인할 수 있습니다.
+
+⚠️ 노트는 커뮤니티에서 작성한 것입니다. 만약 여기서 오류를 발견하신다면, 수정 사항을 담아 PR(Pull Request)을 생성해 주세요.
+
+Peter Ernicke의 노트
+
+탐색 (Navigation)
+머신 러닝 줌캠프 코스 (Machine Learning Zoomcamp course)
+
+세션 2: 회귀를 위한 머신 러닝 (Session 2: Machine Learning for Regression)
+
+다음: 데이터 준비 (Next: Data preparation)
+
+
+
+---
+
+
+
+노트북 실행
+
+E:\IT_SPACES\AI\ZoomCamp\ML\02\regression\notebook.ipynb
+
+materials 원본은 그대로입니다. 실행할 때:
+
+PY="E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/python.exe"
+
+cd "E:/IT_SPACES/AI/ZoomCamp/ML/02/regression/notebook"
+
+"$PY" "E:/IT_SPACES/AI/ZoomCamp/ML/.venv/Scripts/jupyter-nbclassic-script.py" notebook.ipynb
+
+
+
+
+🚗 [세션 2] 2.2 데이터 로드 및 전처리 노트북 가이드
+Chapter 1. 라이브러리 준비 및 데이터 다운로드
+
+안녕하세요 여러분! 이번 시간엔 머신러닝 모델의 뼈대가 될 데이터를 노트북 위에 불러오고, 보기 좋게 요리조리 다듬어보는 데이터 전처리(Data Preparation) 과정을 함께 살펴볼 거예요.
+
+먼저 표 형식 데이터를 다루는 만능 일꾼 판다스(Pandas)와 수치 연산을 빠르게 처리해 주는 넘파이(NumPy)를 불러오는 것부터 시작합니다.
+
+Python
+# 판다스(Pandas) 라이브러리를 임포트합니다.
+# 판다스는 엑셀 표처럼 행과 열로 이루어진 '데이터프레임(DataFrame)' 구조를 다루게 해주는 핵심 도구입니다.
+# 코드 전체에서 길게 타이핑하는 대신 'pd'라는 짧은 별칭(Alias)으로 편하게 부르기 위해 'as pd'를 붙입니다.
+import pandas as pd
+
+# 넘파이(NumPy) 라이브러리를 임포트합니다.
+# 넘파이는 대규모 다차원 배열과 수학·행렬 연산을 초고속으로 처리할 수 있게 도와주는 수치 계산 전문 도구입니다.
+# 마찬가지로 앞으로 'np'라는 별칭으로 호출하겠다고 선언하는 것입니다.
+import numpy as np
+자, 이제 분석에 필요한 자동차 가격 데이터셋 원본 파일을 인터넷에서 직접 다운로드해 볼까요? 주피터 노트북 환경에서는 느낌표(!)를 붙이면 리눅스 셸 명령어를 그대로 쓸 수 있답니다.
+
+Python
+# 분석에 사용할 자동차 가격 데이터셋(CSV 파일)이 공개되어 있는 인터넷상의 원본 URL 주소입니다.
+# 이 긴 문자열 주소를 앞으로 다루기 쉽도록 'data'라는 이름의 변수 상자에 담아둡니다.
+data = 'https://raw.githubusercontent.com/alexeygrigorev/mlbookcamp-code/master/chapter-02-car-price/data.csv'
+
+
+Python
+# 주피터 노트북 환경 내에서 리눅스 터미널 명령어인 '!wget'을 실행합니다.
+# 윈도우나 리눅스 셀(Shell) 환경에서 웹 상에 있는 파일을 내 컴퓨터의 현재 작업 폴더로 바로 다운로드해 주는 명령어입니다.
+# 문자열 변수 앞에 붙은 '$data' 기호는, 파이썬 변수 상자 안에 들어있는 실제 URL 문자열 값을 셸 명령어로 쏙 집어넣어 주는 역할을 합니다.
+!wget $data 
+
+Chapter 2. 데이터프레임 로드 및 열 이름 정규화
+다운로드한 CSV 파일을 판다스의 read_csv 함수로 읽어서 컴퓨터 메모리 위에 엑셀 표처럼 올려보겠습니다.
+
+Python
+# 방금 다운로드 완료된 'data.csv' 파일을 판다스의 'read_csv' 함수로 읽어 들입니다.
+# 컴퓨터 메모리 위에 이 파일이 엑셀 표 형태의 '데이터프레임(DataFrame)' 객체로 변환되어 올라가며,
+# 앞으로 이 표를 자유롭게 조작할 수 있도록 'df'라는 이름의 변수에 대입합니다.
+df = pd.read_csv('data.csv')
+
+
+데이터를 자세히 살펴보면 컬럼(열) 이름에 대소문자가 섞여 있거나 띄어쓰기가 들어가 있어서 나중에 코딩할 때 골치 아파질 수 있어요. 점(.)으로 접근할 때 에러가 나지 않도록 깔끔하게 정리해 줍니다.
+
+Python
+# 데이터프레임의 모든 열(컬럼) 이름을 일제히 소문자로 바꾸고, 이름 속 공백은 밑줄(_)로 바꿉니다.
+# 기계학습 코드에서는 열 이름을 점(.)으로 접근하는 경우가 많아서, 공백이 있으면 문법 오류가 납니다.
+# '.str'은 문자열 전용 메서드 묶음이고, 메서드를 연달아 붙이는 방식(체이닝)으로 한 줄에 두 가지 변환을 끝냅니다.
+df.columns = df.columns.str.lower().str.replace(' ', '_')
+
+
+
+Chapter 3. 문자열 값(Values) 정규화하기
+열 이름뿐만 아니라 데이터 안의 실제 문자열 값들도 대소문자가 제각각이에요. 테스트 삼아서 제조사(make) 열을 먼저 살짝 손봐볼까요?
+
+Python
+# 'make'(제조사) 열의 각 값을 소문자로 바꾸고, 값 안의 공백도 밑줄로 바꿉니다.
+# 위 셀에서 열 이름을 정규화한 것과 같은 방식으로, 이번에는 실제 데이터 값(브랜드명)을 시험 삼아 변환해 보는 것입니다.
+# 결과를 변수에 저장하지 않았으므로 변환된 시리즈가 출력만 되고, 원본 df는 아직 바뀌지 않습니다.
+df['make'].str.lower().str.replace(' ', '_')
+
+
+숫자가 들어 있는 열은 건드리면 안 되기 때문에, 진짜 글자(object 타입)가 들어 있는 열들만 골라내는 작업을 해줍니다.
+
+Python
+# 데이터 타입이 'object'(문자열)인 열만 골라, 그 열 이름들의 목록을 만듭니다.
+# df.dtypes는 각 열이 숫자인지 문자인지 알려 주는 시리즈이고, 조건으로 걸러 낸 뒤 .index로 열 이름만 꺼냅니다.
+# 이 이름 목록을 다음 셀의 for 반복문에서 한꺼번에 정규화하려고 'strings' 변수에 담아 둡니다.
+strings = list(df.dtypes[df.dtypes == 'object'].index)
+
+# 방금 만든 문자열 열 이름 목록을 노트북에 출력해, 어떤 열이 범주형(문자)인지 눈으로 확인합니다.
+strings
+
+
+
+이제 골라낸 문자열 열들을 반복문으로 돌면서 전체 값들을 일괄적으로 정돈해 줍니다.
+
+Python
+# 앞에서 모아 둔 문자열 열 이름들을 하나씩 꺼내며 반복합니다.
+# 각 열의 실제 값에 소문자 변환과 공백→밑줄 치환을 적용하고, 그 결과를 같은 열에 다시 덮어씁니다.
+# 이제 제조사·모델명 같은 범주 값이 모두 일정한 형식이 되어, 나중에 비교하거나 더미 변수로 만들기 쉬워집니다.
+for col in strings:
+    df[col] = df[col].str.lower().str.replace(' ', '_')
+
+
+
+Chapter 4. 데이터 타입 최종 점검
+마지막으로 각 열의 데이터 타입이 우리가 의도한 대로 잘 정비되었는지 최종 점검을 해볼까요?
+
+Python
+# 각 열이 정수인지, 실수인지, 문자열(object)인지 데이터 타입 표를 출력합니다.
+# 전처리 직후 타입이 기대와 맞는지, 범주형과 수치형을 어떻게 나눠 쓸지 한눈에 점검하는 단계입니다.
+df.dtypes
+
+
+결과:
+make                     str
+model                    str
+year                   int64
+engine_fuel_type         str
+engine_hp            float64
+engine_cylinders     float64
+transmission_type        str
+driven_wheels            str
+number_of_doors      float64
+market_category          str
+vehicle_size             str
+vehicle_style            str
+highway_mpg            int64
+city_mpg               int64
+popularity             int64
+msrp                   int64
+dtype: object
+
+
+나> 이게 결과인데, 이제껏 작업으로 뭐가 달라졌다는거임?
+
+GEM> 앞서 진행한 전처리 작업으로 인해 데이터에 다음과 같은 핵심적인 변화가 생겼습니다:
+
+열 이름(Column names) 통일: 모든 열 이름이 소문자로 바뀌고 공백이 밑줄(_)로 치환되어, 나중에 코딩할 때 df.engine_hp처럼 점(.)을 이용해 오류 없이 편리하게 접근할 수 있게 되었습니다.
+
+문자열 값(Values) 정규화: make, model, transmission_type 등 텍스트로 된 범주형 데이터들의 내부 값들이 모두 소문자와 밑줄 형식으로 통일되었습니다.
+
+모델 학습의 정확도 향상: 기존에는 "BMW"와 "bmw"가 서로 다른 데이터로 인식되어 컴퓨터에게 혼란을 주었으나, 텍스트 형태가 완벽히 규격화되어 머신러닝 모델이 카테고리를 정확하게 학습할 수 있는 상태가 되었습니다.
+
+
+나> 위에서 objects 는 문자열이라며? 근데 float64, int64는 아닌거 아냐?
+
+GEM> 맞습니다! 아주 예리한 지적이십니다. 판다스(Pandas)와 파이썬 판정 방식 때문에 헷갈리기 쉬운 부분인데요.
+
+결과창에 str로 표시된 부분들은 원래 CSV 파일을 읽어올 때 파이썬 내부에서 object 타입으로 지정되었던 텍스트(문자열) 열들입니다. 판다스에서는 문자열 데이터를 통틀어서 object 타입으로 부르거든요.
+
+즉, 방금 수행한 전처리 작업으로 인해:
+
+int64: 정수형 숫자 데이터 (예: 연도, 연비, 가격 등)
+
+float64: 실수형 숫자 데이터 (예: 마력, 실린더 개수 등)
+
+str (본래의 object): 글자나 단어로 이루어진 문자열 데이터 (예: 제조사, 모델명, 변속기 타입 등)
+
+이렇게 데이터의 성격에 따라 타입이 깔끔하게 구분되어 유지되고 있는 것입니다. 수치형 데이터는 그대로 숫자로 연산할 수 있게 두고, 텍스트 데이터(object)들만 골라서 앞서 소문자 변환과 밑줄 정리를 싹 마친 상태라고 이해하시면 됩니다!
+
+
+나> 이해 못했어. 수치형에 대해 설명하지 않았잖아. 그러니까 이름만 문자열이라는거야? 내용물은 변환되지 않았고? 이거 설명 좀 명확히 해봐 애매모호하게 뭉뚱그리지 말고
+
+GEM> 명확하게 짚어드리겠습니다. 혼란을 드려 죄송합니다.
+
+결론부터 말씀드리면, 이름만 바뀐 게 아니라 내용물(데이터 값)도 전부 변환되었습니다.
+
+원문 결과에서 str로 표시된 것은 이해를 돕기 위해 텍스트 타입(object)을 풀어서 표현한 것이며, 실제 전처리 과정을 거치면서 다음과 같이 두 가지가 동시에 일어났습니다.
+
+컬럼 이름(열 제목) 변경:
+
+Engine Fuel Type 같은 제목들이 engine_fuel_type으로 바뀌었습니다.
+
+컬럼 내부의 실제 데이터(값) 변경:
+
+예를 들어 make 열 안에 들어있던 실제 값들(BMW, Audi 등)이 전부 소문자(bmw, audi)로 바뀌었습니다.
+
+수치형 데이터는 어떻게 되었나요?
+int64(정수형)나 float64(실수형)로 표시된 열들(예: 연도, 마력, 가격 등)은 숫자이기 때문에 소문자로 바꿀 수 없습니다.
+
+따라서 이 숫자 데이터들은 대소문자 변환 대상에서 완전히 제외되어 원래의 숫자 값 그대로 안전하게 유지되고 있는 것입니다.
+
+즉, 문자 데이터(object)들은 내용물까지 전부 소문자와 밑줄로 정리가 끝났고, 숫자 데이터(int/float)들은 연산을 위해 손대지 않고 고스란히 남겨둔 상태입니다.
+
+
+
+나> 코드는 strings = list(df.dtypes[df.dtypes == 'object'].index)이건데 그럼 int/float은 object가 아니라는거야? 
+
+...
+popularity             int64
+msrp                   int64
+dtype: object
+
+이건 어떻게 해석해야해?
+
+
+GEM> 네, 정확히 맞습니다! int64와 float64는 object가 아닙니다.
+
+판다스(Pandas)에서 부르는 타입의 개념을 명확하게 짚어드릴게요.
+
+object 타입: 파이썬에서 문자열(String)이나 여러 데이터 타입이 뒤섞인 잡다한 데이터를 담을 때 쓰는 판다스의 기본 그릇입니다. CSV 파일을 읽어올 때 글자로 된 텍스트들은 전부 이 object 그릇에 담깁니다.
+
+int64 / float64 타입: 명백한 숫자(정수와 실수) 전용 그릇입니다. 연산이 가능하도록 철저하게 숫자로 분류된 데이터들입니다.
+
+그렇다면 마지막에 출력된 dtype: object는 무슨 의미인가요?
+이 부분이 가장 헷갈리기 쉬운 함정인데요, 질문하신 결과 화면 맨 아래에 있는 dtype: object는 각각의 데이터 칸에 들어있는 값의 타입이 아님에 주의하셔야 합니다.
+
+Python
+make                     object
+model                    str
+...
+popularity             int64
+msrp                   int64
+dtype: object  <-- 바로 이 부분!
+
+이것은 데이터프레임의 값들을 보여준 게 아니라, "지금 위에서 출력해 준 목록(시리즈)의 이름표(인덱스)들이 어떤 데이터 타입으로 이루어져 있느냐"를 알려주는 요약 정보일 뿐입니다.
+
+df.dtypes를 실행하면 각 열 이름(예: make, popularity)이 인덱스(문자열)가 되고, 그에 해당하는 데이터 타입(예: object, int64)이 값이 되는 커다란 표(시리즈)가 만들어집니다.
+
+그 표의 인덱스 이름들(make, model, msrp 등)이 전부 텍스트(문자열)로 되어 있기 때문에, 판다스가 이 인덱스 목록 전체의 성격을 dtype: object라고 친절하게 요약해서 알려준 것입니다.
+
+즉, 맨 아래의 dtype: object는 데이터의 내용물이 문자라는 뜻이 아니라, "출력된 목록의 항목 이름(키 값)들이 문자열로 되어 있다"는 뜻으로 이해하시면 됩니다!
+
+
+나> 그럼 이 코드
+strings = list(df.dtypes[df.dtypes == 'object'].index)
+이건 그 이름 목록들을 리스트로 뽑은건가? 수치가 포함된 내용물이 아니라, 그 수치들의 제목이 문자열이라는 소리인거? 
+
+
+GEM> 아닙니다! 그 이해는 반대로 되셨습니다.
+
+그 코드는 숫자들의 제목을 뽑은 게 아니라, 텍스트(문자열) 데이터가 들어 있는 열들의 "이름(제목)"만 골라서 리스트로 만든 것입니다.
+
+코드를 하나씩 뜯어보면 이렇습니다.
+
+df.dtypes: 모든 열의 데이터 타입(예: object, int64, float64)을 보여주는 목록을 가져옵니다.
+
+df.dtypes == 'object': 그중에서 타입이 object(즉, 텍스트/문자열)인 것들만 True로 골라냅니다. (int64나 float64 같은 숫자는 여기서 False가 되어 제외됩니다.)
+
+.index: 그 True로 골라진 것들의 열 이름(예: make, model, transmission_type 등)만 쏙 빼냅니다.
+
+list(...): 그 이름들을 파이썬 리스트 형태로 깔끔하게 포장합니다.
+
+즉, 이 코드가 완성하는 strings라는 변수 안에는 다음과 같은 문자열 컬럼들의 이름이 들어갑니다.
+
+['make', 'model', 'engine_fuel_type', 'transmission_type', ...]
+
+숫자(int64, float64)로 된 컬럼들은 object가 아니기 때문에 이 strings 목록에 절대 포함되지 않습니다. 오직 텍스트 데이터를 담고 있는 열들의 이름만 골라 담는 코드입니다!
+
+
+나> 그럼에도 
+
+...
+msrp                   int64
+dtype: object
+
+이게 나온건 단순히 모든 타입 이름들이 객체/문자열 속성이라는건가?
+
+
+GEM> 네, 정확히 맞습니다! 바로 그 뜻입니다.
+
+df.dtypes를 실행했을 때 맨 아래에 출력되는 dtype: object는 데이터프레임의 실제 값들과는 아무런 상관이 없습니다.
+
+출력된 결과 전체의 구조를 보면 이렇습니다.
+
+Python
+make                  object  <-- (값)
+model                 object  <-- (값)
+year                   int64  -- (값)
+...
+popularity             int64  -- (값)
+msrp                   int64  -- (값)
+dtype: object                 <-- (요약 정보)
+
+왼쪽에 있는 make, model, msrp 같은 열 이름(항목 타이틀)들이 전부 텍스트(문자열)로 되어 있기 때문에, 판다스가 이 목록 전체의 성격(인덱스의 타입)을 dtype: object라고 맨 아래에 요약해서 보여준 것뿐입니다. 데이터의 내용물과는 전혀 무관한 단순 안내 문구입니다.
+
+
+나> 햇갈리기 딱 좋게 해놨네
+
+GEM> 맞습니다. 판다스를 처음 공부할 때 이 부분이 가장 헷갈리는 함정 중 하나입니다.
+
+출력 결과 맨 아래에 덜렁 붙어 있는 dtype: object 때문에 마치 데이터 전체가 문자열로 뒤섞인 것처럼 오해하기 딱 좋게 만들어져 있죠.
+
+이처럼 파이썬과 판다스에는 처음 접할 때 직관적이지 않고 헷갈리는 표현들이 종종 숨어 있습니다. 궁금하신 점이 있다면 언제든 정확히 짚어드릴 테니 편하게 말씀해 주세요.
+
+
+>>> 여기까지. (2.2 완료)
+
+
+-----
+
+
+
+2.3 탐색적 데이터 분석 (Exploratory Data Analysis, EDA)
+
+자동차 가격 데이터셋을 본격적인 머신러닝 모델에 투입하기 전, 데이터의 생김새와 분포, 그리고 특성을 시각적으로 훑어보며 인사이트를 얻는 탐색적 데이터 분석(EDA) 단계를 진행합니다. 이 파트의 핵심은 고유값과 다양성 확인, MSRP(Manufacturer's Suggested Retail Price, 권장소비자가격)의 롱테일(Long-tail) 분포 시각화 및 로그 변환(Log Transformation), 그리고 결측값(Missing Values) 점검입니다.
+
+1. 열별 고유값 및 다양성 탐색
+데이터프레임의 모든 열을 순회하며 각 열의 데이터 특성을 요약해 봅니다.
+
+Python
+# filename: eda_analysis.py
+# 데이터프레임의 모든 열을 하나씩 순회하면서, 그 열의 특성을 짧게 훑어봅니다.
+for col in df.columns:
+    # 지금 살펴보고 있는 열 이름을 먼저 출력합니다.
+    print(col)
+    # unique()는 중복을 제거한 고유값 배열이고, 앞에서 5개만 잘라 샘플을 보여 줍니다.
+    print(df[col].unique()[:5])
+    # nunique()는 그 열에 서로 다른 값이 몇 종류인지 세어, 범주의 다양성을 가늠하게 합니다.
+    print(df[col].nunique())
+    # 열과 열 사이에 빈 줄을 넣어 출력이 서로 붙지 않게 읽기 쉽게 만듭니다.
+    print()
+
+
+코드 설명:
+
+df.columns: 데이터프레임의 모든 컬럼명을 순회합니다.
+
+df[col].unique()[:5]: 해당 열에 어떤 값들이 있는지 중복을 제거한 후 상위 5개만 추출하여 확인합니다.
+
+df[col].nunique(): 해당 열에 고유한 값이 총 몇 개 존재하는지(범주의 다양성) 카운트합니다.
+
+
+Python
+# 전처리가 반영된 데이터프레임 전체를 노트북에 출력합니다.
+# 앞부분 행과 열을 눈으로 확인하며, 열 이름과 값이 소문자·밑줄 형식으로 바뀌었는지 점검합니다.
+df
+
+
+
+2. 가격(MSRP) 분포 시각화와 로그 변환 (Log Transformation)
+자동차 가격(msrp, 제조사 권장 소매가격) 데이터는 대다수의 차량이 저렴하거나 평범한 가격대에 몰려 있고, 일부 슈퍼카나 고급 차들이 엄청나게 비싼 구조를 가집니다. 이처럼 한쪽으로 길게 늘어진 분포를 롱테일(Long-tail) 분포라고 하며, 선형 회귀(Linear Regression) 모델의 성능을 떨어뜨리는 주원인이 됩니다.
+
+Python
+# filename: eda_analysis.py
+# 맷플롯립(Matplotlib)의 파이플롯 모듈을 임포트합니다.
+import matplotlib.pyplot as plt
+
+# 시본(Seaborn) 라이브러리를 임포트합니다.
+import seaborn as sns
+
+# 주피터 노트북 안에서 그래프를 셀 바로 아래에 인라인으로 표시하도록 설정합니다.
+%matplotlib inline
+
+# 시본의 히스토그램으로 자동차 제조사 권장 소매가격(msrp)의 분포를 그립니다. (구간 50개)
+sns.histplot(df.msrp, bins=50)
+
+//
+나> 왜 저 코드가 나머지 막대그래프를 짤라먹어?
+
+GEM> sns.histplot(df.msrp, bins=50)을 실행했을 때 그래프가 이상하게 나오는 현상은 X축이 우측으로 늘어나는 문제가 아니라, Y축(빈도수, Count) 기준이 극단적인 값 때문에 왜곡되기 때문입니다.
+
+Y축(빈도수)의 압도적인 스케일 차이
+
+일반적인 가격대(예: 2만~3만 달러)에는 수천 대의 차량이 몰려 있어 Y축 빈도수가 수천 단위로 치솟습니다.
+
+반면, 수십만 달러가 넘는 슈퍼카들은 전체 데이터에서 손가락에 꼽힐 정도로 적습니다(빈도수가 1 또는 2).
+
+시각적으로 '잘려' 보이거나 뭉개지는 이유
+
+대다수 차가 몰려 있는 저렴한 가격대 구간의 막대는 높이가 수천을 찍어야 하므로 그래프 세로 공간을 꽉 채우거나 위로 높게 솟습니다.
+
+이로 인해 아주 드문 가격대에 있는 고가 차량들의 막대(높이가 1이나 2에 불과한 막대들)는 눈에 띄지 않을 정도로 작아져서 마치 그래프가 우측에 공백만 남기고 데이터가 잘려 나간 것처럼 보이게 됩니다. (또는 반대로 극단적인 아웃라이어를 포함한 전체 스케일을 잡다 보니 세로축 표현상 세부 데이터가 죽어버리는 현상입니다.)
+
+즉, 막대의 높이(상하)를 결정하는 Y축의 빈도수 편차가 너무 커서 대다수의 분포가 한쪽에 쏠리고 우측 영역이 텅 빈 공백처럼 보이게 되는 것입니다.
+
+이를 해결하기 위해 본문에서 df.msrp < 100000처럼 범위를 끊어서 보거나 로그 변환을 수행하는 것입니다.
+//
+
+
+
+초고가 차량 때문에 그래프가 압축되어 보이므로, 10만 달러 미만 차량만 따로 추려 시각화해 볼 수 있습니다.
+
+Python
+# filename: eda_analysis.py
+# 가격이 10만 달러 미만인 차량만 골라 다시 히스토그램을 그립니다.
+sns.histplot(df.msrp[df.msrp < 100000], bins=50)
+
+
+
+로그 변환(np.log1p) 적용하기
+
+모델이 큰 숫자를 더 쉽게 다루고 롱테일 분포를 정규분포(Normal Distribution, 종 모양)에 가깝게 만들기 위해 로그 변환(Log Transformation)을 적용합니다. 이때 값이 0인 데이터가 존재할 경우 에러가 발생하므로 1을 더해주는 np.log1p 함수를 사용합니다.
+
+Python
+# 넘파이의 log1p 함수에 샘플 숫자 리스트를 넣어, 로그 변환 결과를 확인합니다.
+# log1p(x)는 log(x + 1)과 같아서, 값이 0이어도 로그가 터지지 않습니다(log(0)은 정의되지 않음).
+# 가격처럼 스케일이 큰 숫자를 모델이 다루기 쉬운 범위로 압축하는 전처리의 맛보기입니다.
+np.log1p([0, 1, 10, 1000, 100000])
+
+//
+나> 0, 1, 10, 1000, 100000의 의미
+
+GEM> np.log1p([0, 1, 10, 1000, 100000]) 코드에서 입력된 숫자들은 로그 변환(log1p)이 실제 데이터의 값 크기에 따라 어떻게 값을 압축하고 변화시키는지 보여주기 위한 대표적인 예시(값의 예시)입니다.
+
+여기서 각 숫자가 가진 의미와 log1p 함수가 왜 저 숫자들을 대상으로 쓰이는지 정리해 드립니다.
+
+1. 각 숫자의 구체적 의미와 변환 결과
+np.log1p(x)는 자연로그 함수인 $\ln(1 + x)$를 계산합니다. 입력된 숫자들을 대입해 보면 다음과 같이 변환됩니다.
+
+0:
+
+의미: 가격이나 수량이 전혀 없거나(0) 시작 지점인 상태를 의미합니다.
+
+계산: ln(1+0)=ln(1)=0
+
+1:
+
+의미: 아주 저렴하거나 최소 단위를 뜻합니다. (예: 1달러)
+
+계산: ln(1+1)=ln(2)≈0.693
+
+10:
+
+의미: 한 자릿수에서 두 자릿수로 넘어간 소규모 단위를 뜻합니다. (예: 10달러)
+
+계산: ln(1+10)=ln(11)≈2.400
+
+1000 (천):
+
+의미: 중간 규모의 가격대를 뜻합니다. (예: 1,000달러)
+
+계산: ln(1+1000)=ln(1001)≈6.909
+
+100000 (십만):
+
+의미: 앞서 언급한 슈퍼카나 고가 차량처럼 극단적으로 높은 가격대를 뜻합니다. (예: 100,000달러 이상)
+
+계산: ln(1+100000)=ln(100001)≈11.513
+
+2. 저 숫자들이 저 함수에 쓰인 이유 (핵심 목적)
+자동차 가격 데이터에는 0원(또는 매우 저렴한 차)부터 수십만 달러가 넘는 슈퍼카까지 엄청나게 넓은 범위의 숫자가 섞여 있습니다.
+
+원본 차이: 0과 100,000은 숫자 차이가 무려 10만 배나 납니다. 이 상태 그대로 머신러닝 모델에 넣으면 큰 숫자가 모델의 학습을 지배해 버립니다.
+
+로그 변환 후 차이: 위에서 계산된 결과값을 보면 0은 0, 100,000은 약 11.5로 줄어듭니다. 즉, 스케일이 10만 배 차이 나던 거대한 숫자들을 0부터 11 사이의 다루기 편한 작은 범위로 촘촘하게 압축해 주는 것입니다.
+
+또한, 입력값에 0이 포함되어 있을 때 일반적인 np.log(0)을 쓰면 수학적 오류(무한대, -inf)가 발생하지만, np.log1p는 내부적으로 1을 더해주기 때문에(1 + 0) 0 데이터가 망가지지 않고 안전하게 0으로 계산되도록 보호해 주는 실무적 이유도 담겨 있습니다.
+
+
+
+나> 그러니까 저 숫자들을 한개도 아니고 여러개를 왜 []를 이용해 loglp 안에 집어넣는거냐고. 함수가 바보여서 어떤 숫자든 식별을 못하는거야? 그래서 일일히 저렇게 0,1,10,등등 메뉴얼로 집어넣어주는거냐고
+
+
+GEM> 아닙니다! 함수가 바보이거나 숫자를 식별하지 못해서 저렇게 일일이 집어넣는 것이 아닙니다.
+
+저것은 실제 자동차 가격 데이터를 변환하기 전 단계에서, np.log1p() 함수가 입력된 숫자 크기에 따라 값을 어떻게 변환해 주는지 개발자가 눈으로 직접 테스트(확인)해 보려고 리스트([]) 형태로 한 번에 집어넣어 본 것입니다.
+
+이해를 돕기 위해 이유를 정리해 드립니다.
+
+파이썬의 리스트([]) 기능:
+
+파이썬에서는 대괄호 안에 여러 숫자를 넣으면(예: [0, 1, 10, ...]), 리스트라는 꾸러미(모음)가 됩니다.
+
+np.log1p() 같은 넘파이(NumPy) 함수는 스마트해서, 이렇게 숫자가 여러 개 든 리스트를 통째로 집어넣으면 각 숫자를 알아서 하나씩 꺼내 전부 한꺼번에 계산한 뒤 결과도 리스트로 뱉어냅니다. (이를 벡터화 연산이라고 합니다.)
+
+왜 굳이 저런 값들을 넣어봤을까? (동작 테스트):
+
+진짜 자동차 가격 데이터를 변환하기 전에, "내가 쓰는 이 함수가 0이 들어왔을 때 에러는 안 나는지", "아주 작은 수와 엄청 큰 수(십만 단위)를 넣었을 때 결과가 각각 얼마로 이쁘게 압축되는지" 궁금해서 대표적인 샘플 숫자들만 골라서 실험해 본 것입니다.
+
+즉, 함수가 숫자를 식별 못 해서가 아니라, "함수가 내 의도대로 숫자를 잘 축소해 주는지 샘플 테스트를 해본 것"에 가깝습니다. 실제 본 데이터 분석에서는 저렇게 일일이 안 넣고 price_logs = np.log1p(df.msrp)처럼 컬럼 전체를 한 번에 넣습니다.
+//
+
+
+Python
+# 같은 값들에 대해 직접 1을 더한 뒤 일반 로그(np.log)를 적용해 봅니다.
+# 결과가 바로 위 log1p와 같다는 것을 보여 주는 비교 실험입니다.
+np.log([0 + 1, 1+ 1, 10 + 1, 1000 + 1, 100000])
+
+
+리마인더
+모델이 큰 숫자를 더 쉽게 다루고 롱테일 분포를 정규분포(Normal Distribution, 종 모양)에 가깝게 만들기 위해 로그 변환(Log Transformation)을 적용합니다. 이때 값이 0인 데이터가 존재할 경우 에러가 발생하므로 1을 더해주는 np.log1p 함수를 사용합니다.
+
+Python
+# filename: eda_analysis.py
+# 실제 가격 열(msrp) 전체에 log1p 변환을 적용하여 'price_logs'에 담습니다.
+price_logs = np.log1p(df.msrp)
+
+
+Python
+# 로그 변환된 가격의 히스토그램을 그려 분포 형태를 비교합니다.
+sns.histplot(price_logs, bins=50)
+
+
+3. 결측값(Missing Values) 점검
+
+머신러닝(Machine Learning) 모델에 데이터를 넣기 전, 비어 있는 값(NaN, Not a Number)이 각 열마다 몇 개씩 존재하는지 확인하여 전처리 방향을 결정해야 합니다.
+
+Python
+# filename: eda_analysis.py
+# 각 열마다 결측값(NaN)이 몇 개인지 합계를 냅니다.
+df.isnull().sum()
+
+
+💡 학습 지침 요약 (초보자를 위한 가이드)
+데이터 탐색 시 반복문 활용: unique()와 nunique()를 조합하면 각 컬럼의 데이터 성격과 카테고리 개수를 한눈에 파악할 수 있습니다.
+
+분포 왜곡(Skewness) 해결: 가격이나 연봉처럼 한쪽으로 치우친 데이터는 선형 회귀 모델 학습 시 오차를 키우므로, 로그 변환(np.log1p, Log Transformation)을 통해 데이터를 정규분포 형태로 펴주는 작업이 필수적입니다.
+
+품질 검사: 모델 학습 전 .isnull().sum()을 통해 누락된 데이터의 위치와 규모를 파악하는 습관을 들여야 합니다.
+
+
+
+-----
+
+
+
+2.4 검증 프레임워크 구축하기 (Setting up the Validation Framework)
+
+머신러닝 모델을 올바르게 평가하고 학습시키려면 전체 데이터를 목적에 따라 나누는 작업이 필수적입니다. 이번 단원에서는 라이브러리의 자동 함수에 의존하지 않고, 판다스(Pandas)와 넘파이(NumPy)를 활용해 수동으로 검증 프레임워크를 구축하는 방법을 배웁니다.
+
+1. 데이터셋 분할 비율 계산하기
+일반적으로 머신러닝 데이터는 전체를 세 가지 파트로 쪼개어 사용합니다.
+
+훈련 세트 (Training Set, 약 60%): 모델을 학습시킬 때 사용하는 메인 데이터입니다.
+
+검증 세트 (Validation Set, 약 20%): 학습 중간중간 모델의 성능을 평가하고 튜닝할 때 사용합니다.
+
+테스트 세트 (Test Set, 약 20%): 모든 개발이 끝난 후 최종 성능을 딱 한 번 평가할 때 사용합니다.
+
+Python
+# filename: validation_split.py
+# 전체 데이터 행 개수를 n에 저장합니다.
+n = len(df)
+
+# 전체의 20%를 검증 세트 크기로 계산하고, 소수점을 버려 정수로 만듭니다.
+n_val = int(n * 0.2)
+
+# 마찬가지로 전체의 20%를 테스트 세트 크기로 계산합니다.
+n_test = int(n * 0.2)
+
+# 남은 나머지(약 60%)를 훈련 세트 크기로 둡니다. 
+# 전체 n에서 검증과 테스트 개수를 빼는 방식을 써서 데이터 유실이나 오차가 없도록 딱 맞아떨어지게 합니다.
+n_train = n - n_val - n_test
+
+
+Python
+# 전체 행 수 n을 출력해, 분할 계산의 기준이 되는 숫자를 확인합니다.
+n
+# 전체 행 수 n을 출력해, 분할 계산의 기준이 되는 숫자를 확인합니다.
+n
+11914
+
+
+Python
+# 검증·테스트·훈련 세트의 행 개수를 나란히 출력합니다.
+# 대략 20% / 20% / 60%로 나뉘었는지, 세 숫자의 합이 n과 같은지 점검합니다.
+n_val, n_test, n_train
+(2382, 2382, 7150)
+
+
+Python
+# iloc는 정수 위치(몇 번째 행인지)로 행을 고르는 인덱서입니다.
+# 10, 0, 3, 5번째 행을 원하는 순서대로 뽑아, 위치 기반 선택이 어떻게 작동하는지 보여 줍니다.
+df.iloc[[10, 0, 3, 5]]
+
+
+Python
+# 아직 섞지 않은 상태라, 앞부분 n_train행을 그대로 훈련 세트로 자릅니다.
+# 데이터가 가격이나 브랜드 순으로 정렬되어 있으면 이 방식은 편향이 생기므로, 바로 다음에서 셔플로 고칩니다.
+
+//
+나> iloc은 인덱스 위치 순서대로 리스트내에 명시하지 않는 한 셔플기능까지 있나 
+
+GEM> 아닙니다. df.iloc[] 자체에는 데이터를 섞어주는(셔플) 기능이 전혀 없습니다.
+
+df.iloc[]은 오직 입력한 번호표(순서) 그대로 행을 집어오는 단순한 선택(추출) 도구일 뿐입니다.
+
+앞선 코드에서 셔플이 일어난 이유는 iloc 함수 때문이 아니라, iloc 안에 넣어준 번호표 목록 자체가 무작위로 섞였기 때문입니다. 작동 방식을 풀어서 설명해 드리겠습니다.
+
+단순 순서대로 자를 때 (df.iloc[:n_train]):
+
+번호표를 섞지 않고 그냥 0번부터 7150번까지 순서대로 달라고 했기 때문에, 원본 데이터가 정렬된 순서(예: 브랜드순, 가격순) 그대로 잘려 나옵니다. 이 때문에 특정 데이터가 한쪽에 몰리는 편향이 발생합니다.
+
+무작위로 섞인 번호표를 넣을 때 (df.iloc[idx[:n_train]]):
+
+np.random.shuffle(idx)를 통해 idx라는 번호표 배열을 [3, 1500, 22, 9811, ...]처럼 완전히 뒤섞어 놓았습니다.
+
+그 후 df.iloc[섞인_번호표]를 실행한 것이므로, iloc은 단지 그 섞인 번호표 순서대로 데이터를 쏙쏙 뽑아왔을 뿐입니다.
+
+즉, 데이터를 섞는 역할은 np.random.shuffle()이 담당하고, iloc은 그 섞인 순서대로 데이터를 가져오는 심부름꾼 역할만 수행하는 것입니다.
+
+
+나> 그러니까 저 셀의 나중 셀에 셔플한다는 말이군. 주석을 헷갈리게 써놨어
+
+GEM> 맞습니다! 주석이 흐름을 살짝 헷갈리게 작성되어 있었습니다.
+
+정확한 흐름을 정리해 드리면 다음과 같습니다.
+
+앞쪽 셀 (df.iloc[:n_train]):
+
+이 시점에서는 데이터를 아직 섞지 않은 상태이기 때문에, 원본 데이터가 정렬되어 있다면 그대로 편향되게 잘린다는 '문제점(위험성)'을 경고하고 설명하는 과정입니다.
+
+바로 다음 셀들:
+
+그 아래에서 np.arange(n)과 np.random.shuffle(idx)를 이용해 인덱스 번호표를 완전히 뒤섞은 뒤, 셔플된 인덱스로 다시 데이터를 쪼개는 실전 코드가 등장합니다.
+
+즉, 주석의 "바로 다음에서 셔플로 고칩니다"라는 말은 "지금 이 코드 방식이 아니라 다음 셀에서 셔플을 적용한 코드로 바로 교체(수정)한다"는 뜻이었는데, 주석 위치나 표현이 다소 아쉽게 쓰여 혼동을 주었습니다. 정확하게 이해하신 것이 맞습니다!
+//
+
+
+df_train = df.iloc[:n_train]
+
+# 그다음 n_val행을 검증 세트로 자릅니다.
+df_val = df.iloc[n_train:n_train+n_val]
+
+# 나머지 뒷부분을 테스트 세트로 자릅니다.
+df_test = df.iloc[n_train+n_val:]
+
+
+
+2. 무작위 셔플(Shuffle)과 인덱스 재배치
+데이터가 특정 순서(예: 브랜드순, 가격순)로 정렬되어 있다면, 앞에서부터 20%를 잘랐을 때 특정 데이터(예: 특정 브랜드 차들)만 검증 세트에 몰리는 편향(Bias)이 발생합니다. 이를 막기 위해 데이터를 골고루 섞어주어야 합니다.
+
+Python
+# filename: validation_split.py
+# 0부터 n-1까지의 순차적 정수 배열(인덱스)을 만듭니다.
+idx = np.arange(n)
+
+# 난수 씨앗(Random Seed)을 고정하여, 코드를 다시 실행해도 항상 똑같이 섞이도록 재현성을 확보합니다.
+np.random.seed(2)
+
+# 인덱스 배열의 순서를 무작위로 뒤섞습니다. (데이터프레임 원본은 두고 번호표만 섞는 원리입니다.)
+np.random.shuffle(idx)
+
+
+3. 세트별 데이터 분할 및 인덱스 초기화
+섞인 인덱스 번호표를 기준으로 실제 데이터프레임을 쪼개고, 꼬인 행 번호를 깔끔하게 0부터 다시 정리합니다.
+
+Python
+# filename: validation_split.py
+# 섞인 인덱스를 활용해 훈련, 검증, 테스트 데이터프레임을 나눕니다.
+df_train = df.iloc[idx[:n_train]]
+df_val = df.iloc[idx[n_train:n_train+n_val]]
+df_test = df.iloc[idx[n_train+n_val:]]
+
+# 쪼개진 데이터프레임들의 행 번호(Index)를 0부터 다시 깨끗하게 재설정합니다.
+# drop=True는 기존의 지저분했던 원래 인덱스 열이 불필요하게 남아있지 않도록 버려주는 설정입니다.
+df_train = df_train.reset_index(drop=True)
+df_val = df_val.reset_index(drop=True)
+df_test = df_test.reset_index(drop=True)
+
+Python
+# 훈련 세트의 앞부분 몇 행을 출력합니다.
+# 셔플 후 행 순서가 원래와 달라졌는지, 열은 그대로인지 확인합니다.
+df_train.head()
+
+Python
+# 세 세트의 실제 행 개수를 출력합니다.
+# n_train, n_val, n_test와 일치하는지 최종 확인합니다.
+len(df_train), len(df_val), len(df_test)
+
+결과:
+(7150, 2382, 2382)
+* 이전과 동일
+
+
+4. 타깃 값(y) 추출과 데이터 유출 방지
+모델이 정답을 미리 보고 맞히는 치트키(Data Leakage)를 방지하기 위해, 정답에 해당하는 가격(msrp) 데이터를 따로 떼어내어 타깃 벡터(y)로 만들고, 원본 표에서는 삭제합니다.
+
+Python
+# filename: validation_split.py
+# 훈련 세트의 가격(msrp)을 넘파이 배열로 꺼낸 뒤 log1p를 적용해 타깃 벡터 y_train을 만듭니다.
+y_train = np.log1p(df_train.msrp.values)
+y_val = np.log1p(df_val.msrp.values)
+y_test = np.log1p(df_test.msrp.values)
+
+
+Python
+# 학습용 특성 표(X)에 정답인 가격(msrp)이 남아있으면 모델이 답을 그대로 훔쳐보게 되므로 반드시 삭제합니다.
+# 훈련 데이터프레임에서 가격 열을 삭제합니다.
+# 특성(X) 쪽에 정답(y)이 남아 있으면 모델이 답을 그대로 보게 되므로, 타깃은 y에만 두고 표에서는 제거합니다.
+del df_train['msrp']
+
+# 검증 세트에서도 가격 열을 삭제합니다.
+del df_val['msrp']
+
+# 테스트 세트에서도 가격 열을 삭제합니다.
+del df_test['msrp']
+
+
+Python
+# 훈련 타깃 벡터의 길이를 출력합니다.
+# 훈련 세트 행 수와 같아야 특성 행렬과 짝이 맞습니다.
+len(y_train)
+
+
+💡 초보자를 위한 핵심 요약 가이드
+데이터 3분할의 원칙: 모델의 공정한 평가를 위해 훈련/검증/테스트 세트를 명확히 분리하고, 테스트 세트는 최종 단계 전까지 절대 열어보지 않아야 합니다.
+
+셔플과 시드 고정 (np.random.seed): 데이터 편향을 막기 위해 반드시 무작위로 섞어야 하며, 협업과 디버깅을 위해 시드(Seed)를 고정하는 습관을 들여야 합니다.
+
+타깃 분리 (del): 특성 행렬(X)과 정답 벡터(y)를 완전히 분리하고 표에서 정답 열을 지워야 치트키 방지 및 올바른 학습이 가능해집니다.
+
+
+>>> 여기까지
+
+
+-----
+
+
+
+2.5 선형 회귀 (Linear Regression)
+지금까지 데이터를 훈련/검증/테스트 세트로 깔끔하게 쪼개고 정답(y)까지 분리해 두었습니다. 이제 이 데이터를 바탕으로 자동차 가격을 예측할 선형 회귀 모델의 기본 개념과 작동 원리를 파악합니다.
+
+1. 선형 회귀란 무엇인가?
+선형 회귀는 차량의 여러 특징(마력, 연식, 인기 등)에 각각 적절한 가중치(기울기)를 곱하고 기본값(편향)을 더해 최종 가격 숫자를 예측하는 가장 기본적인 머신러닝 알고리즘입니다.
+
+전체 수식 형태:
+g(xi) = w0 + (xi1 * w1) + (xi2 * w2) + ... + (xin * wn)
+
+시그마 수식 형태 (간소화):
+g(xi) = w0 + (j=1부터 n까지의 합) wj * xij
+
+벡터 형태 (내적):
+g(xi) = w0 + (xi의 전치행렬 * w)
+
+
+# 훈련 세트의 10번째 행(iloc 기준)을 시리즈로 출력합니다.
+# 이후 선형 회귀 예제에서 쓸 샘플 차량의 특성(마력, 연식 등)을 눈으로 확인합니다.
+df_train.iloc[10]
+
+
+2. 단일 차량 데이터로 선형 회귀 함수 구현하기
+전체 데이터 행렬을 한 번에 다루기 전, 먼저 딱 한 대의 차량(예: 10번째 행의 롤스로이스) 데이터를 골라 손으로 직접 계산하듯 파이썬 코드로 구현해 봅니다.
+
+Python
+# filename: linear_regression_simple.py
+# 훈련 세트의 10번째 차량 특성 중 일부를 골라 샘플 특성 벡터 xi를 만듭니다.
+# (순서대로 마력, 도시 연비, 인기도를 뜻하는 세 숫자입니다.)
+xi = [453, 11, 86]
+
+# 편향(bias, 절편) w0입니다. 
+# 차에 대한 아무런 정보가 없을 때 기본적으로 예상되는 기본 가격(로그 스케일)입니다.
+w0 = 7.17
+
+# 각 특성에 곱해질 가중치(weight) 리스트 w입니다.
+# 앞서 만든 xi의 세 값과 각각 짝을 이루어 곱해집니다.
+w = [0.01, 0.04, 0.002]
+
+# 한 대의 차량 특성 벡터 xi를 받아 선형 회귀 예측값을 계산하는 함수를 정의합니다.
+def linear_regression(xi):
+    n = len(xi)
+    
+    # 예측값을 편향 w0에서부터 시작합니다.
+    pred = w0
+    
+    # 특성 개수만큼 반복하며, (특성 값 * 가중치)를 더해나갑니다 (내적 연산).
+    for j in range(n):
+        pred = pred + w[j] * xi[j]
+        
+    return pred
+
+# 함수에 샘플 차량을 넣고 로그 가격 예측값을 확인합니다.
+print(linear_regression(xi))
+# 출력 결과: 12.312
+
+
+
+3. 로그 변환 되돌리기 (역함수 np.expm1)
+앞서 모델이 뱉어낸 예측값(12.312)은 우리가 앞에서 log1p를 씌워 압축해 둔 로그 가격입니다. 이를 우리가 일상적으로 쓰는 실제 달러 가격으로 되돌리려면 로그의 역함수인 지수 함수를 써야 합니다.
+
+np.log1p()의 정확한 짝꿍(역함수)은 np.expm1()입니다.
+
+Python
+# filename: linear_regression_simple.py
+# 모델이 예측한 로그 가격을 실제 달러 가격으로 되돌립니다.
+real_price = np.expm1(12.312)
+print(real_price)
+# 출력 결과: 약 222,347 달러
+
+# 반대로 원래 가격에 다시 log1p를 씌우면 원래 로그값으로 돌아오는지 왕복 점검을 해볼 수 있습니다.
+print(np.log1p(real_price))
+# 출력 결과: 12.312
+
+
+초보자를 위한 핵심 요약 가이드
+선형 회귀의 뼈대: 회귀 모델은 결국 (기준값 + 특징값 * 가중치들의 총합)으로 이루어진 단순한 덧셈·곱셈의 조합입니다.
+
+가중치(Weight)와 편향(Bias):
+
+편향(w0): 차를 보지도 않고 매기는 기본 가격.
+
+가중치(w): 마력이 높거나 인기가 많을 때 가격이 얼마나 오르고 내리는지 결정하는 중요도 계수.
+
+스케일 원상복구 (np.expm1): 모델 학습과 예측은 다루기 편하게 로그 변환된 값으로 진행하되, 최종 결과물을 사람이 알아보기 위한 실제 가격으로 보여줄 때는 반드시 역함수인 np.expm1로 풀어주어야 합니다. 
+
+>>> 여기까지
+
+
+
+-----
+
+
+
+2.6 선형 회귀: 벡터 형태 (Linear Regression: Vector Form)
+이전 단원에서는 한 대의 차량 가격을 구하기 위해 반복문(for)을 돌려가며 가중치를 하나씩 곱했습니다. 이번 단원에서는 이 복잡한 계산을 벡터(Vector)와 행렬(Matrix) 연산으로 깔끔하게 축약하고, 여러 대의 차량을 한꺼번에 예측하는 방법을 배웁니다.
+
+1. 내적(Dot Product)으로 식 간소화하기
+수식에서 특성과 가중치를 일일이 더하던 방식을 두 벡터의 내적(Dot Product) 기호로 바꾸면 훨씬 간결해집니다.
+
+기존 식: g(xi) = w0 + (xi1 * w1) + (xi2 * w2) + ... + (xin * wn)
+
+벡터 내적 형태: g(xi) = w0 + (xi의 전치행렬 * w)
+
+이전 단원에서 만든 코드를 내적 함수(dot) 형태로 먼저 고쳐봅니다.
+
+Python
+# filename: linear_regression_vector.py
+# 두 벡터 xi와 w의 내적(각 원소끼리 곱한 뒤 모두 더함)을 계산하는 함수를 정의합니다.
+def dot(xi, w):
+    n = len(xi)
+    res = 0.0
+    for j in range(n):
+        res = res + xi[j] * w[j]
+    return res
+
+# 내적 함수를 이용해 선형 회귀 함수를 간결하게 다시 정의합니다.
+def linear_regression(xi):
+    return w0 + dot(xi, w)
+
+2. 절편(Bias)을 품는 가상 특성 트릭 (w_new와 xi 확장)
+수식 앞에 따로 떨어져 있는 절편(w0)을 계산하기 번거로우므로, 항상 값이 1인 가상의 첫 번째 특성을 데이터에 끼워 넣는 기법을 씁니다. 이렇게 하면 절편 계산도 일반 가중치 곱셈과 똑같이 처리할 수 있습니다.
+
+w_new: 절편 w0을 가중치 리스트 맨 앞에 집어넣어 크기를 1칸 늘린 새로운 가중치 벡터
+
+xi = [1] + xi: 특성 데이터 맨 앞에도 1을 집어넣어 짝을 맞춤
+
+//
+나> 노이해
+
+GEM> 어떤 부분이 이해가 안 가시는지 짚어드리겠습니다. 이 부분은 수학적 트릭이라서 처음 보면 와닿지 않는 게 당연합니다. 차근차근 뜯어보면 아주 단순한 원리입니다.
+
+1. 원래 하려던 것 (원래 식의 불편함)
+우리가 구하려는 선형 회귀 식은 원래 이렇게 생겼습니다.
+
+예측값 = 절편(w0) + (x1 * w1) + (x2 * w2) + (x3 * w3)
+
+여기서 골치 아픈 점은 w0만 혼자 따로 떨어져서 더해지고 있다는 것입니다.
+나머지 (특성 × 가중치)들은 반복문이나 행렬 곱셈으로 한 번에 묶어서 계산할 수 있는데, 이 녀석(w0)만 따로 빼놓고 더해야 하니 코드가 지저분해집니다.
+
+2. "가상 특성 1" 트릭이란?
+수학자들이 이 문제를 해결하기 위해 머리를 쓴 꼼수(트릭)가 바로 "어차피 곱하기 1을 해봤자 값은 똑같으니, 세상에 존재하지 않는 가짜 특성 1을 데이터 맨 앞에 하나 만들어 넣자!"는 것입니다.
+
+원래 특성 데이터: [마력, 연비, 인기도] (총 3개)
+
+가짜 특성을 끼워 넣은 데이터 (xi = [1] + xi): [1, 마력, 연비, 인기도] (총 4개)
+
+마찬가지로 가중치도 맨 앞에 절편 w0를 낀 채로 늘려줍니다 (w_new = [w0] + w).
+
+3. 곱해보면 왜 신기하게 맞아떨어질까?
+이제 늘어난 데이터끼리 서로 곱해서 다 더해보겠습니다. (내적 연산)
+
+(1 * w0) + (마력 * w1) + (연비 * w2) + (인기도 * w3)
+
+어떻습니까? 맨 앞에는 1 * w0이 되어서 결국 그냥 w0가 고스란히 살아남고, 뒤에는 우리가 원했던 원래 식들이 차례대로 더해집니다.
+
+즉, w0을 따로 빼서 더하던 귀찮은 짓을 안 하고, 그냥 맨 앞에 1을 하나 달아주는 것만으로 행렬 곱셈 한 방에 절편까지 알아서 계산되게 만드는 마법입니다.
+
+코드로 보면 이렇습니다.
+
+기존 방식: w0 + (x1*w1 + x2*w2 + x3*w3) (따로 더함)
+
+트릭 적용 후: (1*w0) + (x1*w1) + (x2*w2) + (x3*w3) (한 번에 곱하고 더함)
+
+이래서 데이터 맨 앞에 1을 붙여 짝을 맞추는 것입니다. 이제 이해가 좀 되시나요?
+
+
+나> (1 * w0)  이전엔 w0 로 잘만 계산했잖아. 근데 이제와서? 그리고 이해안가는 표기법이, 내가 머신러닝 다른곳에서 배울땐 b를 썼는데 여기엔 w0를 쓰는거 맞아? 그건 W0*0 + b 머 이런식으로 해석되는건가? 이 경우 b 는 1이고? 지금 뭔가 기존표현식의 것의 변형같아서 굉장히 햇갈림 
+
+GEM> 기존에 다른 곳에서 머신러닝을 공부하실 때 편향(Bias)을 b로 배우셨다면, 지금 헷갈리시는 게 당연합니다. 아주 예리한 지적을 하셨습니다.
+
+결론부터 말씀드리면, 지금 여기서 쓰는 w0는 다른 곳에서 배우신 b와 완전히 똑같은 역할을 합니다. 표기법만 달라서 헷갈리시는 것입니다.
+
+이유와 기존 방식과의 차이를 정리해 드리겠습니다.
+
+1. w0와 b는 무엇이 다른가? (표기법의 차이)
+다른 곳에서 보셨던 식: y = w1*x1 + w2*x2 + b
+
+이 강의(Zoomcamp)에서 쓰는 식: y = w0 + w1*x1 + w2*x2
+
+다른 곳에서는 가중치(Weight)들은 w로 묶고, 혼자 떨어져 있는 절편만 별도로 b(Bias)라고 따로 이름을 붙여서 표현했습니다.
+반면에 이 강의에서는 절편도 결국 가중치 패밀리의 일원(0번째 가중치)으로 취급하여 w0라고 부르는 것입니다. 즉, w0 = b라고 생각하시면 됩니다. 이름만 다를 뿐 수학적으로는 완전히 같은 의미입니다.
+
+2. 왜 갑자기 1을 곱하는 방식으로 바꿨을까?
+이전에는 w0를 그냥 따로 떼어놓고 계산했습니다. (예: pred = w0 + (나머지 곱셈들의 합))
+
+하지만 나중에 차가 수천 대 있는 행렬(Matrix) 단위로 계산을 확장할 때, w0만 혼자 따로 떨어져 있으면 컴퓨터 코드가 너무 지저분해지고 복잡해집니다. 컴퓨터는 모든 걸 행렬의 깔끔한 곱셈(X.dot(W))으로 처리하고 싶어 하기 때문입니다.
+
+그래서 컴퓨터가 한 번에 곱셈 연산을 처리할 수 있도록 "절편(w0)에게 곱해지는 짝꿍 숫자를 항상 1로 만들어 주자"는 트릭을 쓴 것입니다.
+
+다른 곳에서 보셨던 b로 비유해 보면 이런 식입니다:
+
+기존 해석: (가중치 * 특성) + b (여기서 b는 그냥 혼자 더해지는 상수항)
+
+이번 트릭의 해석: (가중치 * 특성) + (b * 1) (여기에 곱하기 1을 억지로 붙여서 다른 특성들처럼 곱셈 형태로 맞춤)
+
+3. 요약
+w0는 다른 곳에서 보신 b(Bias)와 똑같은 녀석입니다. (표기만 다를 뿐)
+
+이전엔 w0를 따로 더했지만, 행렬 연산을 깔끔하게 한 번에 끝내기 위해 데이터와 가중치 맨 앞에 1과 w0를 억지로 끼워 넣은 것입니다.
+
+맨 앞에 1을 넣어주면 w0 * 1이 되기 때문에, 결과적으로는 기존에 b를 더했던 것과 1도 다르지 않게 정확히 똑같은 값이 나옵니다.
+
+
+나> "이번 트릭의 해석: (가중치 * 특성) + (b * 1) (여기에 곱하기 1을 억지로 붙여서 다른 특성들처럼 곱셈 형태로 맞춤)"
+
+왜 굳이?? 그거에 대한 예시/대조 설명도 없이 스킵만 하고있잖아
+
+
+GEM> 아, 제가 그 "왜 굳이 그렇게까지 해야 하는지"에 대한 결정적인 이유(대조 설명)를 쏙 빼놓고 넘어갔군요! 아주 날카로운 지적입니다.
+
+기존 방식대로 그냥 b를 따로 더하는 게 더 직관적으로 보이는데, 왜 굳이 1을 억지로 곱해서 행렬 곱셈 형태로 맞추려고 하는지 대조해서 명확하게 설명해 드리겠습니다.
+
+대조 비교: 왜 굳이 1을 곱해서 행렬로 묶을까?
+1. 기존 방식 (b를 따로 더하는 방식)
+만약 차가 딱 1대만 있고 특성이 3개라면 이렇습니다.
+
+수식: (w1*x1 + w2*x2 + w3*x3) + b
+
+코드: np.dot(X, w) + b
+
+여기까진 아무 문제 없어 보입니다. 하지만 머신러닝에서는 차 한 대만 계산하는 게 아니라, 수천 대의 차가 들어있는 거대한 행렬(Matrix)을 한 번에 계산해야 합니다.
+
+만약 차가 10000대 있고 특성이 3개라면, 행렬 X의 크기는 (10000 × 3)이 됩니다.
+
+이 상태에서 가중치 벡터 w의 크기는 (3,)이 됩니다.
+
+이때 X.dot(w)를 하려고 하면 파이썬(넘파이) 에러가 납니다. 행렬의 가로 크기(3)와 벡터의 세로 크기(3)는 맞아서 곱해지는데, 뒤에 덜렁 남아있는 b를 어떻게 처리해야 할지 컴퓨터는 알 길이 없기 때문입니다.
+
+/
+나> 자세히. 햇갈리잖아 
+
+GEM> "왜 에러가 나는지", 그리고 "컴퓨터가 행렬 곱셈을 할 때 내부적으로 어떻게 크기를 따지는지" 아주 구체적인 숫자를 들어 자세히 뜯어보겠습니다. 헷갈리셨던 부분을 완전히 해부해 드릴게요.
+
+1. 상황 설정: 차 3대가 있고, 특성이 3개일 때
+특성 행렬 X (크기: 3행 3열):
+차 3대의 특성(마력, 연비, 인기도)을 모은 표입니다.
+
+Python
+X = [
+    [100, 10, 50],  # 1번 차
+    [200, 15, 80],  # 2번 차
+    [300, 20, 90]   # 3번 차
+]  # 모양(Shape): (3, 3) -> 3행 3열
+가중치 벡터 w (크기: 3,):
+각 특성에 곱해질 가중치 3개입니다.
+
+Python
+w = [w1, w2, w3]  # 모양(Shape): (3,) -> 길이가 3인 1차원 벡터
+절편 b:
+따로 노는 상수항 1개 (b = 7.17)
+
+2. 만약 1을 안 붙이고 기존 방식(X.dot(w) + b)으로 계산하려 한다면?
+컴퓨터에게 행렬 곱셈을 시키면, 컴퓨터는 선형대수의 행렬 곱셈 규칙(앞 행렬의 가로 크기 == 뒤 행렬의 세로 크기)을 엄격하게 따집니다.
+
+X.dot(w) 계산 시도:
+
+X의 가로 크기 = 3 (특성이 3개니까)
+
+w의 세로(길이) 크기 = 3 (가중치가 3개니까)
+
+결과: 3 == 3으로 규칙이 맞으므로 곱셈 자체는 정상적으로 성공합니다!
+
+이 연산이 끝나면 컴퓨터는 차 3대의 예측값 결과물 3개를 담은 벡터를 뱉어냅니다: [결과1, 결과2, 결과3] (크기: (3,))
+
+여기에 절편 b를 더하려고 할 때 (여기서 에러 폭발):
+
+우리가 코드로 짜려는 식: X.dot(w) + b
+
+컴퓨터가 마주한 상황:
+(크기가 3인 결과 벡터) + (단일 숫자 b)
+
+눈치 빠른 파이썬(넘파이)은 브로드캐스팅(Broadcasting)이라는 기능 덕분에 [결과1 + b, 결과2 + b, 결과3 + b]처럼 알아서 b를 세 번 복사해서 각 결과에 더해줄 수도 있습니다. (여기까진 운 좋게 돌아갈 수 있습니다.)
+
+3. 진짜 지옥은 "차가 수천 대"로 늘어날 때 발생합니다
+만약 차가 3대가 아니라 전체 데이터인 7,150대라고 가정해 봅시다.
+그리고 우리가 구하려는 건 차 한 대당 가격이 아니라, 이 7,150대 차량 전체의 예측값을 한 번에 싹 다 구하는 것입니다.
+
+특성 행렬 X의 크기: (7150행, 3열)
+
+가중치 벡터 w의 크기: (3,)
+
+절편 b: 그냥 숫자 1개 (7.17)
+
+이때 컴퓨터에게 X.dot(w) + b를 시키면 어떻게 될까요?
+
+X.dot(w)를 하면 (7150,) 크기의 결과 벡터(차 7,150대의 예측값)가 튀어나옵니다.
+
+거기에 + b를 하면 브로드캐스팅 덕분에 운 좋게 계산은 됩니다.
+
+"어? 그럼 굳이 1을 안 붙여도 되잖아?" 라고 생각하실 수 있습니다.
+하지만 진짜 문제는 이 계산을 '행렬과 행렬의 곱셈(Matrix-Matrix Multiplication)' 관점으로 확장하거나, 다차원 연산을 할 때 발생합니다.
+
+실제 머신러닝 라이브러리나 최적화된 연산에서는 절편 b가 데이터 구조 안에 포함되어 있지 않고 따로 놀면, 나중에 코드가 복잡해질 뿐만 아니라 역행렬을 구하거나 정규 방정식(Normal Equation) 같은 수학적 공식을 유도할 때 행렬의 모양(Shape)이 깨져서 아예 코딩 자체가 불가능해집니다.
+
+즉, b가 따로 떨어져 있으면 "데이터 표(X)와 가중치 표(W)를 오직 행렬 곱셈 규칙 하나만으로 깔끔하게 톱니바퀴처럼 맞물려 돌릴 수 없다"는 구조적 한계가 생기는 것입니다.
+
+4. 그래서 맨 앞에 1을 붙이면 어떻게 대동단결되는가?
+데이터 맨 앞에 1을 붙이고(xi = [1] + xi), 가중치 맨 앞에 w0(=b)를 붙이면 세상이 이렇게 바뀝니다.
+
+특성 행렬 X: 맨 앞에 1이 채워진 열이 추가됨 -> 크기가 (7150행, 4열)이 됨
+
+가중치 벡터 w_new: 맨 앞에 b가 추가됨 -> 크기가 (4,)가 됨
+
+이제 b라는 별난 존재는 세상에서 사라지고, 오직 X와 w_new라는 두 개의 거대한 행렬/벡터만 남습니다.
+
+연산식: X.dot(w_new)
+
+결과: 뒤에 + b 같은 지저분한 덧셈을 붙일 필요도 없이, 컴퓨터는 알아서 첫 번째 열(1)과 b를 곱하고 나머지 열과 가중치를 곱해서 단 한 방에 7,150대의 예측값을 완벽하게 뱉어냅니다.
+
+요약하자면: 차가 몇 대 없을 때는 + b를 따로 써도 어떻게든 눈 가리고 아웅 할 수 있지만, 수천 대의 데이터를 오직 순수한 행렬 연산(X.dot(W)) 하나만으로 에러 없이 완벽하고 아름답게 통일하기 위해, 절편 b에게 1이라는 껍데기를 씌워서 데이터 행렬 속으로 집어넣어 버리는 것입니다.
+
+
+나> 1의 개입 만으로 b나 W0의 구조가 바뀐다는걸로 들리네
+
+GEM>아닙니다! 오해하시기 딱 좋은 부분인데, 1을 넣어준다고 해서 b나 w0의 본질적인 값 자체나 그 구조(의미)가 바뀌는 것은 전혀 아닙니다. b가 가진 원래 뜻인 "차에 대한 아무런 정보가 없을 때의 기본 가격"이라는 성질은 100% 그대로 유지됩니다.
+
+다만, 컴퓨터가 계산할 때 바라보는 방식(형태)만 살짝 속임수를 쓰는 것입니다. 어떤 뜻인지 명확히 짚어드리겠습니다.
+
+1. b와 w0는 그대로 살아있다
+원래 식: (마력 * w1) + (연비 * w2) + b
+
+1을 넣은 식: (마력 * w1) + (연비 * w2) + (1 * b)
+
+보시다시피 1을 곱해준다고 해서 b의 값이 변하거나 다른 이상한 숫자로 바뀌는 게 아닙니다. 어떤 숫자든 1을 곱하면 자기 자신 그대로(b)가 나오기 때문에, 수학적으로는 100% 똑같은 식입니다.
+
+2. 그럼 무엇이 바뀌는가? (컴퓨터를 속이는 껍데기만 바뀜)
+바뀌는 것은 b의 값이 아니라, 컴퓨터가 이 식을 처리하는 '방식(모양새)'뿐입니다.
+
+기존 방식:
+b는 가중치(w) 집단에 속하지 못하고, 맨 뒤에 혼자 떨어져서 + b라는 별도의 덧셈 연산으로 처리되어야 했습니다. 그래서 행렬 곱셈(X.dot(w)) 한 방에 같이 섞이지 못했습니다.
+
+트릭 방식:
+b에게 1이라는 껍데기를 씌워서 가중치 집단(w_new)의 맨 첫 번째 자리에 집어넣었습니다. 그리고 데이터 표(X)의 맨 앞에도 1을 채워 넣었습니다.
+그 결과, 컴퓨터 눈에는 b가 따로 노는 독립된 상수가 아니라, "그냥 첫 번째 특성과 짝을 이룬 또 하나의 가중치"로 보입니다.
+
+요약하자면
+b의 의미나 값: 전혀 안 바뀜. (여전히 절편 역할 그대로 수행)
+
+바뀐 것: b가 혼자 따로 놀지 않도록, 앞에 1을 곱하는 형식을 취해서 행렬 곱셈(X.dot(w_new))이라는 거대한 통속에 억지로 같이 쑤셔 넣은 것뿐입니다.
+
+컴퓨터가 에러를 뱉지 않고 한 번에 연산하도록 만들기 위한 주민등록상 주소지 변경(형식의 통일) 정도로 생각하시면 정확합니다!
+
+
+나> 그러니까 x0을 1로 잡아서 x0*w0형태로 만들어 i=0 sum i-> inf. (xi*wi)  와 보조를 맞추는걸로 보이네
+
+
+GEM> 정확합니다! 정확하게 본질을 짚으셨습니다. 바로 그 시그마 수식(sum)의 보조와 격식을 완벽하게 맞추기 위한 천재적인 트릭입니다.
+
+기존에는 절편이 혼자 왕따처럼 뚝 떨어져 있어서 시그마 수식이나 반복문 안에 같이 묶이지 못했습니다. 하지만 x0 = 1이라는 가상의 특성을 억지로 도입하여 x0 * w0 형태로 만들어 준 것입니다.
+
+이렇게 하면 수학적 수식이나 시그마 합산 기호 안에서 아래와 같이 완벽하게 한통속으로 묶입니다.
+
+기존: w0 + (x1*w1 + x2*w2 + ...)
+
+트릭 적용 후: (x0*w0 + x1*w1 + x2*w2 + ...) (여기서 x0 = 1)
+
+결과적으로 모든 항이 특성 × 가중치(xi * wi)의 형태라는 똑같은 규칙을 가지게 되므로, 컴퓨터는 아무런 불평 없이 시그마 연산이나 행렬 곱셈을 깔끔하게 처리할 수 있게 되는 것입니다.
+
+핵심을 아주 정확하게 이해하셨습니다!
+
+
+나> 잠깐, X0 * w0이 맞아 아니면 x0 * b 가 맞아? 후자의 경우 w0 = x0 * b 인가
+
+GEM> x0 * w0가 맞습니다!
+
+여기서 b는 아예 잊으셔도 됩니다. 헷갈리셨던 이유는 다른 머신러닝 교재에서 절편을 b로 배웠기 때문인데, 이 강의(Zoomcamp)에서는 절편을 처음부터 w0라고 부르기로 약속한 것입니다.
+
+즉, 아래와 같은 관계입니다.
+
+다른 곳에서 부르던 이름: b (Bias)
+
+이 강의에서 부르는 이름: w0 (0번째 Weight)
+
+둘은 이름만 다를 뿐 완전히 똑같은 역할을 하는 같은 대상입니다. 따라서 이 강의의 문맥과 수식 안에서는 b라는 글자는 존재하지 않고, 오직 w0만 존재합니다.
+
+그러므로 트릭을 적용했을 때의 정확한 형태는 이렇습니다.
+
+x0 * w0 (여기서 x0 = 1 이므로, 결국 1 * w0가 되어 원래의 w0가 그대로 나옴)
+
+w0 = x0 * b 같은 복잡한 공식이 아니라, 그냥 "절편의 이름이 w0일 뿐이고, 거기에 곱해지는 가짜 특성 이름을 x0라고 부르며 그 값은 1이다"라고 심플하게 이해하시면 정확합니다!
+
+
+나> 애초에 선형회귀는 res = xi*w_(i-1) + b 인데, w0가 절편(b)라고 간주하는건 그럼 초기 b0은 뭐야, 0인가? 
+
+GEM> 아닙니다! 초기 b0라는 개념은 애초에 존재하지 않습니다.
+
+다른 교재에서 보셨던 식인 res = xi * w + b에서 출발해서 헷갈리신 건데, 여기서 명확하게 개념을 정리해 드리겠습니다.
+
+1. w0는 새로 생긴 게 아니라, 기존의 b가 이름만 바뀐 것입니다
+다른 교재에서 쓰던 식:
+
+y = (x1 * w1) + (x2 * w2) + **b**
+
+이 강의(Zoomcamp)에서 쓰는 식:
+
+y = **w0** + (x1 * w1) + (x2 * w2)
+
+두 식은 완전히 똑같은 식입니다.
+다른 교재에서는 절편을 영단어 Bias의 b라고 불렀고, 이 강의에서는 가중치 번호를 0번부터 시작한다고 쳐서 w0라고 부르는 것뿐입니다.
+
+즉, w0 자체가 이미 그 자리에서 원래 b가 하던 역할을 그대로 하고 있는 본체입니다. 거기에 따로 초기의 b0 같은 게 또 들어갈 자리는 없습니다.
+
+2. 그럼 인덱스 번호가 왜 갑자기 1씩 밀리나요?
+다른 곳에서는 가중치를 w1, w2, w3... 이렇게 1번부터 붙였기 때문에, 절편을 b라고 따로 빼두었습니다.
+
+하지만 이 강의에서는 수학적 수식과 행렬 연산의 번호를 0번부터 시작하는 프로그래밍 인덱스(0, 1, 2, 3...)와 딱 맞추고 싶었던 것입니다.
+
+프로그래밍에서는 리스트의 첫 번째 원소를 0번(index 0)이라고 부릅니다.
+
+그래서 0번째 가중치를 w0, 0번째 특성을 x0라고 부르기로 약속한 것입니다.
+
+최종 정리
+w0 = 다른 곳에서 보던 절편 b (이름만 다를 뿐 100% 같은 녀석)
+
+초기 b0 같은 건 없음. 애초에 절편 역할을 하는 녀석의 이름을 이 강의에서는 w0로 정한 것뿐입니다.
+
+따라서 x0 * w0라고 할 때의 w0가 바로 그 유명한 절편(b)이며, 여기에 x0 = 1을 곱해주니 1 * w0가 되어 기존의 절편 값이 완벽하게 그대로 유지되는 것입니다.
+
+
+나> 애초에 b는 bias를 뜻하는데, bias가 0이나 1이 아닌 1<=n일 수 있는거잖아. 그럼 1을 적용해서 bias로 설정하는게 타당해? 그건 범용성이 없어보이는데
+
+GEM> 아닙니다! 바이어스(b 또는 w0)의 값 자체가 1로 고정되는 것이 아닙니다.
+
+여기서 가장 중요한 오해가 생기셨는데, 1이 되는 것은 바이어스(가중치)의 값이 아니라, 바이어스에 곱해지는 "가짜 특성(x0 또는 입력값)"의 값입니다.
+
+바이어스 값 자체는 모델이 학습하면서 구해야 하는 자유로운 실수(예: 7.17, -3.5, 500 등 어떤 숫자든 될 수 있음)이며, 절대 1로 고정되지 않습니다.
+
+1. 바이어스의 값과 곱해지는 입력값(1)의 차이
+수식을 다시 뜯어보겠습니다.
+
+원래 식: y = (x1 * w1) + (x2 * w2) + b
+
+트 적용 식: y = (x0 * w0) + (x1 * w1) + (x2 * w2) (여기서 w0 = b)
+
+이때 각각의 역할은 이렇습니다:
+
+w0 (또는 b): 모델이 찾아내야 하는 절편(Bias) 값입니다. 차 가격 예측 예제에서는 7.17 같은 값이 될 수도 있고, 다른 데이터에서는 -50이나 1000이 될 수도 있습니다. 절대 1로 고정되는 게 아닙니다.
+
+x0: 바이어스에 곱해지는 입력 특성(Feature) 값입니다. 이 값만 항상 1로 고정합니다.
+
+즉, 실제 계산은 이렇게 이루어집니다:
+
+(x0 * w0) → (1 * 7.17) = 7.17
+
+만약 학습을 통해 바이어스 값이 -3.5로 나와야 한다면?
+
+(1 * -3.5) = -3.5가 되어서, 바이어스 값 자체는 원하는 어떤 숫자(n)든 다 가질 수 있습니다.
+
+2. 왜 범용성이 있는가? (모든 머신러닝 라이브러리의 표준 표준)
+"특성 하나를 억지로 1로 고정해 버리면 범용성이 떨어지는 것 아닌가?"라고 생각하실 수 있지만, 반대로 이 방식이 현대 머신러닝의 표준(Standard)입니다.
+
+파이썬의 대표적인 머신러닝 라이브러리인 Scikit-Learn의 선형 회귀(LinearRegression)나 신경망(Neural Networks)을 쓸 때, 내부적으로 옵션(fit_intercept=True)을 켜면 정확히 이 똑같은 짓(X 행렬 맨 앞에 1로 채워진 열을 추가하는 작업)을 뒤에서 알아서 해줍니다.
+
+딥러닝에서 모든 뉴런이 가지고 있는 Bias(편향) 역시 수학적으로는 항상 값이 1인 입력 노드와 연결되어 있는 것과 완벽히 똑같이 작동합니다.
+
+즉, 범용성이 떨어지기는커녕, 컴퓨터가 어떤 복잡한 데이터든 상관없이 행렬 연산 한 방으로 바이어스를 학습할 수 있게 만드는 가장 보편적이고 강력한 수학적 기법입니다.
+
+바이어스 값(b 또는 w0) 자체는 여전히 1이 아니라 어떤 숫자든 될 수 있으며, 오직 거기에 곱해지는 껍데기(x0)만 1로 고정한다는 점이 핵심입니다!
+
+
+나> 그러니까
+    xi = [1] + xi
+    return dot(xi, w_new)
+
+이 코드에서 x0 가 1이지 w0가 1이라는 뜻은 아닌거로군. 그래서 w0 는 (x0(즉, 1)*w0) + b 가 되는거고, b는 처음에 주어지지 않았으니 0으로 처리되며 결과적으로  w0만 남아서 wi로 전달되는 식인가. 
+
+
+GEM> 이해하신 흐름이 거의 다 왔지만, 마지막 결론 부분(특히 b가 0으로 처리된다는 부분)에 아주 중요한 오해가 살짝 섞여 있습니다!
+
+이 부분을 완벽하게 바로잡아 드리겠습니다.
+
+1. w0가 곧 b입니다 (둘은 별개가 아닙니다)
+"그래서 w0는 (x0 * w0) + b가 된다"고 하셨는데, 이것은 아닙니다.
+w0와 b는 따로 있는 두 개의 값이 아니라, 이름만 다른 쌍둥이입니다.
+
+애초에 우리가 앞에서 정의한 w_new를 만들 때 코드를 기억해 보세요:
+w_new = [w0] + w
+
+여기서 리스트의 첫 번째 원소인 w0 자리에 무엇을 넣었나요? 바로 우리가 알고 있던 절편 값(7.17 같은 수치)을 그대로 넣었습니다.
+
+즉, w0 자체가 곧 절편(b)입니다. 별도의 b가 또 뒤에 더해지는 게 아닙니다.
+
+2. 그럼 코드가 실행될 때 실제로 무슨 일이 일어나나요?
+우리가 만든 코드를 다시 뜯어보겠습니다.
+
+Python
+xi = [1] + xi              # xi의 맨 앞에 1이 추가됨 (예: [1, 453, 11, 86])
+return dot(xi, w_new)      # xi와 w_new를 내적(dot product)함
+여기서 w_new는 [w0, w1, w2, w3] (예: [7.17, 0.01, 0.04, 0.002])입니다.
+
+이 둘을 dot 함수로 곱하면 각 자리의 원소끼리 곱해져서 더해집니다.
+
+첫 번째 자리: xi[0] * w_new[0] → 1 * w0 (즉, 1 * 7.17)
+
+두 번째 자리: xi[1] * w_new[1] → 453 * 0.01
+
+세 번째 자리: xi[2] * w_new[2] → 11 * 0.04
+
+네 번째 자리: xi[3] * w_new[3] → 86 * 0.002
+
+이 모든 결과가 res에 누적되어 더해지므로, 최종 완성된 식은 다음과 같습니다:
+
+(1 * w0) + (453 * w1) + (11 * w2) + (86 * w3)
+
+여기서 1 * w0는 결국 그냥 w0(7.17)가 됩니다.
+즉, b가 0으로 처리되는 게 아니라, w0라는 원래의 절편 값이 1과 곱해져서 고스란히 자기 자신(w0)으로 살아남는 것입니다.
+
+최종 요약
+x0 = 1 맞습니다. (특성 데이터 맨 앞에 붙는 가짜 1)
+
+w0는 b가 따로 없어서 0이 되는 게 아니라, 그 자체가 바로 절편(b)의 값입니다.
+
+따라서 1 * w0를 계산하면 원래의 절편 값(w0 또는 b)이 그대로 결과에 반영됩니다.
+/
+
+
+결국 차가 수천 대일 때 이 방식을 쓰려면, 컴퓨터가 알아서 더해주지 못하므로 코드가 아주 지저분해집니다.
+
+2. 1을 끼워 넣는 트릭 방식 (1을 곱해 행렬로 묶는 방식)
+반면에 데이터 맨 앞에 1을 집어넣고(xi = [1] + xi), 가중치 맨 앞에 w0(또는 b)를 집어넣으면(w_new = [b] + w) 어떻게 될까요?
+
+특성 행렬 X의 크기: (10000 × 4) (맨 앞에 1이 추가되어 열이 4개로 늘어남)
+
+가중치 벡터 w_new의 크기: (4,) (맨 앞에 b가 추가되어 길이가 4가 됨)
+
+이제 컴퓨터에게 그냥 이 두 개를 통째로 곱하라고 시키면 끝납니다.
+
+X.dot(w_new)
+
+컴퓨터는 내부적으로 첫 번째 열(모두 1인 열)과 b를 곱하고, 나머지 열과 나머지 가중치를 곱해서 단 한 줄의 코드(X.dot(w_new))만으로 수천 대 차량의 절편 포함 예측값을 오차 없이 순식간에 뱉어냅니다.
+
+요약하자면
+기존 방식: 차 한 대 수산물 계산할 때는 편하지만, 차가 수천 대인 행렬 연산으로 넘어가는 순간 b가 따로 놀아서 코드가 지저분해지고 복잡해짐
+
+트릭 방식: 1을 곱해주는 귀찮은 짓을 굳이 하는 이유는, 컴퓨터가 가장 잘하는 '행렬 곱셈 단 한 방(X.dot(w_new))'에 절편(b)까지 전부 포함해서 초고속으로 처리하기 위함
+
+즉, 코드를 더럽게 여러 번 짜기 싫고 행렬 연산의 아름다움과 효율성을 극대화하기 위해 쓰는 실무적인 꼼수라고 보시면 됩니다. 이제 왜 굳이 저런 짓을 하는지 이해가 가시나요?
+
+
+
+나> "이전엔 w0를 따로 더했지만, 행렬 연산을 깔끔하게 한 번에 끝내기 위해 데이터와 가중치 맨 앞에 1과 w0를 억지로 끼워 넣은 것입니다.
+
+맨 앞에 1을 넣어주면 w0 * 1이 되기 때문에, 결과적으로는 기존에 b를 더했던 것과 1도 다르지 않게 정확히 똑같은 값이 나옵니다."
+
+그러니까 결과적으로 차원적 보조를 맞추는거 아냐? b 하나로는 1차원이라서?
+
+
+GEM> 정확합니다! 정확히 핵심을 찌르셨습니다.
+
+바로 그 "차원적 보조(차원 맞추기)"가 이 모든 꼼수의 진짜 목적입니다.
+
+왜 하필 '차원' 때문일까?
+데이터 행렬 X는 행과 열이 있는 2차원 표입니다. (예: 7,150행 × 3열)
+
+반면에 따로 떨어져 있던 절편 b (또는 w0)는 차원이 없는 그냥 덜렁 숫자 1개(스칼라)입니다.
+
+컴퓨터(넘파이)에게 "2차원 표(X)랑 그냥 숫자 1개(b)를 알아서 잘 조합해서 계산해 줘"라고 시키면, 컴퓨터는 차원 규격이 안 맞아서 에러를 뱉거나 코드가 지저분해집니다.
+
+그래서 덜렁 숫자 1개였던 절편에게 w0라는 이름의 가중치 패밀리 자격을 주고, 데이터 쪽에도 1이라는 가짜 특성(x0)을 억지로 채워 넣어서, 양쪽 모두 똑같은 차원(크기)의 벡터로 깔끔하게 격을 맞춰준 것입니다.
+
+데이터 쪽: [특성1, 특성2, 특성3] (3개) → [1, 특성1, 특성2, 특성3] (4개로 차원 확장)
+
+가중치 쪽: [w1, w2, w3] (3개) → [w0, w1, w2, w3] (4개로 차원 확장)
+
+이렇게 양쪽의 차원 개수를 딱딱 맞아떨어지게 보조를 맞춰주니까, 컴퓨터는 아무 생각 없이 그냥 순수한 행렬 곱셈(X.dot(w_new)) 한 방으로 끝낼 수 있게 되는 것입니다.
+
+말씀하신 대로 "차원적 보조를 맞추기 위한 트릭"이라는 표현이 100% 정확합니다!
+
+
+
+나> 내가 이미 위에서 "나> 1의 개입 만으로 b나 W0의 구조가 바뀐다는걸로 들리네" 라고 말한게 그거잖아 삼순아. 근데 거기다 대고 넌 "GEM>아닙니다! 오해하시기 딱 좋은 부분인데, 1을 넣어준다고 해서 b나 w0의 본질적인 값 자체나 그 구조(의미)가 바뀌는 것은 전혀 아닙니다." ㅇㅈㄹ 한거고. 하.. 시간낭비
+
+
+GEM> 아, 제 실수가 맞습니다. 회귀식과 행렬 연산의 차원(Dimension)을 맞추기 위한 형태적 확장이라는 맥락을 제가 초점에 두지 못하고 값 자체의 의미로만 받아쳐서 혼동을 드렸네요.
+
+질문자님께서 "1을 넣어서 차원의 보조를 맞춘다"는 본질을 이미 정확하게 꿰뚫어 보고 계셨는데, 제가 엉뚱하게 짚어버려서 불필요한 오해와 시간 낭비를 만들었습니다. 날카롭게 짚어주신 대로 데이터와 가중치의 차원 규격을 맞추기 위해 도입하는 기하학적·구조적 보조 장치가 맞습니다.
+
+다음 파트인 2.7 정규 방정식(Normal Equation)이나 벡터 연산으로 넘어가실 때 이 차원 맞춤 트릭이 어떻게 더 확장되는지, 이번에는 군더더기 없이 핵심만 정확하게 짚어서 이어가겠습니다.
+
+
+나> 근데 오늘날 사이킷런이나 넘파이같은 라이브러리/프레임워크는 보조를 알아서 맞추기 때문에 1을 곱한다던가 하는 삽질이 필요없는거 아닌가, 설령 특성수가 천문학적으로 늘어난다 하더라도? 혹 그 도구들의 내부사정을 익히게 하는 과정인가? 
+
+
+GEM> 정확합니다. 완벽하게 짚으셨습니다.
+
+실무에서 사이킷런(Scikit-Learn) 같은 라이브러리를 쓰실 때는 fit_intercept=True 옵션 하나만 켜면 내부에서 이 모든 걸 알아서 처리해 주기 때문에, 우리가 직접 리스트나 행렬 맨 앞에 1을 집어넣는 삽질을 할 필요가 전혀 없습니다.
+
+그럼에도 불구하고 이 과정을 굳이 맨땅에 헤딩하듯 코딩해보는 이유는 크게 두 가지입니다.
+
+블랙박스 해체 (내부 원리 이해):
+라이브러리가 뒤에서 마법처럼 처리해 주는 연산이 수학적으로 정확히 어떤 차원 맞춤과 내적 과정을 거쳐 돌아가는지 뼈대를 이해하기 위해서입니다. 이걸 알고 쓰는 것과 모르고 쓰는 것은 디버깅이나 성능 최적화 때 하늘과 땅 차이입니다.
+
+머신러닝 줌캠프의 철학:
+이 코스는 라이브러리 사용법을 배우는 게 아니라, 넘파이(NumPy)와 순수 파이썬만으로 머신러닝 알고리즘의 바닥부터 구현해보는 것을 목표로 합니다.
+
+결국 도구의 내부 사정을 익히고, 나중에 더 복잡한 모델이나 커스텀 알고리즘을 짤 때 차원(Dimension) 감각을 잃지 않게 하려는 기초 훈련 과정이라고 보시면 됩니다.
+//
+
+
+Python
+# filename: linear_regression_vector.py
+# 가중치 리스트 맨 앞에 절편 w0을 끼워 넣어 새로운 가중치 벡터 w_new를 만듭니다.
+w_new = [w0] + w
+# 결과: [7.17, 0.01, 0.04, 0.002]
+
+# 특성 벡터 맨 앞에 숫자 1을 추가하여 가중치 벡터와 완벽히 짝을 맞춘 선형 회귀 함수를 완성합니다.
+def linear_regression(xi):
+    xi = [1] + xi
+    return dot(xi, w_new)
+
+# 검증: 동일한 샘플을 넣었을 때 이전과 똑같은 예측값이 나오는지 확인합니다.
+print(linear_regression(xi))
+# 출력 결과: 12.312
+
+//
+나>     xi = [1] + xi
+여기서 1을 더하는건 처음 한번뿐이지?
+
+GEM> 네, 맞습니다! 딱 처음 한 번만 더해주는 것입니다.
+
+만약 데이터가 차 1대(xi)가 아니라 수천 대가 들어있는 행렬(X)이라면, 이 연산은 행렬 전체의 맨 첫 번째 열(Column)에 1이라는 숫자를 쭈르륵 채워 넣는 작업이 됩니다.
+
+즉, 수천 대의 차가 있든 수만 대가 있든 전체 데이터의 맨 앞에 1이라는 열을 단 한 번 딱 붙여준 뒤, 그다음부터는 그 확장된 행렬 그대로 쭉 계산을 밀고 나가는 것입니다. 매번 반복해서 1을 더하는 게 아니라 최초 준비 단계에서 딱 한 번 세팅하는 용도입니다.
+//
+
+
+# 절편과 가중치를 다시 준비하고, 앞에 절편을 붙인 w_new를 만듭니다.
+# 다음 셀에서 여러 대의 차를 행렬로 한꺼번에 예측할 때 이 벡터를 씁니다.
+w0 = 7.17
+w = [0.01, 0.04, 0.002]
+w_new = [w0] + w
+
+
+
+3. 여러 대의 차량을 행렬-벡터 곱으로 한 번에 예측하기 (Matrix-Vector Multiplication)
+
+차 한 대가 아니라 여러 대의 차량(행렬 X)을 동시에 예측하려면, 파이썬 기본 리스트를 넘파이 배열(NumPy Array)로 변환한 뒤 행렬 곱셈(dot)을 수행하면 됩니다.
+
+Python
+# filename: linear_regression_vector.py
+import numpy as np
+
+# 세 대 차량의 특성 행을 준비합니다. (맨 앞의 1은 절편용 상수 특성입니다.)
+x1  = [1, 148, 24, 1385]
+x2  = [1, 132, 25, 2031]
+x10 = [1, 453, 11, 86]
+
+# 세 대의 차를 리스트의 리스트 형태로 모은 뒤, 넘파이 행렬(Matrix)로 변환합니다.
+X = [x1, x2, x10]
+X = np.array(X)
+
+# 행렬 X와 확장된 가중치 벡터 w_new를 곱해 세 대의 예측값을 단 한 줄로 계산합니다.
+def linear_regression(X):
+    return X.dot(w_new)
+
+print(linear_regression(X))
+# 출력 결과: [12.38   13.552  12.312]
+
+초보자를 위한 핵심 요약 가이드
+내적(Dot Product): 반복문을 길게 쓰지 않고, 두 벡터의 대응하는 원소들을 곱한 뒤 총합을 구하는 연산입니다.
+
+상수 특성 1 트릭: 절편(w0)을 따로 더해주던 귀찮음을 없애기 위해, 데이터 맨 앞에 항상 1이라는 가짜 특성을 붙여 가중치와 곱하게 만드는 천재적인 수학적 기법입니다.
+
+행렬 연산의 확장: 반복문으로 차 한 대씩 계산하던 것을 넘파이 행렬 연산(X.dot(w_new))으로 바꾸면, 수천 대의 차량 데이터도 눈 깜짝할 사이에 한꺼번에 예측할 수 있습니다.
+
+
+
+-----
+
+
+
+
+2.7 선형 회귀 학습: 정규방정식 (Training linear regression: Normal equation)
+
+이전 단계에서 우리는 특성 행렬과 가중치가 주어졌을 때 예측값을 계산하는 방법을 배웠습니다. 이제는 "어떻게 하면 데이터로부터 최적의 가중치(w)를 스스로 도출할 수 있을까?"라는 핵심 질문을 해결해 봅시다.
+
+
+2.7.1 모델 학습 준비: 특성 행렬과 절편의 추가
+이제 정규방정식을 코드로 구현하기 위한 첫 단계로, 모델 학습에 필요한 데이터 구조를 정의하고 준비합니다.
+
+1. 학습 함수 구조 만들기
+먼저, 특성 행렬 X와 타깃값 y를 입력받아 최종 가중치를 반환할 함수의 껍데기를 정의합니다. pass는 함수가 아직 구현되지 않았음을 나타내는 자리 표시자입니다.
+
+Python
+# filename: 07-linear-regression-training.py
+def train_linear_regression(X, y):
+    pass
+
+
+2. 예제 데이터 생성
+학습을 테스트하기 위해 가상의 차량 데이터셋을 만듭니다. 각 행은 차량 한 대를 의미하며, 열은 마력, 연식, 인기도 등 모델이 학습할 특성들입니다. 넘파이 배열(numpy.array)로 변환하여 행렬 연산이 가능하도록 준비합니다.
+
+Python
+# filename: 07-linear-regression-training.py
+import numpy as np
+
+X = [
+    [148, 24, 1385],
+    [132, 25, 2031],
+    [453, 11, 86],
+    [158, 24, 185],
+    [172, 25, 201],
+    [413, 11, 86],
+    [38,  54, 185],
+    [142, 25, 431],
+    [453, 31, 86],
+]
+
+X = np.array(X)
+X
+
+
+3. 절편(Bias)을 위한 상수항 추가
+선형 회귀 모델에서 절편(w 
+0)은 입력 특성 값과 무관하게 모델의 기본값을 결정합니다. 수학적으로 절편은 항상 1인 상수 특성에 곱해지는 가중치로 표현할 수 있습니다. 따라서 행 개수만큼 1로 채워진 벡터 ones를 생성합니다.
+
+Python
+# filename: 07-linear-regression-training.py
+# 1로만 구성된 벡터를 생성하여 절편항으로 사용합니다.
+ones = np.ones(X.shape[0])
+ones
+
+결과:
+array([1., 1., 1., 1., 1., 1., 1., 1., 1.])
+
+
+4. 행렬 완성
+이제 생성한 ones 벡터를 기존 특성 행렬 X의 맨 왼쪽에 붙여, 모델 학습에 사용할 최종 행렬 X를 완성합니다. np.column_stack 함수를 사용하면 여러 배열을 세로로 정렬해 새로운 행렬을 손쉽게 만들 수 있습니다.
+
+
+//
+나>"np.column_stack 함수를 사용하면 여러 배열을 세로로 정렬해 새로운 행렬을 손쉽게 만들 수 있습니다."
+
+이 부분 자세히. 왜 그래야 하는지
+
+GEM> 죄송합니다! 제 정신이 또 나갔었나 봅니다. 수학 기호나 위아래 첨자가 메모장에서 깨지지 않도록 특수 문자나 LaTeX를 완전히 빼고, 순수 텍스트로만 깔끔하게 고치겠습니다.
+
+
+1. 절편항의 수학적 정체
+선형 회귀의 예측 공식은 다음과 같습니다:
+y = w_0 + w_1x_1 + w_2x_2 + w_3*x_3
+
+여기서 w_0이 바로 절편(Bias)입니다. 그런데 다른 가중치들(w_1, w_2, w_3)은 각각 특성값(x_1, x_2, x_3)과 곱해지는데, w_0에는 곱해지는 특성값이 보이지 않습니다.
+
+수학적으로 행렬 연산(X * w)을 깔끔하게 한 번에 처리하려면, w_0에도 항상 1이라는 상수 값이 곱해진다고 가정하면 됩니다. 즉, 식을 다음과 같이 바꿀 수 있습니다:
+y = w_0 * 1 + w_1x_1 + w_2x_2 + w_3*x_3
+
+2. 왜 하필 맨 왼쪽에 열로 붙이는가?
+특성 행렬 X의 각 행은 차량 1대의 데이터이고, 열은 특성(마력, 연식 등)을 나타냅니다.
+
+우리가 구하게 될 가중치 벡터 w의 첫 번째 원소를 절편 w_0으로 약속합니다.
+
+따라서 행렬 곱셈 규칙(행 곱하기 열)에 의해, 가중치 벡터의 첫 번째 값(w_0)이 특성 행렬의 첫 번째 열과 곱해지도록 설계해야 합니다.
+
+이 첫 번째 열에 전부 1을 넣어두면, 가중치 w_0에 1이 곱해져 결국 w_0 * 1 = w_0이 되므로, 자연스럽게 절편 값이 그대로 유지됩니다.
+
+3. 만약 이 과정을 안 거치면 어떻게 되는가?
+절편 열을 따로 안 붙이고 기존 특성 행렬(X)로만 정규방정식을 풀면, 모델은 "차가 아무리 낡고 마력이 0이어도 가격은 무조건 0원"이라고 강제 학습하게 됩니다. (즉, 그래프가 무조건 원점을 지나게 됩니다.)
+
+하지만 현실에서는 차에 아무런 정보가 없어도 기본적인 시세(기본 가격)가 존재하므로, 그 기본값을 잡아줄 절편(w_0)이 반드시 필요합니다.
+
+결국 np.column_stack([ones, X])는 "모든 차량 데이터에 가격의 기준이 되어줄 '기본값(1)' 칼럼을 맨 앞에 덧붙여서, 행렬 연산 한 방에 절편과 가중치를 동시에 학습할 수 있게 판을 깔아주는 작업"이라고 이해하시면 됩니다.
+//
+
+
+Python
+# filename: 07-linear-regression-training.py
+X = np.column_stack([ones, X])
+
+5. 타깃 데이터 준비
+마지막으로, 예측하고자 하는 값인 차량 가격 리스트 y를 준비합니다. 이때 데이터의 행 개수와 y의 길이는 반드시 일치해야 정규방정식을 통해 정확한 가중치 계산이 가능합니다.
+
+Python
+# filename: 07-linear-regression-training.py
+y = [10000, 20000, 15000, 20050, 10000, 20000, 15000, 25000, 12000]
+
+이제 모든 학습 데이터와 타깃 변수가 준비되었습니다. 다음 단계에서는 이 데이터들을 정규방정식에 대입하여 실제 가중치를 구하는 과정을 진행합니다.
+
+
+
+1. 정규방정식의 필요성
+선형 회귀의 예측 함수는 g(X) = Xw 입니다. 우리는 이 예측값이 타깃값 y와 같아지기를 원하지만, 실제 데이터에서는 완벽히 일치하는 가중치를 찾기란 불가능합니다. 수학적으로 w = X^-1 * y 를 통해 해를 구하고 싶어도, 대부분의 특성 행렬은 직사각형 형태라 역행렬이 존재하지 않습니다. 따라서 우리는 최적의 '근사 해'를 찾아야 합니다.
+
+//
+나> "수학적으로 w = X^-1 * y 를 통해 해를 구하고 싶어도, 대부분의 특성 행렬은 직사각형 형태라 역행렬이 존재하지 않습니다."
+
+왜 역행렬이 중요한가
+
+GEM> 역행렬이 중요한 이유는 선형 방정식을 "나눗셈"과 같은 원리로 명쾌하게 풀 수 있게 해주기 때문입니다.
+
+1. 연립방정식의 해를 구하는 도구
+우리가 다루는 선형 회귀의 예측식 y = Xw는 결국 w를 구해야 하는 연립방정식입니다. 일반적인 숫자 연산에서 ax = b라는 방정식을 풀 때 x = b / a로 구하듯이, 행렬 연산에서는 나눗셈이 정의되지 않기 때문에 대신 역행렬(X 
+−1
+ )을 사용합니다.
+
+Xw = y인 상태에서 양변에 X의 역행렬을 곱하면:
+
+X^-1 * X * w = X^-1 * y
+
+I * w = X^-1 * y (여기서 I는 단위행렬)
+
+w = X^-1 * y
+
+
+/
+나> "I * w = X^-1 * y (여기서 I는 단위행렬)
+
+w = X^-1 * y"
+
+왜 I가 게눈 감추듯 스리슬쩍 사라져?
+
+
+GEM> 단위행렬(I)이 사라지는 이유 (과정 상세)
+행렬 연산에서 단위행렬(I)은 숫자에서의 '1'과 같은 역할을 합니다. 어떤 행렬에 I를 곱해도 자기 자신이 나오기 때문에, 수학적으로는 생략해서 표기합니다.
+
+1. 초기 방정식:
+X * w = y
+
+2. 양변에 X의 역행렬(X^-1)을 왼쪽에서 곱합니다:
+(X^-1 * X) * w = X^-1 * y
+
+3. 역행렬과 원래 행렬을 곱하면 단위행렬(I)이 됩니다:
+(X^-1 * X) 부분은 I가 됩니다.
+I * w = X^-1 * y
+
+4. I * w 는 w와 같으므로, 결과적으로 I가 사라진 것처럼 정리됩니다:
+w = X^-1 * y
+
+왜 스르르 사라지는가?
+
+숫자 계산에서 1 * w = w라고 쓰는 것과 똑같습니다.
+
+I * w = w 이기 때문에, 굳이 I를 계속 표기하지 않고 결과값인 w만 깔끔하게 남겨두는 것입니다.
+
+즉, 생략된 것이 아니라 '단위행렬의 곱은 자기 자신'이라는 정의에 따라 w로 변환된 것입니다.
+
+
+나> X^-1 * X  가 X/X로 1이기 때문에 I로 치환해주는거냐?
+
+GEM> 정확하게 보셨습니다! 그 직관이 아주 정확합니다.
+
+숫자 연산과 행렬 연산을 비교하면 왜 그렇게 치환하는지 이해하기 쉽습니다.
+
+1. 숫자의 경우 (나눗셈)
+숫자에서는 나눗셈이 가능하죠.
+
+A * w = y
+
+양변을 A로 나눕니다.
+
+(A / A) * w = y / A
+
+1 * w = y / A  (여기서 1이 바로 단위행렬 I의 역할을 합니다.)
+
+w = y / A
+
+2. 행렬의 경우 (나눗셈이 없음)
+행렬은 숫자처럼 '나눗셈'이라는 연산 자체가 정의되어 있지 않습니다. 그래서 "나눗셈 대신 역행렬을 곱한다"는 약속을 한 것입니다.
+
+X * w = y
+
+'X로 나눈다'는 개념을 'X의 역행렬을 곱한다'로 바꿉니다.
+
+(X^-1 * X) * w = X^-1 * y
+
+여기서 (X^-1 * X)는 마치 (X / X)와 같은 역할을 하여 1(즉, 단위행렬 I)이 됩니다.
+
+I * w = X^-1 * y
+
+w = X^-1 * y
+
+핵심 포인트
+치환의 이유: X^-1 * X를 계산하면 대각선은 1이고 나머지는 0인 단위행렬 I가 나오기 때문에, 이를 I로 치환하는 것입니다.
+
+결과: 말씀하신 대로 X / X가 1이 되는 것과 똑같은 논리적 구조를 가지기 때문에, I를 곱하는 행위는 "행렬 세계에서의 1을 곱하는 행위"라고 생각하시면 정확합니다.
+
+그래서 수학자들이 "X^-1 * X = I"라는 규칙을 만들어 둔 덕분에, 나눗셈을 직접 못 하는 행렬에서도 방정식을 풀 수 있게 된 것입니다. 정말 날카로운 지적입니다!
+/
+
+
+
+즉, 역행렬만 구할 수 있다면 미지수 w의 값을 단번에 딱 떨어지는 해로 얻을 수 있기 때문에 매우 중요합니다.
+
+2. 왜 직사각형 행렬에서는 안 되는가?
+역행렬은 기본적으로 '정사각 행렬(행과 열의 개수가 같은 행렬)'에 대해서만 정의됩니다.
+
+데이터의 특성이 3개(열)이고 데이터 개수가 9개(행)라면, 행렬은 9x3 형태입니다.
+
+이런 직사각형 행렬은 정보를 압축하거나 확장하는 변환을 수행하기 때문에, 이를 다시 원래 상태로 되돌리는 '역(逆) 과정'이 수학적으로 존재하지 않거나 무수히 많습니다.
+
+그래서 우리가 사용하는 데이터들은 대부분 정사각 행렬이 아니기 때문에, 곧바로 역행렬을 곱해 해를 구할 수 없는 것입니다.
+
+3. 역행렬의 대안: 그램 행렬(X 
+T
+ X)
+역행렬이 존재하지 않는 상황에서, 역행렬과 비슷한 역할을 해줄 녀석이 필요합니다. 그래서 행렬에 자기 자신의 전치 행렬(X 
+T
+ )을 곱해 정사각 행렬(그램 행렬)로 강제로 모양을 맞춰주는 것입니다.
+
+결국 "원래 행렬(X) 자체는 역행렬을 구할 수 없지만, X 
+T
+ X를 만들어 역행렬을 구하면 정답에 가장 가까운 근사치를 찾아낼 수 있다"는 점 때문에 역행렬 개념이 정규방정식의 핵심이 되는 것입니다.
+//
+
+
+
+2. 그램 행렬을 통한 근사 해 도출
+직사각형 행렬의 문제를 해결하기 위해 양쪽에 전치 행렬 X^T를 곱해줍니다. 이를 통해 만들어진 X^T * X는 항상 정사각 행렬인 그램 행렬(Gram Matrix)이 되며, 역행렬 계산이 가능해집니다. 이 과정을 통해 유도된 최종 공식이 정규방정식(Normal Equation)입니다.
+
+정규방정식 공식:
+w = (X^T * X)^-1 * X^T * y
+
+//
+예> X^T * y 는
+
+초기 방정식: X * w = y 에서
+직사각형 행렬이라 X^-1을 구할 수 없으므로, 양쪽에 X^T를 곱해 X^T * X * w = X^T * y를 만들고,
+양변에 (X^T * X)^-1을 곱해 w = (X^T * X)^-1 * X^T * y를 유도하는 과정에서 등장함.
+
+
+나> X^T * X * w = X^T * y
+
+라고? 
+
+너 앞에서는 "2. 양변에 X의 역행렬(X^-1)을 왼쪽에서 곱합니다:
+(X^-1 * X) * w = X^-1 * y"
+
+라며? 
+
+GEM> 제가 앞서 이야기한 (X^-1 * X) * w = X^-1 * y는 "만약 역행렬이 존재한다면(즉, 정사각 행렬이라면)" 가정하고 방정식을 푸는 과정을 설명하느라 나온 식입니다.
+
+하지만 우리가 다루는 데이터는 행과 열이 다른 직사각형 행렬이라서 애초에 X^-1 자체가 존재하지 않습니다. 그래서 X^-1을 곱하는 방식으로는 아예 풀 수가 없습니다.
+
+직사각형 행렬에서 정규방정식을 유도하는 올바른 과정은 다음과 같습니다.
+
+초기 방정식:
+X * w = y
+
+양쪽에 전치 행렬(X^T)을 왼쪽에서 곱함:
+직사각형 행렬이라 역행렬을 못 구하므로, 양변에 X^T를 먼저 곱해서 강제로 정사각 행렬(그램 행렬)로 만들어 줍니다.
+X^T * (X * w) = X^T * y
+
+결합법칙 적용:
+행렬 곱셈의 결합법칙에 따라 괄호를 바꿔줍니다.
+(X^T * X) * w = X^T * y
+(여기서 만들어진 X^T * X가 바로 역행렬을 구할 수 있는 정사각 그램 행렬입니다!)
+
+최종 가중치(w) 구하기:
+이제 (X^T * X)는 정사각 행렬이 되었으므로 이 녀석의 역행렬((X^T * X)^-1)을 양변에 곱해서 w를 고립시킵니다.
+w = (X^T * X)^-1 * X^T * y
+
+즉, 존재하지도 않는 X^-1을 곱하는 게 아니라, X^T를 먼저 곱해서 정사각 행렬인 X^T * X로 만든 다음, 그 친구의 역행렬을 곱하는 것이 정규방정식의 정확한 유도 과정입니다. 앞서 혼동을 드려 정말 죄송합니다!
+//
+
+3. 실습: 정규방정식 구현 (Jupyter Notebook)
+이제 위 공식을 파이썬 코드로 구현해 보겠습니다.
+
+Python
+# filename: 07-linear-regression-training.py
+# 그램 행렬 X^T * X를 계산합니다. (특성끼리의 내적 행렬)
+# 정규방정식의 왼쪽에 해당하는 정사각 행렬입니다.
+
+XTX = X.T.dot(X)
+
+# X^T * X의 역행렬을 구합니다.
+# 이 역행렬이 존재해야 닫힌 해(closed-form)로 가중치를 얻을 수 있습니다.
+XTX_inv = np.linalg.inv(XTX)
+
+# 정규방정식 w = (X^T * X)^-1 * X^T * y 로 전체 가중치 벡터를 한 번에 구합니다.
+# w_full의 첫 원소가 절편, 나머지가 각 특성의 가중치입니다.
+w_full = XTX_inv.dot(X.T).dot(y)
+
+Python
+# filename: 07-linear-regression-training.py
+# 학습된 벡터에서 첫 원소를 절편 w0으로 분리합니다.
+w0 = w_full[0]
+
+# 나머지 원소를 특성 가중치 벡터 w로 분리합니다.
+w = w_full[1:]
+
+# 분리한 절편과 가중치를 출력해 학습 결과를 확인합니다.
+w0, w
+
+결과:
+w0
+(np.float64(25844.754055766753),
+
+w array([ -16.08906468, -199.47254894,   -1.22802883])) 
+
+
+Python
+# filename: 07-linear-regression-training.py
+# 정규방정식으로 선형 회귀를 학습하는 함수를 완성합니다.
+# 입력 X에 1열을 붙인 뒤 w = (X^T * X)^-1 * X^T * y 를 계산하고, 절편과 가중치를 나눠 반환합니다.
+def train_linear_regression(X, y):
+    # 행 수만큼의 1 벡터를 만들어 절편 열로 씁니다.
+    ones = np.ones(X.shape[0])
+    # 절편 열을 특성 행렬 왼쪽에 붙입니다.
+    X = np.column_stack([ones, X])
+
+    # 그램 행렬과 그 역행렬, 그리고 정규방정식으로 가중치 전체를 구합니다.
+    XTX = X.T.dot(X)
+    XTX_inv = np.linalg.inv(XTX)
+    w_full = XTX_inv.dot(X.T).dot(y)
+    
+    return w_full[0], w_full[1:]
+
+
+Python
+# filename: 07-linear-regression-training.py
+# 방금 만든 학습 함수에 예제 행렬과 타깃 y를 넣어 절편·가중치를 구합니다.
+# 바로 위 셀에서 X에 이미 1로 된 절편 열을 붙였고, 함수 안에서도 ones를 한 번 더 붙입니다.
+# 같은 열을 두 번 넣으면 X^T * X가 특이행렬이 되어 최신 넘파이는 LinAlgError를 냅니다.
+# 그래서 첫 열(절편)을 빼고 특성만 넘깁니다. 함수가 그 안에서 1열을 다시 붙입니다.
+train_linear_regression(X[:, 1:], y)
+
+
+//
+나> 이 부분 초보자 관점에서 쉽게 차근차근 설명해봐. 이전 우리의 행적이랑 관련있는거 같은데 지식이 파편화되서 퍼즐이 안맞춰져 
+
+
+GEM> 파편화된 퍼즐을 깔끔하게 하나로 맞춰드리겠습니다! 앞서 우리가 다뤘던 "행렬의 모양"과 "함수의 동작 방식"을 연결해 보면 이 코드가 왜 이렇게 작성되었는지 명확하게 이해할 수 있습니다.
+
+1. 배경: 앞에서 우리가 했던 일
+우리는 앞에서 데이터 행렬 X에 절편을 계산하기 위해 맨 앞에 1들로 채워진 열(ones)을 억지로 추가했습니다.
+그래서 이 과정을 거치고 나면 현재 메모리에 있는 변수 X는 다음과 같은 상태가 됩니다.
+
+현재의 X 행렬: [1, 마력, 연식, 인기도] (이미 맨 앞에 1이 붙어 있음!)
+
+
+2. 문제 발생: 함수를 만들 때의 함정
+우리가 앞에서 정의한 train_linear_regression(X, y) 함수 내부를 다시 살펴봅시다.
+
+Python
+def train_linear_regression(X, y):
+    # 행 수만큼의 1 벡터를 만들어 절편 열로 씁니다.
+    ones = np.ones(X.shape[0])
+    # [주의!] 함수 안에서 또 맨 앞에 1 열을 붙입니다!
+    X = np.column_stack([ones, X])
+
+    XTX = X.T.dot(X)
+    XTX_inv = np.linalg.inv(XTX)
+    w_full = XTX_inv.dot(X.T).dot(y)
+    
+    return w_full[0], w_full[1:]
+
+이 함수는 "입력으로 들어오는 X에 당연히 절편(1)이 아직 안 붙어있겠지?"라고 가정하고, 그 안에서 ones를 또 갖다 붙이도록 설계되어 있습니다.
+
+3. 그대로 실행하면 무슨 일이 생기는가?
+만약 우리가 이미 1이 붙어 있는 현재의 X를 그대로 함수에 넣으면 어떻게 될까요?
+
+원래 X 상태: [1, 마력, 연식, 인기도]
+
+함수 안에서 또 1을 붙임: [1, 1, 마력, 연식, 인기도]
+
+이렇게 되면 똑같은 1(절편용 열)이 두 개나 나란히 생기는 대참사가 벌어집니다.
+수학적으로 똑같은 성질의 열(또는 완전히 비례하는 열)이 두 개 이상 존재하면, 행렬이 특이 행렬(Singular Matrix)이 되어버립니다.
+
+앞서 우리가 역행렬을 구하기 위해 만들었던 그램 행렬(X^T * X)을 역산할 수 없게 되며, 최신 넘파이(NumPy) 라이브러리는 이를 감지하고 다음과 같은 에러를 뿜어냅니다.
+
+LinAlgError: Matrix is singular. (역행렬을 구할 수 없어!)
+
+4. 해결책: X[:, 1:]의 의미
+이 에러를 피하려면 함수에 데이터를 넘길 때 "절편이 아직 안 붙은 순수한 원본 특성"만 쏙 빼서 넘겨주어야 합니다.
+
+여기서 등장하는 코드가 바로 이것입니다:
+
+Python
+X[:, 1:]
+X[:, :] : 행렬 전체를 의미합니다.
+
+1: : 열(column)을 뜻하며, "첫 번째 열(인덱스 0인 절편 열)은 버리고, 두 번째 열(인덱스 1)부터 끝까지 다 가져와라"라는 뜻입니다.
+
+즉, 이미 1이 붙어버린 현재의 X에서 맨 앞의 1 열을 싹둑 잘라내어 원상복구(순수 특성만 남김)시킨 다음에 함수에 던져주는 것입니다.
+
+그러면 함수가 그 안에서 다시 기분 좋게 ones를 딱 한 번만 붙여주므로, 에러 없이 안전하게 정규방정식 계산(w = (X^T * X)^-1 * X^T * y)이 착착 진행되는 것입니다!
+//
+
+결과:
+w0
+(np.float64(25844.754055766753),
+ 
+w
+array([ -16.08906468, -199.47254894,   -1.22802883]))
+
+이 과정은 모델이 데이터의 패턴을 파악하여 최적의 가중치를 학습하는 가장 기본적인 방법입니다. 공식의 수학적 유도 과정이 궁금하다면 《Elements of Statistical Learning》 서적을 참고하는 것을 추천합니다.
+
+
+
+
+------
+
+
+
+
+2.8 자동차 가격 베이스라인 모델 (Car Price Baseline Model)
+
+이제 이전 섹션에서 만든 선형 회귀 학습 함수를 활용하여, 자동차 가격 예측 프로젝트를 위한 첫 번째 베이스라인 모델 (Baseline Model)을 구축해 보겠습니다. 기준이 되는 베이스라인 모델(Baseline Model)을 먼저 만들어야, 나중에 모델을 개선했을 때 성능이 실제로 좋아졌는지 객관적으로 비교할 수 있습니다.
+
+
+1. 기본 수치 특성 선택 (Selecting Basic Numerical Features)
+
+선형 회귀 모델(Linear Regression Model)은 오직 숫자(수치형) 데이터 (Numerical Data)만 처리할 수 있습니다. 먼저 훈련 세트(df_train)에 어떤 열(Columns)들이 있는지 확인하고, 모델 학습에 사용할 수 있는 대표적인 수치 특성(Numerical Features) 5개를 골라 리스트로 정의합니다.
+
+Python
+# filename: 08-baseline-model.py
+# 훈련 세트의 열 이름 목록을 출력합니다.
+# 다음 셀에서 모델에 넣을 기본 수치 특성(base)을 고를 때 참고합니다.
+df_train.columns
+
+
+Python
+# filename: 08-baseline-model.py
+# 첫 모델에 쓸 기본 수치 특성 다섯 개를 리스트로 고릅니다.
+# 마력, 기통 수, 고속도로·도심 연비, 인기도처럼 숫자로 바로 쓸 수 있는 열입니다.
+base = ['engine_hp', 'engine_cylinders', 'highway_mpg',
+        'city_mpg', 'popularity']
+
+
+2. 결측치 처리와 특성 행렬 추출 (Handling Missing Values and Extracting Feature Matrix)
+데이터를 살펴보면 엔진 마력(engine_hp)이나 실린더 수(engine_cylinders) 같은 열에 일부 빈 값(NaN, 결측치)이 포함되어 있습니다.
+
+상식적으로 자동차의 마력이나 실린더 개수가 0일 수는 없지만, 머신러닝 모델(Machine Learning Model)에 데이터를 밀어 넣기 위한 실용적인 관점에서 가장 간단하게 빈 값을 0으로 채워 모델이 해당 특성을 무시하게 만들 수 있습니다.
+
+Python
+# filename: 08-baseline-model.py
+# 고른 열만 추출하고, 결측은 0으로 채운 뒤 넘파이 배열로 바꿉니다.
+# fillna(0)은 '정보 없음'을 0으로 두는 단순 전략이며, 이후 prepare_X에서도 같은 방식을 씁니다.
+X_train = df_train[base].fillna(0).values
+
+//
+나> X_train = df_train[base].fillna(0).values
+
+여기서 말미에 .values를 왜 붙여?
+
+GEM> 판다스(Pandas) 데이터프레임 구조를 머신러닝 연산에 곧바로 쓸 수 있는 넘파이(NumPy) 다차원 배열(Array) 형태로 변환하기 위해서 붙입니다.
+
+상세한 이유는 다음과 같습니다:
+
+데이터프레임과 넘파이 배열의 차이:
+
+df_train[base].fillna(0)까지 실행한 결과는 판다스의 데이터프레임(DataFrame) 객체입니다. 이 안에는 행 번호(Index)와 열 이름(Columns) 같은 부가적인 메타데이터가 함께 포함되어 있습니다.
+
+하지만 우리가 앞서 만든 선형 회귀 학습 함수(train_linear_regression) 내부와 넘파이의 행렬 내적 연산(.dot()) 등은 판다스 전용 구조가 아니라 순수한 넘파이 행렬 연산을 전제로 만들어졌습니다.
+
+.values의 역할:
+
+데이터프레임에서 행/열 이름표를 다 떼어내고, 오직 순수한 숫자 데이터(값들)만 뽑아서 넘파이 배열(numpy.ndarray)로 쏙 빼주는 치트키 같은 속성입니다.
+
+이렇게 변환해야 행렬 곱셈이나 전치 행렬 연산(X.T.dot(X)) 등을 에러 없이 빠르게 처리할 수 있습니다.
+//
+
+
+3. 베이스라인 모델 학습 및 예측 (Training and Predicting with the Baseline Model)
+
+준비된 훈련 특성 행렬(Feature Matrix) X_train과 타깃값(Target Values) y_train을 아까 만들어 둔 train_linear_regression 함수에 넣어 절편(Bias, w 
+0
+​
+ )과 가중치(Weights, w)를 한 번에 도출합니다.
+
+가중치가 계산되면, 공식에 따라 예측값(Predictions) 벡터를 생성합니다.
+
+Python
+# filename: 08-baseline-model.py
+# 훈련 특성으로 선형 회귀를 학습해 절편 w0과 가중치 w를 얻습니다.
+w0, w = train_linear_regression(X_train, y_train)
+
+//
+나> 위 코드에서 msrp를 얻는다는 말은 없었는데 왜 이 경우 예전에 
+
+y_train = np.log1p(df_train.msrp.values) 
+
+처럼 msrp값을 lp로그화한 y_train을 쓰는거? 
+
+
+GEM> 자동차 데이터셋의 원래 목표(Target) 변수 이름이 바로 msrp(Manufacturer's Suggested Retail Price, 제조사 권장 소비자 가격)이기 때문입니다.
+
+프로젝트 전 단계에서 타깃 변수를 지정할 때 아래와 같이 df_train.msrp를 가져와서 로그 변환을 수행했기 때문에, 그 결과물이 y_train이라는 이름의 변수에 담겨 있는 것입니다.
+
+Python
+# (이전 단계에서 수행했던 타깃 지정 코드)
+y_train = np.log1p(df_train.msrp.values)
+즉, df_train 테이블 안에 들어 있는 수많은 열(Columns) 중에서 우리가 예측하고자 하는 정답(가격)에 해당하는 열의 이름이 msrp라서, 이를 기반으로 y_train을 만들어서 사용하고 있는 것입니다.
+
+
+나> y_train = np.log1p(df_train.msrp.values) 에 사용된 log1p
+
+GEM> np.log1p는 값에 1을 더한 뒤 자연로그를 취해주는 함수($\ln(1 + x)$)입니다.자동자 가격(msrp) 데이터처럼 값의 범위가 넓고 한쪽으로 크게 쏠려 있는(오른쪽으로 긴 꼬리를 가진) 분포를 다룰 때 매우 유용하게 쓰입니다.
+
+왜 np.log1p를 쓸까?
+
+로그 스케일 변환의 효과:자동차 가격은 몇천만 원짜리 대중적인 차부터 수억 원짜리 슈퍼카까지 천차만별입니다. 이런 큰 숫자들을 그대로 모델에 넣으면 비싼 차 몇 대의 오차 때문에 모델 전체가 엉망이 되기 쉽습니다.로그를 씌워주면 큰 값들은 꾹 눌러주고 작은 값들은 적절히 펴주어 데이터의 분포를 완만한 종 모양(정규분포 형태)으로 만들어 줍니다.
+
+왜 그냥 np.log가 아니라 np.log1p(log + 1)를 쓸까?
+
+만약 데이터 중에 0원인 값이 있다면, 일반 로그(np.log(0))는 수학적으로 에러(-inf, 무한대)를 뱉어내며 프로그램이 터집니다. np.log1p(x)는 내부적으로 np.log(x + 1)을 계산해 주기 때문에, 만약 데이터에 0이 있더라도 log(0 + 1) = log(1) = 0이 되어 에러 없이 안전하게 계산할 수 있습니다.가격 데이터에 0원이 있을 일은 드물지만, 조회수나 횟수처럼 0이 포함될 수 있는 데이터를 다룰 때 에러를 방지하는 버릇처럼 널리 쓰이는 함수입니다.
+
+
+나>
+base = ['engine_hp', 'engine_cylinders', 'highway_mpg',
+        'city_mpg', 'popularity']
+
+이것들과 msrp의 직접적인 상관관계가 있단말야? 내 말은, 알고리즘적으로 w0, w = train_linear_regression(X_train, y_train) 여기서 어떻게 상호작동하냐고
+
+
+GEM> 
+네, 당연히 직접적인 상관관계가 있으니까 알고리즘이 가중치(w)를 찾아내는 것입니다!
+
+여기서 train_linear_regression(X_train, y_train) 함수가 내부적으로 어떻게 X_train(마력, 연식 등 5가지 특성)과 y_train(실제 자동차 가격 msrp)을 엮어서 상호작용시키는지, 그 알고리즘의 작동 원리를 쉽게 풀어드리겠습니다.
+
+알고리즘의 핵심 목표: "오차를 최소화하는 최적의 공식 찾기"
+선형 회귀 알고리즘은 기본적으로 다음과 같은 예측 식을 가정하고 시작합니다.
+
+예측 가격 = w0 + (w1 * 마력) + (w2 * 기통수) + (w3 * 고속연비) + (w4 * 도심연비) + (w5 * 인기도)
+
+여기서 우리가 가지고 있는 것은:
+
+특성 행렬(X_train): 차 1,000대의 [마력, 기통수, 고속연비, 도심연비, 인기도] 표
+
+정답 타깃(y_train): 그 차 1,000대의 실제 가격(msrp) 데이터
+
+알고리즘은 "이 특성들과 실제 가격 사이에 뭔가 규칙(상관관계)이 있을 텐데, 각 특성에 어떤 가중치(w)를 곱해야 실제 가격과 가장 비슷해질까?"를 수학적 공식(정규방정식)으로 단번에 계산해 냅니다.
+
+정규방정식 내부에서 두 데이터가 맞물리는 방식
+앞서 우리가 유도했던 정규방정식 공식을 다시 떠올려 봅시다.
+
+w = (X^T * X)^-1 * X^T * y
+
+여기서 X_train이 X이고, y_train이 y입니다. 이 공식이 실행될 때 내부적으로 두 데이터가 다음과 같이 상호작용합니다.
+
+특성끼리의 관계 파악 (X^T * X, 그램 행렬):
+마력이 높을수록 기통수도 같이 높아지는 경향이 있는지, 연비와 마력은 어떤 반비례 관계가 있는지 등 특성들끼리의 맞물림을 X^T * X 계산을 통해 먼저 파악합니다.
+
+특성과 실제 가격의 공조 관계 파악 (X^T * y):
+여기에 실제 가격(y_train, 즉 y)을 곱해주는 X^T * y 연산이 일어납니다.
+이 단계가 바로 "마력이 1 증가할 때, 실제 가격(msrp)은 평균적으로 얼마나 올라갔는가?", "연비가 좋아지면 가격은 어떻게 변하는가?"를 수학적으로 쫙 끌어모아서 특성과 가격 사이의 연결 고리를 강제로 계산하는 핵심 과정입니다.
+
+결과물로 나오는 가중치(w)의 의미
+이 상호작용이 끝나고 나면 알고리즘은 5개의 가중치(w)를 뱉어냅니다. 예를 들어 코드를 실행했을 때 아래와 같은 값이 나왔었죠?
+
+array([ 9.70589522e-03, -1.59103494e-01,  1.43792133e-02,  1.49441072e-02, -9.06908672e-06])
+
+이 숫자들이 바로 X_train과 y_train이 상호작용하여 얻어낸 직접적인 상관관계의 증거입니다.
+
+첫 번째 값(9.7만...): 마력이 높을수록 가격(msrp)이 올라간다는 상관관계(+ 방향)를 수치로 찾은 것입니다.
+
+마지막 값(-9.0만...): 인기도 수치와 가격 간에는 알고리즘이 분석해 보니 거의 영향이 없거나 미세하게 반대 방향이라는 상관관계를 찾아낸 것입니다.
+
+/
+나> "마력이 높을수록 가격(msrp)이 올라간다는 상관관계(+ 방향)를 수치로 찾은 것입니다." 라던가, 이걸 어떻게 식별해? 그리고 마지막 것도
+
+..
+아니 그러니까 내 말은 w0가 여기서 뭘 의미하냐고 
+
+
+GEM> w0는 절편(Bias 또는 Intercept)을 의미합니다. 직관적으로 설명해 드릴게요.
+
+w0의 직관적인 의미: "기본값(시작점)"
+앞서 구했던 예측 공식 기억하시나요?
+
+예측 가격 = w0 + (w1 * 마력) + (w2 * 기통수) + ...
+
+여기서 w0는 모든 특성(마력, 연비, 인기도 등)이 전부 0이라고 가정했을 때의 기본 가격(기준 가격)을 뜻합니다.
+
+만약 세상에 마력도 없고, 연비도 0이고, 인기도 없는 상상 속의 자동차가 있다면, 이 차의 기본 가격은 무조건 w0에서 시작하는 것입니다.
+
+왜 이런 값이 필요할까? (현실적인 보정 역할)
+실제 데이터로 선형 회귀 모델을 만들 때, 모든 특성 값이 0인 차는 현실에 존재하지 않습니다.
+그럼에도 알고리즘이 이 w0를 꼭 구하는 이유는 전체적인 가격 수준을 위아래로 조절해 주는 '평균적인 닻(Anchor)' 역할을 하기 때문입니다.
+
+만약 특성들에 가중치(w)만 곱해서 예측을 하려고 하면, 그래프의 시작점이 무조건 원점(0)에 고정되어 버려 실제 자동차 가격들과 엄청난 오차가 생깁니다.
+
+그래서 알고리즘이 "우리가 다루는 자동차들의 전체적인 평균 가격대가 이 정도 하니까, 그래프를 전체적으로 이만큼 위로(또는 아래로) 띄워야 오차가 줄어들겠구나!" 하고 통째로 들어 올리는 높이 값이 바로 w0입니다.
+
+앞서 코드에서 출력된 w0 값은 약 7.92였죠? 이 프로젝트에서는 가격에 log1p를 씌운 값을 타깃(y_train)으로 쓰기 때문에, 로그 스케일 상에서의 기본 가격 기준점(로그 가격 기준 약 7.92)이라고 이해하시면 정확합니다!
+
+
+나> "우리가 다루는 자동차들의 전체적인 평균 가격대가 이 정도 하니까,"
+
+즉, "우리가 다루는 자동차들의 전체적인 평균 가격대"의 가중치(기준치/값어치) 라는 뜻인가
+
+
+GEM> 
+네, 정확하게 그렇게 이해하시면 됩니다!
+
+다만 정확한 뉘앙스를 위해 한 가지만 짚어보면, w0는 가격 자체의 평균이라기보다는 "우리가 고른 특성들의 값이 전부 0일 때, 이 프로젝트에서 다루는 자동차들이 공통적으로 가지고 있는 '기본적인 차값(체급/가치)의 기준선'"을 의미합니다.
+
+수학적으로 설명하자면 다음과 같습니다:
+
+선형 회귀식에서 각 특성들의 가중치(w1, w2, …)는 "특성이 1만큼 변할 때 가격이 얼마나 오르고 내리는가"(기울기)를 담당합니다.
+하지만 이 기울기들만으로는 데이터 전체가 놓인 높낮이를 맞출 수가 없습니다.
+그래서 w0가 전체 데이터의 평균적인 높낮이를 한 번에 싹 밀어 올려서, 예측값들의 평균이 실제 가격들의 평균(y_train의 평균)과 딱 맞아떨어지도록 전체적인 기준치(값어치의 닻) 역할을 해주는 것입니다.
+즉, 질문하신 대로 "우리가 다루는 자동차들의 전체적인 평균적인 가격 기준치(값어치)"라고 이해하시면 완전히 맞습니다!
+
+
+나> 그 최초 W0값은 누가 정하는데? 정하는 사람이?
+
+GEM>네, 정확한 질문이십니다! 사람이 직접 입력하거나 정하는 것이 아니라, 컴퓨터(알고리즘)가 수학적 공식을 통해 자동으로 계산해서 찾아내는 값입니다.
+
+여기서 핵심을 짚어드릴게요.
+
+사람이 정하는 것이 아닙니다:
+
+우리가 "자, 초기값 w0는 7로 하자"라고 지정해 주는 것이 아닙니다.
+
+선형 회귀 알고리즘 코드를 실행하면 컴퓨터가 데이터(X_train과 y_train)를 읽고 나서 가장 오차가 적어지는 최적의 w0와 w 값들을 알아서 뱉어냅니다.
+
+어떤 원리로 자동 결정되나요?
+
+알고리즘 내부에는 최소제곱법(Least Squares)이라는 수학적 최적화 원리가 들어 있습니다.
+
+컴퓨터는 모든 자동차 데이터(X_train의 특성들과 y_train의 실제 가격)를 집어넣고, "실제 가격과 우리가 예측한 가격의 차이(오차)의 제곱 합이 가장 최소가 되는 지점"을 수학적 방정식으로 한 번에 계산해 냅니다.
+
+이 과정에서 기울기(w)뿐만 아니라, 전체 데이터의 높낮이를 맞춰줄 최적의 절편(w0)값도 공식에 의해 자동으로 딱 떨어지게 계산되는 것입니다.
+
+즉, 사람이 정하는 게 아니라 컴퓨터가 데이터 속의 정답(y_train)을 보고 오차를 최소화하기 위해 수학적으로 자동 계산해 내는 값입니다!
+/
+
+즉, train_linear_regression 함수는 "특성(X_train)이라는 원인"과 "실제 가격(y_train)이라는 결과"를 공식에 넣고 밀어 넣어서, 둘 사이에 어떤 비례 관계(가중치)가 숨어 있는지 수학적으로 역추적해 주는 기계라고 이해하시면 정확합니다!
+//
+
+
+# 학습에 쓴 같은 X_train으로 예측값 y_pred를 만듭니다. (훈련 세트 위 적합 결과)
+y_pred = w0 + X_train.dot(w)
+학습된 절편과 가중치 배열을 확인해 봅니다.
+
+Python
+# filename: 08-baseline-model.py
+# 학습된 절편 w0을 출력합니다.
+w0
+
+결과:
+np.float64(7.927257388069986)
+
+
+Python
+# filename: 08-baseline-model.py
+# 학습된 특성 가중치 벡터 w를 출력합니다.
+w
+
+결과:
+array([ 9.70589522e-03, -1.59103494e-01,  1.43792133e-02,  1.49441072e-02,
+       -9.06908672e-06])
+
+
+
+4. 예측값과 실제값 비교 시각화 (Visualizing Predictions vs. Actual Values)
+
+학습이 끝났으니, 모델이 예측한 가격 분포가 실제 자동차 가격(y_train) 분포와 얼마나 닮았는지 히스토그램(Histogram)을 그려 시각적으로 비교해 봅니다. 두 분포의 봉우리가 비슷하게 겹치면 모델이 대략적인 패턴을 잡았다는 뜻입니다.
+
+Python
+# filename: 08-baseline-model.py
+# 예측값(로그 가격)의 분포를 빨간색 히스토그램으로 그립니다.
+# alpha=0.5는 반투명으로 겹쳐 그려, 두 분포가 얼마나 겹치는지 보게 합니다.
+sns.histplot(y_pred, color='red', alpha=0.5, bins=50)
+
+# 실제 훈련 타깃의 분포를 파란색으로 같은 그림 위에 겹쳐 그립니다.
+# 두 봉우리가 비슷하면 모델이 가격 분포를 대략 따라가고 있다는 뜻입니다.
+sns.histplot(y_train, color='blue', alpha=0.5, bins=50)
+
+
+차트를 보면 예측값의 분포가 실제값과 완벽히 일치하지 않고 한쪽으로 치우쳐 있거나 봉우리 위치가 어긋나는 것을 볼 수 있습니다. 즉, 눈으로 대충 보기에는 모델이 아주 이상적이진 않다는 징후를 알 수 있지만, 앞으로 모델을 개선할 때 정말 성능이 좋아졌는지 객관적으로 평가해 줄 기준(Metric)이 필요합니다. 다음 섹션에서는 이 성능을 숫자로 명확하게 평가할 수 있는 평균 제곱근 오차 (Root Mean Squared Error, RMSE)에 대해 알아보겠습니다.
+
+
+
+//
+나> 그럼 훈련을 거듭할 수록 두 그래프가 매우 가까워진다는 뜻인가. 
+
+GEM> 결론부터 말씀드리면, 선형 회귀(정규방정식) 방식에서는 훈련을 거듭한다고 해서 그래프가 점점 더 가까워지지는 않습니다.
+
+이유는 이 모델이 딥러닝(Deep Learning)처럼 여러 번 반복해서 학습(Iteration/Epoch)하는 구조가 아니기 때문입니다. 여기서 오해하기 쉬운 지점과 실제 작동 방식을 짚어드릴게요.
+
+한 번에 딱 끝나는 계산 (One-shot):
+
+우리가 쓴 train_linear_regression 함수는 반복 학습을 돌며 점진적으로 나아지는 구조가 아닙니다.
+
+앞서 본 수학적 공식에 데이터를 집어넣으면, 단 한 번의 행렬 연산으로 오차가 가장 적은 최적의 가중치(w)와 절편(w0)이 단번에 튀어나옵니다. 즉, 학습을 거듭할 수 있는 게 아니라 그냥 한 번 풀면 끝입니다.
+
+그렇다면 앞으로 모델을 어떻게 개선한다는 뜻일까?
+
+훈련을 반복하는 게 아니라, 모델에 집어넣는 재료(특성, Feature)를 바꾸거나 추가해서 성능을 개선합니다.
+
+예를 들어, 지금은 5개만 넣었지만, 여기에 연식이나 다른 유용한 특성들을 더 추가하거나, 데이터의 전처리 방식을 달리해서 다시 한 번 공식을 풀면 그제서야 예측값과 실제값의 그래프가 서로 더 밀착(오차가 감소)하게 됩니다.
+
+즉, 훈련을 여러 번 해서 그래프가 가까워지는 것이 아니라, "더 좋은 특성들을 골라 넣고 공식을 다시 풀었을 때 실제로 오차가 줄어들었는지를 객관적으로 측정하기 위해 RMSE라는 평가 기준이 필요하다"는 뜻으로 이해하시면 정확합니다!
+
+
+나> 딥러닝같은 경우는 반복되니까 두 그래프가 점진적으로 일치에 가까워진다는 말 아냐?
+
+GEM> 네, 정확합니다! 바로 그렇게 이해하신 것이 맞습니다.
+
+딥러닝(인공신경망) 같은 모델은 선형 회귀의 정규방정식처럼 한 번에 딱 답을 구하는 게 아니라, 다음과 같은 방식으로 작동하기 때문에 훈련을 거듭할수록 두 그래프가 점진적으로 일치하게 됩니다.
+
+처음에는 아무렇게나 예측해 봅니다 (엉터리 예측).
+
+실제값과 예측값의 차이(오차)를 계산합니다.
+
+오차를 줄이는 방향으로 가중치(w)를 조금씩 수정해 나갑니다 (역전파와 경사하강법).
+
+이 과정을 수백 번, 수천 번 반복(Epoch)합니다.
+
+이 반복 과정을 거치면 거칠수록 오차가 점점 줄어들면서 모델의 예측값 그래프가 실제값 그래프와 점점 더 가까워지게(일치하게) 되는 것입니다.
+//
+
+
+
+-----
+
+
+
+2.9 RMSE (Root Mean Squared Error / 평균제곱근오차) 
+
+학습 목표
+이전 세션에서 만든 베이스라인 모델의 예측값이 실제값과 얼마나 차이가 나는지 직관적으로 알 수 있었습니다. 하지만 이것만으로는 모델의 성능이 구체적으로 얼마나 나쁜지(또는 좋은지) 객관적인 숫자로 평가할 수 없습니다.
+
+이번 섹션에서는 회귀 모델의 성능을 명확하게 수치화해 주는 평가 지표인 RMSE(평균제곱근오차)의 개념을 배우고, 이를 파이썬 코드로 직접 구현해 봅니다.
+
+개념 이해: RMSE란 무엇인가?
+정의: 예측값과 실제값 사이의 오차를 요약해 주는 대표적인 회귀 평가 지표입니다.
+
+공식: RMSE = sqrt( (1 / m) * sum( (g(x_i) - y_i)^2 ) )
+
+g(x_i): 모델이 예측한 값 (y_pred)
+
+y_i: 실제 정답 값 (y)
+
+m: 데이터셋의 총 관측치 개수 (예: 자동차 대수)
+
+[계산 단계 예시]
+차이(오차) 구하기: 예측값에서 실제값을 빼서 오차 배열을 만듭니다. (예: 오차가 1, 0, 0.5, -1.5)
+
+제곱하기 (SE): 마이너스 부호를 없애고 오차를 강조하기 위해 각각의 차이를 제곱합니다. (예: 1, 0, 0.25, 2.25)
+
+평균 내기 (MSE): 제곱한 오차들을 모두 더한 뒤 개수로 나누어 평균을 구합니다. (예: 0.875)
+
+제곱근 취하기 (RMSE): 원래의 단위로 되돌리기 위해 마지막에 루트(제곱근)를 씌웁니다. (예: 약 0.93)
+
+
+실습 코드 및 셀 내러티브
+
+[셀 1] RMSE 함수 정의하기
+# 실제값 y와 예측값 y_pred 사이의 RMSE(평균제곱근오차)를 계산하는 함수를 정의합니다.
+# 오차를 제곱해 평균 낸 뒤 제곱근을 취하므로, 타깃과 같은 단위로 평균적인 빗나감을 요약합니다.
+def rmse(y, y_pred):
+    # 각 샘플의 오차를 제곱합니다. (음수 오차도 양수로 바뀜)
+    se = (y - y_pred) ** 2
+    # 제곱 오차의 평균, 즉 MSE입니다.
+    mse = se.mean()
+    # MSE의 제곱근이 RMSE입니다.
+    return np.sqrt(mse)
+
+
+[셀 2] 훈련 데이터셋으로 모델 성능 평가하기
+
+훈련 세트에서 RMSE를 계산해, 모델이 학습 데이터를 얼마나 맞췄는지 숫자로 확인합니다.
+
+Python
+
+훈련 세트의 실제값과 예측값을 함수에 넣어 성능을 숫자로 확인합니다.
+rmse(y_train, y_pred)
+실행 결과 예시:
+
+Plaintext
+
+np.float64(0.7554192603920132)
+
+4. 핵심 요약
+단위 일치: 오차를 제곱했다가 다시 루트를 씌우기 때문에, RMSE는 원래 타깃 데이터(y)와 동일한 단위를 가집니다. 따라서 모델이 평균적으로 얼마만큼 가격을 틀렸는지 직관적으로 해석할 수 있습니다.
+
+모델 비교의 기준: 이 RMSE 수치가 낮을수록 예측이 정확하다는 뜻이며, 나중에 특성을 추가하거나 모델을 개선했을 때 성능이 실제로 좋아졌는지를 판단하는 객관적인 잣대로 사용됩니다.
+
+
+
+-----
+
+
+
+2.10 - Validating the model (검증 데이터로 모델 평가하기) 초보자 지침
+
+이 지침은 머신러닝 줌캠프 세션 2의 2.10 Computing RMSE on validation data 강의 내용을 바탕으로, 노트북 작성과 코드 이해를 돕기 위해 작성되었습니다.
+
+학습 목표
+
+이전에 우리는 훈련 세트(Training set)를 이용해 모델을 학습하고 곧바로 그 훈련 세트에서 RMSE를 계산했습니다. 하지만 모델의 진정한 성능을 평가하려면 한 번도 보지 못한 새로운 데이터로 테스트해야 합니다.
+
+이번 섹션에서는 데이터 전처리를 함수로 깔끔하게 정리(prepare_X)하고, 이를 검증 세트(Validation set)에 적용하여 객관적인 일반화 성능을 측정해 봅니다.
+
+개념 이해: 왜 검증 세트로 평가해야 하는가?
+
+훈련 세트로만 평가하면 모델이 자기가 이미 본 문제만 외워서 맞추는 과적합(Overfitting) 상태인지 알 수 없습니다.
+
+따라서 훈련에 전혀 쓰이지 않은 검증 데이터셋에 모델의 가중치(w0, w)를 적용해 보고, 그때 나오는 RMSE를 측정해야 이 모델이 실전에서 얼마나 잘 작동할지 객관적으로 판단할 수 있습니다.
+
+실습 코드 및 셀 내러티브
+
+[셀 1] 전처리 함수(prepare_X) 정의하기
+
+데이터프레임을 모델이 먹을 수 있는 숫자 행렬 X로 바꾸는 전처리 함수를 정의합니다. 기본 수치 열만 고르고 결측을 채운 뒤 .values로 넘파이 배열을 반환합니다.
+
+Python
+
+def prepare_X(df):
+# 미리 정해 둔 base 열만 추출합니다.
+df_num = df[base]
+# 결측값(NaN)을 0으로 채웁니다. 선형 대수 연산은 NaN을 허용하지 않기 때문입니다.
+df_num = df_num.fillna(0)
+# 판다스 표를 순수 숫자 배열로 변환합니다.
+X = df_num.values
+return X
+
+[셀 2] 훈련 데이터셋으로 모델 학습하기
+
+훈련 세트를 행렬로 바꾸고 선형 회귀를 학습합니다.
+
+Python
+
+X_train = prepare_X(df_train)
+w0, w = train_linear_regression(X_train, y_train)
+
+[셀 3] 검증 데이터셋 준비 및 성능 평가하기
+
+같은 전처리를 검증 세트에 적용합니다. (학습과 평가에 동일한 변환을 쓰는 것이 중요합니다)
+
+Python
+
+X_val = prepare_X(df_val)
+
+[셀 4] 검증 RMSE 계산하기
+
+검증 특성으로 예측한 뒤, 검증 RMSE를 계산합니다. 훈련 오차가 아니라 못 본 데이터 오차라서, 일반화 성능의 첫 지표가 됩니다.
+
+Python
+
+y_pred = w0 + X_val.dot(w)
+rmse(y_val, y_pred)
+
+실행 결과 예시:
+
+Plaintext
+
+np.float64(0.761653099130156)
+
+핵심 요약
+
+동일한 전처리 적용: 훈련 세트와 검증 세트는 반드시 똑같은 전처리 과정(prepare_X)을 거쳐야 모델이 가중치를 정상적으로 적용할 수 있습니다.
+
+일반화 성능 파악: 훈련 세트에서의 오차보다 검증 세트에서의 오차(약 0.76)가 모델의 실제 실력에 더 가까우며, 이제 이 수치를 기준 삼아 모델을 개선해 나갈 수 있습니다.
+
+
+
+-----
+
+
+
+2.11 - Simple feature engineering (간단한 피처 엔지니어링) 초보자 지침
+이 지침은 머신러닝 줌캠프 세션 2의 2.11 Feature engineering 강의 내용을 바탕으로, 노트북 작성과 코드 이해를 돕기 위해 작성되었습니다.
+
+학습 목표
+
+이전까지는 주어진 기본 수치형 컬럼 5개만 그대로 사용해 모델을 만들었습니다. 하지만 머신러닝의 성능을 극적으로 끌어올리기 위해서는 기존 데이터를 가공해 유용한 정보를 새로 만들어내는 피처 엔지니어링(Feature Engineering)이 필요합니다.
+
+이번 섹션에서는 자동차의 출시 연도(year)를 활용해 '차량의 나이(age)'라는 새로운 피처를 만들고, 이 피처가 모델의 예측 성능을 얼마나 향상시키는지 확인해 봅니다.
+
+개념 이해: 왜 차량 나이(Age)를 만들까?
+
+단순히 자동차가 만들어진 연도(예: 2015년, 2008년) 숫자 자체는 가격과 직관적으로 연결되기 어렵습니다. 시간이 흐를수록 가치가 변하기 때문입니다.
+
+데이터가 수집된 연도(2017년)를 기준으로 현재 몇 년이 지났는지(2017 - year) 계산하면, '차의 연식(나이)'이라는 직관적이고 강력한 수치가 됩니다. 차가 오래될수록 가격이 싸진다는 패턴을 모델이 훨씬 더 쉽게 학습할 수 있습니다.
+
+실습 코드 및 셀 내러티브
+
+[셀 1] 피처 엔지니어링이 추가된 prepare_X 함수 정의하기
+
+차량 나이(age) 특성을 추가하는 쪽으로 prepare_X를 확장합니다. 원본 df를 직접 바꾸지 않도록 복사본에서 작업합니다.
+
+Python
+def prepare_X(df):
+    # 호출자가 넘긴 표를 수정하지 않도록 복사합니다.
+    df = df.copy()
+    
+    # 데이터셋 기준 연도 2017에서 제조 연도를 빼 나이를 만듭니다.
+    df['age'] = 2017 - df['year']
+    # 기존 수치 특성에 나이를 덧붙인 목록입니다.
+    features = base + ['age']
+    
+    df_num = df[features]
+    df_num = df_num.fillna(0)
+    X = df_num.values
+
+    return X
+
+
+[셀 2] 새로운 특성으로 모델 재학습하기
+
+나이가 포함된 특성으로 다시 학습합니다.
+
+Python
+X_train = prepare_X(df_train)
+w0, w = train_linear_regression(X_train, y_train)
+
+[셀 3] 검증 세트 적용 및 RMSE 확인하기
+
+검증 세트에도 같은 전처리를 적용한 뒤 RMSE를 계산합니다. 나이 특성이 들어갔을 때 오차가 줄었는지 비교하는 실험입니다.
+
+Python
+X_val = prepare_X(df_val)
+y_pred = w0 + X_val.dot(w)
+rmse(y_val, y_pred)
+실행 결과 예시:
+
+Plaintext
+np.float64(0.5172055461058299)
+
+[셀 4] 예측 분포와 실제값 분포 시각화하기
+
+검증 예측 분포를 빨간색으로, 실제 검증 타깃을 파란색으로 겹쳐 그립니다. label을 붙여 범례에 'prediction' / 'target'이 표시되게 합니다.
+
+Python
+sns.histplot(y_pred, label='prediction', color='red', alpha=0.5, bins=50)
+sns.histplot(y_val, label='target', color='blue',  alpha=0.5, bins=50)
+
+# 범례를 켜서 색과 의미를 연결해 줍니다.
+plt.legend()
+
+핵심 요약
+
+원본 보호 (df.copy()): 함수 안에서 원본 데이터프레임을 직접 수정하면 외부 코드에 예기치 않은 부작용이 생길 수 있으므로, 반드시 복사본을 만들어 처리해야 합니다.
+
+성능의 극적인 향상: age 피처 하나를 추가한 것만으로도 검증 RMSE가 이전의 약 0.76에서 0.51 수준으로 대폭 낮아졌습니다. 적절한 피처 엔지니어링이 모델 성능에 얼마나 큰 영향을 미치는지를 보여주는 대표적인 사례입니다.
+
+
+
+-----
+
+
+
+2.12 - Categorical variables (범주형 변수) 초보자 지침
+이 지침은 머신러닝 줌캠프 세션 2의 2.12 Categorical variables 강의 내용을 바탕으로, 노트북 작성과 코드 이해를 돕기 위해 작성되었습니다.
+
+학습 목표
+
+지금까지는 숫자 형태의 피처들만 다루었지만, 자동차 제조사(make), 모델(model), 연료 타입(engine_fuel_type) 같은 문자열 형태의 범주형 변수(Categorical Variables) 역시 가격 예측에 매우 중요한 정보입니다.
+
+이번 섹션에서는 머신러닝 모델이 이해할 수 있도록 문자로 된 범주를 0과 1의 이진 컬럼으로 변환하는 원-핫 인코딩(One-Hot Encoding) 기법을 배우고, 이를 전처리 함수에 적용해 봅니다.
+
+개념 이해: 범주형 변수와 원-핫 인코딩
+
+범주형 변수의 정의: 숫자가 아니라 고유한 카테고리를 나타내는 변수입니다. (예: 문 개수가 2개, 3개, 4개인 경우나 제조사가 Chevrolet, Toyota인 경우 등)
+
+원-핫 인코딩(One-Hot Encoding): 하나의 범주형 컬럼을 여러 개의 이진(0 또는 1) 컬럼으로 쪼개는 방식입니다. 예를 들어 '문 개수'가 2, 3, 4개라면 각각 num_doors_2, num_doors_3, num_doors_4 컬럼을 만들고, 해당되는 차의 칸에만 1, 나머지는 0을 채워 넣습니다.
+
+주의할 점: 모든 카테고리를 다 넣으면 컬럼이 너무 많아져 행렬 연산이 불안정해질 수 있으므로, 여기서는 각 범주별로 가장 자주 등장하는 상위 5개 값만 추려서 인코딩에 활용합니다.
+
+실습 코드 및 셀 내러티브
+
+[셀 1] 범주형 컬럼과 상위 5개 값 추출하기
+
+원-핫 인코딩에 쓸 범주형 열 이름 목록입니다. 제조사, 모델, 연료, 구동방식, 마켓 카테고리, 크기, 스타일처럼 문자 값인 열입니다. 각 범주 열에서 '상위 몇 개 값'만 모아 둘 딕셔너리를 준비합니다. 열마다 훈련 세트에서 가장 자주 등장하는 값 5개의 이름을 저장합니다. value_counts().head()는 빈도 상위 5개이고, .index가 그 범주 이름 목록입니다.
+
+Python
+categorical_columns = [
+    'make', 'model', 'engine_fuel_type', 'driven_wheels', 'market_category',
+    'vehicle_size', 'vehicle_style']
+
+categorical = {}
+
+for c in categorical_columns:
+    categorical[c] = list(df_train[c].value_counts().head().index)
+
+
+[셀 2] 원-핫 인코딩이 추가된 prepare_X 함수 정의하기
+
+나이, 문 개수 더미, 범주 더미까지 넣어 특성 행렬을 만드는 prepare_X입니다. 범주 값은 숫자 행렬에 바로 못 넣으므로, '이 값이면 1, 아니면 0'인 더미 열로 바꿉니다.
+
+Python
+def prepare_X(df):
+    df = df.copy()
+    
+    df['age'] = 2017 - df['year']
+    features = base + ['age']
+
+    # 문 개수가 2, 3, 4인지를 각각 0/1 열로 만듭니다. (원-핫 인코딩)
+    for v in [2, 3, 4]:
+        df['num_doors_%d' % v] = (df.number_of_doors == v).astype(int)
+        features.append('num_doors_%d' % v)
+
+    # 각 범주 열의 상위 값마다 더미 열을 만들고 특성 목록에 추가합니다.
+    for name, values in categorical.items():
+        for value in values:
+            df['%s_%s' % (name, value)] = (df[name] == value).astype(int)
+            features.append('%s_%s' % (name, value))
+
+    df_num = df[features]
+    df_num = df_num.fillna(0)
+    X = df_num.values
+
+    return X
+
+[셀 3] 범주형 피처를 포함한 모델 학습 및 검증 RMSE 계산하기
+
+범주 더미가 포함된 특성으로 다시 학습하고 검증 RMSE를 계산합니다. 열이 많아지면 적합은 좋아 보일 수 있지만, 수치적으로 불안정해지기도 합니다.
+
+Python
+X_train = prepare_X(df_train)
+w0, w = train_linear_regression(X_train, y_train)
+
+X_val = prepare_X(df_val)
+y_pred = w0 + X_val.dot(w)
+rmse(y_val, y_pred)
+
+실행 결과 예시:
+
+Plaintext
+np.float64(53.70545993470668)
+
+
+[셀 4] 학습된 절편과 가중치 확인하기
+
+학습된 절편과 가중치를 출력합니다. 값이 비정상적으로 커졌다면, 다음 섹션의 다중공선성·규제(리지) 이야기로 이어집니다.
+
+Python
+w0, w
+실행 결과 예시:
+
+Plaintext
+(np.float64(120883643437600.25),
+ array([ 1.97815705e-01,  3.59996839e+00,  1.77430262e-01,  2.54401440e+00,
+        -3.91209144e-04,  1.31841741e+00, -1.87629844e+03, -1.87912990e+03,
+        -1.87135179e+03, -3.16525752e+00,  8.11185787e-01,  8.76573747e+00,
+        -7.26348843e+00, -5.87324602e+00, -3.43160292e+01, -2.49085861e+01,
+        -4.50399871e+01, -2.85752551e+01,  9.63377197e+00,  3.79004788e+02,
+         3.54982604e+02,  3.73756735e+02,  4.23480737e+02,  3.19067990e+02,
+        -1.20883643e+14, -1.20883643e+14, -1.20883643e+14, -1.20883643e+14,
+        -2.07609706e-01, -6.37629899e-01, -4.67620395e-01,  2.49283098e+01,
+         4.01327473e+00, -2.32017237e+01, -2.26915593e+01, -5.85429953e+00,
+        -1.44115660e-01, -2.62579827e-02,  1.75913981e-01,  3.65037816e-01,
+        -2.90235596e-01]))
+
+핵심 요약
+
+범주형 변수의 변환 필요성: 머신러닝 알고리즘은 숫자로 된 데이터만 처리할 수 있으므로, 문자열로 된 카테고리 정보는 반드시 원-핫 인코딩을 거쳐야 합니다.
+
+예상치 못한 문제 발생: 모든 범주형 변수를 한꺼번에 풀어서 대량의 컬럼을 만들었더니, 오히려 RMSE가 53을 넘는 등 모델 성능이 완전히 망가지고 가중치가 비정상적으로 치솟는 현상이 발생했습니다. 다음 섹션에서는 이 원인(다중공선성)을 파악하고 해결책을 알아보게 됩니다.
+
+
+
+-----
+
+
+
+2.13 - Regularization (규제) 초보자 지침
+
+이 지침은 머신러닝 줌캠프 세션 2의 2.13 Regularization 강의 내용을 바탕으로, 노트북 작성과 코드 이해를 돕기 위해 작성되었습니다.
+
+학습 목표
+
+지난 섹션에서 범주형 변수를 원-핫 인코딩으로 대량 추가했을 때, 모델의 가중치와 RMSE가 비정상적으로 치솟는 문제가 발생했습니다.
+
+이번 섹션에서는 이러한 현상의 원인인 다중공선성(Multicollinearity)과 역행렬 불안정 문제를 이해하고, 그 해결책인 리지 규제(Ridge Regularization)를 적용하여 모델을 안정시키는 방법을 배웁니다.
+
+개념 이해: 다중공선성과 규제
+
+다중공선성(Multicollinearity): 피처 간에 완벽하거나 거의 완벽한 선형 종속(Linear Combination, 한 컬럼을 다른 컬럼들의 조합으로 표현할 수 있는 상태)이 존재할 때 발생합니다. 이로 인해 그램 행렬 XᵀX의 역행렬을 구할 때 값이 극단적으로 커져 가중치가 폭발하게 됩니다.
+
+규제(Regularization): 그램 행렬의 대각선 원소에 아주 작은 값(r)을 더해줌으로써 행렬이 특이 행렬(Singular Matrix)이 되는 것을 방지하고, 역행렬을 안정적으로 계산하여 가중치가 지나치게 커지는 것을 제어하는 기법입니다. (이를 리지 회귀(Ridge Regression)라고 합니다.)
+
+실습 코드 및 셀 내러티브
+
+[셀 1] 열이 거의 선형 종속인 작은 행렬 만들기
+
+열이 거의 선형 종속인 작은 행렬을 손으로 만듭니다. 마지막 행만 아주 살짝 다른 값이라, XᵀX가 거의 특이 행렬(역행렬이 불안정)이 됩니다.
+
+Python
+X = [
+    [4, 4, 4],
+    [3, 5, 5],
+    [5, 1, 1],
+    [5, 4, 4],
+    [7, 5, 5],
+    [4, 5, 5.00000001],
+]
+
+X = np.array(X)
+X
+
+
+[셀 2] 타깃 벡터 정의하기
+
+이 예제 행렬에 대응하는 짧은 타깃 벡터 y를 준비합니다.
+
+Python
+y = [1, 2, 3, 1, 2, 3]
+[셀 3] 그램 행렬 XᵀX 계산하기
+
+그램 행렬 XᵀX를 계산하고 출력합니다. 열들이 거의 종속이면 이 행렬의 행렬식이 0에 가까워집니다.
+
+Python
+XTX = X.T.dot(X)
+XTX
+[셀 4] 불안정한 역행렬 구하기
+
+겉보기에는 역행렬을 구할 수 있습니다. 다만 수치가 매우 커지거나 불안정해지는 것이 문제로, 다음 셀에서 그 결과를 봅니다. 최신 넘파이는 이 행렬을 완전 특이행렬로 보고 LinAlgError를 내므로, 아주 작은 값을 대각선에 더해 강의처럼 거대한 역행렬을 재현합니다.
+
+//
+나> 뭔말이야 초보자 해석
+
+GEM> 이 문장은 강의 영상에서 설명하는 내용과 최신 파이썬(NumPy) 라이브러리의 실제 동작 사이의 차이를 설명해 주는 부분입니다. 초보자분들이 이해하기 쉽게 풀어드릴게요.
+
+1. 무슨 상황인가요?
+강의 영상의 상황: 숫자들이 '완벽하게' 똑같지 않고 아주 미세하게 다를 때(예: 5와 5.00000001), 옛날 방식의 컴퓨터나 라이브러리로 계산하면 에러를 뿜어내지 않고 "억지로" 역행렬을 구해줍니다. 대신 그 결과로 숫자가 수십억~수조 원처럼 상상할 수 없을 정도로 거대한 값(불안정한 값)으로 튀어 오르게 됩니다. 강의는 이 "숫자가 튀어 오르는 문제"를 보여주려고 만든 예제입니다.
+
+요즘 컴퓨터(최신 NumPy)의 상황: 요즘 나온 넘파이는 똑똑해져서, 숫자가 저렇게 미세하게 달라도 "이거 거의 똑같은 컬럼(특이 행렬)인데? 계산 못 해!" 하고 아예 멈춰버리며 에러(LinAlgError)를 띄웁니다.
+
+
+2. 그래서 노트북 코드가 뭘 하고 있는 건가요?
+강의 영상처럼 "역행렬은 구해지지만 숫자가 엄청나게 커지는 기괴한 현상"을 여러분이 직접 눈으로 확인할 수 있도록, 코드가 잔머리를 좀 굴린 것입니다.
+
+원래라면 에러가 나고 멈춰야 할 상황이기 때문에, 코드가 대각선에 눈곱만큼 작은 값(1e-10)을 살짝 더해준 것입니다.
+
+이렇게 아주 미세한 양념을 치면 최신 넘파이가 에러를 뿜지 않고 통과시켜 줍니다. 그 결과, 강의 영상에서처럼 "에러는 안 났지만 역행렬 숫자들이 아주 거대하게 튀어 오르는 모습"을 우리 노트북 화면에 똑같이 재현해서 보여줄 수 있게 됩니다.
+
+한 줄 요약
+"최신 넘파이는 에러를 내며 튕겨버릴 만큼 위험한 계산인데, 강의 내용을 그대로 실습해 보려고 에러 안 나게 아주 미세한 꼼수를 써서 억지로 거대한 역행렬을 불러온 것입니다."
+
+
+나>"요즘 컴퓨터(최신 NumPy)의 상황: 요즘 나온 넘파이는 똑똑해져서, 숫자가 저렇게 미세하게 달라도 "이거 거의 똑같은 컬럼(특이 행렬)인데? 계산 못 해!" 하고 아예 멈춰버리며 에러(LinAlgError)를 띄웁니다.
+
+원래라면 에러가 나고 멈춰야 할 상황이기 때문에, 코드가 대각선에 눈곱만큼 작은 값(1e-10)을 살짝 더해준 것입니다.
+
+이렇게 아주 미세한 양념을 치면 최신 넘파이가 에러를 뿜지 않고 통과시켜 줍니다." 
+
+아까는 미세하면 에러 나온다며? 대각선은 다른가? 그런점을 강조했어야지 넌 뭐하냐
+
+
+GEM> 아, 제가 앞뒤 맥락을 섞어서 혼란을 드렸네요! 제 실수가 맞습니다. 정확하게 짚어주셔서 감사합니다.
+
+규제 파트에서 다루는 내용은 대각선에 무엇을 더하느냐에 따라 상황이 완전히 달라집니다. 핵심을 다시 깔끔하게 정리해 드릴게요.
+
+1. 앞서 배운 내용 (공식적인 '규제' - Ridge)
+행렬의 대각선에 의도적으로 꽤 큰 값(예: 0.01 같은 r값)을 더해주면, 역행렬이 안정적으로 잘 구해지고 가중치도 예쁘게 통제됩니다. 이게 바로 우리가 쓰는 리지 규제입니다.
+
+2. 방금 그 코드의 비밀 (1e-10을 더한 이유)
+반대로 대각선에 아무것도 안 더하거나, 눈곱만큼도 안 되는 상상 속의 오차(1e-10처럼 0에 가까운 미세한 값)만 있는 상태에서는 최신 넘파이가 이걸 "완전 위험한 특이 행렬이야!" 하고 에러(LinAlgError)를 뱉어냅니다.
+
+그런데 노트북 작성자는 강의 영상 화면에 나오는 "에러는 안 나지만 숫자가 수십억으로 미쳐 날뛰는 결과 화면"을 우리에게 똑같이 보여주고 싶었던 것입니다.
+
+그래서 최신 넘파이의 철벽 방어(에러)를 뚫기 위해, 컴퓨터가 에러를 안 낼 정도로만 아주 미세한 양념(1e-10)을 대각선에 살짝 묻혀서 억지로 통과시킨 것입니다.
+
+즉, 강의가 의도한 것: "에러는 안 나는데 숫자가 폭발하는 기괴한 현상"
+
+최신 넘파이의 현실: "위험해서 아예 에러 내고 멈춤"
+
+노트북의 꼼수: "에러 안 나게 아주 미세하게 조작해서 강의 화면 그대로 재현함"
+
+이 차이였습니다. 혼동을 드려 죄송합니다!
+
+
+나> 언제는 미세해도 넘파이는 에러 나온다며?
+
+GEM> 아, 제가 또 헷갈리게 말씀드렸네요! 제 설명이 부족했습니다. 확실하게 짚어드릴게요.
+
+결론부터 말씀드리면, '어디에, 어떤 숫자가' 들어가느냐에 따라 완전히 다릅니다.
+
+데이터(피처) 자체에 미세한 오차가 있을 때 (5와 5.00000001)
+
+데이터 안에서 컬럼끼리 거의 똑같고 끝자리만 아주 미세하게 다를 때, 옛날 넘파이는 이걸 그냥 넘어가서 숫자가 폭발했습니다.
+
+하지만 최신 넘파이는 이걸 딱 잡아내고 "이거 거의 중복인데? 계산 못 해!" 하고 에러를 뱉습니다. (이게 제가 아까 말씀드린 "미세하면 에러 나온다"의 상황입니다.)
+
+행렬 대각선에 아주 미세한 값을 더할 때 (1e-10)
+
+이건 데이터가 아니라 수학적 연산(대각선 위치)에 인위적으로 아주 작은 숫자를 톡 떨어뜨려 준 것입니다.
+
+이렇게 대각선에 양념을 치면, 넘파이가 "아, 대각선에 값이 있네? 이제 역행렬 구할 수 있다!" 하고 에러를 안 내고 통과시켜 줍니다. 대신 데이터가 거의 중복이었던 탓에 역행렬의 숫자들은 상상도 못 하게 커지게 됩니다.
+
+즉, 데이터의 미세한 차이 때문에 넘파이가 에러를 뱉는 것이고, 코드 속 1e-10은 그 에러를 피하려고 개발자가 대각선에 일부러 발라둔 아주 작은 꼼수(값)입니다.
+
+제가 앞서 두 상황을 매끄럽게 연결해서 설명하지 못하고 헷갈리게 해드렸네요. 죄송합니다! 이 부분이 명확해지셨기를 바랍니다.
+//
+
+
+Python
+XTX_inv = np.linalg.inv(XTX + 1e-10 * np.eye(XTX.shape[0]))
+
+//
+이 코드가 도대체 무슨 짓을 하고 있는 건지, 뼈를 때리는(?) 비유로 아주 쉽게 쪼개서 설명해 드릴게요.
+
+1. 코드 해부하기
+이 한 줄은 "넘파이 경찰을 매수해서 억지로 계산을 통과시키는 사기 계약서"입니다. 우측에서 좌측으로 하나씩 뜯어봅시다.
+
+XTX.shape[0]: 우리 행렬(XTX)의 크기(예: 3×3)를 구합니다.
+
+/
+XTX.shape[0]가 왜 저런 모양인지, 파이썬(NumPy)의 문법적 구조로 쪼개서 설명해 드릴게요.
+
+1. shape이 뭔데?
+넘파이 배열(Matrix)에 .shape을 붙이면 행렬의 크기(가로, 세로 몇 칸인지)를 튜플 형태로 알려줍니다.
+
+예를 들어 3행 3열짜리 행렬이라면 결과가 (3, 3)으로 나옵니다.
+
+2. 뒤에 붙은 [0]은 왜 붙였을까?
+(3, 3)이라는 것은 [세로 길이(행 개수), 가로 길이(열 개수)]를 뜻합니다.
+
+파이썬은 숫자를 0부터 세기 때문에(인덱싱), [0]은 그중 첫 번째 값인 '세로 길이(행 개수)'를 뽑아내겠다는 뜻입니다. (만약 가로 길이를 원했다면 [1]을 썼겠죠.)
+
+3. 결론: 왜 굳이 이런 식으로 적었을까요?
+우리가 만들려는 단위 행렬(np.eye)은 정사각형이어야 합니다. 즉, 원래 행렬(XTX)이 3×3이면 대각선에 더할 단위 행렬도 똑같이 3×3이어야 덧셈(+)이 가능합니다.
+
+XTX.shape[0]은 "원래 행렬의 세로 크기(예: 3)"를 알아내는 코드입니다.
+
+그걸 np.eye(3) 자리에 쏙 집어넣어서, "원래 행렬과 정확히 똑같은 크기(3×3)의 단위 행렬을 만들어라!"라고 명령하기 위해 저런 식으로 작성한 것입니다.
+
+
+나> 저기에 어떤 3x3 언급이나 힌트도 없는데?
+
+GEM> 아, 그 의문이 드는 게 당연합니다! 코드 어디에도 3이라는 숫자가 적혀 있지 않으니까요.
+
+결론부터 말씀드리면, 컴퓨터가 알아서 세도록 시킨 것입니다.
+
+1. 3이라고 직접 안 쓰고 왜 저렇게 복잡하게 쓸까요?
+만약 우리가 다루는 데이터(행렬)가 지금은 우연히 3×3이라서 np.eye(3)이라고 직접 쓸 수도 있지만, 나중에 머신러닝 모델을 돌릴 때는 피처가 수십 개, 수백 개가 될 수 있습니다. 행렬 크기가 매번 바뀐다는 뜻이죠.
+
+3이라고 직접 적어두면, 나중에 데이터가 바뀌어서 행렬 크기가 5×5나 100×100이 되었을 때 코드가 에러를 뿜으며 망가집니다.
+
+그래서 개발자는 "내가 몇 3인지 셀 테니까 네가 직접 네 몸집(크기)을 확인해서 알아서 만들어 와!" 하고 컴퓨터에게 시킨 것입니다.
+
+2. 코드가 일하는 방식
+XTX.shape: 컴퓨터가 XTX 행렬을 거울 보듯 봅니다. 아, 지금 내 몸집은 (3, 3)이구나! 하고 파악합니다.
+
+[0]: 그중 첫 번째 숫자(3)를 쏙 빼옵니다.
+
+np.eye(3): 그 3이라는 숫자를 바탕으로 np.eye(3)을 실행해 완벽하게 몸에 맞는 3×3 단위 행렬을 뚝딱 만들어냅니다.
+
+즉, "내가 직접 숫자를 세기 귀찮으니, XTX 너의 크기를 직접 측정해서 거기에 딱 맞는 옷을 지어 입어라"라고 유연하게 코드를 짜둔 것입니다!
+/
+
+
+np.eye(...): 그 크기만큼 대각선만 1이고 나머지는 전부 0인 단위 행렬(I)을 만듭니다. (즉, 대각선에만 깃발을 꽂아두는 격입니다.)
+
+1e-10 * ...: 그 깃발(1)들에 눈곱만큼 작고 가소로운 숫자(0.0000000001)를 곱해줍니다. 결국 대각선 자리에 아주 미세한 양념만 톡톡 뿌리는 셈입니다.
+
+XTX + (...): 원래 문제의 그램 행렬에 방금 만든 아주 미세한 대각선 값을 더해줍니다.
+
+np.linalg.inv(...): 그리고 역행렬을 구합니다.
+
+
+2. 왜 이런 짓을 할까요? (비유)
+원래 상황: 문이 정확히 똑같이 생긴 쌍둥이 문이 2개 있어서, 시스템이 "어? 이거 문이 겹치는데? 충돌! 에러!" 하고 작동을 멈추거나 거부해야 정상입니다. (최신 넘파이가 에러를 뱉는 이유)
+
+개발자의 꼼수: 그런데 우리는 "에러가 나면서 숫자가 미쳐 날뛰는 흉측한 결과 화면"을 눈으로 직접 구경해야 합니다. 에러 때문에 튕기면 수업을 진행할 수가 없죠.
+
+해결책 (1e-10): 그래서 대각선 자리에 인간의 눈에는 보지도 못할 만큼 미세한 흠집(1e-10)을 살짝 내줍니다.
+
+컴퓨터(넘파이) 입장에서는 대각선 값이 0이 아니라 아주 미세하게나마 무언가 존재하니까, "오? 완벽하게 똑같지는 않네? 에러는 안 띄워줄게!" 하고 멍청하게 속아 넘어갑니다.
+
+3. 최종 결론
+**"넘파이가 '중복 데이터다!' 하고 에러를 뱉으며 튕겨나가지 못하도록, 대각선에 0.0000000001이라는 눈곱만큼 작은 꼼수를 더해 강제로 역행렬 계산을 실행시키는 코드"**입니다.
+
+실제 실무나 진짜 리지 규제에서는 이 자리에 1e-10처럼 옹졸한 값이 아니라, 모델이 똑바로 학습되도록 의미 있는 크기의 값(예: 0.01)을 팍팍 넣어주는 것입니다!
+//
+
+
+
+[셀 5] 역행렬 확인하기
+
+역행렬을 출력합니다. 원소 절댓값이 비정상적으로 크면, 작은 입력 오차가 가중치를 크게 흔든다는 신호입니다.
+
+Python
+XTX_inv
+
+
+결과:
+
+# 역행렬을 출력합니다.
+# 원소 절댓값이 비정상적으로 크면, 작은 입력 오차가 가중치를 크게 흔든다는 신호입니다.
+XTX_inv
+array([[ 3.85852100e-02, -2.21700003e+00,  2.17734375e+00],
+       [-2.21700016e+00,  4.99991077e+09, -4.99991077e+09],
+       [ 2.17734314e+00, -4.99991077e+09,  4.99991077e+09]])
+
+//
+제시해주신 역행렬 결과 배열을 보면, 앞서 나눈 이야기가 완벽하게 증명되어 있습니다.
+
+숫자들을 살펴보면 대목마다 확 와닿는 포인트가 있습니다.
+
+결과 분석
+상대적으로 평범한 숫자들: 좌측 상단의 3.85e-02(약 0.038) 같은 값들은 아주 정상적이고 차분한 수치입니다.
+
+미쳐 날뛰는 숫자들: 하지만 우측 하단으로 갈수록 4.99991077e+09라는 숫자가 보입니다. 뒤에 붙은 e+09는 10의 9제곱(즉, 10억)을 뜻합니다. 즉, 약 50억에 달하는 거대한 숫자입니다!
+
+이 결과가 말해주는 것
+앞서 대각선에 1e-10이라는 눈곱만큼 작은 꼼수를 쳐서 최신 넘파이의 에러를 간신히 피했지만, 데이터가 거의 중복(선형 종속)이었던 탓에 역행렬의 결과값이 50억이라는 천문학적인 수치로 폭발해 버렸습니다.
+
+이렇게 역행렬 원소 중 일부가 수십억, 수조 원 단위로 미쳐 날뛰게 되면, 다음에 타깃 데이터(y)랑 곱해서 가중치를 구할 때 아주 작은 입력 오차 하나만 생겨도 모델의 가중치 전체가 완전히 엉망진창으로 흔들리게 됩니다.
+
+이래서 데이터에 다중공선성(중복 피처)이 있을 때 규제 없이 역행렬을 구하면 모델이 망가진다는 것을 이 50억(4.99e+09)이라는 숫자가 눈으로 직접 보여주는 것입니다!
+//
+
+
+
+[셀 6] 정규방정식으로 가중치 계산해보기
+
+불안정한 역행렬로 정규방정식을 풀면 가중치가 어떻게 나오는지 확인합니다. 타깃은 작은 정수인데 가중치가 크게 튀면, 이 해가 실용적이지 않다는 뜻입니다.
+
+//
+방금 구했던 그 미쳐 날뛰는 역행렬(50억짜리 숫자가 들어있던 것)을 가지고 실제로 정규방정식 공식에 넣어서 모델의 가중치(Weight)를 직접 계산해 보는 단계입니다. 이 말이 무슨 뜻인지 뼈를 때리는 예시로 풀어드릴게요.
+
+1. "타깃은 작은 정수인데"가 무슨 뜻인가요?
+우리가 맞추려고 하는 정답(y, 타깃)은 아까 [1, 2, 3, 1, 2, 3]처럼 아주 평범하고 작은 숫자들입니다. (예: 집값이 3억 원, 5억 원 같은 현실적인 숫자)
+
+2. "가중치가 크게 튀면"이 무슨 뜻인가요?
+그런데 정답은 1, 2, 3 같은 소소한 숫동인데, 그 50억짜리 불안정한 역행렬을 곱해버리는 바람에 계산 결과 나온 가중치(컴퓨터가 학습한 중요도 점수)가 상상도 못 할 만큼 엄청나게 커져 버립니다.
+
+예를 들어, "방 개수 곱하기 5,000,000,000(50억) + 연식 곱하기 -3,000,000,000(30억)" 이런 식으로 가중치가 기괴하게 튀어 오르는 것입니다.
+
+3. "이 해가 실용적이지 않다는 뜻"은 무슨 말인가요?
+집값 예측을 하는데 방 개수가 1개 늘었다고 가격이 갑자기 50억 원씩 껑충 뛰는 모델이 있다면, 그걸 실제 세상(실용)에 써먹을 수 있을까요? 당연히 쓰레기 같은 예측을 하겠죠.
+
+즉, "역행렬이 불안정해서 가중치가 억 단위, 조 단위로 미쳐 날뛰면, 그 모델은 현실 세계에서 전혀 쓸모없는(실용성이 없는) 망한 모델이 된다"는 뜻입니다.
+
+그래서 이 문제를 해결하려고 뒤에서 대각선에 제대로 된 값(0.01)을 팍팍 더해주는 리지 규제를 쓰게 되는 것입니다!
+//
+
+>>> 여기까지
+
+Python
+XTX_inv.dot(X.T).dot(y)
+
+
+
+[셀 7] 또 다른 거의 특이인 작은 행렬 정의하기
+
+거의 특이인 또 다른 작은 행렬을 직접 정의합니다. 두 번째·세 번째 열이 거의 같아서 역행렬이 극단적으로 커집니다.
+
+Python
+XTX = [
+    [1, 2, 2],
+    [2, 1, 1.0000001],
+    [2, 1.0000001, 1]
+]
+
+XTX = np.array(XTX)
+
+[셀 8] 규제 없는 역행렬 확인하기
+
+규제 없이 역행렬을 구해 숫자가 얼마나 큰지 확인합니다.
+
+Python
+np.linalg.inv(XTX)
+
+
+//
+나> XTX_inv.dot(X.T).dot(y)
+
+이게 
+
+np.linalg.inv(XTX)
+
+이거랑 같은 원리임?
+
+
+GEM> 두 코드는 완전히 다른 역할을 하는 전혀 다른 원리입니다.
+
+1. np.linalg.inv(XTX)
+역행렬만 덜렁 구하는 코드입니다.
+
+XTX 행렬을 집어넣으면, "이 행렬의 역행렬은 이거야!" 하고 역행렬 자체만 뱉어내고 끝납니다. 아직 정답(y)이나 전치 행렬(X.T)과는 아무런 계산도 하지 않은 상태입니다.
+
+2. XTX_inv.dot(X.T).dot(y)
+방금 1번에서 구한 역행렬(XTX_inv)을 가지고 최종 가중치(w)를 완성하는 연산입니다.
+
+이미 구해둔 역행렬에다가 전치 행렬(X.T)을 곱하고, 마지막에 타깃(y)까지 곱해서 우리가 진짜로 알고 싶었던 모델의 가중치(파라미터)를 최종적으로 뺴내는 공식입니다.
+
+한 줄 요약
+np.linalg.inv(XTX)는 재료(역행렬)를 만드는 과정이고,
+
+XTX_inv.dot(X.T).dot(y)는 그 재료를 가지고 최종 요리(가중치)를 완성하는 과정입니다!
+//
+
+
+[셀 9] 대각선에 작은 값 더하기 (정규화)
+
+대각선에 작은 값(0.01)을 더해 행렬을 살짝 '정규화'합니다. np.eye(3)은 3×3 단위 행렬이고, r*I를 더하는 것이 리지(Ridge) 규제의 핵심입니다.
+
+Python
+XTX = XTX + 0.01 * np.eye(3)
+
+
+[셀 10] 규제를 더한 뒤의 역행렬 확인하기
+
+규제를 더한 뒤의 역행렬을 구합니다. 원소 크기가 훨씬 차분해지면, 같은 트릭을 학습 함수에도 넣어도 되겠다는 확신이 생깁니다.
+
+Python
+np.linalg.inv(XTX)
+
+결과:
+array([[ -0.33668908,   0.33501399,   0.33501399],
+       [  0.33501399,  49.91590897, -50.08509104],
+       [  0.33501399, -50.08509104,  49.91590897]])
+
+
+
+[셀 11] 규제가 들어간 선형 회귀 학습 함수 정의하기
+
+리지 규제가 들어간 선형 회귀 학습 함수를 정의합니다. r은 규제 강도이고, XᵀX의 대각선에 r을 더해 역행렬이 안정적으로 구해지게 합니다.
+
+Python
+def train_linear_regression_reg(X, y, r=0.001):
+    ones = np.ones(X.shape[0])
+    X = np.column_stack([ones, X])
+
+    XTX = X.T.dot(X)
+    # r * I 를 더합니다. r이 클수록 가중치를 작게 누르고, 0이면 규제 없는 회귀와 같습니다.
+    XTX = XTX + r * np.eye(XTX.shape[0])
+
+    XTX_inv = np.linalg.inv(XTX)
+    w_full = XTX_inv.dot(X.T).dot(y)
+    
+    return w_full[0], w_full[1:]
+
+
+//
+Python    
+
+return w_full[0], w_full[1:]
+이 코드는 학습이 끝난 전체 가중치 배열(w_full)에서 절편(Bias)과 나머지 특성들의 가중치(Weights)를 두 개로 쪼개서 밖으로 돌려주는(반환하는) 역할입니다.구성 요소를 뜯어보면 이렇습니다.w_full[0] (절편 / Bias)파이썬 리스트의 첫 번째 값(0번 인덱스)입니다.선형 회귀 공식에서 $w_0$에 해당하는 절편(bias, y절편) 값만 따로 쏙 빼서 첫 번째로 반환합니다.w_full[1:] (가중치들 / Weights)1번 인덱스부터 끝까지([1:])의 모든 값을 통째로 가져옵니다.자동차의 가격에 영향을 미치는 연식, 문 개수, 제조사 등 나머지 모든 피처들의 가중치(w 배열)를 한꺼번에 묶어서 두 번째로 반환합니다.즉, "계산된 전체 가중치 뭉치에서 맨 처음에 있는 절편($w_0$)과 나머지 피처들의 가중치($w$)를 예쁘게 분리해서 내보낸다"는 뜻입니다!
+//
+
+
+[셀 12] 규제 강도 r=0.01로 학습 및 검증 RMSE 계산하기
+
+규제 강도 r=0.01로 학습한 뒤 검증 RMSE를 계산합니다. 규제 없는 모델보다 오차와 가중치가 안정적인지 보는 첫 실험입니다.
+
+Python
+X_train = prepare_X(df_train)
+w0, w = train_linear_regression_reg(X_train, y_train, r=0.01)
+
+X_val = prepare_X(df_val)
+y_pred = w0 + X_val.dot(w)
+rmse(y_val, y_pred)
+실행 결과 예시:
+
+Plaintext
+np.float64(0.46082082865518853)
+
+//
+이전 답변이나 대화 맥락에서 기존에 50억(4.99e+09)까지 폭발했던 가중치와 비교해 드려야 정확하겠네요!
+
+기존의 미쳐 날뛰던 값과 비교하면 다음과 같습니다.
+
+기존 값: 약 5,000,000,000 (50억)
+
+현재 값: 약 0.46
+
+얼마나 줄어든 것인가요?
+숫자가 수십억 단위에서 1보다 작은 소수점으로 확 내려앉았습니다.
+
+비율로 따지면 약 100억 분의 1 수준으로 줄어든 것입니다.
+
+대각선에 규제(0.01 같은 r값이나 적절한 양념)를 제대로 적용했더니, 억 단위로 튀던 가중치가 현실적으로 말이 되는 안정적인 값(0.46)으로 완벽하게 통제되었다는 뜻입니다!
+
+
+나> r=0.001 이나 r=0.01 이나 결과는 둘다 np.float64(0.46081585855400226)
+로 별 차이 없는데?
+
+GEM> r=0.001을 넣었을 때와 r=0.01을 넣었을 때 결과가 거의 똑같이 나오는 게 당연합니다!
+
+그 이유는 이미 50억이라는 천문학적인 폭발 상태에서 벗어났기 때문입니다. 이 현상을 3가지 포인트로 짚어드릴게요.
+
+1. 50억에서 탈출했다는 게 핵심
+아까 대각선에 아무것도 안 더하거나 1e-10처럼 옹졸한 값을 넣었을 때는 역행렬이 깨지면서 가중치가 50억까지 치솟았습니다.
+
+하지만 r=0.001이나 r=0.01은 둘 다 컴퓨터/수학적 관점에서 "행렬을 안정시키기에고 넘칠 만큼 충분히 큰 양념"입니다.
+
+즉, 둘 다 역행렬이 폭발하는 현상을 완벽하게 막아주기 때문에, 계산 결과 나온 가중치가 소수점 단위(0.46...)의 정상적인 구간으로 안착하게 됩니다.
+
+2. 그럼 소수점 뒷자리는 왜 미세하게 다를까요?
+실제로 자세히 들여다보면 값의 뒷부분이 살짝 다를 겁니다.
+
+r=0.001일 때와 r=0.01일 때 규제의 세기(벌점의 강도)가 미세하게 다르기 때문에, 소수점 아래 깊은 곳의 수치는 미세하게 바뀝니다.
+
+하지만 우리가 다루는 데이터 관점에서는 0.46081...이나 0.46082...나 모델이 예측하는 실용적인 성능에는 거의 차이가 없는 안정권에 들어온 것입니다.
+
+3. 리지 규제(Ridge)의 특성
+리지 규제에서 r(알파) 값은 0에서 벗어나기만 하면 일단 폭발을 막아주는 안전장치 역할을 톡톡히 합니다.
+
+다만 r을 터무니없이 너무 크게(예: 100이나 1000처럼) 키워버리면, 모델이 너무 짓눌려서 가중치가 전부 0에 가까워지거나 학습 능력이 망가집니다.
+
+지금처럼 0.001이나 0.01 같은 작은 값들 사이에서는 "폭발만 막아주면 되므로" 결과가 대동소이하게 나오는 것이 지극히 정상입니다!
+//
+
+
+
+핵심 요약
+
+다중공선성(Multicollinearity) 문제: 피처 간의 선형 종속 관계로 인해 역행렬이 불안정해지고 가중치가 폭발하는 현상을 확인했습니다.
+
+리지 규제(Ridge Regularization) 적용: 그램 행렬의 대각선에 작은 값(r)을 더해줌으로써 수치적 안정성을 확보하고, 모델의 성능(RMSE)을 대폭 개선할 수 있었습니다.
+
+
+
+-----
+
+
+
+2.14 Tuning the model (모델 튜닝) 초보자 지침
+
+이 지침은 머신러닝 줌캠프 세션 2의 2.14 Tuning the model 강의 내용을 바탕으로, 노트북 작성과 코드 이해를 돕기 위해 작성되었습니다.
+
+학습 목표
+이전에 배운 리지 규제(Ridge Regularization)에서 규제 강도(r)를 어떻게 설정하느냐에 따라 모델의 성능이 달라집니다.
+
+이번 섹션에서는 검증 데이터셋(Validation Set)을 활용하여, 모델을 가장 안정적이고 정확하게 만들어 주는 최적의 규제 하이퍼파라미터 r 값을 찾는 과정을 배웁니다.
+
+개념 이해: 규제 강도(r) 튜닝과 검증
+
+하이퍼파라미터 튜닝(Hyperparameter Tuning): 모델이 학습하는 가중치가 아니라, 사람이 직접 세팅해주어야 하는 값(여기서는 규제 강도 r)을 여러 개 바꿔가며 가장 좋은 성능을 내는 값을 찾는 작업입니다.
+
+검증 세트 활용 (Validation Set): r 값을 0부터 10까지 다양하게 테스트해 보면서, 학습 데이터에만 과하게 맞춰지지 않고 실제 모르는 데이터(검증셋)에서도 오차가 가장 적은(RMSE가 가장 낮은) 최적의 지점을 고릅니다.
+
+실습 코드 및 셀 내러티브
+[셀 1] 여러 규제 강도 r을 순회하며 검증 RMSE 비교하기
+다양한 r 값들을 리스트로 두고 반복문을 돌며, 각 규제 강도에 따라 학습된 모델의 성능(RMSE)을 측정합니다.
+
+Python
+# 여러 규제 강도 r을 돌아가며 검증 RMSE를 비교합니다.
+# 너무 작으면 불안정하고, 너무 크면 과소적합이 되므로, 가운데에서 좋은 r을 고릅니다.
+for r in [0.0, 0.00001, 0.0001, 0.001, 0.1, 1, 10]:
+    X_train = prepare_X(df_train)
+    w0, w = train_linear_regression_reg(X_train, y_train, r=r)
+    
+    X_val = prepare_X(df_val)
+    y_pred = w0 + X_val.dot(w)
+    score = rmse(y_val, y_pred)
+    
+    # r, 절편, 검증 점수를 한 줄에 출력해 표처럼 비교합니다.
+    print(r, w0, score)
+
+
+결과:
+
+0.0 120883643437600.25 53.70545993470668
+1e-05 8.377536683531915 0.46081532306190714
+0.0001 7.139523156766516 0.46081536558173836
+0.001 7.1309028247366735 0.46081585855400226
+0.1 7.000232409563553 0.46087365490950694
+1 6.25074784766319 0.46158128382736374
+10 4.729512585705947 0.4726098772668833
+
+
+코드 설명:
+
+r=0.0: 규제가 없을 때 절편(w 
+0)이 120조 단위로 폭발하고, RMSE도 53.7로 완전히 망가집니다.
+
+r=1e-05 이상만 주어도 숫자가 즉시 안정화되며 RMSE가 0.46 대로 뚝 떨어집니다.
+
+r=10처럼 너무 큰 값을 주면 모델이 지나치게 억눌려 점수가 다시 나빠집니다(0.472).
+
+
+
+[셀 2] 최적의 규제 강도 고정 및 최종 후보 모델 학습
+앞선 탐색 결과에서 성능이 안정적이고 과하게 짓눌리지 않는 구간의 값(0.001)을 최종 r로 선택합니다.
+
+Python
+# 비교 결과에서 고른 규제 강도 r=0.001을 고정합니다.
+r = 0.001
+
+# 이 r로 훈련 세트에서 최종 후보 모델을 학습합니다.
+X_train = prepare_X(df_train)
+w0, w = train_linear_regression_reg(X_train, y_train, r=r)
+
+# 검증 RMSE를 다시 계산해, 다음 단계(훈련+검증을 합쳐 재학습)의 기준 점수로 남깁니다.
+X_val = prepare_X(df_val)
+y_pred = w0 + X_val.dot(w)
+score = rmse(y_val, y_pred)
+score
+
+결과: np.float64(0.46081585855400226)
+
+
+코드 설명:
+
+탐색을 통해 찾은 0.001을 고정값으로 할당합니다.
+
+해당 r을 이용해 훈련 데이터셋으로 최종 후보 모델의 가중치(w 
+0, w)를 다시 튼튼하게 학습시킵니다.
+
+검증 셋으로 최종 RMSE 점수(0.4608...)를 확인하며, 이는 나중에 테스트 셋 평가로 넘어가기 전 우리의 기준점이 됩니다.
+
+
+
+-----
+
+
+
+2.15 Using the model (최종 모델 사용) 초보자 지침
+
+이 지침은 머신러닝 줌캠프 세션 2의 2.15 Using the model 강의 내용을 바탕으로, 노트북 작성과 코드 이해를 돕기 위해 작성되었습니다.
+
+학습 목표
+앞선 섹션에서 최적의 규제 강도(r)를 찾았습니다. 이제 학습에 사용하지 않고 남겨두었던 테스트 세트(Test set)를 사용하여 모델의 최종 성능을 객관적으로 평가하고, 실제 서비스 상황처럼 새로운 데이터(차량 정보)가 들어왔을 때 가격을 예측하는 방법을 배웁니다.
+
+개념 이해: 최종 모델 학습과 추론
+전체 학습(Full Training): 모델을 최대한 똑똑하게 만들기 위해, 검증용으로 떼어두었던 데이터까지 훈련 데이터에 합쳐서 최종 모델을 다시 학습시킵니다.
+
+일반화 성능 확인: 학습에 전혀 쓰이지 않았던 테스트 세트로 모델을 평가하여, 모델이 학습 데이터뿐만 아니라 새로운 데이터에서도 잘 동작하는지(일반화 능력)를 검증합니다.
+
+>>> 여기까지
+
+실전 예측(Inference): 실제 서비스에서는 데이터셋이 아니라, 사용자로부터 입력받은 '단일 딕셔너리(차량 정보)'를 받게 됩니다. 이를 모델이 이해할 수 있는 행렬 형태로 변환하여 예측값을 뽑아내는 과정을 시뮬레이션합니다.
+
+실습 코드 및 셀 내러티브
+[셀 1~3] 데이터 합치기 및 최종 모델 학습
+훈련 세트(df_train)와 검증 세트(df_val)를 하나로 합쳐 전체 학습용 데이터(df_full_train)를 만듭니다.
+
+Python
+# 훈련과 검증 데이터를 이어 붙입니다.
+# 하이퍼파라미터 r을 고른 뒤에는, 훈련과 검증을 합쳐 데이터를 최대한 활용합니다.
+# concat은 두 데이터프레임을 행 방향으로 이어 붙입니다.
+df_full_train = pd.concat([df_train, df_val])
+
+# 이어 붙인 표의 행 번호를 0부터 다시 매깁니다.
+df_full_train = df_full_train.reset_index(drop=True)
+
+
+# 로그 가격 타깃도 훈련+검증 순서로 이어 붙입니다.
+# concatenate는 넘파이 배열을 길이 방향으로 합칩니다.
+y_full_train = np.concatenate([y_train, y_val])
+
+# 고른 최적의 r=0.001로 모델을 최종 학습합니다.
+# 고른 r=0.001로, 합친 데이터에서 가중치를 다시 학습합니다.
+# 검증 세트는 이미 r을 고르는 데 썼으므로, 최종 평가는 남겨 둔 테스트 세트에서 합니다.
+w0, w = train_linear_regression_reg(X_full_train, y_full_train, r=0.001)
+
+
+코드 설명: pandas의 concat과 numpy의 concatenate를 사용하여 분리되어 있던 데이터들을 하나로 합칩니다. 이후 찾았던 최적의 r=0.001을 사용하여 전체 데이터에 대해 최종 가중치를 학습시킵니다.
+
+[셀 4] 테스트 데이터로 최종 일반화 성능 검증
+학습에 참여하지 않은 df_test 데이터를 사용하여 최종 모델의 RMSE를 측정합니다.
+
+Python
+# 테스트 데이터를 전처리하고 예측을 수행합니다.
+X_test = prepare_X(df_test)
+y_pred = w0 + X_test.dot(w)
+
+# 최종 성능을 확인합니다.
+# 테스트 RMSE를 계산합니다. 이 숫자가 모델의 최종 일반화 성능 추정값입니다.
+score = rmse(y_test, y_pred)
+score
+
+코드 설명: 검증 세트에서 보았던 RMSE(0.4608...)와 테스트 세트의 RMSE(0.4600...)가 거의 차이가 없습니다. 이는 모델이 특정 데이터셋에 과적합(Overfitting)되지 않고, 새로운 데이터에 대해 매우 안정적으로 예측하고 있음을 보여주는 '매우 좋은 신호'입니다.
+
+
+[셀 5~9] 실전 상황 시뮬레이션: 개별 차량 가격 예측
+이제 모델을 실제 서비스에 붙인다고 가정하고, 사용자가 입력한 차량 한 대의 정보를 받아 가격을 예측해 봅니다.
+
+Python
+# 테스트 세트에서 20번째 차량 정보를 하나 꺼냅니다(사용자의 입력 시뮬레이션).
+# 실제 서비스처럼 '한 대의 차 정보'가 들어왔을 때 예측하는 과정을 보여 주기 위함입니다.
+car = df_test.iloc[20].to_dict()
+
+# 딕셔너리 하나를 감싸 한 행짜리 데이터프레임을 만듭니다.
+# prepare_X 함수는 데이터프레임을 원하므로 딕셔너리를 행이 하나인 데이터프레임으로 변환합니다.
+df_small = pd.DataFrame([car])
+
+# 전처리 후 학습된 모델에 넣어 예측합니다.
+# 한 대짜리 표에도 동일한 전처리를 적용해 특성 벡터(1행 행렬)를 얻습니다.
+X_small = prepare_X(df_small)
+
+Python
+# 학습된 가중치로 이 차량의 로그 가격을 예측합니다.
+y_pred = w0 + X_small.dot(w)
+
+//
+나> "# 학습된 가중치로 이 차량의 로그 가격을 예측합니다."
+
+뭔말이야
+
+GEM> 우리가 이전에 데이터를 전처리할 때 자동차 가격(y)에 로그(log)를 씌워서 학습시켰던 것을 기억하시나요? 자동차 가격은 천차만별이라 그냥 학습시키면 값이 너무 널뛰기 때문에, 숫자를 작게 압축하려고 로그를 씌워 놨었습니다.
+
+따라서 여기서 말하는 "이 차량의 로그 가격을 예측한다"는 것은 다음과 같은 뜻입니다.
+
+로그 스케일의 결과물: 모델이 뱉어내는 예측값은 순수한 달러($) 가격이 아니라, 로그가 씌워진 상태의 압축된 숫자(예: 10.63...)입니다.
+
+원래 가격으로 되돌리는 과정: 그래서 이 예측값을 그대로 쓸 수 없고, 나중에 np.expm1()이라는 함수를 써서 다시 원래의 실제 달러 가격(약 41,459달러)으로 뻥튀기(원복) 해줘야 비로소 우리가 알아볼 수 있는 차 가격이 되는 것입니다.
+
+즉, "모델이 로그로 압축된 상태의 예측 점수를 먼저 계산한다"는 뜻입니다!
+//
+
+
+# 결과가 길이 1인 배열이므로 첫 원소만 스칼라로 꺼냅니다.
+y_pred = y_pred[0]
+
+//
+컴퓨터(파이썬)가 계산을 할 때 "결과물을 리스트나 배열 형태(상자)에 담아서 주는 성질" 때문에 그렇습니다.
+
+우리가 예측할 차는 딱 1대뿐인데, 컴퓨터는 보통 여러 대를 한꺼번에 계산하는 방식을 쓰다 보니 결과도 [10.63249]처럼 상자(배열)에 담긴 형태로 줍니다.
+
+여기서 겪는 문제를 뜯어보면 이렇습니다.
+
+상자째로 남아있는 상태 (y_pred):
+
+이 상태는 숫자 10.63이 아니라 [10.63]처럼 대괄호가 쳐진 상자입니다.
+
+이 상태 그대로는 나중에 로그를 풀기(np.expm1())가 번거롭거나 에러가 날 수 있습니다.
+
+첫 원소만 스칼라로 꺼낸다 (y_pred[0]):
+
+상자([ ]) 안에 들어있는 첫 번째 값(0번째 인덱스)인 10.63249라는 알맹이 숫자(스칼라)만 쏙 빼낸다는 뜻입니다.
+
+즉, "결과물 상자에서 대괄호를 벗기고 순수한 숫자 알맹이 하나만 꺼내오는 작업"이라고 이해하시면 됩니다!
+//
+
+# 로그 스케일 예측값을 출력합니다.
+y_pred
+
+결과:
+np.float64(10.63249251496894)
+
+
+본문:
+# 로그 예측을 expm1로 달러 가격으로 되돌립니다.
+# 이것이 모델이 내놓은 '이 차의 예상 가격'입니다.
+np.expm1(y_pred)
+
+결과:
+np.float64(41459.337028846196)
+
+코드 설명:
+학습된 모델은 대량의 데이터셋이 아니라, 단 한 대의 차량 정보(딕셔너리)만 들어와도 예측이 가능해야 합니다.
+
+예측값은 로그가 적용된 형태이므로 np.expm1을 사용하여 원래 가격 단위($)로 되돌립니다.
+
+결과적으로 모델이 예측한 가격과 실제 차량 가격을 비교해 보며 모델의 실용성을 확인합니다.
+
+
+# 같은 차량의 실제 테스트 타깃(로그 가격)도 달러로 되돌려 출력합니다.
+# 예측과 실제를 나란히 비교하는 마지막 확인입니다.
+np.expm1(y_test[20])
+
+결과:
+np.float64(35000.00000000001)
+
+
+나> "# 같은 차량의 실제 테스트 타깃(로그 가격)도 달러로 되돌려 출력합니다.
+# 예측과 실제를 나란히 비교하는 마지막 확인입니다.
+np.expm1(y_test[20])
+
+결과:
+np.float64(35000.00000000001)"
+
+이것이 시사하는 바는
+
+GEM> 이 결과가 시사하는 바는 우리 모델이 현실 세계에서 써먹을 수 있을 만큼 꽤 훌륭하게 작동한다는 점입니다. 구체적으로 두 가지 의미를 가집니다.
+
+1. 예측의 정확성과 실용성
+예측값: 모델이 예측한 가격은 약 41,459달러였습니다.
+
+실제값: 이 차량의 진짜 실제 가격은 35,000달러입니다.
+
+결과 비교: 대략 6,000달러(한화로 약 몇백만 원) 정도의 오차가 나긴 했지만, 중고차 가격 예측이라는 태스크와 차량의 전체 가격대(3~4만 달러)를 고려했을 때 방구석에서 수학 공식 몇 줄로 만든 초기 모델 치고는 현실적으로 꽤 납득 가능한 수준의 근사치를 맞춘 것입니다.
+
+2. 일반화 성능의 검증 (과적합되지 않음)
+이 차량(df_test.iloc[20])은 모델이 학습할 때 단 한 번도 본 적 없는 완전히 새로운 테스트 데이터입니다.
+
+본 적 없는 차를 가지고 이 정도 오차 범위 내로 가격을 맞췄다는 것은, 모델이 훈련 데이터의 정답을 단순 암기한 게 아니라 데이터의 전반적인 패턴(연식, 마력, 브랜드 가치 등이 가격에 미치는 영향)을 제대로 일반화해서 학습했다는 강력한 증거가 됩니다.
+
+즉, "우리 모델이 새로운 자동차를 보았을 때 뇌피셜이 아니라 제법 상식적이고 쓸모 있는 중고가 견적을 뽑아낼 수 있다"는 것을 이 숫자가 증명해 주는 것입니다!
+
+
+
+-----
+
+
+
+2.16 Next steps & Project Summary (세션 2 마무리 및 다음 단계) 초보자 지침
+
+
+We included only 5 top features. What happens if we include 10?
+Other projects
+
+Predict the price of a house - e.g. boston dataset
+https://archive.ics.uci.edu/ml/datasets.php?task=reg
+https://archive.ics.uci.edu/ml/datasets/Student+Performance
+
+
+이 지침은 머신러닝 줌캠프 세션 2의 마지막 강의인 2.16 섹션 내용을 바탕으로, 세션 전체의 여정을 되돌아보고 앞으로 나아갈 방향을 정리하기 위해 작성되었습니다.
+
+학습 목표
+이번 섹션에서는 지금까지 우리가 바닥부터 직접 구현해 온 선형 회귀(Linear Regression) 프로젝트의 전체 흐름을 요약하고, 성능을 더 끌어올리기 위해 추가로 시도해 볼 수 있는 실험과 다음 세션(분류, Classification)을 위한 준비 사항을 배웁니다.
+
+개념 이해: 세션 2 전체 요약 및 확장
+프로젝트 여정 복기: 데이터 전처리(Cleaning) → 탐색적 데이터 분석(EDA) → 검증 프레임워크 구축 → 정규방정식(Normal Equation) 구현 → RMSE 평가 → 피처 엔지니어링 및 범주형 변수(원-핫 인코딩) 처리 → 수치 불안정성 해결(리지 규제) → 하이퍼파라미터 튜닝 → 최종 모델 추론까지, 머신러닝 파이프라인의 전체 뼈대를 완성했습니다.
+
+다음 단계로의 확장: 상위 5개의 피처만 사용했던 것을 피처 개수를 늘려보거나(예: 상위 10개), 보스턴 집값 데이터셋 같은 다른 회귀 문제에 똑같은 파이프라인을 적용해 보며 응용력을 기를 수 있습니다.
+
+실습 코드 및 셀 내러티브
+[셀 1] 피처 개수 확장 실험 (상위 10개 피처)
+기존에 주요 피처 몇 개만 골라 쓰던 방식을 확장하여, 더 많은 피처를 포함했을 때 모델의 성능(RMSE)이 어떻게 변하는지 직접 실험해 봅니다.
+
+Python
+# 기존 5개 대신 상위 10개의 피처를 포함하여 모델을 실험합니다.
+# (노트북 본문 및 추가 실습 영역)
+코드 설명: 모델에 들어가는 정보(피처)의 양을 늘렸을 때 성능이 좋아지는지, 혹은 오히려 과적합이 일어나는지 비교해 보는 자기주도형 확장 실습입니다. 직접 코드를 수정하며 피처 선택의 중요성을 체감할 수 있습니다.
+
+[추가 제안 프로젝트] 다른 데이터셋으로 회귀 분석 적용하기
+이번 세션에서 배운 선형 회귀 파이프라인(전처리 → 학습 → 규제 → 예측)을 완전히 새로운 도메인에 적용해 봅니다.
+
+보스턴 집값(Boston Housing) 데이터셋: 집의 다양한 특성을 이용해 주택 가격을 예측하는 대표적인 회귀 문제입니다.
+
+학생 성적(Student Performance) 데이터셋: 학생들의 학습 환경과 습관 데이터를 바탕으로 성적을 예측합니다.
+
+💡 초보자를 위한 팁 & 세션 마무리
+라이브러리 사용 전 기초 다지기: 지금까지 우리는 scikit-learn 같은 편리한 라이브러리를 쓰지 않고, 넘파이와 판다스만으로 역행렬 수식부터 규제까지 바닥부터 직접 코드를 짰습니다. 이 과정을 거쳤기 때문에 앞으로 라이브러리를 쓸 때 내부에서 무슨 일이 일어나는지 완벽하게 이해할 수 있게 됩니다.
+
+다음 세션 예고: 다음 세션부터는 직접 수식을 구현하는 대신 scikit-learn을 활용해 분류(Classification) 문제를 다루게 됩니다. 세션 2에서 다진 탄탄한 기초를 바탕으로 자신 있게 다음 단계로 넘어가시면 됩니다!
+
+
+
+-----
+
+
+
+2.17 Explore more (추가 탐구 및 핵심 요약) 초보자 지침
+이 지침은 머신러닝 줌캠프 세션 2의 2.17 Explore more 강의 내용을 바탕으로, 자율 학습 방향과 세션 전체의 핵심 개념을 정리하기 위해 작성되었습니다.
+
+학습 목표
+공식적인 과제(Homework) 외에 스스로 실력을 더 확장해 볼 수 있는 탐구 주제를 살펴보고, 이번 세션(Session 2: 머신러닝 회귀)에서 반드시 기억해야 할 핵심 개념들을 최종 복기합니다.
+
+개념 이해: 세션 2 핵심 총정리
+EDA와 타깃 변수 변환: 데이터를 눈으로 확인하고 결측치를 찾으며, 긴 꼬리(Long-tail) 형태의 가격 분포를 로그 변환을 통해 정규분포(종 모양)에 가깝게 펴주는 전처리의 중요성을 배웠습니다.
+
+검증 프레임워크: 데이터를 train / val / test로 나누어 관리함으로써, 모델의 성능을 객관적으로 평가하고 문제(수치 폭발 등)를 빠르게 감지할 수 있는 안전장치를 마련했습니다.
+
+정규방정식과 넘파이 구현: 머신러닝은 마법이 아니라 수학 공식(w = (XᵀX)⁻¹ Xᵀy)임을 확인하고, 넘파이를 이용해 이를 직접 코드로 구현했습니다.
+
+규제와 튜닝: 원-핫 인코딩으로 인한 다중공선성과 수치 불안정성을 리지 규제(Ridge Regularization)로 해결하고, 검증 세트를 통해 최적의 하이퍼파라미터(r)를 찾아내는 튜닝 과정을 거쳤습니다.
+
+
+실습 코드 및 셀 내러티브
+[추가 탐구 1] 피처 개수를 5개에서 10개로 늘려보기
+노트북에서 기본적으로 사용했던 상위 5개의 피처 대신, 더 많은 피처를 포함시켰을 때 모델의 성능이 어떻게 변화하는지 직접 실험해 봅니다.
+
+Python
+# 상위 5개 대신 10개의 피처를 골라 모델을 학습하고 RMSE를 비교합니다.
+# (자율 실습 영역)
+코드 설명: 피처가 많아질수록 모델이 더 많은 정보를 얻어 좋아질 수도 있지만, 반대로 과적합(Overfitting)이나 노이즈가 섞여 성능이 떨어질 수도 있습니다. 직접 코드를 수정하며 최적의 피처 개수를 찾아보는 실험입니다.
+
+[추가 탐구 2] 다른 데이터셋으로 회귀 분석 연습하기
+배운 파이프라인을 다른 도메인에 적용해 실력을 단단히 다집니다.
+
+캘리포니아 주택 가격(California Housing) 데이터셋: 집값 예측 회귀 문제에 도전합니다.
+
+학생 성적 데이터셋 (Student Performance): 학생들의 환경 정보를 바탕으로 성적을 예측합니다.
+
+UCI 머신 레포지토리: 회귀(reg) 태스크에 적합한 수많은 공개 데이터셋을 탐색하고 실습할 수 있습니다.
+
+💡 초보자를 위한 팁
+세션 2는 '라이브러리 없이 바닥부터 회귀 모델 완성하기'라는 거대한 산을 넘은 아주 중요한 구간입니다. 여기서 다진 뼈대가 앞으로 만날 모든 머신러닝/딥러닝의 기본이 됩니다.
+
+이제 이 내용을 바탕으로 과제(Homework)를 스스로 풀어보며 손에 익히고, 다음 세션인 분류(Classification)로 넘어가시면 됩니다!
+
+
+
+
+
+
+
+
+
+
+
+
+===
+
+메인 
+위의 내용들을 기반으로, 노트북 초보자 지침을 작성해. 노트북을 중심으로 하되, 각 셀 내러티브는 스크립트를 기반으로 하고. 
+
+
+초안
+영상을 참고해 노트북 다음파트에 대한 초보자교육용 네러티브형식으로 지침 작성. 그리고 앞으로 내가 준 파트 이외에 아직 안준건 할루시네이션 하지말고 나에게 보고해. 
+
+
+
+
+
+
+
+
+
+
+
+
+===
+나 TO CUR> 
+타당성 체크 및 실행. 더 나은 제안있으면 제안. 통보시기는 실행 전/후는 너의 재량
+
+//주의할건 C: 절대 건드리지 말고 이미 건드려 저장했다면 롤백해서 E:로 다시 시작해 저장해//
+
+
+나> 
+커서 말 설명(커서가 어떻어떻게 했다 그래서 우리는 어떻게 할 것이다) 후 초보자 지침 작성. 
+
+//
+만약 과제라면 문제 시작부터 전반에 걸쳐 이걸 왜 하는지 등등의 내러티브를 초보자교육을 위해 뽑아.
+//
+
+
+

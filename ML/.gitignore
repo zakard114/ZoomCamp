@@ -14,3 +14,6 @@ uv.lock
 02/**/data.csv
 # local venv-repair notes
 02/**/GEMINI_INSTALL.md
+
+# Module 03: downloaded telco CSV (notebook fetches it)
+03/**/data-week-3.csv

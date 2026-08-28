@@ -17,3 +17,8 @@ uv.lock
 
 # Module 03: downloaded telco CSV (notebook fetches it)
 03/**/data-week-3.csv
+
+# Module 04: local notepad (do not push)
+04/evaluation.txt
+# Module 04: telco CSV (same source as module 03)
+04/**/data-week-3.csv

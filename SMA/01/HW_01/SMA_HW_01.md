@@ -2,10 +2,6 @@
 
 Write-up for the homework form. I ran `[2026]_Module_01_Homework.ipynb`.
 
-**Course:** [Stock Markets Analytics Zoomcamp 2026](https://courses.datatalks.club)  
-**Instructions:** [cohorts/2026/homework1.md](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/cohorts/2026/homework1.md)  
-**Submit:** https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw01
-
 ---
 
 ## Form answers

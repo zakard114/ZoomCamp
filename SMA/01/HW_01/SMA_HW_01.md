@@ -1,6 +1,6 @@
 # SMA Zoomcamp 2026 — Homework 1: Intro and Data Sources
 
-Write-up for the homework form. Notebook I ran: `[2026]_Module_01_Homework.ipynb`. Official questions (untouched): `materials/homework1.md`.
+Write-up for the homework form. I ran `[2026]_Module_01_Homework.ipynb`.
 
 **Course:** [Stock Markets Analytics Zoomcamp 2026](https://courses.datatalks.club)  
 **Instructions:** [cohorts/2026/homework1.md](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/cohorts/2026/homework1.md)  
@@ -28,6 +28,13 @@ I ran `[2026]_Module_01_Homework.ipynb` in local Jupyter, same environment as th
 ---
 
 ## Q1 — S&P 500 additions (from 2020)
+
+**Question:** Which year had the highest number of additions (starting from 2020)?
+
+- 2025
+- 2024
+- 2023
+- 2022
 
 Wikipedia list → DataFrame of ticker, name, year added → count by year.
 
@@ -81,6 +88,13 @@ I also counted names added at least 20 years ago (224). Extra — not the year-w
 
 ## Q2 — Indexes YTD vs the US (as of 21 August 2026)
 
+**Question:** How many indexes (out of 10) have better year-to-date returns than the US (S&P 500) as of August 21, 2026?
+
+- 1
+- 2
+- 3
+- 4
+
 Close-to-close from 2026-01-01 to 2026-08-21. Count how many of the **10 non-US** indexes beat `^GSPC`. No FX.
 
 `history(end="2026-08-21")` skipped 21 Aug on my run, so I used `end="2026-08-22"`.
@@ -123,6 +137,13 @@ I also compared 3-, 5-, and 10-year windows. Extra, not the form.
 
 ## Q3 — Median S&P 500 correction drawdown
 
+**Question:** Median drawdown (in %) of significant market corrections in the S&P 500 index
+
+- 8
+- 16
+- 24
+- 32
+
 I marked an ATH when close beat the prior cummax, took the trough between consecutive ATHs, and kept only ≥5% drops. Then `(peak - trough) / peak * 100`.
 
 ```python
@@ -144,6 +165,13 @@ median drawdown %  ≈  8
 ---
 
 ## Q4 — AMZN, median 2-day return after a positive surprise
+
+**Question:** Calculate the median 2-day percentage change in stock prices following positive earnings surprise days.
+
+- 3.35
+- 2.35
+- 1.35
+- 0.35
 
 `get_earnings_dates()` gave me 25 rows from 2020-10-29 (one future date with empty EPS).
 
@@ -172,6 +200,10 @@ Bull vs bear split was extra, not the form.
 
 ## Q5 — Capstone idea
 
+**Question:** Describe the capstone project you would like to pursue, considering your aspirations, ML model predictions, and prior knowledge. Even if you are unsure at this stage, try to generate an idea you would like to explore — such as a specific asset class, country, industry vertical, or investment strategy. Be as specific as possible.
+
+Free text (no multiple-choice).
+
 I want a short-term prediction model for the US stock market, focusing on the S&P 500 and a few large names like AMZN, over about a 30-day horizon after a dip.
 
 Q3 was about 5% drops from all-time highs, and the homework mentioned “buy the dip”, so I would start there. I am not sure about the model yet. For inputs I would reuse the correction size/length from Q3, earnings surprises like Q4, and the FRED series we already pulled in the lesson notebook (Fed funds and core CPI).
@@ -179,6 +211,10 @@ Q3 was about 5% drops from all-time highs, and the homework mentioned “buy the
 ---
 
 ## Q6 — Extra metrics for that idea
+
+**Question:** Using the data sources we have covered (or any others you find relevant), download and explore a few additional metrics or time series that could be valuable for your project. Briefly explain why you think each metric is useful.
+
+Free text (no multiple-choice).
 
 I reused a few FRED downloads from the Module 1 notebook.
 

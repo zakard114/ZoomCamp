@@ -1,7 +1,5 @@
 # SMA Zoomcamp 2026 — Homework 1: Intro and Data Sources
 
-Write-up for the homework form. I ran `[2026]_Module_01_Homework.ipynb`.
-
 ---
 
 ## Form answers

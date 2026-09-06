@@ -1,0 +1,42 @@
+{% extends "chores/base.html" %}
+{% block title %}Chores — Household Chores{% endblock %}
+{% block content %}
+<h1>Chores</h1>
+<p><a href="{% url 'chore_create' %}">Add chore</a></p>
+{% if chores %}
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Assignee</th>
+      <th>Due</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for chore in chores %}
+    <tr>
+      <td class="{% if chore.is_done %}done{% endif %}">{{ chore.title }}</td>
+      <td>{% if chore.assignee %}{{ chore.assignee.name }}{% else %}—{% endif %}</td>
+      <td>{% if chore.due_date %}{{ chore.due_date }}{% else %}—{% endif %}</td>
+      <td>{% if chore.is_done %}Done{% else %}Open{% endif %}</td>
+      <td class="actions">
+        <form class="actions" method="post" action="{% url 'chore_toggle' chore.pk %}">
+          {% csrf_token %}
+          <button type="submit">{% if chore.is_done %}Reopen{% else %}Mark done{% endif %}</button>
+        </form>
+        <a href="{% url 'chore_edit' chore.pk %}">Edit</a>
+        <form class="actions" method="post" action="{% url 'chore_delete' chore.pk %}">
+          {% csrf_token %}
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No chores yet. <a href="{% url 'chore_create' %}">Create one</a>.</p>
+{% endif %}
+{% endblock %}

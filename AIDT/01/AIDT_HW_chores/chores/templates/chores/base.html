@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Household Chores{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    nav a { margin-right: 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #ddd; }
+    .done { text-decoration: line-through; color: #666; }
+    .actions form { display: inline; }
+    .actions button, .actions a { margin-right: 0.35rem; }
+    label { display: block; margin-top: 0.75rem; }
+    input, textarea, select { width: 100%; max-width: 28rem; }
+    .btn { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="{% url 'chore_list' %}">Chores</a>
+    <a href="{% url 'chore_create' %}">Add chore</a>
+    <a href="{% url 'member_list' %}">Members</a>
+    <a href="{% url 'member_create' %}">Add member</a>
+  </nav>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

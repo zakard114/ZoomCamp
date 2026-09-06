@@ -1,0 +1,11 @@
+{% extends "chores/base.html" %}
+{% block title %}{{ heading }} — Household Chores{% endblock %}
+{% block content %}
+<h1>{{ heading }}</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn" type="submit">Save</button>
+  <a href="{% url 'chore_list' %}">Cancel</a>
+</form>
+{% endblock %}

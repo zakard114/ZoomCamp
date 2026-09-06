@@ -1,0 +1,15 @@
+{% extends "chores/base.html" %}
+{% block title %}Members — Household Chores{% endblock %}
+{% block content %}
+<h1>Members</h1>
+<p><a href="{% url 'member_create' %}">Add member</a></p>
+{% if members %}
+<ul>
+  {% for member in members %}
+  <li>{{ member.name }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No members yet.</p>
+{% endif %}
+{% endblock %}

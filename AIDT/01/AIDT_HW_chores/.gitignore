@@ -25,3 +25,10 @@ Thumbs.db
 
 # Caches
 .cache/
+
+# Local notes / dumps (keep project docs as .md)
+*.txt
+
+# Cursor local junk (if any under this tree)
+.cursor/history/
+.cursor/temp/

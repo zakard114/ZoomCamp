@@ -1,23 +1,10 @@
 # ML Zoomcamp 2026 — Homework 1: Introduction to Machine Learning
 
-Submission write-up for Module 01 homework  
-(Pandas / NumPy refresh on the pinned 2026 car fuel-efficiency dataset).
-
-**Course:** [Machine Learning Zoomcamp 2026](https://courses.datatalks.club/ml-zoomcamp-2026/)  
-**Instructions:** [`materials/homework.md`](materials/homework.md) · [upstream homework.md](https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/cohorts/2026/homework/01-intro/homework.md)  
-**Submit form:** https://courses.datatalks.club/ml-zoomcamp-2026/homework/hw01
-
-**Local folder:** `E:\IT_SPACES\AI\ZoomCamp\ML\01\HW_01\`  
-**Working notebook:** [`[2026]_HW_01.ipynb`](./%5B2026%5D_HW_01.ipynb)  
-**Homework URL (paste into form):** https://github.com/zakard114/ZoomCamp/tree/main/ML/01/HW_01  
-**Notebook on GitHub:** https://github.com/zakard114/ZoomCamp/blob/main/ML/01/HW_01/%5B2026%5D_HW_01.ipynb  
-**This write-up on GitHub:** https://github.com/zakard114/ZoomCamp/blob/main/ML/01/HW_01/ML_01_HW.md
-
-**FAQ contribution (optional):** https://github.com/DataTalksClub/faq/issues/281
+Notebook: [`[2026]_HW_01.ipynb`](./%5B2026%5D_HW_01.ipynb)
 
 ---
 
-## Homework form answers (paste-ready)
+## Form answers
 
 | # | Answer |
 |---|--------|
@@ -29,20 +16,13 @@ Submission write-up for Module 01 homework
 | 6 | **Yes, it decreased** |
 | 7 | **0.369** |
 
-**Homework URL (repo folder):** https://github.com/zakard114/ZoomCamp/tree/main/ML/01/HW_01
-
 ---
 
 ## Setup
 
-I ran [`[2026]_HW_01.ipynb`](./%5B2026%5D_HW_01.ipynb) in local Jupyter (nbclassic), same ML Zoomcamp `.venv` as Module 1 lessons.
+Ran the notebook in local Jupyter (nbclassic), same ML Zoomcamp `.venv` as Module 1.
 
-- Kernel: Python (ml-zoomcamp) / `HW_01/.venv` → `ML/.venv`
-- Data: `data/car_fuel_efficiency_2026.csv` (2026 pinned release; not committed — download from the course repo)
-
-```text
-https://raw.githubusercontent.com/DataTalksClub/machine-learning-zoomcamp/main/cohorts/2026/data/car_fuel_efficiency_2026.csv
-```
+- Data: `data/car_fuel_efficiency_2026.csv` (not committed; download from the course repo)
 
 ---
 
@@ -210,14 +190,3 @@ sum of w: 0.36919696904925486
 ```
 
 **Answer:** **0.369**
-
----
-
-## Submission checklist
-
-| Field | Value |
-|-------|--------|
-| Homework URL | https://github.com/zakard114/ZoomCamp/tree/main/ML/01/HW_01 |
-| FAQ contribution | https://github.com/DataTalksClub/faq/issues/281 |
-| Learning in public | optional |
-| Time spent | optional |

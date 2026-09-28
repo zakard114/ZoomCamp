@@ -1,6 +1,6 @@
 # SMA Zoomcamp 2026 — Homework 2: Dataframe Analysis
 
-[[2026]_Module_02_Homework.ipynb](https://github.com/zakard114/ZoomCamp/blob/main/SMA/02/HW_02/%5B2026%5D_Module_02_Homework.ipynb)
+Q1–Q4 calculations: [[2026]_Module_02_Homework.ipynb](https://github.com/zakard114/ZoomCamp/blob/main/SMA/02/HW_02/%5B2026%5D_Module_02_Homework.ipynb)
 
 ---
 

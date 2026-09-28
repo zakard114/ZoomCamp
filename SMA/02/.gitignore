@@ -1,0 +1,8 @@
+*.txt
+.venv/
+**/.venv/
+.ipynb_checkpoints/
+__pycache__/
+.cache/
+*.parquet*
+*.brotli

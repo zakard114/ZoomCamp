@@ -1,9 +1,6 @@
 # SMA Zoomcamp 2026 — Homework 2: Dataframe Analysis
 
-Submission write-up. Working notebook: `[2026]_Module_02_Homework.ipynb` (same folder).
-
-**Official:** [`materials/homework2.md`](materials/homework2.md)  
-**Submit:** https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw02
+[[2026]_Module_02_Homework.ipynb](https://github.com/zakard114/ZoomCamp/blob/main/SMA/02/HW_02/%5B2026%5D_Module_02_Homework.ipynb)
 
 ---
 

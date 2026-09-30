@@ -8,7 +8,9 @@ Submission write-up for Module 04 homework
 **Submit form (browser only, not a form answer):** https://courses.datatalks.club/ai-dev-tools-2026/homework/hw4  
 
 **Local project:** `E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker\`  
-**Write-up folder:** `E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\HW_04\`
+**Homework URL (paste into form):** https://github.com/zakard114/order-tracker
+
+Style reference (Modules 01–03): `AIDT_01_HW.md` / `AIDT_02_HW.md` / `AIDT_03_HW.md`
 
 ---
 
@@ -22,6 +24,8 @@ Submission write-up for Module 04 homework
 | 4 | **`Normal`** |
 | 5 | **`Test alert handled successfully; standing down.`** (full agent text in Q5) |
 | 6 | **The express delivery date calculation tried to use a day that does not exist in that month.** |
+
+**Homework URL (repo):** https://github.com/zakard114/order-tracker
 
 ---
 
@@ -85,8 +89,7 @@ Alerting → Alert rules.
 
 What did the agent respond? Include the last line.
 
-Full text from `incident-response/responses/last-response.txt`  
-(`INC-20260930-f7f9addf`):
+From `incident-response/responses/last-response.txt` (`INC-20260930-f7f9addf`):
 
 ```text
 Headless coding assistant acknowledgement (Order Tracker).
@@ -101,11 +104,8 @@ No code changes were applied.
 Test alert handled successfully; standing down.
 ```
 
-Last line (form answer):
-
-```text
-Test alert handled successfully; standing down.
-```
+Evidence: Grafana test webhook → responder on `:8001`; last line is  
+`Test alert handled successfully; standing down.`
 
 ---
 
@@ -129,7 +129,7 @@ Tools: Docker Desktop; Grafana at `http://127.0.0.1:3000`; responder on `:8001`.
 
 | Check | Result |
 |-------|--------|
-| `/healthz` | `{"status":"ok"}` |
+| Local `/healthz` | `{"status":"ok"}` |
 | `standard-1001` metric | `http.status_code=200` |
 | `standard-1002` metric | `http_status_code=404` |
 | Grafana 5xx alert | state **Normal** |
@@ -140,21 +140,23 @@ Artifacts:
 
 | Path | Role |
 |------|------|
-| `order-tracker/` (sibling) | Forked app + compose + OTel |
-| `order-tracker/observability/` | Collector, Prom, Loki, Tempo, Grafana |
-| `order-tracker/incident-response/` | Webhook server + evidence + headless |
-| `_docs/guides/packets/` | Step packets for this write-up folder |
+| `app/telemetry.py` / `app/main.py` | OTel metric + express date fix |
+| `compose.yaml` | app + observability stack |
+| `observability/` | Collector, Prom, Loki, Tempo, Grafana |
+| `incident-response/` | Webhook server + evidence + headless |
+| `.github` / fork | https://github.com/zakard114/order-tracker |
 
 ---
 
 ## How to run locally
 
 ```powershell
-. E:\IT_SPACES\AI\scripts\use_e_drive.ps1
 cd E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker
+. E:\IT_SPACES\AI\scripts\use_e_drive.ps1
 
 docker compose up --build -d
-curl.exe http://127.0.0.1:8000/healthz
+# http://127.0.0.1:8000/healthz
+
 curl.exe http://127.0.0.1:8000/api/orders/standard-1001
 curl.exe http://127.0.0.1:8000/api/orders/standard-1002
 
@@ -164,14 +166,12 @@ curl.exe http://127.0.0.1:8000/api/orders/standard-1002
 
 - Health: http://127.0.0.1:8000/healthz  
 - Grafana: http://127.0.0.1:3000  
-- App fork: https://github.com/zakard114/order-tracker  
 
 ---
 
 ## Reflection
 
-One practical takeaway: **a 404 does not fire a 5xx alert** — and calendar math with  
-`datetime.replace(day=…)` breaks at month boundaries; add days with `timedelta` instead.
+One practical takeaway from this module: **a 404 does not fire a 5xx alert** — and calendar math with `datetime.replace(day=…)` breaks at month boundaries; add days with `timedelta` instead.
 
 ---
 

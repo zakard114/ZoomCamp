@@ -1,23 +1,28 @@
-# Homework 4 — Order Tracker (official)
+# Order Tracker — AIDT Homework 4
 
-Working folder for **AI Dev Tools Zoomcamp 2026** HW4. Same idea as Module 01 chores / Module 03 AgentRelay: official text stays in `materials/`; answers and packets live here; the app clone is a sibling.
+Local write-up and packets for
+[AI Dev Tools Zoomcamp 2026 — Homework 4: DevOps and Observability](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/blob/main/cohorts/2026/homework/04-devops/homework.md)
+(Order Tracker: run → instrument → telemetry → alert → responder → express fix).
 
-**Official (do not edit):** [`materials/homework.md`](materials/homework.md)  
-**Starter (fork this):** https://github.com/alexeygrigorev/order-tracker  
-**App clone (after fork):** `E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker\`  
-**Submit:** https://courses.datatalks.club/ai-dev-tools-2026/homework/hw4  
-**Write-up:** [`AIDT_04_HW.md`](AIDT_04_HW.md)  
-**Deadline (platform):** 6 October 2026, 09:00 (account timezone). yaml `due_at`: `2026-10-05T23:00:00Z`.
+## Official materials
 
-## Trap / draft
+- Course text (do not edit): [`materials/homework.md`](materials/homework.md)
+- Form answers: [`AIDT_04_HW.md`](AIDT_04_HW.md)
+- Starter fork: https://github.com/alexeygrigorev/order-tracker
+- App clone: `E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker\`
 
-The earlier `[DRAFT]` homework (Agent Relay + three signals MCQ) is **not** the scored form. Keep it as study notes only. Scored app is **Order Tracker**.
+## Local run
 
-## How we work
+```powershell
+. E:\IT_SPACES\AI\scripts\use_e_drive.ps1
+cd E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker
+docker compose up --build -d
+curl.exe http://127.0.0.1:8000/healthz
+# after observability stack: Grafana http://127.0.0.1:3000
+```
 
-Cursor writes one packet → you give it to Gemini for Korean narration → Cursor validity-checks → **you** run the commands and look at the result.
+## Submission
 
-## Paths
-
-Caches / Docker volumes: E: only — `. E:\IT_SPACES\AI\scripts\use_e_drive.ps1`  
-Docker Engine must be running for Q1.
+- **Form (open in browser):** https://courses.datatalks.club/ai-dev-tools-2026/homework/hw4
+- **Repository URL (paste into the form):** https://github.com/zakard114/order-tracker
+- **Write-up on ZoomCamp:** https://github.com/zakard114/ZoomCamp/tree/main/AIDT/04/DevOps/HW_04

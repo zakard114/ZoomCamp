@@ -1,19 +1,5 @@
 # AI Dev Tools Zoomcamp 2026 — Homework 4: DevOps and Observability
 
-Submission write-up for Module 04 homework  
-(run app → instrument lookups → telemetry pipeline → 5xx alert → responder → express incident).
-
-**Course:** [AI Dev Tools Zoomcamp 2026](https://courses.datatalks.club)  
-**Instructions:** [homework.md](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/blob/main/cohorts/2026/homework/04-devops/homework.md)  
-**Submit form (browser only, not a form answer):** https://courses.datatalks.club/ai-dev-tools-2026/homework/hw4  
-
-**Local project:** `E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker\`  
-**Homework URL (paste into form):** https://github.com/zakard114/order-tracker
-
-Style reference (Modules 01–03): `AIDT_01_HW.md` / `AIDT_02_HW.md` / `AIDT_03_HW.md`
-
----
-
 ## Homework form answers (paste-ready)
 
 | # | Answer |
@@ -175,11 +161,6 @@ One practical takeaway from this module: **a 404 does not fire a 5xx alert** —
 
 ---
 
-## Learning in public
+## Flow
 
-- Link: _(add LinkedIn / blog URL after posting)_  
-- Repo to share: https://github.com/zakard114/order-tracker  
-
-Optional post outline (no secrets): fork Order Tracker → OTel metric on lookups →  
-Collector → Grafana → 5xx alert stays Normal on 404 → responder standing-down line →  
-express `timedelta` fix.
+fork Order Tracker → OTel metric on lookups → Collector → Grafana → 5xx alert stays Normal on 404 → responder standing-down line → express timedelta fix.

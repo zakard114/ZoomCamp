@@ -8,8 +8,7 @@ Submission write-up for Module 04 homework
 **Submit form (browser only, not a form answer):** https://courses.datatalks.club/ai-dev-tools-2026/homework/hw4  
 
 **Local project:** `E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker\`  
-**Write-up folder:** `E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\HW_04\`  
-**Homework URL (paste into form):** https://github.com/zakard114/order-tracker
+**Write-up folder:** `E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\HW_04\`
 
 ---
 
@@ -23,8 +22,6 @@ Submission write-up for Module 04 homework
 | 4 | **`Normal`** |
 | 5 | **`Test alert handled successfully; standing down.`** (full agent text in Q5) |
 | 6 | **The express delivery date calculation tried to use a day that does not exist in that month.** |
-
-**Homework URL (repo):** https://github.com/zakard114/order-tracker
 
 ---
 

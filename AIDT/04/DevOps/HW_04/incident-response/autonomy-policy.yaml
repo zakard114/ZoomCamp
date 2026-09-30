@@ -1,0 +1,8 @@
+# What authorizes an action is this file + allowlists — not model confidence.
+# Fill during homework.
+---
+default_level: read_only
+allowlists:
+  queries: []
+  commands: []
+escalation: required_unless_allowlisted

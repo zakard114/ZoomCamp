@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HW4 responder structured output — stub",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["incident_id", "likely_root_cause", "proposed_action", "confidence_note"],
+  "properties": {
+    "incident_id": { "type": "string" },
+    "likely_root_cause": { "type": "string" },
+    "proposed_action": { "type": "string" },
+    "confidence_note": { "type": "string" }
+  }
+}

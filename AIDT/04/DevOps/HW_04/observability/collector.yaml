@@ -1,0 +1,9 @@
+# OpenTelemetry Collector config. Fill during homework.
+# Receivers: OTLP. Exporters: Prometheus / Loki / Tempo.
+# Do not put secrets in this file.
+---
+receivers: {}
+processors: {}
+exporters: {}
+service:
+  pipelines: {}

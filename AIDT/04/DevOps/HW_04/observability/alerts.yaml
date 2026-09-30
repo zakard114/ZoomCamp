@@ -1,0 +1,6 @@
+# One alert that represents real user impact (not CPU).
+# Payload must include enough context to act: service, environment,
+# deployed version, owner, dashboard URL.
+# Fill during homework. Do not wire AWS SNS.
+---
+groups: []

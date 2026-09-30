@@ -1,0 +1,5 @@
+# HW4 observability Compose (separate from the app stack).
+# Fill during homework. Do not deploy this to AWS.
+# Services expected by the lesson: otel-collector, prometheus, loki, tempo, grafana.
+---
+services: {}

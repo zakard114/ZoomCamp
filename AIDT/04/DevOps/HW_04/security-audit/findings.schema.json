@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HW4 security findings — stub",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scanner", "findings", "human_disposition"],
+  "properties": {
+    "scanner": { "type": "string" },
+    "findings": { "type": "array", "items": { "type": "object" } },
+    "human_disposition": { "type": "string" }
+  }
+}

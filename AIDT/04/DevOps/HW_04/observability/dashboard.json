@@ -1,0 +1,8 @@
+{
+  "title": "HW4 observability dashboard — stub",
+  "panels": [],
+  "templating": {
+    "list": []
+  },
+  "_comment": "Replace during homework. Filter by environment and deployed version."
+}

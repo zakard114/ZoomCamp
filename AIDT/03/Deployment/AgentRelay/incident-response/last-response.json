@@ -1,0 +1,6 @@
+{
+  "incident_id": "INC-20260925-001",
+  "likely_root_cause": "Local inject flag observability/.inject-register-failure made POST /api/v1/agents raise RelayError 500 (homework fault injection), so new agents could not enroll.",
+  "proposed_action": "Run allowlisted runbook incident-response/runbooks/disable-inject.ps1 to remove the flag, then verify POST /api/v1/agents returns 201 (status only).",
+  "confidence_note": "High given the flag file and the injected_failure branch in main.register. Confidence does not authorize the runbook; autonomy-policy.yaml does."
+}

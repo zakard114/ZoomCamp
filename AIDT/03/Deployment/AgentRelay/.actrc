@@ -1,0 +1,4 @@
+# Default act flags for this repo (Windows Docker Desktop).
+# Prefer: .\scripts\run-act-ci.ps1  (sets mounts correctly).
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+--pull=false

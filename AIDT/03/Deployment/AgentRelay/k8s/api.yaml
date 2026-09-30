@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-relay
+spec:
+  selector:
+    app: agent-relay
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-relay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-relay
+  template:
+    metadata:
+      labels:
+        app: agent-relay
+    spec:
+      initContainers:
+        - name: wait-postgres
+          image: postgres:16-alpine
+          command:
+            - sh
+            - -c
+            - until pg_isready -h postgres -U relay -d relay; do sleep 2; done
+      containers:
+        - name: api
+          image: agent-relay:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          env:
+            # In-cluster DNS hostname = Service name "postgres" (same idea as Compose Q4)
+            - name: RELAY_DATABASE_URL
+              value: postgresql+psycopg://relay:relay@postgres:5432/relay
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10

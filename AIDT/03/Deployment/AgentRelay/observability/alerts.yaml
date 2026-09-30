@@ -1,0 +1,18 @@
+# User impact, not CPU. Payload labels are enough to start investigating.
+groups:
+  - name: agent-relay-user-impact
+    rules:
+      - alert: AgentRegistrationFailures
+        expr: increase(agent_relay_http_errors_total{endpoint="/api/v1/agents",status="500"}[2m]) > 0
+        for: 0m
+        labels:
+          severity: page
+          service: agent-relay
+          environment: dev
+          owner: hw4
+        annotations:
+          summary: Agent registration is returning 500 — users cannot enroll.
+          description: POST /api/v1/agents is failing. New agents cannot register or send tasks.
+          dashboard: http://127.0.0.1:3000/d/agent-relay-metrics
+          runbook: ../incident-response/runbooks/disable-inject.ps1
+          deployed_version: hw4-local

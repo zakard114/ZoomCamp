@@ -1,0 +1,17 @@
+# What authorizes an action is this file + allowlists — not model confidence.
+default_level: read_only
+allowlists:
+  queries:
+    - GET http://127.0.0.1:9090/api/v1/query
+    - GET http://127.0.0.1:9090/api/v1/rules
+    - GET http://127.0.0.1:8000/health
+    - GET http://127.0.0.1:8000/ready
+    - git log -5 --oneline
+    - git diff --stat HEAD
+  commands:
+    - incident-response/runbooks/disable-inject.ps1
+    - incident-response/runbooks/verify-recovery.ps1
+escalation: required_unless_allowlisted
+notes: >
+  The responder is read-only. Confidence scores and alert severity do not
+  authorize writes. Only an allowlisted runbook may change RELAY_INJECT_REGISTER_FAILURE.

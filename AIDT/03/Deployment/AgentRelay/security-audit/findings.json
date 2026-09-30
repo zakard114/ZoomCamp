@@ -1,0 +1,13 @@
+{
+  "scanner": "Semgrep (CLI not on PATH this session; brief + human/model review recorded. Re-run `semgrep --config=auto` when installed.)",
+  "findings": [
+    {
+      "id": "HW4-HUMAN-1",
+      "title": "Homework inject flag can force registration 500",
+      "path": "main.py",
+      "disposition": "accepted for local homework only; not a production feature"
+    }
+  ],
+  "model_review": "No agent tokens are written to structured logs. Register success logs status 201 only. Evidence scripts store HTTP status, not response bodies. Grafana admin/admin is local Docker. Inject flag is the intentional break.",
+  "human_disposition": "Keep inject behind a local flag file. Do not ship RELAY_INJECT_REGISTER_FAILURE=1. No secrets committed."
+}

@@ -1,0 +1,15 @@
+{
+  "incident_id": "INC-20260925-001",
+  "collected_at": "2026-09-25T09:13:13Z",
+  "queries": [
+    "pytest test_hw4_inject.py (status codes only)",
+    "GET http://127.0.0.1:9090/api/v1/query?query=up"
+  ],
+  "register_status_before": 201,
+  "register_status_injected": [500],
+  "register_status_after": 201,
+  "inject_flag_present_after_recovery": false,
+  "prom_up_status": "success",
+  "verification": "1 passed in test_hw4_inject.py",
+  "notes": "Read-only packet. Response bodies discarded. Tokens not stored. Live uvicorn bind timed out on this Windows session; the same inject/recover path was executed through TestClient."
+}

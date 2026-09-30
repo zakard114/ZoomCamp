@@ -1,0 +1,21 @@
+.venv
+.ruff_cache/
+*.db
+*.db-shm
+*.db-wal
+observability/hw4-test.db
+__pycache__/
+.pytest_cache/
+*-credentials.json
+
+# Local Postgres volumes (Compose / kind) — never commit DB files
+docker/pgdata/
+docker/kind-pgdata/
+
+# HW4 local telemetry (E: bind mounts)
+observability/grafana-data/
+observability/prom-data/
+observability/.inject-register-failure
+observability/uvicorn-hw4.log
+observability/uvicorn-hw4.err.log
+observability/bootcheck.txt

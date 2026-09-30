@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+  workflow_dispatch:
+
+# Local (Windows): .\scripts\run-act-ci.ps1
+# Q6: if `test` fails, `build-and-deploy` never runs — existing kind Deployment stays as-is.
+
+env:
+  IMAGE_NAME: agent-relay
+  CLUSTER_NAME: agent-relay
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # Avoid GHA `services:` healthchecks — act on Windows aborts the job while
+    # postgres is still initializing. Start Postgres with docker in a step instead.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start Postgres
+        run: |
+          set -euo pipefail
+          docker rm -f agent-relay-ci-pg 2>/dev/null || true
+          docker run -d --name agent-relay-ci-pg \
+            -e POSTGRES_USER=relay \
+            -e POSTGRES_PASSWORD=relay \
+            -e POSTGRES_DB=relay_test \
+            -p 5433:5432 \
+            postgres:16-alpine
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.9.13"
+
+      - name: Sync deps
+        run: uv sync --frozen
+
+      - name: Wait for Postgres then run tests
+        env:
+          RELAY_DATABASE_URL: postgresql+psycopg://relay:relay@127.0.0.1:5433/relay_test
+        run: |
+          set -euo pipefail
+          uv run python <<'PY'
+          import os, time, sys
+          import psycopg
+          url = os.environ["RELAY_DATABASE_URL"].replace("postgresql+psycopg://", "postgresql://", 1)
+          for i in range(1, 91):
+              try:
+                  with psycopg.connect(url, connect_timeout=3) as conn:
+                      with conn.cursor() as cur:
+                          cur.execute("SELECT 1")
+                  print(f"postgres ready after {i} tries")
+                  sys.exit(0)
+              except Exception as e:
+                  print(f"waiting for postgres... {i}: {e}")
+                  time.sleep(2)
+          print("postgres did not become ready in time", file=sys.stderr)
+          sys.exit(1)
+          PY
+          uv run pytest -q
+
+      - name: Stop Postgres
+        if: always()
+        run: docker rm -f agent-relay-ci-pg 2>/dev/null || true
+
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unique image tag
+        id: meta
+        shell: bash
+        run: |
+          TAG="ci-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-$(date +%s)"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+
+      - name: Build image
+        run: docker build -t "${IMAGE_NAME}:${TAG}" .
+
+      - name: Install kind + kubectl
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL -o kind "https://kind.sigs.k8s.io/dl/v0.27.0/kind-linux-amd64"
+          chmod +x kind && sudo mv kind /usr/local/bin/kind
+          KVER="$(curl -fsSL https://dl.k8s.io/release/stable.txt)"
+          curl -fsSL -o kubectl "https://dl.k8s.io/release/${KVER}/bin/linux/amd64/kubectl"
+          chmod +x kubectl && sudo mv kubectl /usr/local/bin/kubectl
+
+      - name: Fix kubeconfig for act container
+        if: ${{ env.ACT }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          CFG="${KUBECONFIG:-$HOME/.kube/config}"
+          test -f "$CFG"
+          sed -i 's/127\.0\.0\.1/host.docker.internal/g' "$CFG"
+          sed -i 's/localhost/host.docker.internal/g' "$CFG"
+
+      - name: Load image into kind and roll out
+        shell: bash
+        run: |
+          set -euo pipefail
+          kind load docker-image "${IMAGE_NAME}:${TAG}" --name "${CLUSTER_NAME}"
+          kubectl set image "deployment/agent-relay" "api=${IMAGE_NAME}:${TAG}"
+          kubectl rollout status "deployment/agent-relay" --timeout=180s
+          kubectl get pods -l app=agent-relay

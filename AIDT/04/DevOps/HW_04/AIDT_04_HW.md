@@ -11,7 +11,7 @@
 | 5 | **`Test alert handled successfully; standing down.`** (full agent text in Q5) |
 | 6 | **The express delivery date calculation tried to use a day that does not exist in that month.** |
 
-**Repository URL:** https://github.com/zakard114/order-tracker
+**Order Tracker fork (form Repository URL):** https://github.com/zakard114/order-tracker
 
 ---
 
@@ -142,11 +142,12 @@ From this write-up folder (`HW_04`). Prefer the sibling clone at `../order-track
 ```powershell
 # cd into the Order Tracker app (sibling of HW_04, or your own fork checkout)
 cd ..\order-tracker
-# example absolute path on this machine:
+# example absolute path on your machine:
 # cd E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker
 
-# source env helper that points package caches/temp off C: (this machine: E: policy)
-. E:\IT_SPACES\AI\scripts\use_e_drive.ps1
+# your machine — source env helper that keeps package caches/temp off C:
+# (from order-tracker → AI/scripts; adjust if your layout differs)
+. ..\..\..\..\..\scripts\use_e_drive.ps1
 
 # build & start app + observability stack
 docker compose up --build -d

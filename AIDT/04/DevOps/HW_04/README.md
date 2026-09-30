@@ -6,19 +6,7 @@ Write-up folder for
 
 ## Form answers
 
-[`AIDT_04_HW.md`](AIDT_04_HW.md)
-
-## Local run
-
-```powershell
-cd E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker
-. E:\IT_SPACES\AI\scripts\use_e_drive.ps1
-docker compose up --build -d
-curl.exe http://127.0.0.1:8000/healthz
-```
-
-- Health: http://127.0.0.1:8000/healthz  
-- Grafana: http://127.0.0.1:3000  
+[`AIDT_04_HW.md`](AIDT_04_HW.md) — answers, evidence, and how to run locally.
 
 ## Submission
 

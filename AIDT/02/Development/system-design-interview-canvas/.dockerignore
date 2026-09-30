@@ -1,0 +1,16 @@
+.git
+.cursor
+**/.venv
+**/node_modules
+frontend/dist
+frontend/.output
+frontend/.vite
+backend/data
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.ruff_cache
+e2e/test-results
+e2e/playwright-report
+e2e/blob-report
+e2e/playwright/.cache

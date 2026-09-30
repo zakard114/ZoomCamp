@@ -1,0 +1,203 @@
+openapi: 3.1.0
+info:
+  title: LaneDeck API
+  version: 0.1.0
+  description: |
+    HTTP contract for LaneDeck (Mini Kanban).
+
+    Field naming is **camelCase** to match the frontend service
+    (`frontend/src/api/cardsApi.ts`, `frontend/src/types.ts`).
+
+    Paths map to `cardsApi` methods: `health`, `listCards`, `createCard`,
+    `updateCard`, `deleteCard`.
+servers:
+  - url: http://127.0.0.1:8000
+    description: Local FastAPI (default)
+
+tags:
+  - name: health
+    description: Liveness
+  - name: cards
+    description: Kanban card CRUD (`listCards`, `createCard`, `updateCard`, `deleteCard`)
+
+paths:
+  /health:
+    get:
+      operationId: health
+      tags: [health]
+      summary: Liveness check
+      responses:
+        "200":
+          description: Service is up
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /api/cards:
+    get:
+      operationId: listCards
+      tags: [cards]
+      summary: List cards
+      parameters:
+        - name: lane
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/Lane"
+          description: When set, only cards in this lane are returned
+      responses:
+        "200":
+          description: Cards sorted by lane then position
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Card"
+    post:
+      operationId: createCard
+      tags: [cards]
+      summary: Create a card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCardRequest"
+      responses:
+        "201":
+          description: Card created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /api/cards/{cardId}:
+    parameters:
+      - $ref: "#/components/parameters/CardId"
+    patch:
+      operationId: updateCard
+      tags: [cards]
+      summary: Update card title, lane, and/or position
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCardRequest"
+      responses:
+        "200":
+          description: Card updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Card"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteCard
+      tags: [cards]
+      summary: Delete a card
+      responses:
+        "204":
+          description: Card deleted
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  parameters:
+    CardId:
+      name: cardId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    Lane:
+      type: string
+      enum: [todo, doing, done]
+
+    HealthResponse:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          example: ok
+
+    Card:
+      type: object
+      required: [id, title, lane, position, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        lane:
+          $ref: "#/components/schemas/Lane"
+        position:
+          type: integer
+          minimum: 0
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateCardRequest:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        lane:
+          $ref: "#/components/schemas/Lane"
+          default: todo
+
+    UpdateCardRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        lane:
+          $ref: "#/components/schemas/Lane"
+        position:
+          type: integer
+          minimum: 0
+      description: At least one field should be provided
+
+    ErrorResponse:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    NotFound:
+      description: Card not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"

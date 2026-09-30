@@ -1,6 +1,7 @@
 # AIDT Module 04 — DevOps and Observability for AI-Built Apps
 
-Main workspace for the **AI Dev Tools Zoomcamp 2026** Module 4.
+Main workspace for the **AI Dev Tools Zoomcamp 2026** Module 4
+([Order Tracker](https://github.com/alexeygrigorev/order-tracker) homework).
 
 ## Contents
 
@@ -20,13 +21,7 @@ Main workspace for the **AI Dev Tools Zoomcamp 2026** Module 4.
 
 ## Homework
 
-- Working folder: [`DevOps/HW_04/`](DevOps/HW_04/)
-- Write-up: [`DevOps/HW_04/AIDT_04_HW.md`](DevOps/HW_04/AIDT_04_HW.md)
-- Official: [`materials/homework.md`](materials/homework.md) (copy under [`DevOps/HW_04/materials/`](DevOps/HW_04/materials/))
-- Prerequisite: Homework 3 **Agent Relay** (`AIDT/03/Deployment/AgentRelay/`)
-- homework.yaml title is **[DRAFT]**; due_at: `2026-09-28T21:59:00Z` — confirm on the platform
-- AWS app stack is **not** required by the homework text. Do not `Create stack`.
-
-## Layout note
-
-Same idea as Module 03: keep `materials/` untouched; lesson experiments and homework live under `DevOps/`.
+- Working write-up: [`DevOps/HW_04/`](DevOps/HW_04/) — answers in [`AIDT_04_HW.md`](DevOps/HW_04/AIDT_04_HW.md)
+- Official text: [`materials/homework.md`](materials/homework.md) (also under [`DevOps/HW_04/materials/`](DevOps/HW_04/materials/))
+- App fork (form **Repository URL**): https://github.com/zakard114/order-tracker
+- Local clone of the fork typically lives beside the write-up at `DevOps/order-tracker/` (nested git repo; not part of this monorepo tree)

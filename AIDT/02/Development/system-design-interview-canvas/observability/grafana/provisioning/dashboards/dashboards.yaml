@@ -1,0 +1,10 @@
+apiVersion: 1
+providers:
+  - name: interview-canvas
+    orgId: 1
+    folder: Interview Canvas
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: /etc/grafana/provisioning/dashboards/json

@@ -11,7 +11,7 @@
 | 5 | **`Test alert handled successfully; standing down.`** (full agent text in Q5) |
 | 6 | **The express delivery date calculation tried to use a day that does not exist in that month.** |
 
-**Homework URL (repo):** https://github.com/zakard114/order-tracker
+**Repository URL:** https://github.com/zakard114/order-tracker
 
 ---
 
@@ -136,18 +136,30 @@ Artifacts:
 
 ## How to run locally
 
+From this write-up folder (`HW_04`). Prefer the sibling clone at `../order-tracker`
+(portable relative path). Absolute paths below are machine-specific examples only.
+
 ```powershell
-cd E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker
+# cd into the Order Tracker app (sibling of HW_04, or your own fork checkout)
+cd ..\order-tracker
+# example absolute path on this machine:
+# cd E:\IT_SPACES\AI\ZoomCamp\AIDT\04\DevOps\order-tracker
+
+# source env helper that points package caches/temp off C: (this machine: E: policy)
 . E:\IT_SPACES\AI\scripts\use_e_drive.ps1
 
+# build & start app + observability stack
 docker compose up --build -d
-# http://127.0.0.1:8000/healthz
 
-curl.exe http://127.0.0.1:8000/api/orders/standard-1001
-curl.exe http://127.0.0.1:8000/api/orders/standard-1002
+# health check (Q1)
+curl.exe http://127.0.0.1:8000/healthz
 
-# Grafana (after observability is up)
-# http://127.0.0.1:3000
+# sample lookups used in the write-up
+curl.exe http://127.0.0.1:8000/api/orders/standard-1001   # Q2: expect 200
+curl.exe http://127.0.0.1:8000/api/orders/standard-1002   # Q3: expect 404
+
+# Grafana UI (after observability is up)
+# open http://127.0.0.1:3000
 ```
 
 - Health: http://127.0.0.1:8000/healthz  

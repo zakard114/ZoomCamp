@@ -67,6 +67,9 @@ AIDT/**/.env
 AIDT/**/.env.*
 !AIDT/**/.env.example
 AIDT/**/db.sqlite3
+AIDT/**/*.db
+AIDT/**/*.db-shm
+AIDT/**/*.db-wal
 AIDT/**/node_modules/
 AIDT/**/docker/pgdata/
 AIDT/**/.pytest_cache/
@@ -74,6 +77,12 @@ AIDT/**/.ruff_cache/
 AIDT/**/.cache/
 AIDT/**/__pycache__/
 AIDT/**/*.py[cod]
+# local notes that may contain credentials — never commit
+AIDT/**/DevOps.txt
+AIDT/**/Deployment.txt
+AIDT/**/Development.txt
+# nested app clones (own remotes); write-ups live under HW_* folders
+AIDT/04/DevOps/order-tracker/
 # retroloop generated frontend assets (built on host)
 AIDT/**/static/css/app.css
 AIDT/**/static/board/

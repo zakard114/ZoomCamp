@@ -1,9 +1,3 @@
-# Learning in public — Module 04 (LinkedIn draft)
-
-Copy-paste ready. Style matched to Module 03 post.
-
----
-
 🚀 AI Dev Tools Zoomcamp 2026 - Module 4 Complete
 
 Wrapped Module 4 of AI Dev Tools Zoomcamp by DataTalksClub (Alexey Grigorev's build-and-ship track). The lesson moved from “it runs on my laptop” into observability: metrics, logs, and traces you can actually query when something breaks. For the assignment I forked Order Tracker and walked the full loop — instrument lookups, ship telemetry through a local Collector stack, alert on user-visible 5xx, wire an automatic responder, then fix a real calendar-edge bug the agent surfaced.
@@ -31,8 +25,3 @@ A green health check is not the same as knowing why users fail. Instrumentation 
 Following along with this amazing course - who else is building with AI coding agents? You can sign up here: https://lnkd.in/gsdZGWE3
 
 #DataTalksClub #LearningInPublic #AIDevTools #OpenTelemetry #Observability #Grafana #Prometheus #Docker #IncidentResponse #Zoomcamp
-
----
-
-**Repo to share:** https://github.com/zakard114/order-tracker  
-**Write-up:** ZoomCamp → AIDT → 04 → DevOps → HW_04 → `AIDT_04_HW.md`

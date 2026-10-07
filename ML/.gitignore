@@ -26,3 +26,7 @@ uv.lock
 # Module 01 homework: local CSV / compare cache (notebook downloads CSV)
 01/HW_01/data/
 01/_cohort_compare/
+
+# Module 02 / 03 homework CSVs (pinned 2026 releases)
+02/HW_02/data/
+03/HW_03/data/

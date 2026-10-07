@@ -2,28 +2,24 @@
 
 Notebook: [`[2026]_HW_03.ipynb`](./%5B2026%5D_HW_03.ipynb)
 
-Submit: https://courses.datatalks.club/ml-zoomcamp-2026/homework/hw03
-
 ---
 
 ## Form answers
 
-Fill after running the notebook. Do not pick a nearby option.
-
 | # | Answer |
 |---|--------|
-| 1 | |
-| 2 | |
-| 3 | |
-| 4 | |
-| 5 | |
-| 6 | |
+| 1 | **technology** |
+| 2 | **interaction_count and lead_score** |
+| 3 | **lead_source** |
+| 4 | **0.65** |
+| 5 | **number_of_courses_viewed** |
+| 6 | **0.001** |
 
 ---
 
 ## Setup
 
-Run the notebook in local Jupyter (nbclassic), same ML Zoomcamp `.venv` as Module 3.
+Ran the notebook in local Jupyter (nbclassic), same ML Zoomcamp `.venv` as Module 3.
 
 - Data: `data/course_lead_scoring_2026.csv` (2026 pinned lead-scoring release)
 - Official: `materials/homework.md` (do not edit)
@@ -68,10 +64,10 @@ df["industry"].mode()
 **Output:**
 
 ```text
-
+Q1 최빈값: technology
 ```
 
-**Answer:**
+**Answer:** **technology**
 
 ---
 
@@ -93,10 +89,13 @@ df[numerical].corr()
 **Output:**
 
 ```text
-
+1. interaction_count & lead_score: 0.9287123432397134
+2. number_of_courses_viewed & lead_score: 0.769352062184664
+3. number_of_courses_viewed & interaction_count: 0.7216090038937035
+4. annual_income & interaction_count: 0.10637458469219016
 ```
 
-**Answer:**
+**Answer:** **interaction_count and lead_score**
 
 ---
 
@@ -117,10 +116,13 @@ df[numerical].corr()
 **Output:**
 
 ```text
-
+lead_source          0.03
+employment_status    0.02
+location             0.00
+industry             0.00
 ```
 
-**Answer:**
+**Answer:** **lead_source**
 
 ---
 
@@ -142,10 +144,10 @@ Include categorical features with one-hot encoding.
 **Output:**
 
 ```text
-
+Q4 검증 정확도: 0.65
 ```
 
-**Answer:**
+**Answer:** **0.65**
 
 ---
 
@@ -162,10 +164,13 @@ Difference does not have to be positive. Compare without rounding the original a
 **Output:**
 
 ```text
-
+기준(Baseline) 정확도 원점수: 0.645
+[lead_source 제외 시] 정확도: 0.64200 | 차이 (기준 - 제외): 0.00300
+[number_of_courses_viewed 제외 시] 정확도: 0.64300 | 차이 (기준 - 제외): 0.00200
+[interaction_count 제외 시] 정확도: 0.60100 | 차이 (기준 - 제외): 0.04400
 ```
 
-**Answer:**
+**Answer:** **number_of_courses_viewed**
 
 ---
 
@@ -187,7 +192,10 @@ C_values = [0.000001, 0.00001, 0.0001, 0.001]
 **Output:**
 
 ```text
-
+C=1e-06  정확도=0.59800  round3=0.598
+C=1e-05  정확도=0.59800  round3=0.598
+C=0.0001  정확도=0.61300  round3=0.613
+C=0.001  정확도=0.64500  round3=0.645
 ```
 
-**Answer:**
+**Answer:** **0.001**

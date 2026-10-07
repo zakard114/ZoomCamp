@@ -64,7 +64,7 @@ df["industry"].mode()
 **Output:**
 
 ```text
-Q1 최빈값: technology
+Q1 mode: technology
 ```
 
 **Answer:** **technology**
@@ -144,7 +144,7 @@ Include categorical features with one-hot encoding.
 **Output:**
 
 ```text
-Q4 검증 정확도: 0.65
+Q4 validation accuracy: 0.65
 ```
 
 **Answer:** **0.65**
@@ -164,10 +164,10 @@ Difference does not have to be positive. Compare without rounding the original a
 **Output:**
 
 ```text
-기준(Baseline) 정확도 원점수: 0.645
-[lead_source 제외 시] 정확도: 0.64200 | 차이 (기준 - 제외): 0.00300
-[number_of_courses_viewed 제외 시] 정확도: 0.64300 | 차이 (기준 - 제외): 0.00200
-[interaction_count 제외 시] 정확도: 0.60100 | 차이 (기준 - 제외): 0.04400
+Baseline accuracy (unrounded): 0.645
+[without lead_source] accuracy: 0.64200 | difference (baseline - without): 0.00300
+[without number_of_courses_viewed] accuracy: 0.64300 | difference (baseline - without): 0.00200
+[without interaction_count] accuracy: 0.60100 | difference (baseline - without): 0.04400
 ```
 
 **Answer:** **number_of_courses_viewed**
@@ -192,10 +192,10 @@ C_values = [0.000001, 0.00001, 0.0001, 0.001]
 **Output:**
 
 ```text
-C=1e-06  정확도=0.59800  round3=0.598
-C=1e-05  정확도=0.59800  round3=0.598
-C=0.0001  정확도=0.61300  round3=0.613
-C=0.001  정확도=0.64500  round3=0.645
+C=1e-06  accuracy=0.59800  round3=0.598
+C=1e-05  accuracy=0.59800  round3=0.598
+C=0.0001  accuracy=0.61300  round3=0.613
+C=0.001  accuracy=0.64500  round3=0.645
 ```
 
 **Answer:** **0.001**

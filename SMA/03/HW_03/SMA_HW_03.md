@@ -10,7 +10,7 @@ Q1–Q4 calculations: [[2026]_Module_03_Homework.ipynb](https://github.com/zakar
 |---|--------|
 | 1 | **0.025** |
 | 2 | **0.588** |
-| 3 | **1243** |
+| 3 | **1171** |
 | 4 | **4** |
 | 5 | see Q5 below |
 
@@ -23,7 +23,7 @@ Q1–Q4 calculations: [[2026]_Module_03_Homework.ipynb](https://github.com/zakar
 - Launch: `bash run-nbclassic.sh` — do not use `jupyter notebook`
 - Frame: `../modeling/stocks_df_combined_2026_09_18.parquet.brotli` on E: (2000-01-03 to 2026-09-18, 202,292 rows)
 
-The lesson OHLCV list names `Close` and `Adj Close_x`. This file has `Close_x`. The model uses growth, technicals, macros, and dummies, so I left the price column as it is.
+The lesson OHLCV list names `Close` and `Adj Close_x`. This file has `Close_x`. The model uses growth, technicals, macros, and dummies, so I left the price column as it is. I read the local parquet next to the lesson notebook, not a Colab `/content` file.
 
 ---
 
@@ -31,7 +31,7 @@ The lesson OHLCV list names `Close` and `Adj Close_x`. This file has `Close_x`. 
 
 **Question:** Absolute correlation of the strongest month-and-week dummy with `is_positive_growth_30d_future`, to three decimals.
 
-`Month` is a month-start timestamp, so `October_w4` has to be built from `Date`. `get_dummies` prefixes the column: `month_wom_October_w4`. **115** dummies, **60** of them `month_wom`.
+`Month` is a month-start timestamp, so I built the week label from `Date`, and I took `Month.dt.month` before `get_dummies`. `get_dummies` prefixes the column: `month_wom_October_w4`. **115** dummies, **60** of them `month_wom`.
 
 **Answer:** **0.025**. Raw absolute correlation **0.024584**. The form options are 0.015, 0.025, 0.035, 0.045.
 
@@ -51,7 +51,9 @@ The lesson OHLCV list names `Close` and `Adj Close_x`. This file has `Close_x`. 
 
 **Question:** Test rows where the depth-10 tree is right and pred0–pred4 are all wrong.
 
-`random_state=42`, fit on train+validation (**169,129** rows, no missing labels). The lesson join looks up prediction columns that are not on the frame yet, so I wrote the prediction vector onto the same rows.
+The lesson merge looks up prediction columns that are not on the frame yet, so I wrote the prediction vector in the same row order.
+
+On my run, pred5 matches the label and every hand rule misses on 1243 test rows. 1187 of those labels are 1 and 56 are 0. pred5 is a true positive and no hand rule predicted 1 on 1187 test rows. With the tree correct, exactly 0, 1, 2, 3, 4, and 5 hand rules wrong comes to 613, 2680, 3905, 4875, 2515, and 1243. The form choices are 271, 571, 1171, and 1571. 1243 is not a choice. The nearest is 1171.
 
 **Answer:** **1243**.
 
@@ -61,7 +63,7 @@ The lesson OHLCV list names `Close` and `Adj Close_x`. This file has `Close_x`. 
 
 **Question:** Depth with the highest precision on the test set.
 
-Depth 1 calls every test row positive (precision 0.570). Depth 4 is the high point, and it stays above 0.58.
+Depth 1 called every test row positive. The highest test precision was at depth 4.
 
 **Answer:** **4**. Test precision **0.629175**.
 

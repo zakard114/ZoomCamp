@@ -1,0 +1,29 @@
+03 Homework
+
+Stock Markets Analytics — Module 3 homework (2026)
+Official: https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/cohorts/2026/homework3.md
+Submit: https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw03
+
+Working: E:\IT_SPACES\AI\ZoomCamp\SMA\03\HW_03
+Materials (do not edit): E:\IT_SPACES\AI\ZoomCamp\SMA\03\HW_03\materials\homework3.md
+Lesson working copy: E:\IT_SPACES\AI\ZoomCamp\SMA\03\modeling
+
+Layout (same as SMA 01/02):
+  SMA: ZoomCamp\SMA\03\HW_03
+
+.venv: junction → SMA/.venv → ML/.venv
+
+실행 (Git Bash). `jupyter notebook` 금지.
+수업 노트북 서버를 끈 뒤, 같은 포트로 과제 노트북을 연다.
+
+cd /e/IT_SPACES/AI/ZoomCamp/SMA/03/HW_03
+bash run-nbclassic.sh
+
+브라우저: http://localhost:8888/tree
+커널: SMA / 이 폴더 .venv Python 3 (Anaconda 아님)
+노트북 안에서 !pip 쓰지 말 것.
+열 파일: [2026]_Module_03_Homework.ipynb
+제출 정리: SMA_HW_03.md
+
+HINT (official): HW uses the same dataframe as the Module 3 Colab lesson.
+Prefer continuing from the lesson notebook pipeline before answering Q1–Q4.

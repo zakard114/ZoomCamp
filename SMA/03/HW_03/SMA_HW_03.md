@@ -55,7 +55,7 @@ The lesson merge looks up prediction columns that are not on the frame yet, so I
 
 On my run, pred5 matches the label and every hand rule misses on 1243 test rows. 1187 of those labels are 1 and 56 are 0. pred5 is a true positive and no hand rule predicted 1 on 1187 test rows. With the tree correct, exactly 0, 1, 2, 3, 4, and 5 hand rules wrong comes to 613, 2680, 3905, 4875, 2515, and 1243. The form choices are 271, 571, 1171, and 1571. 1243 is not a choice. The nearest is 1171.
 
-**Answer:** **1243**.
+**Answer:** **1171**. Raw count **1243**. The form choice is the nearest option, **1171**.
 
 ---
 

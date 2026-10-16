@@ -2,10 +2,6 @@
 
 Notebook: [`[2026]_HW_04.ipynb`](./%5B2026%5D_HW_04.ipynb)
 
-Official: https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/cohorts/2026/homework/04-evaluation/homework.md
-
-Submit: https://courses.datatalks.club/ml-zoomcamp-2026/homework/hw04
-
 ---
 
 ## Form answers

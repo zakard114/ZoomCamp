@@ -8,14 +8,12 @@ Notebook: [`[2026]_HW_05.ipynb`](./%5B2026%5D_HW_05.ipynb)
 
 | # | Answer |
 |---|--------|
-| 1 | `uv --version` (not graded) |
+| 1 | `uv 0.13.5 (46776a95d 2026-10-21 x86_64-pc-windows-msvc)` (not graded) |
 | 2 | **1.7.2** |
 | 3 | **0.533** |
 | 4 | **0.770** |
 | 5 | **python:3.11.15-slim-bookworm** |
 | 6 | **0.770** |
-
-Submit: https://courses.datatalks.club/ml-zoomcamp-2026/homework/hw05
 
 ---
 
@@ -50,7 +48,7 @@ with a `DictVectorizer` in front. Graded inference loads `pipeline.bin`.
 uv --version
 ```
 
-**Answer:** `uv --version`
+**Answer:** `uv 0.13.5 (46776a95d 2026-10-21 x86_64-pc-windows-msvc)`
 
 ---
 

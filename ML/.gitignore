@@ -37,5 +37,10 @@ uv.lock
 # Module 05: telco CSV (same source as module 03)
 05/**/data-week-3.csv
 
+# Module 05 homework: official 2026 lock and Python pin
+!05/HW_05/uv.lock
+!05/HW_05/.python-version
+05/HW_05/data/
+
 # Module 04 homework CSV (pinned 2026 lead-scoring release)
 04/HW_04/data/

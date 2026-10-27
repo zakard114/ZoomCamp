@@ -26,3 +26,21 @@ uv.lock
 # Module 01 homework: local CSV / compare cache (notebook downloads CSV)
 01/HW_01/data/
 01/_cohort_compare/
+
+# Module 02 / 03 homework CSVs (pinned 2026 releases)
+02/HW_02/data/
+03/HW_03/data/
+06/HW_06/data/
+
+# Module 05: local notepad (do not push)
+05/deployment.txt
+# Module 05: telco CSV (same source as module 03)
+05/**/data-week-3.csv
+
+# Module 05 homework: official 2026 lock and Python pin
+!05/HW_05/uv.lock
+!05/HW_05/.python-version
+05/HW_05/data/
+
+# Module 04 homework CSV (pinned 2026 lead-scoring release)
+04/HW_04/data/

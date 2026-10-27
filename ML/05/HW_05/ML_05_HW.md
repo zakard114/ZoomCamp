@@ -28,7 +28,8 @@ Ran the notebook in local Jupyter (nbclassic) on the shared ML Zoomcamp `.venv`.
 - Frozen artifact: `pipeline.bin`
 - Expected sha256: `1646bbdcd38d4f044da6b630c5b332c93a314245a8c21929011c42de51f629f1`
 - Data named by the homework: `data/course_lead_scoring_2026.csv`
-- Image tag: `zoomcamp-model:2026-hw5`. The container was not run.
+- Image tag: `zoomcamp-model:2026-hw5`
+- Q6: build/run that image, then `python q6_test.py` or the notebook `requests` cell against `localhost:9696` (not a local pickle load)
 
 Model line from the homework:
 
@@ -142,9 +143,16 @@ This question checks a version-controlled declaration. The displayed size of a l
 
 ## Q6 — run the container
 
-**Question:** Run the same request from Question 4 against the container. Report `conversion_probability` rounded to three decimal places. The expected result is the same reference inference as Question 4, with the same `0.005` absolute tolerance.
+**Question:** Run the same request from Question 4 against the container. Report `conversion_probability` rounded to three decimal places. The expected result is the same reference inference as Question 4, with the same `0.005` absolute tolerance. Also verify that `/health` returns `{"status":"ok", ...}` and the model checksum recorded in `model_metadata.json`.
 
-The container was not run. Homework says this value is the same as Q4.
+Build and run the image in a terminal from `HW_05` first (this blocks that terminal):
+
+```bash
+docker build -t zoomcamp-model:2026-hw5 .
+docker run --rm -p 9696:9696 zoomcamp-model:2026-hw5
+```
+
+Then either run `python q6_test.py` in another terminal, or the notebook cell that `POST`s to `/predict` and `GET`s `/health` on `localhost:9696`.
 
 **Output:**
 

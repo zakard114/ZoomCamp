@@ -1,0 +1,29 @@
+04 Homework
+
+Stock Markets Analytics — Module 4 homework (2026)
+Official: https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/cohorts/2026/homework4.md
+Submit: https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw04
+Deadline: 30 October 2026, 22:59
+
+Working: E:\IT_SPACES\AI\ZoomCamp\SMA\04\HW_04
+Materials (do not edit): E:\IT_SPACES\AI\ZoomCamp\SMA\04\HW_04\materials\homework4.md
+Lesson working copy: E:\IT_SPACES\AI\ZoomCamp\SMA\04\trading_strategy_and_simulation
+
+Layout (same as SMA 01/02/03):
+  SMA: ZoomCamp\SMA\04\HW_04
+
+.venv: junction → SMA/.venv → ML/.venv
+
+실행 (Git Bash). `jupyter notebook` 금지.
+수업 노트북 서버를 끈 뒤, 같은 포트로 과제 노트북을 연다.
+
+cd /e/IT_SPACES/AI/ZoomCamp/SMA/04/HW_04
+bash run-nbclassic.sh
+
+브라우저: http://localhost:8888/tree
+커널: SMA / 이 폴더 .venv Python 3 (Anaconda 아님)
+노트북 안에서 !pip 쓰지 말 것.
+열 파일: [2026]_Module_04_Homework.ipynb
+제출 정리: SMA_HW_04.md
+
+HINT (official): start from the Module 4 Colab workbook. Q1 drops Ticker and month_wom before get_dummies. Q2 adds thresholds on that same model. Q3 is a fresh run with the full dummies and growth_future_30d > 1.022.

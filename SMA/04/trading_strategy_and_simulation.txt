@@ -1,0 +1,36 @@
+04 Trading Strategy and Simulation
+
+Stock Markets Analytics — Module 4
+GitHub: https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/tree/main/04-trading-strategy-and-simulation
+Working: E:\IT_SPACES\AI\ZoomCamp\SMA\04\trading_strategy_and_simulation
+Materials (do not edit): E:\IT_SPACES\AI\ZoomCamp\SMA\04\trading_strategy_and_simulation\materials
+
+=== 2026 (현재 학습 본진) ===
+작업본: [2026]_Module_04_Trading_Simulations.ipynb
+원본 materials: [2026]_Module_04_Colab_Trading_Simulations.ipynb , README.md
+영상: https://www.youtube.com/watch?v=JZE3nL_yfcc
+슬라이드: https://docs.google.com/presentation/d/e/2PACX-1vTPlvP2c0RF06wQfT5sXU_mMCzg-zs3KYybpxaWzlgT0ug2c3L5Zo-pnZR0yU--N-ADEJ8IW7bmTkwV/pub?start=false&loop=false&delayms=3000
+데이터: stocks_df_combined_2026_09_18.parquet.brotli (모듈 3과 같은 파일, 하드링크)
+
+=== 2025 (참고 유지) ===
+작업본: [2025]_Module_04_Trading_Simulations.ipynb
+materials: [2025]_Module_04_Colab_Trading_Simulations.ipynb
+영상: https://www.youtube.com/watch?v=YU7N-sY8eCQ
+2025 parquet (stocks_df_combined_2025_06_13.parquet.brotli) 는 로컬에 없음. 학습은 2026 노트북.
+
+과제(HW4): E:\IT_SPACES\AI\ZoomCamp\SMA\04\HW_04
+공식: https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/cohorts/2026/homework4.md
+제출: https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw04
+마감: 2026-10-30 22:59
+
+.venv: junction → SMA\.venv → ML\.venv  (독립 설치 금지, C: pip 금지)
+
+실행 (Git Bash). jupyter notebook 금지 → nbclassic.
+
+cd /e/IT_SPACES/AI/ZoomCamp/SMA/04/trading_strategy_and_simulation
+bash run-nbclassic.sh
+
+브라우저: http://127.0.0.1:8888
+커널: 이 폴더 .venv Python 3 (Anaconda 아님)
+노트북 안에서 !pip 쓰지 말 것.
+열 파일: [2026]_Module_04_Trading_Simulations.ipynb

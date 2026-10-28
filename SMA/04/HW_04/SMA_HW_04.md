@@ -1,6 +1,6 @@
 # SMA Zoomcamp 2026 — Homework 4: Trading System
 
-Q1–Q3 calculations: [[2026]_Module_04_Homework.ipynb](%5B2026%5D_Module_04_Homework.ipynb)
+Q1–Q3 calculations: [[2026]_Module_04_Homework.ipynb](https://github.com/zakard114/ZoomCamp/blob/main/SMA/04/HW_04/%5B2026%5D_Module_04_Homework.ipynb)
 
 ---
 
@@ -10,7 +10,7 @@ Q1–Q3 calculations: [[2026]_Module_04_Homework.ipynb](%5B2026%5D_Module_04_Hom
 |---|--------|
 | 1 | **1.126** |
 | 2 | **0.57** |
-| 3 | **7337** |
+| 3 | **8** |
 | 4 | see Q4 below |
 
 ---
@@ -50,14 +50,16 @@ Same reduced-dummy forest as Q1. Threshold 0.55 averages 6.06 trades a day. Thre
 
 ## Q3 — Growth target above 1.022, trades for `pred5_clf_10`
 
-**Question:** Number of test trades for the depth-10 tree after the positive label becomes `growth_future_30d > 1.022`.
+**Question:** Number of trades for `pred5_clf_10` after the positive label becomes `growth_future_30d > 1.022`.
 
-This run uses the full dummy set again, not the reduced set from Q1. The positive rate falls from about 0.59 to **0.491**. The depth-10 tree, `max_depth=10`, `random_state=42`, fit on train+validation, flags **7,337** test rows.
+This run uses the full dummy set again, not the reduced set from Q1. The positive rate falls from about 0.59 to **0.491**. The depth-10 tree, `max_depth=10`, `random_state=42`, fit on train+validation, flags **7,337** test rows. Average trades per day is **8.01**.
 
-**Answer:** **7337**.
+The form choices are **6 / 7 / 8 / 9**, so the scored value is the average trades per day, not the raw test count.
+
+**Answer:** **8**.
 
 ---
 
 ## Q4 — Ideal strategy
 
-I would keep the reduced-dummy random forest and trade only when its probability is at least 0.57. That was the highest CAGR among the rules that stay under 5 trades a day. I would still put $100 on each signal, and I would stop adding trades once the day reaches the 75% count the capital formula already uses, about 6 names. I would not use a 0.65 cutoff. It barely trades, so the CAGR is not something I would trust out of sample. Fees stay 0.2% for the round trip.
+I would not put a flat $100 on every positive flag. Each morning I would take the reduced-dummy random forest, keep names with probability at least 0.57, rank them by probability, and invest only in the top three that day. That day's capital would be split equally across those names, so a quiet day does not leave cash idle and a crowded day does not force a long list of tiny bets. If fewer than two names clear 0.57, I would skip the day. I would treat agreement with the depth-10 tree from the 1.022 growth label as a soft filter: when both models agree I would allow a slightly larger size, and when they disagree I would skip. Round-trip fees stay at 0.2% in the simulation so the CAGR stays honest.

@@ -1,0 +1,29 @@
+05 Homework
+
+Stock Markets Analytics — Module 5 homework (2026)
+Official: https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/cohorts/2026/homework5.md
+Submit: https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw05
+Deadline: 6 November 2026, 22:59
+
+Working: E:\IT_SPACES\AI\ZoomCamp\SMA\05\HW_05
+Materials (do not edit): E:\IT_SPACES\AI\ZoomCamp\SMA\05\HW_05\materials\homework5.md
+Lesson working copy: E:\IT_SPACES\AI\ZoomCamp\SMA\05\deployment_and_automation
+
+Layout (same as SMA 01–04):
+  SMA: ZoomCamp\SMA\05\HW_05
+
+.venv: junction → SMA/.venv → ML/.venv
+
+실행 (Git Bash). `jupyter notebook` 금지.
+
+cd /e/IT_SPACES/AI/ZoomCamp/SMA/05/HW_05
+bash run-nbclassic.sh
+
+브라우저: http://localhost:8888/tree
+커널: SMA / 이 폴더 .venv Python 3 (Anaconda 아님)
+노트북 안에서 !pip 쓰지 말 것.
+열 파일: [2026]_Module_05_Homework.ipynb
+제출 정리: SMA_HW_05.md
+
+HINT (official): three distinct research ideas, free text, no model fit required.
+Use the six-part structure for each idea. Mechanisms should differ (not just ticker/indicator swaps).

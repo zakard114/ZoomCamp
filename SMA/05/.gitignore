@@ -1,0 +1,10 @@
+﻿*.parquet*
+*.brotli
+.venv/
+**/.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Module notes. Root gitignore ignores SMA/**/*.txt; these stay tracked.
+!deployment_and_automation.txt
+!HW_05.txt

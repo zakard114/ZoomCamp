@@ -1,0 +1,34 @@
+﻿05 Deployment and Automation
+
+Stock Markets Analytics — Module 5
+GitHub: https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/tree/main/05-deployment-and-automation
+Working: E:\IT_SPACES\AI\ZoomCamp\SMA\05\deployment_and_automation
+Materials (do not edit): E:\IT_SPACES\AI\ZoomCamp\SMA\05\deployment_and_automation\materials
+
+=== Lesson ===
+Working notebook: [2025]_Module_05_Advanced_Strategies_And_Simulation.ipynb
+Upstream materials: README.md, scripts/, main.py, system_test.ipynb, 2025 Colab notebook
+Video (2025): https://www.youtube.com/watch?v=FA0x_yBfMjM
+Slides (2025): https://docs.google.com/presentation/d/e/2PACX-1vQbhpwqnfNTvo1Q4jxeWs5UnncPVhMPrro9iy2Y74ObF0NgfRCzPLBeXvs55Xp2vR-2RknrpQSwefXH/pub?start=false&loop=false&delayms=3000
+Data: stocks_df_combined_2026_09_18.parquet.brotli (same file as modules 3/4, hardlink; gitignored)
+
+=== Homework ===
+Official: https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/cohorts/2026/homework5.md
+Submit: https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw05
+Deadline: 6 November 2026, 22:59
+Working: E:\IT_SPACES\AI\ZoomCamp\SMA\05\HW_05
+Write-up: SMA_HW_05.md
+Notebook: [2026]_Module_05_Homework.ipynb
+
+.venv: junction → SMA\.venv → ML\.venv
+Do not pip install onto C:. Prefer shared venv packages; if a package is missing, install with E: cache.
+
+실행 (Git Bash). jupyter notebook 금지 — nbclassic.
+
+cd /e/IT_SPACES/AI/ZoomCamp/SMA/05/deployment_and_automation
+bash run-nbclassic.sh
+
+Automation sketch (lesson):
+  python main.py
+  scripts/data_repo.py, transform.py, train.py
+  system_test.ipynb

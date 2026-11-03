@@ -1,10 +1,5 @@
 # SMA Zoomcamp 2026 — Homework 5: Research Ideas
 
-## Setup
-
-- Official text: `materials/homework5.md` (do not edit)
-- Deliverable: this write-up (`SMA_HW_05.md`) — free text only; no homework notebook
-
 The three ideas use different mechanisms on purpose: a local-language disclosure edge (Korea), a relative-value / pairs idea (memory semis), and a macro-surprise idea (US CPI surprise vs rate-sensitive names). That matches the homework hint to vary the economic story, not just the ticker.
 
 ---

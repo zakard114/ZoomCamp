@@ -1,14 +1,9 @@
 # SMA Zoomcamp 2026 — Homework 5: Research Ideas
 
-Q1–Q3 write-up cells: [[2026]_Module_05_Homework.ipynb](https://github.com/zakard114/ZoomCamp/blob/main/SMA/05/HW_05/%5B2026%5D_Module_05_Homework.ipynb)
-
----
-
 ## Setup
 
-- Kernel: SMA / `HW_05/.venv` → `SMA/.venv` → `ML/.venv`
 - Official text: `materials/homework5.md` (do not edit)
-- Launch: `bash run-nbclassic.sh` — do not use `jupyter notebook`
+- Deliverable: this write-up (`SMA_HW_05.md`) — free text only; no homework notebook
 
 The three ideas use different mechanisms on purpose: a local-language disclosure edge (Korea), a relative-value / pairs idea (memory semis), and a macro-surprise idea (US CPI surprise vs rate-sensitive names). That matches the homework hint to vary the economic story, not just the ticker.
 

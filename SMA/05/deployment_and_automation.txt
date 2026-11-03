@@ -17,8 +17,7 @@ Official: https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob
 Submit: https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw05
 Deadline: 6 November 2026, 22:59
 Working: E:\IT_SPACES\AI\ZoomCamp\SMA\05\HW_05
-Write-up: SMA_HW_05.md
-Notebook: [2026]_Module_05_Homework.ipynb
+Write-up (deliverable): SMA_HW_05.md — free text only; no homework notebook
 
 .venv: junction → SMA\.venv → ML\.venv
 Do not pip install onto C:. Prefer shared venv packages; if a package is missing, install with E: cache.

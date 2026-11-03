@@ -2,10 +2,6 @@
 
 Notebook: [`[2026]_HW_06.ipynb`](./%5B2026%5D_HW_06.ipynb)
 
-Official instructions: [cohorts/2026/homework/06-trees/homework.md](https://github.com/DataTalksClub/machine-learning-zoomcamp/blob/main/cohorts/2026/homework/06-trees/homework.md)
-
-Submit: https://courses.datatalks.club/ml-zoomcamp-2026/homework/hw06
-
 ---
 
 ## Form answers
@@ -26,7 +22,6 @@ Submit: https://courses.datatalks.club/ml-zoomcamp-2026/homework/hw06
 Ran locally with shared ML Zoomcamp `.venv` (nbclassic / script). Answers computed on the pinned 2026 CSV.
 
 - Data: `data/car_fuel_efficiency_2026.csv` (2026 pinned release)
-- Official: `materials/homework.md` (do not edit)
 - Launch: `bash run-nbclassic.sh` or `.\run-nbclassic.ps1` (port **8891**)
 - Kernel: this folder `.venv` → `ML\.venv`. Do not use `!pip` / `!wget`
 
@@ -246,9 +241,5 @@ Share a short post with `#mlzoomcamp` (no secrets). Submit the post link with th
 **Post link:**
 
 ---
-
-## Submit
-
-https://courses.datatalks.club/ml-zoomcamp-2026/homework/hw06
 
 If a numerical answer does not match an option exactly, pick the closest. If exactly between two options, pick the higher value.

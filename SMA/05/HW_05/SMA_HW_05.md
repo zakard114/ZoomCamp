@@ -4,26 +4,11 @@ Q1–Q3 write-up cells: [[2026]_Module_05_Homework.ipynb](https://github.com/zak
 
 ---
 
-## Form answers
-
-| # | Choice |
-|---|--------|
-| 1 | see Q1 below |
-| 2 | see Q2 below |
-| 3 | see Q3 below |
-
-All three are free-text exploratory answers. No numeric bubbles.
-
----
-
 ## Setup
 
 - Kernel: SMA / `HW_05/.venv` → `SMA/.venv` → `ML/.venv`
 - Official text: `materials/homework5.md` (do not edit)
 - Launch: `bash run-nbclassic.sh` — do not use `jupyter notebook`
-- Official note: no code, trained model, or completed backtest is required
-- Submit: https://courses.datatalks.club/sma-zoomcamp-2026/homework/hw05
-- Deadline: 6 November 2026, 22:59
 
 The three ideas use different mechanisms on purpose: a local-language disclosure edge (Korea), a relative-value / pairs idea (memory semis), and a macro-surprise idea (US CPI surprise vs rate-sensitive names). That matches the homework hint to vary the economic story, not just the ticker.
 
@@ -83,11 +68,3 @@ The three ideas use different mechanisms on purpose: a local-language disclosure
 **5. Research approach.** Event study around CPI releases. Signal: surprise = actual − consensus (or actual − prior nowcast). Rule sketch: if surprise is above a positive threshold, short the rate-sensitive basket vs SPY for N days; if below a negative threshold, long the basket vs SPY. Keep Module 4 fee assumptions. No need for a deep model on day one — a signed surprise bucket table is enough to see if anything exists.
 
 **6. Validation and risks.** Benchmark: SPY, and the same baskets traded on random Wednesdays. Reject if results only appear before costs, if they vanish after 2015 (or another regime cut), or if the open already reflects the print so the close-to-close window is empty. Publication timing, ETF spreads, and overlapping FOMC weeks are the main operational risks.
-
----
-
-## Before submit checklist
-
-- Each idea has a thesis, named data, a first test, and a failure mode.
-- Mechanisms differ: disclosure lag (KR) vs relative value (memory pair) vs macro surprise (US CPI).
-- None of the three is “use AI to predict prices.”

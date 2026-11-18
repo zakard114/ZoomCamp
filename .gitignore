@@ -92,9 +92,13 @@ AIDT/**/retroloop.git-removed-for-monorepo/
 
 # SMA (Stock Markets Analytics) — local notes, venvs, caches
 SMA/**/*.txt
+!SMA/Project/requirements.txt
+SMA/**/*.parquet*
+SMA/**/*.parquet.brotli
 SMA/**/.venv/
 SMA/**/.venv.incomplete/
 SMA/**/.ipynb_checkpoints/
 SMA/**/__pycache__/
 SMA/**/.cache/
 SMA/**/*.py[cod]
+SMA/_upstream_sma_m5/

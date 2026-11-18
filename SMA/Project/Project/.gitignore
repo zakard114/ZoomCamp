@@ -1,0 +1,10 @@
+.venv/
+.venv.incomplete/
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+.cache/
+*.parquet
+*.parquet.brotli
+models/
+outputs/

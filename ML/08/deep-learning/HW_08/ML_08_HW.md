@@ -23,20 +23,10 @@ Ran locally on CPU with this folder's `.venv` (`torch==2.9.0+cpu`, `torchvision=
 
 - Data: `data/` from `straight-curly-data/data.zip` (800 train, 201 held-out). `ImageFolder` maps `curly=0`, `straight=1`.
 - Histories: `history_baseline.json`, `history_augmented.json` (four lists each).
-- Kernel: this folder `.venv`. Do not use `!pip` / `!wget`.
 
 ---
 
 ## Dataset
-
-Fixed archive. Do not make another random split. Do not augment the held-out images.
-
-| Split | Curly | Straight | Total |
-| --- | ---: | ---: | ---: |
-| Train | 410 | 390 | 800 |
-| Held-out evaluation | 103 | 98 | 201 |
-
-Shared evaluation transform: resize to 200×200 (bilinear), `ToTensor`, ImageNet normalize.
 
 ```python
 len(train_dataset), len(evaluation_dataset), train_dataset.class_to_idx
@@ -176,15 +166,3 @@ Mean of last five evaluation accuracies: 0.72
 ```
 
 **Answer:** **0.72**
-
----
-
-## Learning in Public
-
-Share a short post with `#mlzoomcamp` (no secrets). Submit the post link with the homework.
-
-**Post link:**
-
----
-
-Numeric answers use the precision stated in each question. The grader allows absolute error 0.05 on the accuracy questions and 0.02 on the loss questions.

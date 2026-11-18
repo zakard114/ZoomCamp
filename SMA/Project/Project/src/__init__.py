@@ -1,1 +1,0 @@
-"""SMA capstone: load → features → train → simulate."""

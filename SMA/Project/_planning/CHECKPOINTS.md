@@ -12,4 +12,4 @@ Official rubric: https://github.com/DataTalksClub/stock-markets-analytics-zoomca
 | Scripts + orchestration | py modules + run / notebook | done | `run.py`, `project.ipynb` |
 | Submit + peer review 3× | Form + reviews | pending | user |
 
-Upgrade backlog (not floor): 2nd sim, benchmark CAGR, EDA, Cron, KRX story.
+Internal upgrade list: `_planning/BACKLOG.md` (do not copy into public README).

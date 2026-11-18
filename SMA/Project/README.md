@@ -1,10 +1,10 @@
-# SMA Zoomcamp 2026 — Capstone (floor build)
+# SMA Zoomcamp 2026 — Capstone
 
 ## Problem
 
-Build an **end-to-end algo-trading workflow**: load the course combined equity dataset, engineer lecture features, train a **RandomForest** to flag 30-day forward return opportunities, apply a **probability threshold rule**, and **vector-simulate** fixed $100 trades with **0.2% fees** on the held-out test period.
+End-to-end **algo-trading workflow**: load the course combined equity dataset, engineer lecture features, train a **RandomForest** for 30-day forward return opportunities, apply a **probability threshold** rule, and **vector-simulate** fixed $100 trades with **0.2% fees** on the held-out test period.
 
-**Scope for attempt 1 (2026-11-20):** US large-cap panel from the course pipeline (Module 02 → Module 04). Korea/KRX or DART angles are documented as future upgrades in Module 5 homework, not required for the rubric floor.
+**Data scope:** Combined panel from course Modules 02–04 (prices, technical features, US macro, forward-return labels).
 
 ## Data sources (lecture)
 
@@ -26,8 +26,8 @@ Defined in `src/features.py` (`FEATURE_SETS`):
 
 - **TO_PREDICT:** `is_positive_growth_30d_future` (growth cutoff = 1.0)
 - **NUMERIC:** past growth, TA, patterns, custom (`ln_volume`, splits, etc.), macro
-- **DUMMIES:** `Month`, `Weekday`, `ticker_type` (Ticker / `month_wom` dropped for reduced model, as in HW4 Q1)
-- **Simulation label:** `growth_future_30d` (not used as input)
+- **DUMMIES:** `Month`, `Weekday`, `ticker_type` (Ticker / `month_wom` dropped for reduced model, as in Module 4 homework)
+- **Simulation label:** `growth_future_30d` (not used as a model input)
 
 ## Model & strategy
 
@@ -57,22 +57,10 @@ SMA/Project/
 ```powershell
 . E:\IT_SPACES\AI\scripts\use_e_drive.ps1
 cd E:\IT_SPACES\AI\ZoomCamp\SMA\Project
-# Optional: junction .venv → ..\..\ML\.venv (see zoomcamp-shared-venv skill)
 E:\IT_SPACES\AI\ZoomCamp\ML\.venv\Scripts\python.exe run.py
 ```
 
-Dependencies: `requirements.txt` (already in shared `ML/.venv` if you completed Module 4).
-
-## Rubric floor (bold = 6 minimum)
-
-| Area | Evidence in this repo |
-|------|------------------------|
-| README problem | This file |
-| Lecture data sources | Table above + parquet from M02/M04 |
-| One frame + feature sets | `features.py` |
-| RandomForest / DecisionTree | `modeling.py` (RF) |
-| Vector sim ≥1 strategy | `simulation.py` |
-| `.py` modules + driver notebook/CLI | `src/*`, `run.py`, `project.ipynb` |
+Dependencies: `requirements.txt` (shared `ML/.venv` if you completed earlier modules).
 
 ## Verified run (local, 2026-11-18)
 
@@ -90,14 +78,14 @@ Dependencies: `requirements.txt` (already in shared `ML/.venv` if you completed 
 | Net P&L (USD) | ~12,983.6 |
 | CAGR (approx., 4y) | ~1.128 |
 
-Latest test-day signals (sample): `HINDUNILVR.NS`, `RELIANCE.NS`, `SBIN.NS` on `2026-09-18` — `growth_future_30d` may be **NaN** at the dataset tail (no full 30d forward window).
+Latest test-day signals (sample): `HINDUNILVR.NS`, `RELIANCE.NS`, `SBIN.NS` on `2026-09-18`. At the dataset tail, `growth_future_30d` can be **NaN** when the 30-day forward window is not yet observable.
 
 ## Reproduce
 
 1. Place or build the combined parquet (Module 02).
-2. `python run.py` — prints simulation stats + latest test-day tickers with signals.
+2. Run `run.py` — prints simulation stats and latest test-day tickers with signals.
 3. Open `project.ipynb` and run all cells (same pipeline).
 
-## Future upgrades (post-deadline)
+## Course project rubric
 
-- Second strategy (`sim2_*`, threshold 0.57), benchmark vs S&P, KRX tickers, incremental refresh/Cron — per official [project rubric](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/tree/main/projects/README.md).
+Evaluation criteria and optional extensions: [course `projects/README.md`](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/tree/main/projects/README.md).

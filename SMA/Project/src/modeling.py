@@ -1,10 +1,15 @@
-"""RandomForest classifier + probability threshold rule (lecture model)."""
+"""Lecture models: RandomForest + DecisionTree, probability threshold rules."""
+
+from __future__ import annotations
 
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 from .config import (
+    DT_MAX_DEPTH,
+    DT_RANDOM_STATE,
     GROWTH_CUTOFF,
     DROP_TICKER_AND_MONTH_WOM,
     PRED_THRESHOLD,
@@ -43,10 +48,45 @@ def fit_random_forest(
     return model, proba
 
 
+def fit_decision_tree(
+    frame: pd.DataFrame, features: list[str]
+) -> tuple[DecisionTreeClassifier, np.ndarray]:
+    x_tv, y_tv, x_all = train_valid_matrices(frame, features)
+    model = DecisionTreeClassifier(
+        max_depth=DT_MAX_DEPTH,
+        random_state=DT_RANDOM_STATE,
+    )
+    model.fit(x_tv, y_tv)
+    proba = model.predict_proba(x_all)[:, 1]
+    return model, proba
+
+
 def attach_predictions(
-    frame: pd.DataFrame, proba: np.ndarray, threshold: float = PRED_THRESHOLD
+    frame: pd.DataFrame,
+    proba: np.ndarray,
+    threshold: float = PRED_THRESHOLD,
+    *,
+    prefix: str = "pred_rf",
 ) -> tuple[pd.DataFrame, str]:
-    col = f"pred_rf_{threshold:.2f}"
+    col = f"{prefix}_{threshold:.2f}"
     out = frame.copy()
     out[col] = (proba >= threshold).astype(int)
     return out, col
+
+
+def attach_all_strategy_columns(
+    frame: pd.DataFrame,
+    proba_rf: np.ndarray,
+    proba_dt: np.ndarray,
+    thresholds: tuple[float, ...] = (0.55, 0.57),
+) -> tuple[pd.DataFrame, list[str]]:
+    out = frame.copy()
+    columns: list[str] = []
+    for thr in thresholds:
+        col = f"pred_rf_{thr:.2f}"
+        out[col] = (proba_rf >= thr).astype(int)
+        columns.append(col)
+    col_dt = f"pred_dt_{thresholds[0]:.2f}"
+    out[col_dt] = (proba_dt >= thresholds[0]).astype(int)
+    columns.append(col_dt)
+    return out, columns

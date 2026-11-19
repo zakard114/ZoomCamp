@@ -4,7 +4,6 @@
 import os
 import sys
 
-# Keep matplotlib/sklearn caches on E: when using the shared ZoomCamp venv
 os.environ.setdefault("MPLCONFIGDIR", r"E:\IT_SPACES\AI\.cache\matplotlib")
 os.environ.setdefault("XDG_CACHE_HOME", r"E:\IT_SPACES\AI\.cache")
 os.environ.setdefault("TEMP", r"E:\IT_SPACES\AI\.cache\tmp")
@@ -18,11 +17,20 @@ def main() -> int:
     print("=== SMA Capstone pipeline ===")
     print(f"Data: {result.data_path}")
     print(f"Rows: {result.n_rows:,}  Features: {result.n_features}")
-    print(f"Prediction column: {result.pred_column}")
-    print("--- Simulation (test split) ---")
+    print(f"Primary strategy: {result.pred_column}")
+    print("--- Simulation (primary) ---")
     for k, v in result.simulation.items():
         print(f"  {k}: {v}")
-    print("--- Latest test-day signals (sample) ---")
+    print("--- Strategy comparison (test) ---")
+    for row in result.comparison.get("strategies", []):
+        label = row.get("strategy", "?")
+        cagr = row.get("cagr_approx")
+        trades = row.get("test_trades")
+        sharpe = row.get("sharpe_daily")
+        print(f"  {label}: trades={trades} cagr={cagr} sharpe={sharpe}")
+    passive = result.comparison.get("passive_baseline", {})
+    print(f"  passive baseline: trades={passive.get('test_trades')} cagr={passive.get('cagr_approx')}")
+    print("--- Latest test-day signals (primary) ---")
     if result.latest_trades is not None and len(result.latest_trades):
         print(result.latest_trades.to_string(index=False))
     else:

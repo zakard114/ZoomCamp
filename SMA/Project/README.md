@@ -1,5 +1,7 @@
 # SMA Zoomcamp 2026 — Capstone
 
+**Product demo (Signal Desk):** Companion API/UI over frozen run artifacts. **This directory** is the graded ML pipeline and reproduction entry point.
+
 ## Problem
 
 End-to-end **algo-trading workflow**: load the course combined equity dataset, engineer lecture features, train a **RandomForest** for 30-day forward return opportunities, apply a **probability threshold** rule, and **vector-simulate** fixed $100 trades with **0.2% fees** on the held-out test period.
@@ -29,11 +31,30 @@ Defined in `src/features.py` (`FEATURE_SETS`):
 - **DUMMIES:** `Month`, `Weekday`, `ticker_type` (Ticker / `month_wom` dropped for reduced model, as in Module 4 homework)
 - **Simulation label:** `growth_future_30d` (not used as a model input)
 
+## Derived features (rubric §2 — 20+ documented)
+
+| Feature | Description |
+|---------|-------------|
+| `ln_volume` | log(volume) stability |
+| `div_payout` | dividend event dummy |
+| `stock_split` | split event dummy |
+| `sma10_over_sma20` | short/long MA ratio |
+| `rsi_x_vol` | RSI × volatility interaction |
+| `yield_spread_10y_fed` | `DGS10 − FEDFUNDS` |
+| `hl_rel_sq` | squared high–low range (custom) |
+| `growth_vol_ratio` | past growth / volatility |
+| `month_sin`, `month_cos` | calendar seasonality |
+| `high_ln_volume` | above-median volume dummy |
+
+Plus lecture TA, patterns, macro, and dummy sets in `FEATURE_SETS` → **208** model columns after dummies (see `run.py` output).
+
 ## Model & strategy
 
-- **Model:** `RandomForestClassifier` (`n_estimators=100`, `max_depth=13`, `random_state=42`)
-- **Rule:** buy signal when `predict_proba >= 0.55` → column `pred_rf_0.55`
-- **Simulation:** vector sim on `split == "test"` only; capital assumption `100 × 30 × Q75(daily trades)`; approximate **CAGR** over 4 years (Module 4 formula)
+- **Models:** `RandomForestClassifier` (primary) + `DecisionTreeClassifier` (second lecture model)
+- **Rules:** buy when `predict_proba >= threshold` → `pred_rf_0.55`, `pred_rf_0.57`, `pred_dt_0.55`
+- **Tuning:** optional `python -m src.tuning` (`RandomizedSearchCV` on train/valid)
+- **Simulation:** vector sim on `split == "test"`; fees 0.2%; **CAGR**, **Sharpe**, **max drawdown** vs passive baseline (`src/benchmark.py`)
+- **EDA:** `python run_eda.py` → correlation chart in [`docs/figures/`](docs/figures/)
 
 ## Repository layout
 
@@ -69,23 +90,46 @@ Dependencies: `requirements.txt` (shared `ML/.venv` if you completed earlier mod
 | Metric | Value |
 |--------|-------|
 | Rows (after filters) | 202,292 |
-| Features | 208 |
-| Strategy | `pred_rf_0.55` |
-| Test trades | 3,756 |
-| Avg trades / day (test) | ~6.06 |
-| Q75 trades / day | 7 |
-| Assumed capital (USD) | 21,000 |
-| Net P&L (USD) | ~12,983.6 |
-| CAGR (approx., 4y) | ~1.128 |
+| Features | 216 |
+| Primary strategy | `pred_rf_0.55` |
+| Test trades (primary) | 6,092 |
+| Q75 trades / day | 11 |
+| Assumed capital (USD) | 33,000 |
+| Net P&L (USD) | ~19,183.6 |
+| CAGR (approx., 4y) | ~1.121 |
+| Sharpe (daily P&L, test) | ~5.71 |
 
-Latest test-day signals (sample): `HINDUNILVR.NS`, `RELIANCE.NS`, `SBIN.NS` on `2026-09-18`. At the dataset tail, `growth_future_30d` can be **NaN** when the 30-day forward window is not yet observable.
+Also compare `pred_rf_0.57`, `pred_dt_0.55`, and passive baseline via `run.py` (see `src/benchmark.py`).
+
+Latest test-day signals (sample): `RELIANCE.NS`, `SBIN.NS` on `2026-09-18`. At the dataset tail, `growth_future_30d` can be **NaN** when the 30-day forward window is not yet observable.
 
 ## Reproduce
 
 1. Place or build the combined parquet (Module 02).
-2. Run `run.py` — prints simulation stats and latest test-day tickers with signals.
-3. Open `project.ipynb` and run all cells (same pipeline).
+2. Run `run.py` — primary simulation, **multi-strategy comparison**, latest signals.
+3. `python run_eda.py` — EDA summary + figure.
+4. `python -m src.download --regime refresh` — rebuild instructions (second automation regime).
+5. Open `project.ipynb` and run all cells (same pipeline).
 
-## Course project rubric
+## Documentation
 
-Evaluation criteria and optional extensions: [course `projects/README.md`](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/tree/main/projects/README.md).
+| Doc | Rubric |
+|-----|--------|
+| [`docs/FINDINGS.md`](docs/FINDINGS.md) | Problem steps, difficulties, reproduction |
+| [`docs/AUTOMATION.md`](docs/AUTOMATION.md) | Cron, two data regimes, export to Signal Desk |
+
+## Course project rubric (self-check)
+
+Official checklist: [course `projects/README.md`](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/projects/README.md).
+
+| Block | Evidence in this repo |
+|-------|----------------------|
+| Problem | This README + [`FINDINGS.md`](docs/FINDINGS.md) |
+| Data | Lecture sources table; derived features above |
+| EDA | `run_eda.py`, `src/eda.py`, `docs/figures/` |
+| Modeling | RF + DT; thresholds; `src/tuning.py` |
+| Simulation | `src/simulation.py`, `src/benchmark.py`, `run.py` comparison |
+| Automation | `run.py`, `project.ipynb`, `docs/AUTOMATION.md` |
+| Bonus (live) | [signal-desk](https://github.com/zakard114/signal-desk) Docker / Render / Ops |
+
+**Portfolio demo:** https://signal-desk-c3dx.onrender.com

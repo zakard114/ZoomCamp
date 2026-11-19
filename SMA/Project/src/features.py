@@ -55,10 +55,33 @@ def numerical_and_calendar_columns(df_full: pd.DataFrame) -> tuple[pd.DataFrame,
     frame["ln_volume"] = np.log(frame.Volume.to_numpy() + 1e-6)
     frame["div_payout"] = (frame.Dividends > 0).astype(int)
     frame["stock_split"] = (frame["Stock Splits"] > 0).astype(int)
-    custom = [
+    if "SMA10" in frame.columns and "SMA20" in frame.columns:
+        frame["sma10_over_sma20"] = frame["SMA10"] / (frame["SMA20"].replace(0, np.nan))
+        frame["sma10_over_sma20"] = frame["sma10_over_sma20"].fillna(1.0)
+    if "rsi" in frame.columns and "volatility" in frame.columns:
+        frame["rsi_x_vol"] = frame["rsi"] * frame["volatility"]
+    if "FEDFUNDS" in frame.columns and "DGS10" in frame.columns:
+        frame["yield_spread_10y_fed"] = frame["DGS10"] - frame["FEDFUNDS"]
+    if "high_minus_low_relative" in frame.columns:
+        frame["hl_rel_sq"] = frame["high_minus_low_relative"] ** 2
+    growth_cols = [g for g in frame.columns if g.startswith("growth_") and "future" not in g]
+    if growth_cols and "volatility" in frame.columns:
+        frame["growth_vol_ratio"] = frame[growth_cols[0]] / (frame["volatility"].abs() + 1e-6)
+    if "Date" in frame.columns:
+        month_num = frame["Date"].dt.month
+        frame["month_sin"] = np.sin(2 * np.pi * month_num / 12)
+        frame["month_cos"] = np.cos(2 * np.pi * month_num / 12)
+    vol_med = frame["ln_volume"].median()
+    frame["high_ln_volume"] = (frame["ln_volume"] > vol_med).astype(int)
+    custom_base = [
         "SMA10", "SMA20", "growing_moving_average", "high_minus_low_relative",
         "volatility", "ln_volume", "div_payout", "stock_split",
     ]
+    derived_candidates = [
+        "sma10_over_sma20", "rsi_x_vol", "yield_spread_10y_fed", "hl_rel_sq",
+        "growth_vol_ratio", "month_sin", "month_cos", "high_ln_volume",
+    ]
+    custom = custom_base + [c for c in derived_candidates if c in frame.columns]
     numerical = growth + technical_indicators + patterns + custom + macro
 
     df = frame[frame.Date >= MIN_HISTORY_DATE].copy()

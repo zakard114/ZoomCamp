@@ -1,0 +1,283 @@
+{
+  "cache_meta": {
+    "path": "E:\\IT_SPACES\\AI\\ZoomCamp\\SMA\\04\\trading_strategy_and_simulation\\stocks_df_combined_2026_09_18.parquet.brotli",
+    "fingerprint": "0f3dbf2aeb59df1b",
+    "rows": 240759,
+    "cache_hit": true
+  },
+  "vector_primary": {
+    "pred_column": "pred_rf_0.55",
+    "test_trades": 6092,
+    "avg_trades_per_day": 8.068874172185431,
+    "q75_trades_per_day": 11.0,
+    "assumed_capital_usd": 33000.0,
+    "net_pnl_usd": 19183.647097762296,
+    "cagr_approx": 1.121385980210999
+  },
+  "exact_primary": {
+    "label": "exact_iterrows_reinvest",
+    "pred_column": "pred_rf_0.55",
+    "starting_cash_usd": 10000.0,
+    "ending_cash_usd": 29199.44709776231,
+    "test_trades": 6013,
+    "net_pnl_usd": 19199.44709776231,
+    "cagr_approx": 1.3072048695246188
+  },
+  "diagnostics": {
+    "pred_column": "pred_rf_0.55",
+    "overall_test": {
+      "signals": 6092,
+      "precision": 0.6239330269205515,
+      "recall": 0.2008985200845666
+    },
+    "by_ticker_top_signals": [
+      {
+        "ticker": "MC.PA",
+        "signals": 289,
+        "precision": 0.4013840830449827,
+        "recall": 0.2510822510822511
+      },
+      {
+        "ticker": "CDI.PA",
+        "signals": 285,
+        "precision": 0.41754385964912283,
+        "recall": 0.2621145374449339
+      },
+      {
+        "ticker": "RMS.PA",
+        "signals": 275,
+        "precision": 0.49818181818181817,
+        "recall": 0.2836438923395445
+      },
+      {
+        "ticker": "HINDUNILVR.NS",
+        "signals": 255,
+        "precision": 0.5215686274509804,
+        "recall": 0.2923076923076923
+      },
+      {
+        "ticker": "INFY",
+        "signals": 254,
+        "precision": 0.5748031496062992,
+        "recall": 0.2979591836734694
+      },
+      {
+        "ticker": "TCS.NS",
+        "signals": 248,
+        "precision": 0.5161290322580645,
+        "recall": 0.26778242677824265
+      },
+      {
+        "ticker": "RELIANCE.NS",
+        "signals": 242,
+        "precision": 0.6033057851239669,
+        "recall": 0.3029045643153527
+      },
+      {
+        "ticker": "NVO",
+        "signals": 234,
+        "precision": 0.6282051282051282,
+        "recall": 0.2677595628415301
+      },
+      {
+        "ticker": "SBIN.NS",
+        "signals": 225,
+        "precision": 0.6177777777777778,
+        "recall": 0.2245557350565428
+      },
+      {
+        "ticker": "OR.PA",
+        "signals": 221,
+        "precision": 0.6470588235294118,
+        "recall": 0.26142595978062155
+      },
+      {
+        "ticker": "IDEXY",
+        "signals": 211,
+        "precision": 0.7440758293838863,
+        "recall": 0.23644578313253012
+      },
+      {
+        "ticker": "LICI.NS",
+        "signals": 207,
+        "precision": 0.5169082125603864,
+        "recall": 0.21881390593047034
+      },
+      {
+        "ticker": "TTE",
+        "signals": 186,
+        "precision": 0.7204301075268817,
+        "recall": 0.21788617886178863
+      },
+      {
+        "ticker": "ITC.NS",
+        "signals": 183,
+        "precision": 0.6721311475409836,
+        "recall": 0.2808219178082192
+      },
+      {
+        "ticker": "HDB",
+        "signals": 182,
+        "precision": 0.7252747252747253,
+        "recall": 0.2755741127348643
+      }
+    ],
+    "by_month": [
+      {
+        "month": "April",
+        "signals": 337,
+        "precision": 0.798219584569733,
+        "recall": 0.14755896873285793
+      },
+      {
+        "month": "August",
+        "signals": 281,
+        "precision": 0.2491103202846975,
+        "recall": 0.05852842809364549
+      },
+      {
+        "month": "December",
+        "signals": 241,
+        "precision": 0.6514522821576764,
+        "recall": 0.09480676328502416
+      },
+      {
+        "month": "February",
+        "signals": 259,
+        "precision": 0.4594594594594595,
+        "recall": 0.11038961038961038
+      },
+      {
+        "month": "January",
+        "signals": 406,
+        "precision": 0.47783251231527096,
+        "recall": 0.1396688264938805
+      },
+      {
+        "month": "July",
+        "signals": 530,
+        "precision": 0.4207547169811321,
+        "recall": 0.15464632454923716
+      },
+      {
+        "month": "June",
+        "signals": 690,
+        "precision": 0.691304347826087,
+        "recall": 0.291921664626683
+      },
+      {
+        "month": "March",
+        "signals": 1568,
+        "precision": 0.6434948979591837,
+        "recall": 0.6016696481812761
+      },
+      {
+        "month": "May",
+        "signals": 365,
+        "precision": 0.6657534246575343,
+        "recall": 0.12966915688367128
+      },
+      {
+        "month": "November",
+        "signals": 393,
+        "precision": 0.6513994910941476,
+        "recall": 0.14050493962678376
+      },
+      {
+        "month": "October",
+        "signals": 539,
+        "precision": 0.8738404452690167,
+        "recall": 0.23293768545994065
+      },
+      {
+        "month": "September",
+        "signals": 483,
+        "precision": 0.6480331262939959,
+        "recall": 0.2394797245600612
+      }
+    ],
+    "sample_false_positive_rows": [
+      {
+        "Date": "2025-06-24",
+        "Ticker": "NVO",
+        "growth_future_30d": 0.6415947634359946,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2022-09-23",
+        "Ticker": "META",
+        "growth_future_30d": 0.6466063847444246,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2025-06-20",
+        "Ticker": "NVO",
+        "growth_future_30d": 0.6616511160329468,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2025-03-06",
+        "Ticker": "NVO",
+        "growth_future_30d": 0.6703306309376392,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2025-03-07",
+        "Ticker": "NVO",
+        "growth_future_30d": 0.6799349956550145,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2025-03-05",
+        "Ticker": "NVO",
+        "growth_future_30d": 0.7032055039239329,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2022-09-26",
+        "Ticker": "META",
+        "growth_future_30d": 0.7092469826208352,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2022-09-27",
+        "Ticker": "META",
+        "growth_future_30d": 0.7177828114828336,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2025-03-05",
+        "Ticker": "MC.PA",
+        "growth_future_30d": 0.7303929578850554,
+        "pred_rf_0.55": 1
+      },
+      {
+        "Date": "2025-02-21",
+        "Ticker": "META",
+        "growth_future_30d": 0.7390520629565155,
+        "pred_rf_0.55": 1
+      }
+    ],
+    "improvement_ideas": [
+      "Raise threshold on tickers with precision < 0.45 in by_ticker slice.",
+      "Add volatility regime filter (trade when realized vol above median).",
+      "Blend DT and RF proba for low-liquidity names (high ln_volume requirement)."
+    ]
+  },
+  "sp500_benchmark": {
+    "label": "spy_buy_hold",
+    "symbol": "^GSPC",
+    "start": "2022-09-16",
+    "end": "2026-09-23",
+    "years": 4.016427104722792,
+    "cagr_approx": 1.1890507055258397,
+    "fetched_at": "2026-11-20T12:40:41Z"
+  },
+  "primary_beats_spx_cagr": false,
+  "strategy_columns": [
+    "pred_rf_0.55",
+    "pred_rf_0.57",
+    "pred_dt_0.55",
+    "pred_xgb_0.55"
+  ]
+}

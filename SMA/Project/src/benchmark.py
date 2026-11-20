@@ -18,6 +18,28 @@ def daily_trade_pnl(frame: pd.DataFrame, pred_col: str) -> pd.Series:
     return rows.groupby("Date")["pnl"].sum().sort_index()
 
 
+def rolling_annualized_returns(daily: pd.Series, window_days: int = 63) -> dict:
+    """Approximate rolling CAGR windows on cumulative daily P&L (rubric metrics)."""
+    if daily.empty:
+        return {"rolling_windows": 0, "rolling_mean_cagr": None}
+    cum = daily.cumsum()
+    roll = cum.rolling(window_days, min_periods=max(10, window_days // 3)).apply(
+        lambda x: float(x.iloc[-1] - x.iloc[0]) if len(x) else np.nan,
+        raw=False,
+    )
+    roll = roll.dropna()
+    if roll.empty:
+        return {"rolling_windows": 0, "rolling_mean_cagr": None}
+    scale = 252 / window_days
+    annualized = roll / TRADE_NOTIONAL * scale
+    return {
+        "rolling_windows": int(len(roll)),
+        "rolling_mean_annualized_return": float(annualized.mean()),
+        "rolling_min_annualized_return": float(annualized.min()),
+        "rolling_max_annualized_return": float(annualized.max()),
+    }
+
+
 def sharpe_and_drawdown(daily: pd.Series) -> dict:
     if daily.empty or len(daily) < 2:
         return {"sharpe_daily": None, "max_drawdown_usd": None}
@@ -62,11 +84,13 @@ def compare_strategies(frame: pd.DataFrame, pred_columns: list[str]) -> dict:
         sim = vector_simulate(frame, col)
         daily = daily_trade_pnl(frame, col)
         risk = sharpe_and_drawdown(daily)
+        rolling = rolling_annualized_returns(daily)
         rows.append(
             {
                 "strategy": col,
                 **sim,
                 **risk,
+                **rolling,
             }
         )
     passive = passive_baseline(frame)

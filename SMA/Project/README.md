@@ -46,14 +46,15 @@ Defined in `src/features.py` (`FEATURE_SETS`):
 | `month_sin`, `month_cos` | calendar seasonality |
 | `high_ln_volume` | above-median volume dummy |
 
-Plus lecture TA, patterns, macro, and dummy sets in `FEATURE_SETS` → **208** model columns after dummies (see `run.py` output).
+Plus lecture TA, patterns, macro, and dummy sets in `FEATURE_SETS` → **216** model columns after dummies (see `run.py` output).
 
 ## Model & strategy
 
-- **Models:** `RandomForestClassifier` (primary) + `DecisionTreeClassifier` (second lecture model)
-- **Rules:** buy when `predict_proba >= threshold` → `pred_rf_0.55`, `pred_rf_0.57`, `pred_dt_0.55`
+- **Models:** `RandomForestClassifier` (primary) + `DecisionTreeClassifier` + optional **XGBoost** (`fit_xgboost`)
+- **Rules:** buy when `predict_proba >= threshold` → `pred_rf_0.55`, `pred_rf_0.57`, `pred_dt_0.55`, optional `pred_xgb_0.55`
 - **Tuning:** optional `python -m src.tuning` (`RandomizedSearchCV` on train/valid)
-- **Simulation:** vector sim on `split == "test"`; fees 0.2%; **CAGR**, **Sharpe**, **max drawdown** vs passive baseline (`src/benchmark.py`)
+- **Simulation:** vector sim + **exact `iterrows` reinvest** (`src/exact_simulation.py`); top-3/day and probability-scaled sizing (`src/strategies_advanced.py`); **CAGR**, **Sharpe**, **max drawdown**, rolling windows vs passive baseline and **^GSPC** (`src/benchmark.py`, `src/sp500_benchmark.py`)
+- **Analysis:** `python run_analysis.py` → `docs/analysis_snapshot.json`; ticker/month precision (`src/analysis.py`)
 - **EDA:** `python run_eda.py` → correlation chart in [`docs/figures/`](docs/figures/)
 
 ## Repository layout
@@ -63,9 +64,19 @@ SMA/Project/
   README.md
   requirements.txt
   run.py                 # CLI end-to-end
-  project.ipynb          # calls the same functions as run.py
+  run_eda.py             # EDA summary + figure
+  project.ipynb          # same pipeline as run.py
+  docs/                  # FINDINGS, AUTOMATION, figures/
   src/
-    download.py          # locate local combined parquet
+    benchmark.py         # multi-strategy vs passive baseline
+    exact_simulation.py  # iterrows reinvestment path
+    strategies_advanced.py
+    sp500_benchmark.py
+    analysis.py
+    incremental.py
+    eda.py
+    tuning.py
+    download.py
     load_data.py
     features.py
     modeling.py
@@ -83,7 +94,7 @@ E:\IT_SPACES\AI\ZoomCamp\ML\.venv\Scripts\python.exe run.py
 
 Dependencies: `requirements.txt` (shared `ML/.venv` if you completed earlier modules).
 
-## Verified run (local, 2026-11-18)
+## Verified run (local, 2026-11-19)
 
 `ML\.venv\Scripts\python.exe run.py` on combined parquet (`stocks_df_combined_2026_09_18`):
 
@@ -118,18 +129,6 @@ Latest test-day signals (sample): `RELIANCE.NS`, `SBIN.NS` on `2026-09-18`. At t
 | [`docs/FINDINGS.md`](docs/FINDINGS.md) | Problem steps, difficulties, reproduction |
 | [`docs/AUTOMATION.md`](docs/AUTOMATION.md) | Cron, two data regimes, export to Signal Desk |
 
-## Course project rubric (self-check)
+**Live portfolio demo:** https://signal-desk-c3dx.onrender.com · Capstone repo path: [`SMA/Project`](https://github.com/zakard114/ZoomCamp/tree/main/SMA/Project).
 
-Official checklist: [course `projects/README.md`](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/projects/README.md).
-
-| Block | Evidence in this repo |
-|-------|----------------------|
-| Problem | This README + [`FINDINGS.md`](docs/FINDINGS.md) |
-| Data | Lecture sources table; derived features above |
-| EDA | `run_eda.py`, `src/eda.py`, `docs/figures/` |
-| Modeling | RF + DT; thresholds; `src/tuning.py` |
-| Simulation | `src/simulation.py`, `src/benchmark.py`, `run.py` comparison |
-| Automation | `run.py`, `project.ipynb`, `docs/AUTOMATION.md` |
-| Bonus (live) | [signal-desk](https://github.com/zakard114/signal-desk) Docker / Render / Ops |
-
-**Portfolio demo:** https://signal-desk-c3dx.onrender.com
+Course rubric: [official `projects/README.md`](https://github.com/DataTalksClub/stock-markets-analytics-zoomcamp/blob/main/projects/README.md).

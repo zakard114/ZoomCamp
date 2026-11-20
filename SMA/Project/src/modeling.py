@@ -74,13 +74,40 @@ def attach_predictions(
     return out, col
 
 
+def fit_xgboost(frame: pd.DataFrame, features: list[str]):
+    """Optional third model (rubric §4); skips cleanly if xgboost is not installed."""
+    try:
+        import xgboost as xgb
+    except ImportError:
+        return None, None
+    x_tv, y_tv, x_all = train_valid_matrices(frame, features)
+    model = xgb.XGBClassifier(
+        n_estimators=120,
+        max_depth=8,
+        learning_rate=0.08,
+        subsample=0.9,
+        colsample_bytree=0.85,
+        reg_lambda=1.0,
+        random_state=42,
+        n_jobs=-1,
+        eval_metric="logloss",
+    )
+    model.fit(x_tv, y_tv)
+    proba = model.predict_proba(x_all)[:, 1]
+    return model, proba
+
+
 def attach_all_strategy_columns(
     frame: pd.DataFrame,
     proba_rf: np.ndarray,
     proba_dt: np.ndarray,
     thresholds: tuple[float, ...] = (0.55, 0.57),
+    *,
+    proba_xgb: np.ndarray | None = None,
 ) -> tuple[pd.DataFrame, list[str]]:
     out = frame.copy()
+    out["proba_rf"] = proba_rf
+    out["proba_dt"] = proba_dt
     columns: list[str] = []
     for thr in thresholds:
         col = f"pred_rf_{thr:.2f}"
@@ -89,4 +116,9 @@ def attach_all_strategy_columns(
     col_dt = f"pred_dt_{thresholds[0]:.2f}"
     out[col_dt] = (proba_dt >= thresholds[0]).astype(int)
     columns.append(col_dt)
+    if proba_xgb is not None:
+        out["proba_xgb"] = proba_xgb
+        col_xgb = f"pred_xgb_{thresholds[0]:.2f}"
+        out[col_xgb] = (proba_xgb >= thresholds[0]).astype(int)
+        columns.append(col_xgb)
     return out, columns
